@@ -1,19 +1,13 @@
-# muxi-workbench
-Status service for Muxi Workbench
+# Muxi Workbench
 
 
+Backend mono repo for  Muxi Workbench. 
 
-```
-MICRO_SERVER_ADDRESS=localhost:50051 ./main
-```
+### Services
 
-### Tracing
-
-https://magodo.github.io/go-micro-tracing/
-https://www.slll.info/archives/2834.html
-
-### Zap
-
-https://dev-journal.in/2019/05/27/adding-uber-go-zap-logger-to-golang-project/
-https://mp.weixin.qq.com/s/i0bMh_gLLrdnhAEWlF-xDw
-https://github.com/sandipb/zap-examples/
++ [Gateway](./tree/master/service/gateway)
++ [Status](./tree/master/service/status)
++ [User](./tree/master/service/user)
++ [Team](./tree/master/service/team)
++ [Project](./tree/master/service/project)
++ [Feed](./tree/master/service/feed)
