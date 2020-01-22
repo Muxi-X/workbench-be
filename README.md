@@ -5,9 +5,9 @@ Backend mono repo for  Muxi Workbench.
 
 ### Services
 
-+ [Gateway](./tree/master/service/gateway)
-+ [Status](./tree/master/service/status)
-+ [User](./tree/master/service/user)
-+ [Team](./tree/master/service/team)
-+ [Project](./tree/master/service/project)
-+ [Feed](./tree/master/service/feed)
++ [Gateway](https://github.com/Muxi-X/workbench-be/tree/master/service/gateway)
++ [Status](https://github.com/Muxi-X/workbench-be/tree/master/service/status)
++ [User](https://github.com/Muxi-X/workbench-be/tree/master/service/user)
++ [Team](https://github.com/Muxi-X/workbench-be/tree/master/service/team)
++ [Project](https://github.com/Muxi-X/workbench-be/tree/master/service/project)
++ [Feed](https://github.com/Muxi-X/workbench-be/tree/master/service/feed)
