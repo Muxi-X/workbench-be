@@ -1,4 +1,4 @@
-# workbench-status-service
+# muxi-workbench
 Status service for Muxi Workbench
 
 

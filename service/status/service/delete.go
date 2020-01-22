@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
-	"workbench-status-service/model"
-	pb "workbench-status-service/proto"
+	pb "muxi-workbench-status/proto"
+	"muxi-workbench-status/model"
 )
 
 // Delete ... 删除动态

@@ -1,7 +1,8 @@
 package model
 
 import (
-	"workbench-status-service/pkg/constvar"
+	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
 )
 
 type StatusModel struct {
@@ -20,25 +21,25 @@ func (c *StatusModel) TableName() string {
 
 // Create status
 func (u *StatusModel) Create() error {
-	return DB.Self.Create(&u).Error
+	return m.DB.Self.Create(&u).Error
 }
 
 // Delete status
 func DeleteStatus(id uint32) error {
 	status := &StatusModel{}
 	status.ID = id
-	return DB.Self.Delete(&status).Error
+	return m.DB.Self.Delete(&status).Error
 }
 
 // Update status
 func (u *StatusModel) Update() error {
-	return DB.Self.Save(u).Error
+	return m.DB.Self.Save(u).Error
 }
 
 // GetStatus get a single status by id
 func GetStatus(id uint32) (*StatusModel, error) {
 	s := &StatusModel{}
-	d := DB.Self.Where("id = ?", id).First(&s)
+	d := m.DB.Self.Where("id = ?", id).First(&s)
 	return s, d.Error
 }
 
@@ -51,16 +52,16 @@ func ListStatus(groupId, offset, limit int, lastId uint32) ([]*StatusModel, uint
 	statusList := make([]*StatusModel, 0)
 	var count uint64
 
-	if err := DB.Self.Model(&StatusModel{}).Count(&count).Error; err != nil {
+	if err := m.DB.Self.Model(&StatusModel{}).Count(&count).Error; err != nil {
 		return statusList, count, err
 	}
 
 	if lastId != 0 {
-		if err := DB.Self.Where("id < ?", lastId).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
+		if err := m.DB.Self.Where("id < ?", lastId).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
 			return statusList, count, err
 		}
 	} else {
-		if err := DB.Self.Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
+		if err := m.DB.Self.Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
 			return statusList, count, err
 		}
 	}

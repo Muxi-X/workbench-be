@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
-	"workbench-status-service/model"
-	pb "workbench-status-service/proto"
+	"muxi-workbench-status/model"
+	pb "muxi-workbench-status/proto"
 )
 
 // Update ... 更新动态
