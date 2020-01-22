@@ -44,7 +44,7 @@ func GetStatus(id uint32) (*StatusModel, error) {
 }
 
 // ListStatus list all status
-func ListStatus(groupId, offset, limit int, lastId uint32) ([]*StatusModel, uint64, error) {
+func ListStatus(groupId, offset, limit int, lastId uint32, filter *StatusModel) ([]*StatusModel, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
@@ -52,16 +52,16 @@ func ListStatus(groupId, offset, limit int, lastId uint32) ([]*StatusModel, uint
 	statusList := make([]*StatusModel, 0)
 	var count uint64
 
-	if err := m.DB.Self.Model(&StatusModel{}).Count(&count).Error; err != nil {
+	if err := m.DB.Self.Model(&StatusModel{}).Where(filter).Count(&count).Error; err != nil {
 		return statusList, count, err
 	}
 
 	if lastId != 0 {
-		if err := m.DB.Self.Where("id < ?", lastId).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
+		if err := m.DB.Self.Where(filter).Where("id < ?", lastId).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
 			return statusList, count, err
 		}
 	} else {
-		if err := m.DB.Self.Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
+		if err := m.DB.Self.Where(filter).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
 			return statusList, count, err
 		}
 	}

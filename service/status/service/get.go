@@ -2,9 +2,10 @@ package service
 
 import (
 	"context"
-	"fmt"
+	errno "muxi-workbench-status/errno"
 	"muxi-workbench-status/model"
 	pb "muxi-workbench-status/proto"
+	e "muxi-workbench/pkg/err"
 )
 
 // Get ... 获取动态
@@ -12,8 +13,7 @@ func (s *StatusService) Get(ctx context.Context, req *pb.GetRequest, res *pb.Get
 
 	status, err := model.GetStatus(req.Id)
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
 	res.Status = &pb.Status{

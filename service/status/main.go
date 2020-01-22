@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	pb "muxi-workbench-status/proto"
@@ -15,6 +14,7 @@ import (
 	"github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/opentracing/opentracing-go"
+	"github.com/spf13/viper"
 )
 
 func main() {
@@ -38,20 +38,12 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
-	// repo := &Repository{}
-
-	// Create a new service. Optionally include some options here.
 	srv := micro.NewService(
-
-		// This name must match the package name given in your protobuf definition
-		micro.Name("workbench.service.status"),
+		micro.Name(viper.GetString("local_name")),
 		micro.WrapHandler(
 			opentracingWrapper.NewHandlerWrapper(opentracing.GlobalTracer()),
 		),
 		micro.WrapHandler(handler.ServerErrorHandlerWrapper()),
-		// micro.WrapClient(
-		// 	opentracingWrapper.NewClientWrapper(tracer),
-		// ),
 	)
 
 	// Init will parse the command line flags.
@@ -62,6 +54,6 @@ func main() {
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		fmt.Println(err)
+		logger.Error(err.Error())
 	}
 }

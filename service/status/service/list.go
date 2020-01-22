@@ -2,18 +2,20 @@ package service
 
 import (
 	"context"
-	"fmt"
+	errno "muxi-workbench-status/errno"
 	"muxi-workbench-status/model"
 	pb "muxi-workbench-status/proto"
+	e "muxi-workbench/pkg/err"
 )
 
 // List ... 动态列表
 func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
 
-	list, count, err := model.ListStatus(0, 0, 20, 0)
+	list, count, err := model.ListStatus(0, 0, 20, 0, &model.StatusModel{
+		UserID: req.Uid,
+	})
 	if err != nil {
-		fmt.Println(err)
-		return err
+		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
 	resList := make([]*pb.Status, 0)

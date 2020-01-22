@@ -23,6 +23,7 @@ message ListRequest {
   uint32 offset = 2;
   uint32 limit = 3;
   uint32 group = 4;
+  uint32 uid = 5;
 }
 
 message ListResponse {
@@ -52,21 +53,3 @@ message Status {
   uint32 user_id = 4;
   string time = 5;
 }
-
-// message Container {
-//   string id = 1;
-//   string customer_id = 2;
-//   string origin = 3;
-//   string user_id = 4;
-// }
-
-// Created a blank get request
-
-
-// message Response {
-//   bool created = 1;
-//   Consignment consignment = 2;
-
-//   // Added a pluralised consignment to our generic response message
-//   repeated Consignment consignments = 3;
-// }
