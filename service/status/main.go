@@ -19,7 +19,12 @@ import (
 
 func main() {
 
-	t, io, err := tracer.NewTracer("workbench.service.status", "localhost:6831")
+	// init config
+	if err := config.Init("", "WORKBENCH_STATUS"); err != nil {
+		panic(err)
+	}
+
+	t, io, err := tracer.NewTracer(viper.GetString("local_name"), viper.GetString("tracing.jager"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,11 +33,6 @@ func main() {
 
 	// set var t to Global Tracer (opentracing single instance mode)
 	opentracing.SetGlobalTracer(t)
-
-	// init config
-	if err := config.Init("", "WORKBENCH_STATUS"); err != nil {
-		panic(err)
-	}
 
 	// init db
 	model.DB.Init()

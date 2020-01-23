@@ -68,21 +68,3 @@ func ListStatus(groupId, offset, limit int, lastId uint32, filter *StatusModel) 
 
 	return statusList, count, nil
 }
-
-// // Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
-// func (u *UserModel) Compare(pwd string) (err error) {
-// 	err = auth.Compare(u.Password, pwd)
-// 	return
-// }
-
-// // Encrypt the user password.
-// func (u *UserModel) Encrypt() (err error) {
-// 	u.Password, err = auth.Encrypt(u.Password)
-// 	return
-// }
-
-// // Validate the fields.
-// func (u *UserModel) Validate() error {
-// 	validate := validator.New()
-// 	return validate.Struct(u)
-// }
