@@ -15,6 +15,19 @@ type StatusModel struct {
 	UserID  uint32 `json:"userId" gorm:"column:user_id;" binding:"required"`
 }
 
+type StatusListItem struct {
+	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Content  string `json:"content" gorm:"column:content;" binding:"required"`
+	Title    string `json:"title" gorm:"column:title;" binding:"required"`
+	Time     string `json:"time" gorm:"column:time;" binding:"required"`
+	Like     uint32 `json:"like" gorm:"column:like;" binding:"required"`
+	Comment  uint32 `json:"comment" gorm:"column:comment;" binding:"required"`
+	UserID   uint32 `json:"userId" gorm:"column:user_id;" binding:"required"`
+	Avatar   string `json:"avatar" gorm:"column:avatar;" binding:"required"`
+	UserName string `json:"username" gorm:"column:name;" binding:"required"`
+	GroupID  uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
+}
+
 func (c *StatusModel) TableName() string {
 	return "status"
 }
@@ -44,26 +57,31 @@ func GetStatus(id uint32) (*StatusModel, error) {
 }
 
 // ListStatus list all status
-func ListStatus(groupId, offset, limit int, lastId uint32, filter *StatusModel) ([]*StatusModel, uint64, error) {
+func ListStatus(groupID, offset, limit, lastID uint32, filter *StatusModel) ([]*StatusListItem, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
 
-	statusList := make([]*StatusModel, 0)
-	var count uint64
+	statusList := make([]*StatusListItem, 0)
 
-	if err := m.DB.Self.Model(&StatusModel{}).Where(filter).Count(&count).Error; err != nil {
-		return statusList, count, err
+	query := m.DB.Self.Table("status").Select("status.*, users.name, users.avatar, users.group_id").Where(filter).Joins("left join users on users.id = status.user_id").Offset(offset).Limit(limit).Order("status.id desc")
+
+	if lastID != 0 {
+		query = query.Where("status.id < ?", lastID)
 	}
 
-	if lastId != 0 {
-		if err := m.DB.Self.Where(filter).Where("id < ?", lastId).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
-			return statusList, count, err
-		}
-	} else {
-		if err := m.DB.Self.Where(filter).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
-			return statusList, count, err
-		}
+	if groupID != 0 {
+		query = query.Where("users.group_id = ?", groupID)
+	}
+
+	if filter.UserID != 0 {
+		query = query.Where("status.user_id = ?", filter.UserID)
+	}
+
+	var count uint64
+
+	if err := query.Scan(&statusList).Count(&count).Error; err != nil {
+		return statusList, count, err
 	}
 
 	return statusList, count, nil

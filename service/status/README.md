@@ -8,6 +8,12 @@ make
 MICRO_SERVER_ADDRESS=localhost:50051 ./main
 ```
 
+Compile Protobuffer
+
+```
+protoc --go_out=plugins=micro:. ./proto/status.proto
+```
+
 ### Tracing
 
 https://magodo.github.io/go-micro-tracing/

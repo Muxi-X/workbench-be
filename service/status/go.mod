@@ -12,5 +12,6 @@ require (
 	github.com/spf13/viper v1.6.1
 	github.com/uber/jaeger-client-go v2.21.1+incompatible
 	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5
+	golang.org/x/tools/gopls v0.3.3 // indirect
 	muxi-workbench v0.0.0-00010101000000-000000000000
 )

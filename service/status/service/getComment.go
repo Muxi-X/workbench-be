@@ -8,27 +8,25 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// List ... 动态列表
-func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
+// ListComment ... 评论列表
+func (s *StatusService) ListComment(ctx context.Context, req *pb.CommentListRequest, res *pb.CommentListResponse) error {
 
-	list, count, err := model.ListStatus(req.Group, req.Offset, req.Limit, req.Lastid, &model.StatusModel{
-		UserID: req.Uid,
-	})
+	list, count, err := model.ListComments(req.StatusId, req.Offset, req.Limit, req.Lastid)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	resList := make([]*pb.Status, 0)
+	resList := make([]*pb.Comment, 0)
 
 	for index := 0; index < len(list); index++ {
 		item := list[index]
-		resList = append(resList, &pb.Status{
+		resList = append(resList, &pb.Comment{
 			Id:       item.ID,
 			Content:  item.Content,
-			Title:    item.Title,
 			Time:     item.Time,
 			Avatar:   item.Avatar,
 			UserName: item.UserName,
+			UserId:   item.Creator,
 		})
 	}
 
