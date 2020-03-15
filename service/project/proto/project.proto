@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package project;
+
+service ProjectService {
+  // 项目相关
+  rpc GetProjectList(GetProjectListRequest) returns (ProjectListResponse) {}
+  rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
+  rpc UpdateProjectInfo(ProjectInfo) returns (Response) {}
+  rpc DeleteProject(GetRequest) returns (Response) {}
+  rpc GetFileTree(GetRequest) returns (Tree) {}
+  rpc GetDocTree(GetRequest) returns (Tree) {}
+  rpc UpdateFileTree(Tree) returns (Response) {}
+  rpc UpdateDocTree(Tree) returns (Response) {}
+  rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
+  rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
+  // rpc GetTrashbin(GetRequest) returns (Response) {}
+
+  // 文件相关
+  rpc CreateFile(CreateFileRequest) returns (Response) {}
+  rpc DeleteFile(GetRequest) returns (Response) {}
+  rpc GetFileDetail(GetRequest) returns (FileDetail) {}
+  rpc GetFileInfoList(GetInfoByIdsRequest) returns (GetFileInfoListResponse) {}
+  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
+
+  // 文档相关
+  rpc CreateDoc(CreateDocRequest) returns (Response) {}
+  rpc UpdateDoc(UpdateDocRequest ) returns (Response) {}
+  rpc DeleteDoc(GetRequest) returns (Response) {}
+  rpc GetDocDetail(GetRequest) returns (DocDetail) {}
+  rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
+  rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
+}
+
+message GetProjectListRequest {
+  uint32 user_id = 1;
+  uint32 lastid = 2;
+  uint32 offset = 3;
+  uint32 limit = 4;
+  bool pagination = 5;
+}
+
+message GetMemberListRequest {
+  uint32 project_id = 1;
+  uint32 lastid = 2;
+  uint32 offset = 3;
+  uint32 limit = 4;
+  bool pagination = 5;
+}
+
+message ProjectListResponse {
+  repeated ProjectListItem list = 2;
+}
+
+message GetRequest {
+  uint32 id = 1;
+}
+
+message GetInfoRequest {
+  repeated uint32 ids = 1;
+}
+
+message RegisterRequest {
+  string email = 1;
+  string name = 2;
+}
+
+message LoginRequest {
+  string email = 1;
+  string auth_token = 2;
+}
+
+message UserInfo {
+  uint32 id = 1;
+  string nick = 2;
+  string name = 3;
+  string avatar_url = 4;
+}
+
+message UserInfoResponse {
+  repeated UserInfo list = 1;
+}
+
+message UserProfile {
+  uint32 id = 1;
+  string nick = 2;
+  string name = 3;
+  string avatar_url = 4;
+  string intro = 5;
+  string email = 6;
+}
+
+message Response {}
+
+message User {
+  uint32 id = 1;
+  string avatar = 2;
+}
+
+message ProjectListItem {
+  uint32 id = 1;
+  string name = 2;
+  string logo = 3;
+}
+
+
+message MembersListResponse {
+  uint32 count = 1;
+  repeated MembersListItem list = 2;
+}
+
+message MembersListItem {
+  uint32 id = 1;
+  string name = 2;
+  string avatar = 3;
+  string group_name = 4;
+  uint32 role  = 5;
+}
+
+message UpdateMemberRequest {
+  uint32 id = 1;
+  repeated string list = 2;
+}
+
+message ProjectInfo {
+  uint32 id = 1;
+  string name = 2;
+  string intro = 3;
+  uint32 user_count = 4;
+}
+
+message Tree {
+  string tree = 1;
+}
+
+message CreateFileRequest {
+  uint32 project_id = 1;
+  string name = 2;
+  string url = 3;
+}
+
+message CreateDocRequest {
+  string title = 1;
+  string content = 2;
+}
+
+message UpdateDocRequest {
+  uint32 id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+message GetInfoByIdsRequest {
+  repeated string list = 1;
+}
+
+message FileDetail {
+  uint32 id = 1;
+  string name = 2;
+  string url = 3;
+  string creator = 4;
+  string create_time = 5;
+}
+
+message GetFileInfoListResponse {
+  repeated FileDetail list = 1;
+}
+
+message GetDocInfoListResponse {
+  repeated DocDetail list = 1;
+}
+
+message GetFileFolderListResponse {
+  repeated FileFolderDetail list = 1;
+}
+
+message GetDocFolderListResponse {
+  repeated DocFolderDetail list = 1;
+}
+
+
+message FileFolderDetail {
+  uint32 id = 1;
+  string name = 2;
+}
+
+message DocDetail {
+  uint32 id = 1;
+  string title = 2;
+  string content = 3;
+  string creator = 4;
+  string create_time = 5;
+  string last_editor = 6;
+  string last_edit_time = 7;
+}
+
+
+message DocFolderDetail {
+  uint32 id = 1;
+  string name = 2;
+}
