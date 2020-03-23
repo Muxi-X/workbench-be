@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	log "muxi-workbench/log"
+	"muxi-workbench/log"
 
 	"github.com/jinzhu/gorm"
 	// MySQL driver.
@@ -18,6 +18,10 @@ type Database struct {
 }
 
 var DB *Database
+
+//type RedisDB struct {
+//	Self *redis.Client
+//}
 
 func openDB(username, password, addr, name string) *gorm.DB {
 	config := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s",
@@ -72,3 +76,16 @@ func (db *Database) Init() {
 func (db *Database) Close() {
 	DB.Self.Close()
 }
+
+//func (r *RedisDB) Init() {
+//	//Rdb.Self = redis.NewClient(&redis.Options{
+//	//	Addr: viper.GetString("redis.addr"),
+//	//	Password: viper.GetString("redis.password"),
+//	//	DB: 0,
+//	//})
+//	r.Self = redis.NewClient(&redis.Options{
+//		Addr: viper.GetString("redis.addr"),
+//		Password: viper.GetString("redis.password"),
+//		DB: 0,
+//	})
+//}

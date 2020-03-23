@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package feed;
+
+service Feed {
+    rpc Add(AddRequest) returns (AddResponse) {}
+    rpc List(ListRequest) returns (ListResponse) {}
+    rpc PersonalList(PersonalListRequest) returns (ListResponse) {}
+}
+
+message AddRequest {
+    string action = 1;
+    User user = 6;
+    Source source = 7;
+}
+
+message AddResponse {
+
+}
+
+message ListRequest {
+    string page = 1;
+}
+
+message ListResponse {
+    repeated SingleData data_list = 1;
+    bool has_next = 2;
+    uint32 page_max = 3;
+    uint32 pageNum = 4;
+    uint32 rows_num = 5;
+}
+
+message PersonalListRequest {
+    uint32 user_id = 1;
+    string page = 2;
+}
+
+message SingleData {
+    string action = 1;
+    uint32 feed_id = 2;
+    bool if_split = 3;
+    string time_day = 4;
+    string time_hm = 5;
+    User user = 6;
+    Source source = 7;
+}
+
+message User {
+    string name = 1;
+    uint32 id = 2;
+    string avatar_url = 3;
+}
+
+// source: feed的来源.
+// kind_id的对应关系如下，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，5 -> ???，6 -> 进度
+message Source {
+    uint32 kind_id = 1;
+    uint32 object_id = 2;
+    string object_name = 3;
+    int32 project_id = 4;      // 存在-1
+    string project_name = 5;
+}
