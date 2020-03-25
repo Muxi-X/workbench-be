@@ -6,7 +6,7 @@ import (
 )
 
 var PubRdb *redis.Client
-var SubRdb *redis.Client
+var SubRdb *redis.PubSub
 var RdbChan = "Rdb"
 
 func OpenRedisClient() *redis.Client {

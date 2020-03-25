@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package feed;
 
-service Feed {
+service FeedService {
     rpc Add(AddRequest) returns (AddResponse) {}
     rpc List(ListRequest) returns (ListResponse) {}
     rpc PersonalList(PersonalListRequest) returns (ListResponse) {}

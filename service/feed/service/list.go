@@ -13,7 +13,7 @@ import (
 const PageSize = 40
 
 // 全部feed列表
-func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
+func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
 	page, err := strconv.ParseUint(req.Page, 10, 32)
 	if err != nil {
 		return e.ServerErr(errno.ErrBind, err.Error())
@@ -56,7 +56,7 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 }
 
 // 个人feed列表
-func (s *StatusService) PersonalList(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
+func (s *FeedService) PersonalList(ctx context.Context, req *pb.PersonalListRequest, res *pb.ListResponse) error {
 
 	return nil
 }

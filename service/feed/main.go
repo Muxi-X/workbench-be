@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"github.com/micro/cli"
 	"log"
 
 	m "muxi-workbench-feed/model"
@@ -10,7 +12,7 @@ import (
 	logger "muxi-workbench/log"
 	"muxi-workbench/model"
 	"muxi-workbench/pkg/handler"
-	tracer "muxi-workbench/pkg/tracer"
+	"muxi-workbench/pkg/tracer"
 
 	"github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
@@ -18,10 +20,29 @@ import (
 	"github.com/spf13/viper"
 )
 
+// 使用--sub运行subscribe服务
+// 否则默认运行feed服务
+var (
+	subFg = flag.Bool("sub", false, "use subscribe service mode")
+	//subFg *bool
+)
+
+func Init() {
+}
+
 func main() {
+	flag.Parse()
+
+	var err error
 
 	// init config
-	if err := config.Init("", "WORKBENCH_FEED"); err != nil {
+	if *subFg {
+		err = config.Init("./conf/config_sub.yaml", "WORKBENCH_SUB")
+	} else {
+		err = config.Init("./conf/config.yaml", "WORKBENCH_FEED")
+	}
+
+	if err != nil {
 		panic(err)
 	}
 
@@ -39,10 +60,13 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
-	m.PubRdb = m.OpenRedisClient()
-	m.SubRdb = m.OpenRedisClient()
-	defer m.PubRdb.Close()
-	defer m.SubRdb.Close()
+	// init redis db for subscribe service
+	if *subFg {
+		m.PubRdb = m.OpenRedisClient()
+		m.SubRdb = m.OpenRedisClient().Subscribe(m.RdbChan)
+		defer m.PubRdb.Close()
+		defer m.SubRdb.Close()
+	}
 
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),
@@ -50,13 +74,18 @@ func main() {
 			opentracingWrapper.NewHandlerWrapper(opentracing.GlobalTracer()),
 		),
 		micro.WrapHandler(handler.ServerErrorHandlerWrapper()),
+		micro.Flags(cli.BoolFlag{
+			Name:   "sub",
+			Usage:  "use subscribe service mode",
+			Hidden: false,
+		}),
 	)
 
 	// Init will parse the command line flags.
 	srv.Init()
 
 	// Register handler
-	pb.RegisterStatusServiceHandler(srv.Server(), &s.StatusService{})
+	_ = pb.RegisterFeedServiceHandler(srv.Server(), &s.FeedService{})
 
 	// Run the server
 	if err := srv.Run(); err != nil {
