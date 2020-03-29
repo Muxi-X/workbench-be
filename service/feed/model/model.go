@@ -1,7 +1,7 @@
 package model
 
 import (
-	. "muxi-workbench-feed/proto"
+	"github.com/jinzhu/gorm"
 	m "muxi-workbench/model"
 )
 
@@ -30,21 +30,47 @@ func (f *FeedModel) Create() error {
 
 func GetRowsSum() (uint32, error) {
 	var count uint32
-	d := m.DB.Self.Table("feeds").Count(count)
+	d := m.DB.Self.Table("feeds").Count(&count)
 	return count, d.Error
 }
 
-func FeedList(offset, limit uint32) ([]*SingleData, error) {
-	//var data []*FeedModel
-	var result []*SingleData
-
-	//d := m.DB.Self.Find(&data).Order("id desc").Offset(offset).Limit(limit)
-	d := m.DB.Self.Table("feeds").Order("id dsc").Offset(offset).Limit(limit).Scan(result)
-
-	return result, d.Error
+func GetPersonalRowsSum(uid uint32) (uint32, error) {
+	var count uint32
+	d := m.DB.Self.Table("feeds").Where("userid = ?", uid).Count(&count)
+	return count, d.Error
 }
 
-func PersonalFeedList(uid, offset, limit uint32) ([]*SingleData, error) {
-	var result []*SingleData
-	return result, nil
+func FeedList(lastId, limit uint32) ([]*FeedModel, error) {
+	var data []*FeedModel
+	var d *gorm.DB
+
+	// 判断是否为0, 0为第一次查询
+	if lastId != 0 {
+		d = m.DB.Self.Where("id < ?", lastId).Order("id desc").Limit(limit).Find(&data)
+	} else {
+		d = m.DB.Self.Order("id desc").Limit(limit).Find(&data)
+	}
+
+	if d.RecordNotFound() {
+		return data, nil
+	}
+	return data, d.Error
+}
+
+func PersonalFeedList(uid, lastId, limit uint32) ([]*FeedModel, error) {
+	var data []*FeedModel
+	var d *gorm.DB
+
+	// 判断是否为0, 0为第一次查询
+	if lastId != 0 {
+		d = m.DB.Self.Where("userid = ? AND id < ?", uid, lastId).Order("id desc").Limit(limit).Find(&data)
+	} else {
+		d = m.DB.Self.Where("userid = ?", uid).Order("id desc").Limit(limit).Find(&data)
+	}
+
+	if d.RecordNotFound() {
+		return data, nil
+	}
+
+	return data, d.Error
 }

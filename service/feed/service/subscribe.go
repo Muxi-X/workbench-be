@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"time"
 
 	"muxi-workbench-feed/model"
@@ -8,30 +9,26 @@ import (
 	logger "muxi-workbench/log"
 )
 
-func (s *SubService) SubForDB() error {
+func SubServiceRun() {
 	//sub := model.SubRdb.Subscribe(model.RdbChan)
 	//ch := sub.Channel()
 	//for msg := range ch {
 	//	fmt.Println(msg.Payload)
 	//	// DB写入
 	//}
-	msg, err := model.SubRdb.Receive()
-	if err != nil {
-		return err
+
+	for {
+		msg, err := model.SubRdb.Receive()
+		if err != nil {
+			logger.Error("sub receive error")
+			continue
+		}
+		req := msg.(pb.AddRequest)
+
+		if err := FeedDBWrite(&req); err != nil {
+			logger.Error("feed db write error")
+		}
 	}
-	req := msg.(pb.AddRequest)
-
-	return FeedDBWrite(&req)
-
-	//for {
-	//	msg, err := model.SubRdb.Receive()
-	//	if err != nil {
-	//		return err
-	//	}
-	//	req := msg.(pb.AddRequest)
-	//
-	//	go FeedDBWrite(&req)
-	//}
 }
 
 func FeedDBWrite(req *pb.AddRequest) error {
@@ -50,9 +47,11 @@ func FeedDBWrite(req *pb.AddRequest) error {
 		TimeHm:            time.Now().Format("15:04:05"),
 	}
 
-	if err := feed.Create(); err != nil {
-		logger.Error(err.Error())
-		return err
-	}
+	fmt.Println(feed)
+
+	//if err := feed.Create(); err != nil {
+	//	logger.Error(err.Error())
+	//	return err
+	//}
 	return nil
 }

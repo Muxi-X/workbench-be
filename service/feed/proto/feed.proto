@@ -3,7 +3,7 @@ syntax = "proto3";
 package feed;
 
 service FeedService {
-    rpc Add(AddRequest) returns (AddResponse) {}
+    rpc Add(AddRequest) returns (Response) {}
     rpc List(ListRequest) returns (ListResponse) {}
     rpc PersonalList(PersonalListRequest) returns (ListResponse) {}
 }
@@ -14,12 +14,13 @@ message AddRequest {
     Source source = 7;
 }
 
-message AddResponse {
-
+message Response {
 }
 
 message ListRequest {
-    string page = 1;
+    uint32 page = 1;
+    uint32 size = 2;
+    uint32 last_id = 3;
 }
 
 message ListResponse {
@@ -32,7 +33,9 @@ message ListResponse {
 
 message PersonalListRequest {
     uint32 user_id = 1;
-    string page = 2;
+    uint32 page = 2;
+    uint32 size = 3;
+    uint32 last_id = 4;
 }
 
 message SingleData {

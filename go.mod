@@ -5,9 +5,9 @@ replace muxi-workbench => ./
 go 1.12
 
 require (
-	github.com/go-redis/redis/v7 v7.2.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/micro/go-micro v1.18.0
+	github.com/micro/go-plugins v1.5.1
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/spf13/viper v1.6.2
 	github.com/uber/jaeger-client-go v2.22.1+incompatible

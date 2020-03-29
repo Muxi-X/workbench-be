@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"github.com/micro/cli"
 	"log"
 
 	m "muxi-workbench-feed/model"
@@ -14,6 +13,7 @@ import (
 	"muxi-workbench/pkg/handler"
 	"muxi-workbench/pkg/tracer"
 
+	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/opentracing/opentracing-go"
@@ -24,11 +24,7 @@ import (
 // 否则默认运行feed服务
 var (
 	subFg = flag.Bool("sub", false, "use subscribe service mode")
-	//subFg *bool
 )
-
-func Init() {
-}
 
 func main() {
 	flag.Parse()
@@ -61,12 +57,23 @@ func main() {
 	defer model.DB.Close()
 
 	// init redis db for subscribe service
+	m.PubRdb = m.OpenRedisClient()
+	defer m.PubRdb.Close()
 	if *subFg {
-		m.PubRdb = m.OpenRedisClient()
 		m.SubRdb = m.OpenRedisClient().Subscribe(m.RdbChan)
-		defer m.PubRdb.Close()
 		defer m.SubRdb.Close()
 	}
+
+	//redis broker
+	//bro := redis.NewBroker(broker.Addrs("redis://user:root@localhost:6379"))
+	//if err := bro.Init(); err != nil {
+	//	panic(err)
+	//}
+	//
+	//if err := bro.Connect(); err != nil {
+	//	panic(err)
+	//}
+	//bro.Subscribe()
 
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),
@@ -79,13 +86,18 @@ func main() {
 			Usage:  "use subscribe service mode",
 			Hidden: false,
 		}),
+		//micro.Broker(bro),
 	)
 
 	// Init will parse the command line flags.
 	srv.Init()
 
-	// Register handler
-	_ = pb.RegisterFeedServiceHandler(srv.Server(), &s.FeedService{})
+	if !*subFg {
+		// Register handler
+		pb.RegisterFeedServiceHandler(srv.Server(), &s.FeedService{})
+	} else {
+		go s.SubServiceRun()
+	}
 
 	// Run the server
 	if err := srv.Run(); err != nil {
