@@ -57,10 +57,16 @@ func main() {
 	defer model.DB.Close()
 
 	// init redis db for subscribe service
-	m.PubRdb = m.OpenRedisClient()
-	defer m.PubRdb.Close()
-	if *subFg {
-		m.SubRdb = m.OpenRedisClient().Subscribe(m.RdbChan)
+	rdbClient := m.OpenRedisClient()
+	if _, err = rdbClient.Ping().Result(); err != nil {
+		panic(err)
+	}
+
+	if !*subFg {
+		m.PubRdb = rdbClient
+		defer m.PubRdb.Close()
+	} else {
+		m.SubRdb = rdbClient.Subscribe(m.RdbChan)
 		defer m.SubRdb.Close()
 	}
 

@@ -1,57 +1,43 @@
 package service
 
 import (
-	"fmt"
-	"time"
+	"encoding/json"
 
 	"muxi-workbench-feed/model"
-	pb "muxi-workbench-feed/proto"
 	logger "muxi-workbench/log"
 )
 
 func SubServiceRun() {
-	//sub := model.SubRdb.Subscribe(model.RdbChan)
-	//ch := sub.Channel()
-	//for msg := range ch {
-	//	fmt.Println(msg.Payload)
-	//	// DB写入
-	//}
+	var feed = &model.FeedModel{}
 
-	for {
-		msg, err := model.SubRdb.Receive()
-		if err != nil {
-			logger.Error("sub receive error")
-			continue
+	ch := model.SubRdb.Channel()
+	for msg := range ch {
+		logger.Info("received")
+
+		if err := json.Unmarshal([]byte(msg.Payload), feed); err != nil {
+			panic(err)
 		}
-		req := msg.(pb.AddRequest)
+		//fmt.Println(feed)
 
-		if err := FeedDBWrite(&req); err != nil {
-			logger.Error("feed db write error")
+		if err := feed.Create(); err != nil {
+			logger.Error(err.Error())
 		}
 	}
-}
 
-func FeedDBWrite(req *pb.AddRequest) error {
-
-	feed := &model.FeedModel{
-		UserId:            req.User.Id,
-		Username:          req.User.Name,
-		UserAvatar:        req.User.AvatarUrl,
-		Action:            req.Action,
-		SourceKindId:      req.Source.KindId,
-		SourceObjectName:  req.Source.ObjectName,
-		SourceObjectId:    req.Source.ObjectId,
-		SourceProjectName: req.Source.ProjectName,
-		SourceProjectId:   req.Source.ProjectId,
-		TimeDay:           time.Now().Format("2006/01/02"),
-		TimeHm:            time.Now().Format("15:04:05"),
-	}
-
-	fmt.Println(feed)
-
-	//if err := feed.Create(); err != nil {
-	//	logger.Error(err.Error())
-	//	return err
+	//for {
+	//	msg, err := model.SubRdb.ReceiveMessage()
+	//	if err != nil {
+	//		logger.Error("sub receive error")
+	//		continue
+	//	}
+	//	//logger.Info("received")
+	//	if err := json.Unmarshal([]byte(msg.Payload), feed); err != nil {
+	//		panic(err)
+	//	}
+	//
+	//	//fmt.Println(feed)
+	//	if err := feed.Create(); err != nil {
+	//		logger.Error(err.Error())
+	//	}
 	//}
-	return nil
 }

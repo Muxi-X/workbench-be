@@ -12,7 +12,7 @@ import (
 
 // 全部feed列表
 func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
-	list, err := model.FeedList(req.LastId, req.Size) // page从1开始
+	list, err := model.GetFeedList(req.LastId, req.Size) // page从1开始
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
@@ -53,7 +53,7 @@ func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.Lis
 
 // 个人feed列表
 func (s *FeedService) PersonalList(ctx context.Context, req *pb.PersonalListRequest, res *pb.ListResponse) error {
-	list, err := model.PersonalFeedList(req.UserId, req.LastId, req.Size)
+	list, err := model.GetPersonalFeedList(req.UserId, req.LastId, req.Size)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
@@ -111,6 +111,9 @@ func FormatListData(list []*model.FeedModel) ([]*pb.SingleData, error) {
 			defer wg.Done()
 
 			var ifSplit = false
+			// TO DO:
+			// how to split?
+
 			user := &pb.User{
 				Name:      feed.Username,
 				Id:        feed.UserId,

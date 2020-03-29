@@ -10,5 +10,4 @@ db:  # DB 配置 部署时环境变量覆盖
   password: muxi
 redis:
   addr: 127.0.0.1:6379
-#  username: root
-  password: root
+  password:

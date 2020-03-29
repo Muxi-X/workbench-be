@@ -39,8 +39,8 @@ func main() {
 	client := pb.NewFeedServiceClient("workbench.service.feed", service.Client())
 
 	req := &pb.ListRequest{
-		Page: 2,
-		Size: 5,
+		Page:   2,
+		Size:   5,
 		LastId: 400,
 	}
 
@@ -63,15 +63,23 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(respForUser)
-	//fmt.Println(respForUser.PageMax, respForUser.RowsNum)
+	fmt.Println(respForUser.PageMax, respForUser.RowsNum)
 
+	// 新feed测试数据，创建status
 	addReq := &pb.AddRequest{
-		Action:               "",
-		User:                 nil,
-		Source:               nil,
-		XXX_NoUnkeyedLiteral: struct{}{},
-		XXX_unrecognized:     nil,
-		XXX_sizecache:        0,
+		Action: "创建",
+		User: &pb.User{
+			Name:      "测试",
+			Id:        2333,
+			AvatarUrl: "",
+		},
+		Source: &pb.Source{
+			KindId:      6,
+			ObjectId:    6666, // status id
+			ObjectName:  "测试数据", // 进度标题
+			ProjectId:   -1, // 固定数据
+			ProjectName: "noname", // 固定数据
+		},
 	}
 	addResp, err := client.Add(context.Background(), addReq)
 	if err != nil {
