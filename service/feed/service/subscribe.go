@@ -7,6 +7,7 @@ import (
 	logger "muxi-workbench/log"
 )
 
+// 异步写入feed数据
 func SubServiceRun() {
 	var feed = &model.FeedModel{}
 
@@ -23,21 +24,4 @@ func SubServiceRun() {
 			logger.Error(err.Error())
 		}
 	}
-
-	//for {
-	//	msg, err := model.SubRdb.ReceiveMessage()
-	//	if err != nil {
-	//		logger.Error("sub receive error")
-	//		continue
-	//	}
-	//	//logger.Info("received")
-	//	if err := json.Unmarshal([]byte(msg.Payload), feed); err != nil {
-	//		panic(err)
-	//	}
-	//
-	//	//fmt.Println(feed)
-	//	if err := feed.Create(); err != nil {
-	//		logger.Error(err.Error())
-	//	}
-	//}
 }

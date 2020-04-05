@@ -10,6 +10,7 @@ import (
 	logger "muxi-workbench/log"
 )
 
+// 新增feed
 func (s *FeedService) Add(ctx context.Context, req *pb.AddRequest, res *pb.Response) error {
 	feed := &model.FeedModel{
 		UserId:            req.User.Id,

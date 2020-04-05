@@ -38,9 +38,11 @@ func main() {
 
 	client := pb.NewFeedServiceClient("workbench.service.feed", service.Client())
 
+	// 测试：feed数据获取
+
 	req := &pb.ListRequest{
 		Page:   2,
-		Size:   5,
+		Size:   10,
 		LastId: 400,
 	}
 
@@ -49,7 +51,8 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(resp)
-	//fmt.Println(resp.PageMax, resp.RowsNum)
+
+	// 测试：个人feed获取
 
 	reqForUser := &pb.PersonalListRequest{
 		UserId: 1,
