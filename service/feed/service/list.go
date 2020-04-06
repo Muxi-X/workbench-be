@@ -10,8 +10,20 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
+const (
+	NOBODY     = 0 // 无权限用户
+	NORMAL     = 1 // 普通用户
+	ADMIN      = 3 // 管理员
+	SUPERADMIN = 7 // 超管
+)
+
 // 全部feed列表
 func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
+	// 用户无权限
+	if req.Role == NOBODY {
+		return nil
+	}
+
 	// 获取feed数据
 	list, err := model.GetFeedList(req.LastId, req.Size)
 	if err != nil {
@@ -53,7 +65,13 @@ func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.Lis
 	// 为管理员，则返回所有数据
 	// 为普通用户，则查询用户所在的project ids,从所有的data中删去不在的数据，再返回
 	// 如果直接删去不需要的数据，则返回的数据数不与请求的page size一致，最好还是sql查询时就进行该过程
-	// 涉及到user服务和project服务
+	// 涉及到project服务
+
+	if req.Role == ADMIN || req.Role == SUPERADMIN {
+		return nil
+	} else if req.Role == NORMAL {
+		// ...
+	}
 
 	return nil
 }

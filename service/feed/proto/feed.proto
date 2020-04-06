@@ -21,6 +21,7 @@ message ListRequest {
     uint32 page = 1;
     uint32 size = 2;
     uint32 last_id = 3;
+    uint32 role = 4;
 }
 
 message ListResponse {
