@@ -1,5 +1,7 @@
 package model
 
+import m "muxi-workbench/model"
+
 type FileModel struct {
 	ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Name       string `json:"name" gorm:"column:filename;" binding:"required"`
@@ -15,4 +17,28 @@ type FileModel struct {
 
 func (u *FileModel) TableName() string {
 	return "files"
+}
+
+// 创建文件
+func (u *FileModel) Create() error {
+	return m.DB.Self.Create(&u).Error
+}
+
+// DeleteFile ... 删除文件
+func DeleteFile(id uint32) error {
+	doc := &FileModel{}
+	doc.ID = id
+	return m.DB.Self.Delete(&doc).Error
+}
+
+// Update doc
+func (u *FileModel) Update() error {
+	return m.DB.Self.Save(u).Error
+}
+
+// GetFile ... 获取文件
+func GetFile(id uint32) (*FileModel, error) {
+	s := &FileModel{}
+	d := m.DB.Self.Where("id = ?", id).First(&s)
+	return s, d.Error
 }

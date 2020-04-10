@@ -10,8 +10,8 @@ service ProjectService {
   rpc DeleteProject(GetRequest) returns (Response) {}
   rpc GetFileTree(GetRequest) returns (Tree) {}
   rpc GetDocTree(GetRequest) returns (Tree) {}
-  rpc UpdateFileTree(Tree) returns (Response) {}
-  rpc UpdateDocTree(Tree) returns (Response) {}
+  rpc UpdateFileTree(UpdateTreeRequest) returns (Response) {}
+  rpc UpdateDocTree(UpdateTreeRequest) returns (Response) {}
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
   rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
   // rpc GetTrashbin(GetRequest) returns (Response) {}
@@ -129,6 +129,11 @@ message ProjectInfo {
   uint32 user_count = 4;
 }
 
+message UpdateTreeRequest {
+  uint32 id = 1;
+  string tree = 2;
+}
+
 message Tree {
   string tree = 1;
 }
@@ -137,11 +142,14 @@ message CreateFileRequest {
   uint32 project_id = 1;
   string name = 2;
   string url = 3;
+  uint32 user_id = 4;
 }
 
 message CreateDocRequest {
   string title = 1;
   string content = 2;
+  uint32 project_id = 3;
+  uint32 user_id = 4;
 }
 
 message UpdateDocRequest {

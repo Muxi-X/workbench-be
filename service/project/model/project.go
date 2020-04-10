@@ -25,6 +25,30 @@ func (u *ProjectModel) TableName() string {
 	return "projects"
 }
 
+// 创建项目
+func (u *ProjectModel) Create() error {
+	return m.DB.Self.Create(&u).Error
+}
+
+// DeleteProject ... 删除项目
+func DeleteProject(id uint32) error {
+	doc := &ProjectModel{}
+	doc.ID = id
+	return m.DB.Self.Delete(&doc).Error
+}
+
+// 更新项目
+func (u *ProjectModel) Update() error {
+	return m.DB.Self.Save(u).Error
+}
+
+// GetProject ... 获取项目
+func GetProject(id uint32) (*ProjectModel, error) {
+	s := &ProjectModel{}
+	d := m.DB.Self.Where("id = ?", id).First(&s)
+	return s, d.Error
+}
+
 // ListProject list all project
 func ListProject(userID, offset, limit, lastID uint32, pagination bool) ([]*ProjectListItem, uint64, error) {
 	var count uint64

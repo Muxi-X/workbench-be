@@ -40,15 +40,42 @@ func main() {
 
 	client := pb.NewProjectServiceClient("workbench.service.project", service.Client())
 
-	req := &pb.GetProjectListRequest{
-		UserId:     22,
+	// 获取项目列表
+	// req := &pb.GetProjectListRequest{
+	// 	UserId:     22,
+	// 	Offset:     0,
+	// 	Limit:      20,
+	// 	Lastid:     0,
+	// 	Pagination: false,
+	// }
+
+	// resp, err := client.GetProjectList(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatalf("Could not greet: %v", err)
+	// }
+	// fmt.Println(resp.List)
+
+	// 获取项目信息
+	// req := &pb.GetRequest{
+	// 	Id: 3,
+	// }
+
+	// resp, err := client.GetProjectInfo(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatalf("Could not greet: %v", err)
+	// }
+	// fmt.Println(resp)
+
+	// 获取成员列表
+	req := &pb.GetMemberListRequest{
+		ProjectId:  2,
 		Offset:     0,
 		Limit:      20,
 		Lastid:     0,
 		Pagination: false,
 	}
 
-	resp, err := client.GetProjectList(context.Background(), req)
+	resp, err := client.GetMembers(context.Background(), req)
 	if err != nil {
 		log.Fatalf("Could not greet: %v", err)
 	}
