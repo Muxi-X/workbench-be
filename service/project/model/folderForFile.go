@@ -2,6 +2,12 @@ package model
 
 import m "muxi-workbench/model"
 
+// FolderForFileInfo ... 文件文件夹信息
+type FolderForFileInfo struct {
+	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name string `json:"name" gorm:"column:filename;" binding:"required"`
+}
+
 // FolderForFileModel ... 文件文件夹模型
 type FolderForFileModel struct {
 	ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
@@ -38,5 +44,12 @@ func (u *FolderForFileModel) Update() error {
 func GetFolderForFileModel(id uint32) (*FolderForFileModel, error) {
 	s := &FolderForFileModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&s)
+	return s, d.Error
+}
+
+// GetFolderForFileInfoByIds ... 获取文件文件夹信息列表
+func GetFolderForFileInfoByIds(ids []uint32) ([]*FolderForFileInfo, error) {
+	s := make([]*FolderForFileInfo, 0)
+	d := m.DB.Self.Table("foldersforfiles").Where("id IN (?)", ids).Find(&s)
 	return s, d.Error
 }

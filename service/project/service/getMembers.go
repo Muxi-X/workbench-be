@@ -24,7 +24,7 @@ func (s *Service) GetMembers(ctx context.Context, req *pb.GetMemberListRequest, 
 			Id:        item.ID,
 			Name:      item.Name,
 			Avatar:    item.Avatar,
-			GroupName: "groupName",
+			GroupName: "groupName", // TODO  join group table
 			Role:      item.Role,
 		})
 	}
