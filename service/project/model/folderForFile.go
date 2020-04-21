@@ -1,5 +1,14 @@
 package model
 
+import m "muxi-workbench/model"
+
+// FolderForFileInfo ... 文件文件夹信息
+type FolderForFileInfo struct {
+	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name string `json:"name" gorm:"column:filename;" binding:"required"`
+}
+
+// FolderForFileModel ... 文件文件夹模型
 type FolderForFileModel struct {
 	ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Name       string `json:"name" gorm:"column:filename;" binding:"required"`
@@ -9,6 +18,38 @@ type FolderForFileModel struct {
 	ProjectID  uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 }
 
+// TableName ... 物理表名
 func (u *FolderForFileModel) TableName() string {
-	return "foldersformds"
+	return "foldersforfiles"
+}
+
+// Create ... 创建文件文件夹
+func (u *FolderForFileModel) Create() error {
+	return m.DB.Self.Create(&u).Error
+}
+
+// DeleteFolderForFile ... 删除文件文件夹
+func DeleteFolderForFile(id uint32) error {
+	doc := &FolderForFileModel{}
+	doc.ID = id
+	return m.DB.Self.Delete(&doc).Error
+}
+
+// Update ... 更新文件文件夹
+func (u *FolderForFileModel) Update() error {
+	return m.DB.Self.Save(u).Error
+}
+
+// GetFolderForFileModel ... 获取文件文件夹
+func GetFolderForFileModel(id uint32) (*FolderForFileModel, error) {
+	s := &FolderForFileModel{}
+	d := m.DB.Self.Where("id = ?", id).First(&s)
+	return s, d.Error
+}
+
+// GetFolderForFileInfoByIds ... 获取文件文件夹信息列表
+func GetFolderForFileInfoByIds(ids []uint32) ([]*FolderForFileInfo, error) {
+	s := make([]*FolderForFileInfo, 0)
+	d := m.DB.Self.Table("foldersforfiles").Where("id IN (?)", ids).Find(&s)
+	return s, d.Error
 }
