@@ -67,19 +67,41 @@ func main() {
 	// fmt.Println(resp)
 
 	// 获取成员列表
-	req := &pb.GetMemberListRequest{
-		ProjectId:  2,
-		Offset:     0,
-		Limit:      20,
-		Lastid:     0,
-		Pagination: false,
+	// req := &pb.GetMemberListRequest{
+	// 	ProjectId:  2,
+	// 	Offset:     0,
+	// 	Limit:      20,
+	// 	Lastid:     0,
+	// 	Pagination: false,
+	// }
+
+	// resp, err := client.GetMembers(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatalf("Could not greet: %v", err)
+	// }
+	// fmt.Println(resp.List)
+
+	// 获取文档详情
+	// req := &pb.GetRequest{
+	// 	Id: 2,
+	// }
+
+	// resp, err := client.GetDocDetail(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatalf("Could not greet: %v", err)
+	// }
+	// fmt.Println(resp)
+
+	// 获取文档信息列表
+	req := &pb.GetInfoByIdsRequest{
+		List: []uint32{1, 2, 3},
 	}
 
-	resp, err := client.GetMembers(context.Background(), req)
+	resp, err := client.GetDocInfoList(context.Background(), req)
 	if err != nil {
 		log.Fatalf("Could not greet: %v", err)
 	}
-	fmt.Println(resp.List)
+	fmt.Println(resp)
 
 	// new request context
 	// ctx := metadata.NewContext(context.Background(), map[string]string{"key1": "val1", "key2": "val2"})

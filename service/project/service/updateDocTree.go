@@ -16,7 +16,7 @@ func (s *Service) UpdateDocTree(ctx context.Context, req *pb.UpdateTreeRequest, 
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	project.FileTree = req.Tree
+	project.DocTree = req.Tree
 
 	if err := project.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

@@ -141,8 +141,9 @@ message Tree {
 message CreateFileRequest {
   uint32 project_id = 1;
   string name = 2;
-  string url = 3;
-  uint32 user_id = 4;
+  string hashName = 3; // 上传到对象存储时生成的唯一 hash 文件名
+  string url = 4;
+  uint32 user_id = 5;
 }
 
 message CreateDocRequest {
@@ -159,7 +160,7 @@ message UpdateDocRequest {
 }
 
 message GetInfoByIdsRequest {
-  repeated string list = 1;
+  repeated uint32 list = 1;
 }
 
 message FileDetail {
@@ -171,11 +172,11 @@ message FileDetail {
 }
 
 message GetFileInfoListResponse {
-  repeated FileDetail list = 1;
+  repeated FileInfo list = 1;
 }
 
 message GetDocInfoListResponse {
-  repeated DocDetail list = 1;
+  repeated DocInfo list = 1;
 }
 
 message GetFileFolderListResponse {
@@ -186,6 +187,10 @@ message GetDocFolderListResponse {
   repeated DocFolderDetail list = 1;
 }
 
+message FileInfo {
+  uint32 id = 1;
+  string title = 2;
+}
 
 message FileFolderDetail {
   uint32 id = 1;
@@ -200,6 +205,11 @@ message DocDetail {
   string create_time = 5;
   string last_editor = 6;
   string last_edit_time = 7;
+}
+
+message DocInfo {
+  uint32 id = 1;
+  string title = 2;
 }
 
 
