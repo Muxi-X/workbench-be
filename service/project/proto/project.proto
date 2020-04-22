@@ -15,6 +15,7 @@ service ProjectService {
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
   rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
   // rpc GetTrashbin(GetRequest) returns (Response) {}
+  rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
 
   // 文件相关
   rpc CreateFile(CreateFileRequest) returns (Response) {}
@@ -30,6 +31,10 @@ service ProjectService {
   rpc GetDocDetail(GetRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
+}
+
+message ProjectIdsResponse {
+  repeated uint32 list = 1;
 }
 
 message GetProjectListRequest {
