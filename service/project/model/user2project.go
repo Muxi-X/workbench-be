@@ -38,6 +38,13 @@ type MemberListItem struct {
 	Role    uint32 `json:"role" gorm:"column:role;" binding:"required"`
 }
 
+// GetUserToProjectByUser ... 根据用户 id 获取项目-成员关系
+func GetUserToProjectByUser(id uint32) ([]*UserToProjectModel, error) {
+	list := make([]*UserToProjectModel, 0)
+	d := m.DB.Self.Table("user2projects").Where("user_id = ?", id).Find(&list)
+	return list, d.Error
+}
+
 // GetProjectMemberList ... 项目成员列表
 func GetProjectMemberList(projectID, offset, limit, lastID uint32, pagination bool) ([]*MemberListItem, uint64, error) {
 	var count uint64
