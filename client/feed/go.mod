@@ -4,6 +4,10 @@ replace muxi-workbench => ../../
 
 replace muxi-workbench-feed => ../../service/feed
 
+replace muxi-workbench-project => ../../service/project
+
+replace muxi-workbench-user => ../../service/user
+
 go 1.13
 
 require (

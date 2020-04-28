@@ -5,6 +5,7 @@ replace muxi-workbench => ./
 go 1.12
 
 require (
+	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/jinzhu/gorm v1.9.12
 	github.com/micro/go-micro v1.18.0
 	github.com/opentracing/opentracing-go v1.1.0

@@ -19,7 +19,7 @@ import (
 
 func main() {
 	// init config
-	if err := config.Init("", "WORKBENCH_STATUS"); err != nil {
+	if err := config.Init("", "WORKBENCH_USER"); err != nil {
 		panic(err)
 	}
 

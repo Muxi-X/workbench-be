@@ -14,9 +14,7 @@ import (
 	"github.com/opentracing/opentracing-go"
 )
 
-const (
-	address = "localhost:50051"
-)
+const address = "localhost:50051"
 
 func main() {
 	t, io, err := tracer.NewTracer("workbench.cli.feed", address)
@@ -38,12 +36,16 @@ func main() {
 
 	client := pb.NewFeedServiceClient("workbench.service.feed", service.Client())
 
-	// 测试：feed数据获取
-
+	// 获取feed
 	req := &pb.ListRequest{
-		Page:   2,
-		Size:   10,
-		LastId: 400,
+		LastId: 67,
+		Limit:  5,
+		Role:   3,
+		UserId: 53,
+		Filter: &pb.Filter{
+			UserId:  0,
+			GroupId: 3,
+		},
 	}
 
 	resp, err := client.List(context.Background(), req)
@@ -52,41 +54,21 @@ func main() {
 	}
 	fmt.Println(resp)
 
-	// 测试：个人feed获取
-
-	reqForUser := &pb.PersonalListRequest{
-		UserId: 1,
-		Page:   2,
-		Size:   5,
-		LastId: 400,
-	}
-
-	respForUser, err := client.PersonalList(context.Background(), reqForUser)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(respForUser)
-	fmt.Println(respForUser.PageMax, respForUser.RowsNum)
-
-	// 新feed测试数据，创建status
-	addReq := &pb.AddRequest{
-		Action: "创建",
-		User: &pb.User{
-			Name:      "测试",
-			Id:        2333,
-			AvatarUrl: "",
-		},
-		Source: &pb.Source{
-			KindId:      6,
-			ObjectId:    6666, // status id
-			ObjectName:  "测试数据", // 进度标题
-			ProjectId:   -1, // 固定数据
-			ProjectName: "noname", // 固定数据
-		},
-	}
-	addResp, err := client.Add(context.Background(), addReq)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(addResp)
+	// 新增feed
+	//addReq := &pb.PushRequest{
+	//	Action: "创建",
+	//	UserId: 2333,
+	//	Source: &pb.Source{
+	//		Kind:        6,
+	//		Id:          6666,   // status id
+	//		Name:        "测试数据", // 进度标题
+	//		ProjectId:   0,      // 固定数据
+	//		ProjectName: "",     // 固定数据
+	//	},
+	//}
+	//addResp, err := client.Push(context.Background(), addReq)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//fmt.Println(addResp)
 }
