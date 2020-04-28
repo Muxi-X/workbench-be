@@ -3,48 +3,42 @@ syntax = "proto3";
 package feed;
 
 service FeedService {
-    rpc Add(AddRequest) returns (Response) {}
+    rpc Push(PushRequest) returns (Response) {}
     rpc List(ListRequest) returns (ListResponse) {}
-    rpc PersonalList(PersonalListRequest) returns (ListResponse) {}
 }
 
-message AddRequest {
+message PushRequest {
     string action = 1;
-    User user = 6;
-    Source source = 7;
+    uint32 user_id = 2;
+    Source source = 3;
 }
 
-message Response {
-}
+message Response {}
 
 message ListRequest {
-    uint32 page = 1;
-    uint32 size = 2;
-    uint32 last_id = 3;
-    uint32 role = 4;
+    uint32 last_id = 1;
+    uint32 limit = 2;
+    uint32 role = 3;
+    uint32 user_id = 4;
+    Filter filter = 5;
+}
+
+message Filter  {
+    uint32 user_id = 1;   // 0 代表不筛选
+    uint32 group_id = 2;  // 0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
 }
 
 message ListResponse {
-    repeated SingleData data_list = 1;
-    bool has_next = 2;
-    uint32 page_max = 3;
-    uint32 pageNum = 4;
-    uint32 rows_num = 5;
+    repeated FeedItem list = 1;
+    uint32 count = 2;
 }
 
-message PersonalListRequest {
-    uint32 user_id = 1;
-    uint32 page = 2;
-    uint32 size = 3;
-    uint32 last_id = 4;
-}
-
-message SingleData {
-    string action = 1;
-    uint32 feed_id = 2;
-    bool if_split = 3;
-    string time_day = 4;
-    string time_hm = 5;
+message FeedItem {
+    uint32 id = 1;
+    string action = 2;
+    bool show_divider = 3;
+    string date = 4;
+    string time = 5;
     User user = 6;
     Source source = 7;
 }
@@ -56,11 +50,11 @@ message User {
 }
 
 // source: feed的来源.
-// kind_id的对应关系如下，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，5 -> ???，6 -> 进度
+// kind的对应关系如下，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
 message Source {
-    uint32 kind_id = 1;
-    uint32 object_id = 2;
-    string object_name = 3;
-    int32 project_id = 4;      // 存在-1
+    uint32 kind = 1;
+    uint32 id = 2;
+    string name = 3;
+    uint32 project_id = 4;
     string project_name = 5;
 }

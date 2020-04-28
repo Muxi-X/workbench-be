@@ -26,55 +26,55 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type AddRequest struct {
+type PushRequest struct {
 	Action               string   `protobuf:"bytes,1,opt,name=action,proto3" json:"action,omitempty"`
-	User                 *User    `protobuf:"bytes,6,opt,name=user,proto3" json:"user,omitempty"`
-	Source               *Source  `protobuf:"bytes,7,opt,name=source,proto3" json:"source,omitempty"`
+	UserId               uint32   `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Source               *Source  `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AddRequest) Reset()         { *m = AddRequest{} }
-func (m *AddRequest) String() string { return proto.CompactTextString(m) }
-func (*AddRequest) ProtoMessage()    {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
+func (m *PushRequest) Reset()         { *m = PushRequest{} }
+func (m *PushRequest) String() string { return proto.CompactTextString(m) }
+func (*PushRequest) ProtoMessage()    {}
+func (*PushRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_96e1d1466bbab432, []int{0}
 }
 
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AddRequest.Unmarshal(m, b)
+func (m *PushRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PushRequest.Unmarshal(m, b)
 }
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+func (m *PushRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PushRequest.Marshal(b, m, deterministic)
 }
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
+func (m *PushRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PushRequest.Merge(m, src)
 }
-func (m *AddRequest) XXX_Size() int {
-	return xxx_messageInfo_AddRequest.Size(m)
+func (m *PushRequest) XXX_Size() int {
+	return xxx_messageInfo_PushRequest.Size(m)
 }
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+func (m *PushRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_PushRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+var xxx_messageInfo_PushRequest proto.InternalMessageInfo
 
-func (m *AddRequest) GetAction() string {
+func (m *PushRequest) GetAction() string {
 	if m != nil {
 		return m.Action
 	}
 	return ""
 }
 
-func (m *AddRequest) GetUser() *User {
+func (m *PushRequest) GetUserId() uint32 {
 	if m != nil {
-		return m.User
+		return m.UserId
 	}
-	return nil
+	return 0
 }
 
-func (m *AddRequest) GetSource() *Source {
+func (m *PushRequest) GetSource() *Source {
 	if m != nil {
 		return m.Source
 	}
@@ -113,10 +113,11 @@ func (m *Response) XXX_DiscardUnknown() {
 var xxx_messageInfo_Response proto.InternalMessageInfo
 
 type ListRequest struct {
-	Page                 uint32   `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	Size                 uint32   `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`
-	LastId               uint32   `protobuf:"varint,3,opt,name=last_id,json=lastId,proto3" json:"last_id,omitempty"`
-	Role                 uint32   `protobuf:"varint,4,opt,name=role,proto3" json:"role,omitempty"`
+	LastId               uint32   `protobuf:"varint,1,opt,name=last_id,json=lastId,proto3" json:"last_id,omitempty"`
+	Limit                uint32   `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	Role                 uint32   `protobuf:"varint,3,opt,name=role,proto3" json:"role,omitempty"`
+	UserId               uint32   `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Filter               *Filter  `protobuf:"bytes,5,opt,name=filter,proto3" json:"filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -147,23 +148,16 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetPage() uint32 {
-	if m != nil {
-		return m.Page
-	}
-	return 0
-}
-
-func (m *ListRequest) GetSize() uint32 {
-	if m != nil {
-		return m.Size
-	}
-	return 0
-}
-
 func (m *ListRequest) GetLastId() uint32 {
 	if m != nil {
 		return m.LastId
+	}
+	return 0
+}
+
+func (m *ListRequest) GetLimit() uint32 {
+	if m != nil {
+		return m.Limit
 	}
 	return 0
 }
@@ -175,22 +169,80 @@ func (m *ListRequest) GetRole() uint32 {
 	return 0
 }
 
+func (m *ListRequest) GetUserId() uint32 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *ListRequest) GetFilter() *Filter {
+	if m != nil {
+		return m.Filter
+	}
+	return nil
+}
+
+type Filter struct {
+	UserId               uint32   `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	GroupId              uint32   `protobuf:"varint,2,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Filter) Reset()         { *m = Filter{} }
+func (m *Filter) String() string { return proto.CompactTextString(m) }
+func (*Filter) ProtoMessage()    {}
+func (*Filter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_96e1d1466bbab432, []int{3}
+}
+
+func (m *Filter) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Filter.Unmarshal(m, b)
+}
+func (m *Filter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Filter.Marshal(b, m, deterministic)
+}
+func (m *Filter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Filter.Merge(m, src)
+}
+func (m *Filter) XXX_Size() int {
+	return xxx_messageInfo_Filter.Size(m)
+}
+func (m *Filter) XXX_DiscardUnknown() {
+	xxx_messageInfo_Filter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Filter proto.InternalMessageInfo
+
+func (m *Filter) GetUserId() uint32 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *Filter) GetGroupId() uint32 {
+	if m != nil {
+		return m.GroupId
+	}
+	return 0
+}
+
 type ListResponse struct {
-	DataList             []*SingleData `protobuf:"bytes,1,rep,name=data_list,json=dataList,proto3" json:"data_list,omitempty"`
-	HasNext              bool          `protobuf:"varint,2,opt,name=has_next,json=hasNext,proto3" json:"has_next,omitempty"`
-	PageMax              uint32        `protobuf:"varint,3,opt,name=page_max,json=pageMax,proto3" json:"page_max,omitempty"`
-	PageNum              uint32        `protobuf:"varint,4,opt,name=pageNum,proto3" json:"pageNum,omitempty"`
-	RowsNum              uint32        `protobuf:"varint,5,opt,name=rows_num,json=rowsNum,proto3" json:"rows_num,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
-	XXX_unrecognized     []byte        `json:"-"`
-	XXX_sizecache        int32         `json:"-"`
+	List                 []*FeedItem `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+	Count                uint32      `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *ListResponse) Reset()         { *m = ListResponse{} }
 func (m *ListResponse) String() string { return proto.CompactTextString(m) }
 func (*ListResponse) ProtoMessage()    {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_96e1d1466bbab432, []int{3}
+	return fileDescriptor_96e1d1466bbab432, []int{4}
 }
 
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
@@ -211,110 +263,26 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetDataList() []*SingleData {
+func (m *ListResponse) GetList() []*FeedItem {
 	if m != nil {
-		return m.DataList
+		return m.List
 	}
 	return nil
 }
 
-func (m *ListResponse) GetHasNext() bool {
+func (m *ListResponse) GetCount() uint32 {
 	if m != nil {
-		return m.HasNext
-	}
-	return false
-}
-
-func (m *ListResponse) GetPageMax() uint32 {
-	if m != nil {
-		return m.PageMax
+		return m.Count
 	}
 	return 0
 }
 
-func (m *ListResponse) GetPageNum() uint32 {
-	if m != nil {
-		return m.PageNum
-	}
-	return 0
-}
-
-func (m *ListResponse) GetRowsNum() uint32 {
-	if m != nil {
-		return m.RowsNum
-	}
-	return 0
-}
-
-type PersonalListRequest struct {
-	UserId               uint32   `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Page                 uint32   `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	Size                 uint32   `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
-	LastId               uint32   `protobuf:"varint,4,opt,name=last_id,json=lastId,proto3" json:"last_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *PersonalListRequest) Reset()         { *m = PersonalListRequest{} }
-func (m *PersonalListRequest) String() string { return proto.CompactTextString(m) }
-func (*PersonalListRequest) ProtoMessage()    {}
-func (*PersonalListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_96e1d1466bbab432, []int{4}
-}
-
-func (m *PersonalListRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PersonalListRequest.Unmarshal(m, b)
-}
-func (m *PersonalListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PersonalListRequest.Marshal(b, m, deterministic)
-}
-func (m *PersonalListRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PersonalListRequest.Merge(m, src)
-}
-func (m *PersonalListRequest) XXX_Size() int {
-	return xxx_messageInfo_PersonalListRequest.Size(m)
-}
-func (m *PersonalListRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_PersonalListRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PersonalListRequest proto.InternalMessageInfo
-
-func (m *PersonalListRequest) GetUserId() uint32 {
-	if m != nil {
-		return m.UserId
-	}
-	return 0
-}
-
-func (m *PersonalListRequest) GetPage() uint32 {
-	if m != nil {
-		return m.Page
-	}
-	return 0
-}
-
-func (m *PersonalListRequest) GetSize() uint32 {
-	if m != nil {
-		return m.Size
-	}
-	return 0
-}
-
-func (m *PersonalListRequest) GetLastId() uint32 {
-	if m != nil {
-		return m.LastId
-	}
-	return 0
-}
-
-type SingleData struct {
-	Action               string   `protobuf:"bytes,1,opt,name=action,proto3" json:"action,omitempty"`
-	FeedId               uint32   `protobuf:"varint,2,opt,name=feed_id,json=feedId,proto3" json:"feed_id,omitempty"`
-	IfSplit              bool     `protobuf:"varint,3,opt,name=if_split,json=ifSplit,proto3" json:"if_split,omitempty"`
-	TimeDay              string   `protobuf:"bytes,4,opt,name=time_day,json=timeDay,proto3" json:"time_day,omitempty"`
-	TimeHm               string   `protobuf:"bytes,5,opt,name=time_hm,json=timeHm,proto3" json:"time_hm,omitempty"`
+type FeedItem struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Action               string   `protobuf:"bytes,2,opt,name=action,proto3" json:"action,omitempty"`
+	ShowDivider          bool     `protobuf:"varint,3,opt,name=show_divider,json=showDivider,proto3" json:"show_divider,omitempty"`
+	Date                 string   `protobuf:"bytes,4,opt,name=date,proto3" json:"date,omitempty"`
+	Time                 string   `protobuf:"bytes,5,opt,name=time,proto3" json:"time,omitempty"`
 	User                 *User    `protobuf:"bytes,6,opt,name=user,proto3" json:"user,omitempty"`
 	Source               *Source  `protobuf:"bytes,7,opt,name=source,proto3" json:"source,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -322,74 +290,74 @@ type SingleData struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SingleData) Reset()         { *m = SingleData{} }
-func (m *SingleData) String() string { return proto.CompactTextString(m) }
-func (*SingleData) ProtoMessage()    {}
-func (*SingleData) Descriptor() ([]byte, []int) {
+func (m *FeedItem) Reset()         { *m = FeedItem{} }
+func (m *FeedItem) String() string { return proto.CompactTextString(m) }
+func (*FeedItem) ProtoMessage()    {}
+func (*FeedItem) Descriptor() ([]byte, []int) {
 	return fileDescriptor_96e1d1466bbab432, []int{5}
 }
 
-func (m *SingleData) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_SingleData.Unmarshal(m, b)
+func (m *FeedItem) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FeedItem.Unmarshal(m, b)
 }
-func (m *SingleData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_SingleData.Marshal(b, m, deterministic)
+func (m *FeedItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FeedItem.Marshal(b, m, deterministic)
 }
-func (m *SingleData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SingleData.Merge(m, src)
+func (m *FeedItem) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FeedItem.Merge(m, src)
 }
-func (m *SingleData) XXX_Size() int {
-	return xxx_messageInfo_SingleData.Size(m)
+func (m *FeedItem) XXX_Size() int {
+	return xxx_messageInfo_FeedItem.Size(m)
 }
-func (m *SingleData) XXX_DiscardUnknown() {
-	xxx_messageInfo_SingleData.DiscardUnknown(m)
+func (m *FeedItem) XXX_DiscardUnknown() {
+	xxx_messageInfo_FeedItem.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SingleData proto.InternalMessageInfo
+var xxx_messageInfo_FeedItem proto.InternalMessageInfo
 
-func (m *SingleData) GetAction() string {
+func (m *FeedItem) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *FeedItem) GetAction() string {
 	if m != nil {
 		return m.Action
 	}
 	return ""
 }
 
-func (m *SingleData) GetFeedId() uint32 {
+func (m *FeedItem) GetShowDivider() bool {
 	if m != nil {
-		return m.FeedId
-	}
-	return 0
-}
-
-func (m *SingleData) GetIfSplit() bool {
-	if m != nil {
-		return m.IfSplit
+		return m.ShowDivider
 	}
 	return false
 }
 
-func (m *SingleData) GetTimeDay() string {
+func (m *FeedItem) GetDate() string {
 	if m != nil {
-		return m.TimeDay
+		return m.Date
 	}
 	return ""
 }
 
-func (m *SingleData) GetTimeHm() string {
+func (m *FeedItem) GetTime() string {
 	if m != nil {
-		return m.TimeHm
+		return m.Time
 	}
 	return ""
 }
 
-func (m *SingleData) GetUser() *User {
+func (m *FeedItem) GetUser() *User {
 	if m != nil {
 		return m.User
 	}
 	return nil
 }
 
-func (m *SingleData) GetSource() *Source {
+func (m *FeedItem) GetSource() *Source {
 	if m != nil {
 		return m.Source
 	}
@@ -452,12 +420,12 @@ func (m *User) GetAvatarUrl() string {
 }
 
 // source: feed的来源.
-// kind_id的对应关系如下，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，5 -> ???，6 -> 进度
+// kind的对应关系如下，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
 type Source struct {
-	KindId               uint32   `protobuf:"varint,1,opt,name=kind_id,json=kindId,proto3" json:"kind_id,omitempty"`
-	ObjectId             uint32   `protobuf:"varint,2,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
-	ObjectName           string   `protobuf:"bytes,3,opt,name=object_name,json=objectName,proto3" json:"object_name,omitempty"`
-	ProjectId            int32    `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Kind                 uint32   `protobuf:"varint,1,opt,name=kind,proto3" json:"kind,omitempty"`
+	Id                   uint32   `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	ProjectId            uint32   `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
 	ProjectName          string   `protobuf:"bytes,5,opt,name=project_name,json=projectName,proto3" json:"project_name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -489,28 +457,28 @@ func (m *Source) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Source proto.InternalMessageInfo
 
-func (m *Source) GetKindId() uint32 {
+func (m *Source) GetKind() uint32 {
 	if m != nil {
-		return m.KindId
+		return m.Kind
 	}
 	return 0
 }
 
-func (m *Source) GetObjectId() uint32 {
+func (m *Source) GetId() uint32 {
 	if m != nil {
-		return m.ObjectId
+		return m.Id
 	}
 	return 0
 }
 
-func (m *Source) GetObjectName() string {
+func (m *Source) GetName() string {
 	if m != nil {
-		return m.ObjectName
+		return m.Name
 	}
 	return ""
 }
 
-func (m *Source) GetProjectId() int32 {
+func (m *Source) GetProjectId() uint32 {
 	if m != nil {
 		return m.ProjectId
 	}
@@ -525,12 +493,12 @@ func (m *Source) GetProjectName() string {
 }
 
 func init() {
-	proto.RegisterType((*AddRequest)(nil), "feed.AddRequest")
+	proto.RegisterType((*PushRequest)(nil), "feed.PushRequest")
 	proto.RegisterType((*Response)(nil), "feed.Response")
 	proto.RegisterType((*ListRequest)(nil), "feed.ListRequest")
+	proto.RegisterType((*Filter)(nil), "feed.Filter")
 	proto.RegisterType((*ListResponse)(nil), "feed.ListResponse")
-	proto.RegisterType((*PersonalListRequest)(nil), "feed.PersonalListRequest")
-	proto.RegisterType((*SingleData)(nil), "feed.SingleData")
+	proto.RegisterType((*FeedItem)(nil), "feed.FeedItem")
 	proto.RegisterType((*User)(nil), "feed.User")
 	proto.RegisterType((*Source)(nil), "feed.Source")
 }
@@ -538,43 +506,38 @@ func init() {
 func init() { proto.RegisterFile("proto/feed.proto", fileDescriptor_96e1d1466bbab432) }
 
 var fileDescriptor_96e1d1466bbab432 = []byte{
-	// 575 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcb, 0x6e, 0xd3, 0x40,
-	0x14, 0xc5, 0x89, 0xeb, 0xc7, 0x75, 0xa8, 0xca, 0x20, 0x51, 0xb7, 0xa8, 0x50, 0x2c, 0x16, 0x65,
-	0x41, 0x2b, 0x95, 0x0f, 0x40, 0x95, 0x2a, 0x84, 0x25, 0x88, 0xd0, 0x44, 0x5d, 0x5b, 0x93, 0xcc,
-	0xa4, 0x99, 0xe2, 0x47, 0x98, 0x19, 0x97, 0x94, 0xbf, 0x61, 0x87, 0xf8, 0x1c, 0xbe, 0x08, 0xdd,
-	0x19, 0x27, 0xf1, 0x22, 0xec, 0xd8, 0xdd, 0x73, 0xee, 0xfb, 0xf8, 0x8e, 0xe1, 0x60, 0xa9, 0x1a,
-	0xd3, 0x5c, 0xcc, 0x85, 0xe0, 0xe7, 0xd6, 0x24, 0x3e, 0xda, 0xd9, 0x1d, 0xc0, 0x15, 0xe7, 0x54,
-	0x7c, 0x6b, 0x85, 0x36, 0xe4, 0x19, 0x04, 0x6c, 0x66, 0x64, 0x53, 0xa7, 0xde, 0xa9, 0x77, 0x16,
-	0xd3, 0x0e, 0x91, 0x17, 0xe0, 0xb7, 0x5a, 0xa8, 0x34, 0x38, 0xf5, 0xce, 0x92, 0x4b, 0x38, 0xb7,
-	0x65, 0x6e, 0xb4, 0x50, 0xd4, 0xf2, 0xe4, 0x35, 0x04, 0xba, 0x69, 0xd5, 0x4c, 0xa4, 0xa1, 0x8d,
-	0x18, 0xb9, 0x88, 0x89, 0xe5, 0x68, 0xe7, 0xcb, 0x00, 0x22, 0x2a, 0xf4, 0xb2, 0xa9, 0xb5, 0xc8,
-	0xa6, 0x90, 0x7c, 0x92, 0xda, 0xac, 0x1b, 0x13, 0xf0, 0x97, 0xec, 0x56, 0xd8, 0xb6, 0x8f, 0xa9,
-	0xb5, 0x91, 0xd3, 0xf2, 0x87, 0x48, 0x07, 0x8e, 0x43, 0x9b, 0x1c, 0x42, 0x58, 0x32, 0x6d, 0x0a,
-	0xc9, 0xd3, 0xa1, 0xa5, 0x03, 0x84, 0x39, 0xc7, 0x60, 0xd5, 0x94, 0x22, 0xf5, 0x5d, 0x30, 0xda,
-	0xd9, 0x2f, 0x0f, 0x46, 0xae, 0x89, 0x6b, 0x4a, 0xde, 0x42, 0xcc, 0x99, 0x61, 0x45, 0x29, 0xb5,
-	0x49, 0xbd, 0xd3, 0xe1, 0x59, 0x72, 0x79, 0xd0, 0x4d, 0x2a, 0xeb, 0xdb, 0x52, 0x5c, 0x33, 0xc3,
-	0x68, 0x84, 0x21, 0x98, 0x46, 0x8e, 0x20, 0x5a, 0x30, 0x5d, 0xd4, 0x62, 0x65, 0xec, 0x10, 0x11,
-	0x0d, 0x17, 0x4c, 0x8f, 0xc5, 0xca, 0xba, 0x70, 0xc6, 0xa2, 0x62, 0xab, 0x6e, 0x90, 0x10, 0xf1,
-	0x67, 0xb6, 0x22, 0x29, 0x58, 0x73, 0xdc, 0x56, 0xdd, 0x30, 0x6b, 0x88, 0x49, 0xaa, 0xf9, 0xae,
-	0x8b, 0xba, 0xad, 0xd2, 0x3d, 0xe7, 0x42, 0x3c, 0x6e, 0xab, 0xac, 0x81, 0xa7, 0x5f, 0x84, 0xd2,
-	0x4d, 0xcd, 0xca, 0xbe, 0x2c, 0x87, 0x10, 0xa2, 0xbe, 0xb8, 0xae, 0x53, 0x26, 0x40, 0xe8, 0xd6,
-	0xb5, 0x7a, 0x0d, 0x76, 0xe8, 0x35, 0xdc, 0xad, 0x97, 0xdf, 0xd7, 0x2b, 0xfb, 0xe3, 0x01, 0x6c,
-	0x97, 0xfe, 0xe7, 0x87, 0x3f, 0x84, 0x10, 0xf5, 0xc1, 0x7c, 0xd7, 0x2a, 0x40, 0x98, 0x73, 0xdc,
-	0x45, 0xce, 0x0b, 0xbd, 0x2c, 0xa5, 0xb1, 0x0d, 0x23, 0x1a, 0xca, 0xf9, 0x04, 0x21, 0xba, 0x8c,
-	0xac, 0x44, 0xc1, 0xd9, 0x83, 0x6d, 0x1a, 0xd3, 0x10, 0xf1, 0x35, 0x7b, 0xc0, 0x72, 0xd6, 0xb5,
-	0x70, 0x02, 0xc4, 0x34, 0x40, 0xf8, 0xb1, 0xfa, 0x4f, 0x07, 0x96, 0x83, 0x8f, 0x39, 0xa8, 0x44,
-	0xcd, 0x2a, 0xd1, 0xed, 0x62, 0x6d, 0xb2, 0x0f, 0x83, 0xcd, 0x12, 0x03, 0xc9, 0xc9, 0x09, 0x00,
-	0xbb, 0x67, 0x86, 0xa9, 0xa2, 0x55, 0xa5, 0x5d, 0x21, 0xa6, 0xb1, 0x63, 0x6e, 0x54, 0x99, 0xfd,
-	0xf4, 0x20, 0x70, 0xd5, 0x71, 0xe8, 0xaf, 0xb2, 0xe6, 0xbd, 0x8f, 0x80, 0x30, 0xe7, 0xe4, 0x39,
-	0xc4, 0xcd, 0xf4, 0x4e, 0xcc, 0xcc, 0x56, 0x9e, 0xc8, 0x11, 0x39, 0x27, 0x2f, 0x21, 0xe9, 0x9c,
-	0x76, 0x14, 0xd7, 0x00, 0x1c, 0x35, 0xc6, 0x81, 0x4e, 0x00, 0x96, 0xaa, 0x59, 0xa7, 0xa3, 0x50,
-	0x7b, 0x34, 0xee, 0x98, 0x9c, 0x93, 0x57, 0x30, 0x5a, 0xbb, 0x6d, 0x01, 0xa7, 0x57, 0xd2, 0x71,
-	0x58, 0xe1, 0xf2, 0xb7, 0x07, 0xc9, 0x07, 0x21, 0xf8, 0x44, 0xa8, 0x7b, 0x39, 0x13, 0xe4, 0x0d,
-	0x0c, 0xaf, 0x38, 0x27, 0xdd, 0x49, 0x6f, 0x9f, 0xf5, 0xf1, 0xbe, 0x63, 0x36, 0x8f, 0xef, 0x11,
-	0xb9, 0x00, 0xdf, 0x9e, 0xf8, 0x13, 0xe7, 0xe9, 0xdd, 0xdc, 0x31, 0xe9, 0x53, 0x9b, 0x84, 0xf7,
-	0x30, 0xea, 0x1f, 0x28, 0x39, 0x72, 0x51, 0x3b, 0x8e, 0x76, 0x77, 0x81, 0x69, 0x60, 0xff, 0x3a,
-	0xef, 0xfe, 0x06, 0x00, 0x00, 0xff, 0xff, 0x62, 0x38, 0xfd, 0x6b, 0x89, 0x04, 0x00, 0x00,
+	// 486 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x53, 0x51, 0x6f, 0xd3, 0x30,
+	0x10, 0xc6, 0x6d, 0x96, 0x36, 0x97, 0x6e, 0x02, 0x0b, 0xb1, 0x30, 0x69, 0xa8, 0x44, 0x3c, 0x54,
+	0x42, 0xda, 0xa4, 0xf2, 0xca, 0x23, 0x42, 0x44, 0x42, 0x08, 0x79, 0xda, 0x73, 0x15, 0xea, 0x1b,
+	0x33, 0x4b, 0xe2, 0x62, 0x3b, 0xe5, 0x9d, 0x3f, 0xc0, 0x8f, 0xe2, 0x8f, 0x21, 0x9f, 0x9d, 0x2e,
+	0x03, 0x89, 0xb7, 0xbb, 0xcf, 0xf6, 0x7d, 0xf7, 0x7d, 0x77, 0x86, 0xc7, 0x3b, 0xa3, 0x9d, 0xbe,
+	0xbc, 0x41, 0x94, 0x17, 0x14, 0xf2, 0xc4, 0xc7, 0xa5, 0x84, 0xfc, 0x73, 0x6f, 0x6f, 0x05, 0x7e,
+	0xef, 0xd1, 0x3a, 0xfe, 0x0c, 0xd2, 0x7a, 0xeb, 0x94, 0xee, 0x0a, 0xb6, 0x64, 0xab, 0x4c, 0xc4,
+	0x8c, 0x9f, 0xc2, 0xac, 0xb7, 0x68, 0x36, 0x4a, 0x16, 0x93, 0x25, 0x5b, 0x1d, 0x8b, 0xd4, 0xa7,
+	0x95, 0xe4, 0xaf, 0x20, 0xb5, 0xba, 0x37, 0x5b, 0x2c, 0xa6, 0x4b, 0xb6, 0xca, 0xd7, 0x8b, 0x0b,
+	0xa2, 0xb8, 0x22, 0x4c, 0xc4, 0xb3, 0x12, 0x60, 0x2e, 0xd0, 0xee, 0x74, 0x67, 0xb1, 0xfc, 0xc5,
+	0x20, 0xff, 0xa8, 0xac, 0x1b, 0x28, 0x4f, 0x61, 0xd6, 0xd4, 0xd6, 0xf9, 0xd2, 0x2c, 0x94, 0xf6,
+	0x69, 0x25, 0xf9, 0x53, 0x38, 0x6a, 0x54, 0xab, 0x5c, 0x64, 0x0c, 0x09, 0xe7, 0x90, 0x18, 0xdd,
+	0x04, 0xba, 0x63, 0x41, 0xf1, 0xb8, 0xbb, 0xe4, 0xef, 0xee, 0x6e, 0x54, 0xe3, 0xd0, 0x14, 0x47,
+	0xe3, 0xee, 0xde, 0x13, 0x26, 0xe2, 0x59, 0xf9, 0x16, 0xd2, 0x80, 0x8c, 0x0b, 0xb1, 0x07, 0x85,
+	0x9e, 0xc3, 0xfc, 0xab, 0xd1, 0xfd, 0xee, 0xde, 0x80, 0x19, 0xe5, 0x95, 0x2c, 0x3f, 0xc0, 0x22,
+	0xc8, 0x09, 0xfa, 0x78, 0x09, 0x49, 0xa3, 0xac, 0x2b, 0xd8, 0x72, 0xba, 0xca, 0xd7, 0x27, 0x91,
+	0x11, 0x51, 0x56, 0x0e, 0x5b, 0x41, 0x67, 0x5e, 0xda, 0x56, 0xf7, 0xdd, 0x41, 0x1a, 0x25, 0xe5,
+	0x6f, 0x06, 0xf3, 0xe1, 0x22, 0x3f, 0x81, 0xc9, 0xa1, 0x8b, 0x89, 0x92, 0xa3, 0xc9, 0x4c, 0x1e,
+	0x4c, 0xe6, 0x25, 0x2c, 0xec, 0xad, 0xfe, 0xb1, 0x91, 0x6a, 0xaf, 0x24, 0x1a, 0xf2, 0x65, 0x2e,
+	0x72, 0x8f, 0xbd, 0x0b, 0x90, 0xb7, 0x4c, 0xd6, 0x0e, 0xc9, 0x9b, 0x4c, 0x50, 0xec, 0x31, 0xa7,
+	0x5a, 0x24, 0x5f, 0x32, 0x41, 0x31, 0x7f, 0x01, 0x89, 0x97, 0x5b, 0xa4, 0xe4, 0x15, 0x84, 0xce,
+	0xaf, 0x2d, 0x1a, 0x41, 0xf8, 0x68, 0xd6, 0xb3, 0xff, 0xcc, 0xba, 0x82, 0xc4, 0xbf, 0xf1, 0x0c,
+	0x5d, 0xdd, 0x62, 0x5c, 0x24, 0x8a, 0xa3, 0xa8, 0xc9, 0x41, 0xd4, 0x39, 0x40, 0xbd, 0xaf, 0x5d,
+	0x6d, 0x36, 0xbd, 0x69, 0xa8, 0xf5, 0x4c, 0x64, 0x01, 0xb9, 0x36, 0x4d, 0xf9, 0x93, 0x41, 0x1a,
+	0xaa, 0xfb, 0x6a, 0x77, 0xaa, 0x1b, 0x0c, 0xa1, 0xf8, 0x9f, 0x6a, 0x03, 0xe3, 0x74, 0xc4, 0x78,
+	0x0e, 0xb0, 0x33, 0xfa, 0x1b, 0x6e, 0xdd, 0xfd, 0x76, 0x64, 0x11, 0xa9, 0xa4, 0x77, 0x6f, 0x38,
+	0xa6, 0xa7, 0xc1, 0x8e, 0x3c, 0x62, 0x9f, 0xea, 0x16, 0xd7, 0x77, 0x90, 0xfb, 0xa1, 0x5c, 0xa1,
+	0xd9, 0xab, 0x2d, 0xf2, 0xd7, 0x90, 0xf8, 0x0f, 0xc3, 0x9f, 0x04, 0xf1, 0xa3, 0xcf, 0x73, 0x16,
+	0x67, 0x7d, 0xd8, 0xf4, 0x47, 0xfc, 0x12, 0x12, 0xbf, 0x1b, 0xc3, 0xe5, 0xd1, 0xda, 0x9f, 0xf1,
+	0x31, 0x34, 0x3c, 0xf8, 0x92, 0xd2, 0xdf, 0x7c, 0xf3, 0x27, 0x00, 0x00, 0xff, 0xff, 0xa0, 0x0f,
+	0x7d, 0x20, 0xaf, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -585,9 +548,8 @@ var _ server.Option
 // Client API for FeedService service
 
 type FeedServiceClient interface {
-	Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*Response, error)
+	Push(ctx context.Context, in *PushRequest, opts ...client.CallOption) (*Response, error)
 	List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*ListResponse, error)
-	PersonalList(ctx context.Context, in *PersonalListRequest, opts ...client.CallOption) (*ListResponse, error)
 }
 
 type feedServiceClient struct {
@@ -608,8 +570,8 @@ func NewFeedServiceClient(serviceName string, c client.Client) FeedServiceClient
 	}
 }
 
-func (c *feedServiceClient) Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "FeedService.Add", in)
+func (c *feedServiceClient) Push(ctx context.Context, in *PushRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "FeedService.Push", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -628,22 +590,11 @@ func (c *feedServiceClient) List(ctx context.Context, in *ListRequest, opts ...c
 	return out, nil
 }
 
-func (c *feedServiceClient) PersonalList(ctx context.Context, in *PersonalListRequest, opts ...client.CallOption) (*ListResponse, error) {
-	req := c.c.NewRequest(c.serviceName, "FeedService.PersonalList", in)
-	out := new(ListResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for FeedService service
 
 type FeedServiceHandler interface {
-	Add(context.Context, *AddRequest, *Response) error
+	Push(context.Context, *PushRequest, *Response) error
 	List(context.Context, *ListRequest, *ListResponse) error
-	PersonalList(context.Context, *PersonalListRequest, *ListResponse) error
 }
 
 func RegisterFeedServiceHandler(s server.Server, hdlr FeedServiceHandler, opts ...server.HandlerOption) {
@@ -654,14 +605,10 @@ type FeedService struct {
 	FeedServiceHandler
 }
 
-func (h *FeedService) Add(ctx context.Context, in *AddRequest, out *Response) error {
-	return h.FeedServiceHandler.Add(ctx, in, out)
+func (h *FeedService) Push(ctx context.Context, in *PushRequest, out *Response) error {
+	return h.FeedServiceHandler.Push(ctx, in, out)
 }
 
 func (h *FeedService) List(ctx context.Context, in *ListRequest, out *ListResponse) error {
 	return h.FeedServiceHandler.List(ctx, in, out)
-}
-
-func (h *FeedService) PersonalList(ctx context.Context, in *PersonalListRequest, out *ListResponse) error {
-	return h.FeedServiceHandler.PersonalList(ctx, in, out)
 }

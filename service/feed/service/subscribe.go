@@ -5,13 +5,14 @@ import (
 
 	"muxi-workbench-feed/model"
 	logger "muxi-workbench/log"
+	m "muxi-workbench/model"
 )
 
-// 异步写入feed数据
+// SubServiceRun ... 写入feed数据
 func SubServiceRun() {
 	var feed = &model.FeedModel{}
 
-	ch := model.SubRdb.Channel()
+	ch := m.PSCli.Self.Channel()
 	for msg := range ch {
 		logger.Info("received")
 

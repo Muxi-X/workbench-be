@@ -58,18 +58,13 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
-	// init redis db for subscribe service
-	rdbClient := m.OpenRedisClient()
-	if _, err = rdbClient.Ping().Result(); err != nil {
-		panic(err)
-	}
-
+	// init redis db
 	if !*subFg {
-		m.PubRdb = rdbClient
-		defer m.PubRdb.Close()
+		model.Rdb.Init()
+		defer model.Rdb.Close()
 	} else {
-		m.SubRdb = rdbClient.Subscribe(m.RdbChan)
-		defer m.SubRdb.Close()
+		model.PSCli.Init(m.RdbChan)
+		defer model.PSCli.Close()
 	}
 
 	//redis broker

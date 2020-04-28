@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	m "muxi-workbench/model"
 )
 
@@ -15,7 +14,7 @@ type FeedModel struct {
 	SourceObjectName  string `json:"source_object_name" gorm:"column:source_objectname"`
 	SourceObjectId    uint32 `json:"source_object_id" gorm:"column:source_objectid"`
 	SourceProjectName string `json:"source_project_name" gorm:"column:source_projectname"`
-	SourceProjectId   int32  `json:"source_project_id" gorm:"column:source_projectid"` // 存在-1
+	SourceProjectId   uint32 `json:"source_project_id" gorm:"column:source_projectid"`
 	TimeDay           string `json:"time_day" gorm:"column:timeday"`
 	TimeHm            string `json:"time_hm" gorm:"column:timehm"`
 }
@@ -29,55 +28,75 @@ func (f *FeedModel) Create() error {
 	return m.DB.Self.Create(f).Error
 }
 
-// 获取全部feed数量
-func GetRowsSum() (uint32, error) {
-	var count uint32
-	d := m.DB.Self.Table("feeds").Count(&count)
-	return count, d.Error
-}
-
-// 获取个人feed总数
-func GetPersonalRowsSum(uid uint32) (uint32, error) {
-	var count uint32
-	d := m.DB.Self.Table("feeds").Where("userid = ?", uid).Count(&count)
-	return count, d.Error
-}
-
-// 查找feed
-// 参数：last-->上一次查询的最后一个feed的id；limit-->预期返回的数据数
-func GetFeedList(lastId, limit uint32) ([]*FeedModel, error) {
+// GetFeedList ... 查找feed
+func GetFeedList(lastId, limit, uid uint32, filter []uint32, filterRequired bool) ([]*FeedModel, error) {
 	var data []*FeedModel
-	var d *gorm.DB
 
-	// 判断是否为0, 0为第一次查询
+	query := m.DB.Self.Table("feeds").Order("id desc").Limit(limit)
+
+	// 查找用户的feed
+	if uid != 0 {
+		query = query.Where("userid = ?", uid)
+	}
+
+	// 0为第一次查询
 	if lastId != 0 {
-		d = m.DB.Self.Where("id < ?", lastId).Order("id desc").Limit(limit).Find(&data)
-	} else {
-		d = m.DB.Self.Order("id desc").Limit(limit).Find(&data)
+		query = query.Where("id < ?", lastId)
 	}
 
-	if d.RecordNotFound() {
-		return data, nil
+	if filterRequired {
+		query = query.Where("source_projectid in (?) OR source_projectid = 0", filter)
 	}
-	return data, d.Error
+
+	if err := query.Scan(&data).Error; err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
-// 查找个人feed
-// 参数：uid-->user id；last-->上一次查询的最后一个feed的id；limit-->预期返回的数据数
-func GetPersonalFeedList(uid, lastId, limit uint32) ([]*FeedModel, error) {
+// GetPersonalFeedList ... 查找用户所属feed
+//func GetPersonalFeedList(lastId, limit, uid uint32) ([]*FeedModel, uint32, error) {
+//	var data []*FeedModel
+//	var count uint32
+//
+//	query := m.DB.Self.Table("feeds").Where("userid = ?", uid).Order("id desc").Limit(limit)
+//
+//	// 0为第一次查询
+//	if lastId != 0 {
+//		query = query.Where("id < ?", lastId)
+//	}
+//
+//	if err := query.Scan(&data).Count(&count).Error; err != nil {
+//		return nil, 0, err
+//	}
+//
+//	return data, count, nil
+//}
+
+// GetFeedListForGroup ... 根据组别查找feed
+func GetFeedListForGroup(lastId, limit, groupId uint32, filter []uint32, filterRequired bool) ([]*FeedModel, error) {
 	var data []*FeedModel
-	var d *gorm.DB
+	//var count uint32
 
-	// 判断是否为0, 0为第一次查询
+	query := m.DB.Self.Table("feeds").
+		Select("feeds.*").
+		Where("users.group_id = ?", groupId).
+		Joins("left join users on users.id = feeds.userid").
+		Order("feeds.id desc").
+		Limit(limit)
+
 	if lastId != 0 {
-		d = m.DB.Self.Where("userid = ? AND id < ?", uid, lastId).Order("id desc").Limit(limit).Find(&data)
-	} else {
-		d = m.DB.Self.Where("userid = ?", uid).Order("id desc").Limit(limit).Find(&data)
+		query = query.Where("feeds.id < ?", lastId)
 	}
 
-	if d.RecordNotFound() {
-		return data, nil
+	if filterRequired {
+		query = query.Where("source_projectid in (?) OR source_projectid = 0", filter)
 	}
 
-	return data, d.Error
+	if err := query.Scan(&data).Error; err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }

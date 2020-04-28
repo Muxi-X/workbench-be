@@ -1,19 +1,14 @@
 package model
 
 import (
-	"github.com/go-redis/redis/v7"
-	"github.com/spf13/viper"
+	m "muxi-workbench/model"
 )
 
-var PubRdb *redis.Client
-var SubRdb *redis.PubSub
+//var PubRdb *redis.Client
+//var SubRdb *redis.PubSub
 
 const RdbChan = "sub"
 
-func OpenRedisClient() *redis.Client {
-	return redis.NewClient(&redis.Options{
-		Addr: viper.GetString("redis.addr"),
-		Password: viper.GetString("redis.password"),
-		DB: 0,
-	})
+func PublishMsg(msg []byte) error {
+	return m.Rdb.Self.Publish(RdbChan, msg).Err()
 }
