@@ -28,70 +28,37 @@ func (f *FeedModel) Create() error {
 	return m.DB.Self.Create(f).Error
 }
 
-// GetFeedList ... 查找feed
-func GetFeedList(lastId, limit, uid uint32, filter []uint32, filterRequired bool) ([]*FeedModel, error) {
-	var data []*FeedModel
-
-	query := m.DB.Self.Table("feeds").Order("id desc").Limit(limit)
-
-	// 查找用户的feed
-	if uid != 0 {
-		query = query.Where("userid = ?", uid)
-	}
-
-	// 0为第一次查询
-	if lastId != 0 {
-		query = query.Where("id < ?", lastId)
-	}
-
-	if filterRequired {
-		query = query.Where("source_projectid in (?) OR source_projectid = 0", filter)
-	}
-
-	if err := query.Scan(&data).Error; err != nil {
-		return nil, err
-	}
-
-	return data, nil
+// FilterParams provide filter's params.
+type FilterParams struct {
+	UserId     uint32
+	GroupId    uint32
+	ProjectIds []uint32 // 可访问的 projects' id
 }
 
-// GetPersonalFeedList ... 查找用户所属feed
-//func GetPersonalFeedList(lastId, limit, uid uint32) ([]*FeedModel, uint32, error) {
-//	var data []*FeedModel
-//	var count uint32
-//
-//	query := m.DB.Self.Table("feeds").Where("userid = ?", uid).Order("id desc").Limit(limit)
-//
-//	// 0为第一次查询
-//	if lastId != 0 {
-//		query = query.Where("id < ?", lastId)
-//	}
-//
-//	if err := query.Scan(&data).Count(&count).Error; err != nil {
-//		return nil, 0, err
-//	}
-//
-//	return data, count, nil
-//}
-
-// GetFeedListForGroup ... 根据组别查找feed
-func GetFeedListForGroup(lastId, limit, groupId uint32, filter []uint32, filterRequired bool) ([]*FeedModel, error) {
+// GetFeedList ... 查找feed
+func GetFeedList(lastId, limit uint32, filter *FilterParams) ([]*FeedModel, error) {
 	var data []*FeedModel
-	//var count uint32
 
-	query := m.DB.Self.Table("feeds").
-		Select("feeds.*").
-		Where("users.group_id = ?", groupId).
-		Joins("left join users on users.id = feeds.userid").
-		Order("feeds.id desc").
-		Limit(limit)
+	query := m.DB.Self.Table("feeds").Select("feeds.*").Order("feeds.id desc").Limit(limit)
 
-	if lastId != 0 {
-		query = query.Where("feeds.id < ?", lastId)
+	// 查找用户的feed
+	if filter.UserId != 0 {
+		query = query.Where("feeds.userid = ?", filter.UserId)
 	}
 
-	if filterRequired {
-		query = query.Where("source_projectid in (?) OR source_projectid = 0", filter)
+	// 组别筛选
+	if filter.GroupId != 0 {
+		query = query.Where("users.group_id = ?", filter.GroupId).Joins("left join users on users.id = feeds.userid")
+	}
+
+	// 项目权限过滤
+	if len(filter.ProjectIds) != 0 {
+		query = query.Where("source_projectid in (?) OR source_projectid = 0", filter.ProjectIds)
+	}
+
+	// 分页
+	if lastId != 0 {
+		query = query.Where("feeds.id < ?", lastId)
 	}
 
 	if err := query.Scan(&data).Error; err != nil {

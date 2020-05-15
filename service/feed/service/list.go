@@ -18,29 +18,25 @@ const (
 
 // List ... feed列表
 func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
-	var filterRequired = false
-	var filter []uint32
+	var projectIds []uint32
 	var err error
 
 	// 普通用户，只能返回有权限访问的 projects
 	if req.Role == NORMAL {
-		filterRequired = true
-		filter, err = GetFilterFromProjectService(req.UserId)
+		projectIds, err = GetFilterFromProjectService(req.UserId)
 		if err != nil {
 			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 		}
 	}
 
-	var feeds []*model.FeedModel
-
-	if req.Filter.GroupId != 0 {
-		// 组别筛选
-		feeds, err = model.GetFeedListForGroup(req.LastId, req.Limit, req.Filter.GroupId, filter, filterRequired)
-	} else {
-		// 用户筛选&全部数据无筛选
-		feeds, err = model.GetFeedList(req.LastId, req.Limit, req.Filter.UserId, filter, filterRequired)
+	// 筛选条件
+	var filter = &model.FilterParams{
+		UserId:     req.Filter.UserId,
+		GroupId:    req.Filter.GroupId,
+		ProjectIds: projectIds,
 	}
 
+	feeds, err := model.GetFeedList(req.LastId, req.Limit, filter)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
