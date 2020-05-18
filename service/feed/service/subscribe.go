@@ -12,7 +12,7 @@ import (
 func SubServiceRun() {
 	var feed = &model.FeedModel{}
 
-	ch := m.PSCli.Self.Channel()
+	ch := m.PubSubClient.Self.Channel()
 	for msg := range ch {
 		logger.Info("received")
 

@@ -8,9 +8,8 @@ import (
 	"go.uber.org/zap"
 )
 
-type RedisDB struct {
+type Redis struct {
 	Self *redis.Client
-	//PubSub *redis.PubSub
 }
 
 type PubSub struct {
@@ -18,28 +17,28 @@ type PubSub struct {
 }
 
 var (
-	Rdb   *RedisDB
-	PSCli *PubSub
+	RedisDB      *Redis
+	PubSubClient *PubSub
 )
 
-func (*RedisDB) Init() {
-	Rdb = &RedisDB{
+func (*Redis) Init() {
+	RedisDB = &Redis{
 		Self: OpenRedisClient(),
 	}
 }
 
-func (*RedisDB) Close() {
-	_ = Rdb.Self.Close()
+func (*Redis) Close() {
+	_ = RedisDB.Self.Close()
 }
 
 func (*PubSub) Init(channel string) {
-	PSCli = &PubSub{
+	PubSubClient = &PubSub{
 		Self: OpenRedisPubSubClient(channel),
 	}
 }
 
 func (*PubSub) Close() {
-	_ = PSCli.Self.Close()
+	_ = PubSubClient.Self.Close()
 }
 
 func OpenRedisClient() *redis.Client {

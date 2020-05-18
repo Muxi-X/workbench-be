@@ -10,5 +10,5 @@ import (
 const RdbChan = "sub"
 
 func PublishMsg(msg []byte) error {
-	return m.Rdb.Self.Publish(RdbChan, msg).Err()
+	return m.RedisDB.Self.Publish(RdbChan, msg).Err()
 }

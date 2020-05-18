@@ -22,9 +22,7 @@ import (
 
 // 使用--sub运行subscribe服务
 // 否则默认运行feed服务
-var (
-	subFg = flag.Bool("sub", false, "use subscribe service mode")
-)
+var subFg = flag.Bool("sub", false, "use subscribe service mode")
 
 // 包含两个服务：feed服务和subscribe服务
 // subscribe服务 --> 异步将feed数据写入数据库
@@ -34,10 +32,12 @@ func main() {
 	var err error
 
 	// init config
-	if *subFg {
-		err = config.Init("./conf/config_sub.yaml", "WORKBENCH_SUB")
-	} else {
+	if !*subFg {
+		// feed-service
 		err = config.Init("./conf/config.yaml", "WORKBENCH_FEED")
+	} else {
+		// sub-service
+		err = config.Init("./conf/config_sub.yaml", "WORKBENCH_SUB")
 	}
 
 	if err != nil {
@@ -58,26 +58,6 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
-	// init redis db
-	if !*subFg {
-		model.Rdb.Init()
-		defer model.Rdb.Close()
-	} else {
-		model.PSCli.Init(m.RdbChan)
-		defer model.PSCli.Close()
-	}
-
-	//redis broker
-	//bro := redis.NewBroker(broker.Addrs("redis://user:root@localhost:6379"))
-	//if err := bro.Init(); err != nil {
-	//	panic(err)
-	//}
-	//
-	//if err := bro.Connect(); err != nil {
-	//	panic(err)
-	//}
-	//bro.Subscribe()
-
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),
 		micro.WrapHandler(
@@ -96,14 +76,38 @@ func main() {
 	srv.Init()
 
 	if !*subFg {
-		// Register handler
+		// feed-service
+
+		// init redis db
+		model.RedisDB.Init()
+		defer model.RedisDB.Close()
+
 		pb.RegisterFeedServiceHandler(srv.Server(), &s.FeedService{})
+
+		// Run the server
+		if err := srv.Run(); err != nil {
+			logger.Error(err.Error())
+		}
+
 	} else {
-		go s.SubServiceRun()
+		// sub-service
+
+		// init redis pub/sub client
+		model.PubSubClient.Init(m.RdbChan)
+		defer model.PubSubClient.Close()
+
+		s.SubServiceRun()
 	}
 
-	// Run the server
-	if err := srv.Run(); err != nil {
-		logger.Error(err.Error())
-	}
+	//if !*subFg {
+	//	// Register handler
+	//	pb.RegisterFeedServiceHandler(srv.Server(), &s.FeedService{})
+	//} else {
+	//	go s.SubServiceRun()
+	//}
+	//
+	//// Run the server
+	//if err := srv.Run(); err != nil {
+	//	logger.Error(err.Error())
+	//}
 }
