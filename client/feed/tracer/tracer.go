@@ -1,16 +1,17 @@
 package tracer
 
 import (
+	"io"
+	"time"
+
 	opentracing "github.com/opentracing/opentracing-go"
 	jaeger "github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
-	"io"
-	"time"
 )
 
-func NewTracer(servicename string, addr string) (opentracing.Tracer, io.Closer, error) {
+func NewTracer(serviceName string, addr string) (opentracing.Tracer, io.Closer, error) {
 	cfg := jaegercfg.Configuration{
-		ServiceName: servicename, // tracer name
+		ServiceName: serviceName, // tracer name
 		Sampler: &jaegercfg.SamplerConfig{
 			Type:  jaeger.SamplerTypeConst,
 			Param: 1,

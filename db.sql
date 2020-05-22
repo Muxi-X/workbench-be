@@ -36,3 +36,51 @@ CREATE TABLE `users` (
   KEY `team_id` (`team_id`),
   KEY `group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Table structure for feeds
+-- ----------------------------
+
+DROP TABLE IF EXISTS `feeds`;
+CREATE TABLE `feeds` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) DEFAULT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `useravatar` varchar(200) DEFAULT NULL,
+  `action` varchar(20) DEFAULT NULL,
+  `source_kindid` int(11) DEFAULT NULL,
+  `source_objectname` varchar(100) DEFAULT NULL,
+  `source_objectid` int(11) DEFAULT NULL,
+  `source_projectname` varchar(100) DEFAULT NULL,
+  `source_projectid` int(11) DEFAULT NULL,
+  `timeday` varchar(20) DEFAULT NULL,
+  `timehm` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Table structure for projects
+-- ----------------------------
+
+DROP TABLE IF EXISTS `projects`;
+CREATE TABLE `projects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `intro` varchar(100) DEFAULT NULL,
+  `time` varchar(50) DEFAULT NULL,
+  `count` int(11) DEFAULT NULL,
+  `team_id` int(11) DEFAULT NULL,
+  `filetree` text,
+  `doctree` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `team_id` (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+DROP TABLE IF EXISTS `user2projects`;
+CREATE TABLE `user2projects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

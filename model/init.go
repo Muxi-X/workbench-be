@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
-	log "muxi-workbench/log"
+	"muxi-workbench/log"
 
 	"github.com/jinzhu/gorm"
 	// MySQL driver.
