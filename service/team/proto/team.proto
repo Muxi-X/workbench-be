@@ -43,6 +43,7 @@ message UpdateGroupInfoRequest {
 message GroupListRequest {
     uint32 offset = 1;
     uint32 limit = 2;
+    bool pagination = 3;
 }
 
 message GroupListResponse {
@@ -54,6 +55,7 @@ message MemberListRequest {
     uint32 group_id = 1;
     uint32 offset = 2;
     uint32 limit = 3;
+    bool pagination = 4;
 }
 
 message MemberListResponse {
@@ -99,6 +101,7 @@ message ParseInvitationResponse {
 message ApplicationListRequest {
     uint32 offset = 1;
     uint32 limit = 2;
+    bool pagination = 3;
 }
 
 message ApplicationListResponse {
