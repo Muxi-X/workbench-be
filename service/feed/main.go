@@ -98,16 +98,4 @@ func main() {
 
 		s.SubServiceRun()
 	}
-
-	//if !*subFg {
-	//	// Register handler
-	//	pb.RegisterFeedServiceHandler(srv.Server(), &s.FeedService{})
-	//} else {
-	//	go s.SubServiceRun()
-	//}
-	//
-	//// Run the server
-	//if err := srv.Run(); err != nil {
-	//	logger.Error(err.Error())
-	//}
 }
