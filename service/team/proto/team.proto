@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package team;
+
+service TeamService {
+    // 组别
+    rpc CreateGroup(CreateGroupRequest) returns (Response) {}
+    rpc DeleteGroup(DeleteGroupRequest) returns (Response) {}
+    rpc UpdateGroupInfo(UpdateGroupInfoRequest) returns (Response) {}
+    rpc GetGroupList(GroupListRequest) returns (GroupListResponse) {}
+    rpc GetMemberList(MemberListRequest) returns (MemberListResponse) {}
+    rpc UpdateMembersForGroup(UpdateMembersRequest) returns (Response) {}
+
+    // 团队
+    rpc Join(JoinRequest) returns (Response) {}
+    rpc Remove(RemoveRequest) returns (Response) {}
+    rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {}
+    rpc ParseInvitation(ParseInvitationRequest) returns (ParseInvitationResponse) {}
+
+    // 申请
+    rpc GetApplications(ApplicationListRequest) returns (ApplicationListResponse) {}
+    rpc CreateApplication(ApplicationRequest) returns (Response) {}
+    rpc DeleteApplication(ApplicationRequest) returns (Response) {}
+}
+
+message CreateGroupRequest {
+    string group_name = 1;
+    uint32 role = 2;
+    repeated uint32 user_list = 3;
+}
+
+message DeleteGroupRequest {
+    uint32 group_id = 1;
+    uint32 role = 2;
+}
+
+message UpdateGroupInfoRequest {
+    uint32 group_id = 1;
+    string new_name = 2;
+    uint32 role = 3;
+}
+
+message GroupListRequest {
+    uint32 offset = 1;
+    uint32 limit = 2;
+}
+
+message GroupListResponse {
+    repeated GroupItem list = 1;
+    uint32 count = 2;
+}
+
+message MemberListRequest {
+    uint32 group_id = 1;
+    uint32 offset = 2;
+    uint32 limit = 3;
+}
+
+message MemberListResponse {
+    repeated Member list = 1;
+    uint32 count = 2;
+}
+
+message UpdateMembersRequest {
+    uint32 group_id = 1;
+    uint32 role = 2;
+    repeated uint32 user_list = 3;
+}
+
+message JoinRequest {
+    uint32 user_id = 1;
+    uint32 team_id = 2;
+    uint32 role = 3;
+}
+
+message RemoveRequest {
+    uint32 user_id = 1;
+    uint32 team_id = 2;
+    uint32 role = 3;
+}
+
+message CreateInvitationRequest {
+    uint32 team_id = 1;
+}
+
+message CreateInvitationResponse {
+    string url = 1;
+    string hash = 2;
+}
+
+message ParseInvitationRequest {
+    string hash = 1;
+}
+
+message ParseInvitationResponse {
+    uint32 team_id = 1;
+}
+
+message ApplicationListRequest {
+    uint32 offset = 1;
+    uint32 limit = 2;
+}
+
+message ApplicationListResponse {
+    repeated ApplyUserItem list = 1;
+    uint32 count = 2;
+}
+
+message ApplicationRequest {
+    uint32 user_id = 1;
+}
+
+message Member {
+    uint32 id = 1;
+    string name = 3;
+    uint32 team_id = 2;
+    uint32 group_id = 4;
+    string group_name = 5;
+    uint32 role = 6;
+    string email = 7;
+    string avatar = 8;
+}
+
+message ApplyUserItem {
+    uint32 id = 1;
+    string name = 2;
+    string email = 3;
+}
+
+message GroupItem {
+    uint32 id = 1;
+    string name = 2;
+    uint32 user_count = 3;
+}
+
+message Response {}
