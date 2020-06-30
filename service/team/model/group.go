@@ -2,6 +2,7 @@ package model
 
 import(
 	m "github.com/Muxi-X/workbench-be/model"
+	"github.com/Muxi-X/workbench-be/pkg/constvar"
 )
 
 type GroupModel struct {
@@ -33,9 +34,54 @@ func DeleteGroup(id uint32) error {
 func (g *GroupModel) Update() error {
 	return m.DB.Self.Save(g).Error
 }
-
+//get group by groupid
 func GetGroup(id uint32) (*GroupModel, error) {
 	g := &GroupModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&g)
 	return g, d.Error
 }
+
+//list all of group
+func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel,uint64,error) {
+	if limit == 0 {
+		limit = constvar.DefaultLimit
+	}
+
+	grouplist := make([]*GroupModel, 0)
+
+	//order 根据groups.id降序输出，即优先输出最近创建group
+	query := m.DB.Self.Table("groups").Select("groups.id").Order("groups.id desc")
+
+	if pagination {
+		query = query.Offset(offset).Limit(limit)
+	}
+
+    var count uint64
+
+	if err := query.Scan(&grouplist).Count(&count).Error; err != nil {
+		return grouplist, count, err
+	}
+
+	return grouplist, count, nil
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
