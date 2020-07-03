@@ -9,6 +9,10 @@ import (
 )
 
 func (ts *TeamService) UpdateGroupInfo (ctx context.Context, req *pb.UpdateGroupInfoRequest, res *pb.Response) error {
+	if req.Role != model.SUPERADMIN {
+		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")
+	}
+
 	group, err := model.GetGroup(req.GroupId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase,err.Error())
@@ -20,4 +24,5 @@ func (ts *TeamService) UpdateGroupInfo (ctx context.Context, req *pb.UpdateGroup
 		return e.ServerErr(errno.ErrDatabase,err.Error())
 	}
 
+	return nil
 }
