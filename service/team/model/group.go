@@ -22,6 +22,13 @@ const (
 
 )
 
+const (
+	TEAM = 1   //对象:团队
+	GROUP = 2 //对象:组别
+	NOGROUP = 0
+	NOTEAM = 0
+)
+
 func (g *GroupModel) TableName() string{
 	return "groups"
 }

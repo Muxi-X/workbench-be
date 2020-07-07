@@ -2,12 +2,10 @@ package service
 
 import (
 	"context"
-	e "github.com/Muxi-X/workbench-be/pkg/err"
-	errno "github.com/Muxi-X/workbench-be/service/team/errno"
-	"github.com/Muxi-X/workbench-be/service/team/model"
 	pb "github.com/Muxi-X/workbench-be/service/team/proto"
 )
 
+/*
 func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationListRequest,res *pb.ApplicationListResponse) error {
 	list, count, err := model.ListApplictions(req.Offset, req.Limit, req.Pagination)
 	if err != nil {
@@ -29,4 +27,9 @@ func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationLi
 	res.List = resList
 
 	return nil
+}
+ */
+
+func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationListRequest,res *pb.ApplicationListResponse) error {
+
 }

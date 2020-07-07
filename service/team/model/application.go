@@ -3,11 +3,12 @@ package model
 import (
 	m "github.com/Muxi-X/workbench-be/model"
 	"github.com/Muxi-X/workbench-be/pkg/constvar"
-	"github.com/spf13/viper"
-	"strconv"
-	"time"
-
 )
+
+type ApplyModel struct {
+	ID     uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	UserID uint32 `json:"user_id" gorm:"column:user_id;" binding:"required"`
+}
 
 type ApplyUserItem struct {
 	ID    uint32
@@ -15,42 +16,26 @@ type ApplyUserItem struct {
 	Eamil string
 }
 
-func CreateInvitation(team_id uint32, expired int64) string {
-	t := time.Now().Unix()
-	final := t + expired
-	words := strconv.FormatUint(uint64(team_id), 10) + " " + strconv.FormatInt(final, 10)
-	sercetKey := viper.GetString("aes.sercet_key")
-	return AesEncrypt(words, sercetKey)
+func (a *ApplyModel) TableName() string{
+	return "applys"
 }
 
-func ParseInvitation(hash string) (uint32, error) {
-	var i int
-	t := time.Now().Unix()
-	sercetKey := viper.GetString("aes.sercet_key")
-	words := AesDecrypt(hash, sercetKey)
-	for i = 0; i < len(words); i++ {
-		if words[i] == ' ' {
-			break
-		}
-	}
-	//string to int64
-	datetime, err := strconv.ParseInt(words[i+1:], 10, 64)
-	if t >= datetime {
-		return 0, err
-	}
-
-	//teamid,_ := strconv.ParseUint(words[:i],10,64)
-	tmp, _ := strconv.ParseInt(words[:i], 10, 64)
-	teamid := uint32(tmp)
-	return teamid, nil
+func (a *ApplyModel) Create() error {
+	return m.DB.Self.Create(&a).Error
 }
 
-func ListApplictions(offset uint32, limit uint32, pagination bool) ([]*ApplyUserItem, uint64, error) {
+func DeleteApply(userid uint32) error {
+	apply := &ApplyModel{}
+	apply.UserID = userid
+	return m.DB.Self.Delete(&apply).Error
+}
+
+func ListApplictions(offset uint32, limit uint32, pagination bool) (, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
 
-	applicationlist := make([]*ApplyUserItem, 0)
+	applicationlist := make([]*ApplyModel, 0)
 
 	query := m.DB.Self.Table("applys").Select("id").Order("id desc")
 
@@ -61,8 +46,8 @@ func ListApplictions(offset uint32, limit uint32, pagination bool) ([]*ApplyUser
 	var count uint64
 
 	if err := query.Scan(&applicationlist).Count(&count).Error; err != nil {
-		return applicationlist, count, err
+
 	}
 
-	return applicationlist, count, nil
+
 }

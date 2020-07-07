@@ -8,7 +8,6 @@ import (
 
 func (ts *TeamService) CreateInvitation(ctx context.Context, req *pb.CreateInvitationRequest, res *pb.CreateInvitationResponse) error {
 	res.Hash = model.CreateInvitation(req.TeamId, req.Expired)
-
 	return nil
 }
 

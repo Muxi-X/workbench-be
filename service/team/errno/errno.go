@@ -11,6 +11,9 @@ var (
 
     //group
 	ErrPermissionDenied = &err.Errno{Code: 20101, Message: "Permission Denied"}
+
+	//invitation
+	ErrLinkExpiration = &err.Errno{Code: 20201, Message:"Link expiration"}
 	)
 
 

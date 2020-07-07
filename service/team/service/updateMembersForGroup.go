@@ -2,11 +2,10 @@ package service
 
 import (
 	"context"
+	e "github.com/Muxi-X/workbench-be/pkg/err"
 	errno "github.com/Muxi-X/workbench-be/service/team/errno"
 	"github.com/Muxi-X/workbench-be/service/team/model"
 	pb "github.com/Muxi-X/workbench-be/service/team/proto"
-	e "github.com/Muxi-X/workbench-be/pkg/err"
-	um "github.com/Muxi-X/workbench-be/service/user/model"
 )
 
 func (ts *TeamService) UpdateMembersForGroup (ctx context.Context, req *pb.UpdateMembersRequest, res *pb.Response) error {
@@ -14,24 +13,19 @@ func (ts *TeamService) UpdateMembersForGroup (ctx context.Context, req *pb.Updat
 	if req.Role != model.SUPERADMIN {
 		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")
 	}
-
-
+	//传入的为该组别全体的成员,统计切片长度,即为总人数..之后更新数据
 	g, err := model.GetGroup(req.GroupId)
-	//用零暂时代替表达式.以后要做更改
-	g.Counter = 0
-	g.Update()
-
-
-	//update members info
-	list, err := um.GetUserByIds(req.UserList)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-	for _, member := range list {
-		member.GroupID = req.GroupId
-		//if err := member.Update(); err != nil {
-		//     return e.ServerErr(errno.ErrDatabase, err.Error())
-		//}
+	g.Counter = uint32(len(req.UserList))
+	if err := g.Update(); err != nil {
+		return e.ServerErr(errno.ErrDatabase,err.Error())
+	}
+
+	//update members info
+	if err := UpdateUsersGroupidOrTeamid(req.UserList, req.GroupId, model.GROUP); err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
 
