@@ -83,6 +83,7 @@ message RemoveRequest {
 
 message CreateInvitationRequest {
     uint32 team_id = 1;
+    int64 expired = 2;
 }
 
 message CreateInvitationResponse {
