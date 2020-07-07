@@ -49,7 +49,7 @@ func main() {
 	srv.Init()
 
 	// Register handler
-	pb.RegisterUserServiceHandler(srv.Server(), &s.Service{})
+	pb.RegisterUserServiceHandler(srv.Server(), &s.UserService{})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

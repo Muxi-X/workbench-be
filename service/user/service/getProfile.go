@@ -6,7 +6,7 @@ import (
 )
 
 // GetProfile ... 获取用户信息
-func (s *Service) GetProfile(ctx context.Context, req *pb.GetRequest, res *pb.UserProfile) error {
+func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *pb.UserProfile) error {
 
 	// status, err := model.GetStatus(req.Id)
 	// if err != nil {

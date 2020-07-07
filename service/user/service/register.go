@@ -2,17 +2,18 @@ package service
 
 import (
 	"context"
+
 	errno "muxi-workbench-user/errno"
-	e "muxi-workbench/pkg/err"
 	model "muxi-workbench-user/model"
 	pb "muxi-workbench-user/proto"
+	e "muxi-workbench/pkg/err"
 )
 
 // Register ... 注册
-func (s *Service) Register(ctx context.Context, req *pb.RegisterRequest, res *pb.Response) error {
+func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res *pb.Response) error {
 
 	user := &model.UserModel{
-		Name: req.Name,
+		Name:  req.Name,
 		Email: req.Email,
 	}
 

@@ -6,11 +6,13 @@ go 1.12
 
 require (
 	github.com/go-redis/redis v6.15.7+incompatible
+	github.com/golang/protobuf v1.3.2
 	github.com/jinzhu/gorm v1.9.12
 	github.com/micro/go-micro v1.18.0
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/spf13/viper v1.6.2
 	github.com/uber/jaeger-client-go v2.22.1+incompatible
 	go.uber.org/zap v1.14.1
+	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5
 	muxi-workbench v0.0.0-00010101000000-000000000000
 )

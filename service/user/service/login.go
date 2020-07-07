@@ -6,7 +6,7 @@ import (
 )
 
 // Login ... 登录
-func (s *Service) Login(ctx context.Context, req *pb.LoginRequest, res *pb.Response) error {
+func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest, res *pb.Response) error {
 
 	// status, err := model.GetStatus(req.Id)
 	// if err != nil {
