@@ -1,6 +1,9 @@
 package model
 
-import m "muxi-workbench/model"
+import (
+	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
+)
 
 type UserModel struct {
 	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
@@ -51,31 +54,26 @@ func GetUserByIds(ids []uint32) ([]*UserModel, error) {
 	return list, nil
 }
 
-// // ListStatus list all status
-// func ListStatus(groupId, offset, limit int, lastId uint32, filter *StatusModel) ([]*StatusModel, uint64, error) {
-// 	if limit == 0 {
-// 		limit = constvar.DefaultLimit
-// 	}
+// ListUser list users
+func ListUser(offset, limit, lastId uint32, filter *UserModel) ([]*UserModel, error) {
+	if limit == 0 {
+		limit = constvar.DefaultLimit
+	}
 
-// 	statusList := make([]*StatusModel, 0)
-// 	var count uint64
+	list := make([]*UserModel, 0)
 
-// 	if err := m.DB.Self.Model(&StatusModel{}).Where(filter).Count(&count).Error; err != nil {
-// 		return statusList, count, err
-// 	}
+	query := m.DB.Self.Model(&UserModel{}).Where(filter).Offset(offset).Limit(limit)
 
-// 	if lastId != 0 {
-// 		if err := m.DB.Self.Where(filter).Where("id < ?", lastId).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
-// 			return statusList, count, err
-// 		}
-// 	} else {
-// 		if err := m.DB.Self.Where(filter).Offset(offset).Limit(limit).Order("id desc").Find(&statusList).Error; err != nil {
-// 			return statusList, count, err
-// 		}
-// 	}
+	if lastId != 0 {
+		query = query.Where("id < ?", lastId).Order("id desc")
+	}
 
-// 	return statusList, count, nil
-// }
+	if err := query.Scan(&list).Error; err != nil {
+		return nil, err
+	}
+
+	return list, nil
+}
 
 // // Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
 // func (u *UserModel) Compare(pwd string) (err error) {
@@ -94,3 +92,13 @@ func GetUserByIds(ids []uint32) ([]*UserModel, error) {
 // 	validate := validator.New()
 // 	return validate.Struct(u)
 // }
+
+func UpdateTeamAndGroup(ids []uint32, value, kind uint32) (err error) {
+	query := m.DB.Self.Table("users").Where("id In (?)", ids)
+	if kind == 1 {
+		err = query.Update("team_id", value).Error
+	} else if kind == 2 {
+		err = query.Update("group_id", value).Error
+	}
+	return
+}

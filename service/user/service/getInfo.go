@@ -9,7 +9,7 @@ import (
 )
 
 // GetInfo ... 获取用户信息
-func (s *Service) GetInfo(ctx context.Context, req *pb.GetInfoRequest, res *pb.UserInfoResponse) error {
+func (s *UserService) GetInfo(ctx context.Context, req *pb.GetInfoRequest, res *pb.UserInfoResponse) error {
 
 	list, err := model.GetUserByIds(req.Ids)
 	if err != nil {
