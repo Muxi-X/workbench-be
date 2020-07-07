@@ -2,9 +2,10 @@ local_name: workbench.service.user # 本地服务名
 k8s_service_name: workbench.user-be # k8s 服务名
 runmode: debug                 # 开发模式, debug, release, test 部署时环境变量覆盖
 tracing:
-  jager: localhost:6831 # opentracing 
+  jager: localhost:6831 # opentracing
 db:  # DB 配置 部署时环境变量覆盖
   name: workbench
   addr: 0.0.0.0:3306
   username: root
   password: root
+auth_addr: localhost:8083
