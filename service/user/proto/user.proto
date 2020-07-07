@@ -8,6 +8,20 @@ service UserService {
   rpc GetInfo(GetInfoRequest) returns (UserInfoResponse) {}
   rpc GetProfile(GetRequest) returns (UserProfile) {}
   rpc List(ListRequest) returns (ListResponse) {}
+
+  //rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
+  rpc UpdateTeamAndGroupForUsers(UpdateTeamGroupRequest) returns (Response) {}
+}
+
+message UpdateTeamGroupRequest {
+  repeated uint32 ids = 1;
+  uint32 value = 2;    // 目标值（team_id or group_id）
+  uint32 kind = 3;     // 1 => team; 2 => group
+}
+
+message UpdateInfoRequest {
+  uint32 id = 1;
+  UserInfo info = 2;
 }
 
 message GetRequest {
@@ -53,11 +67,11 @@ message GetResponse {
 }
 
 message ListRequest {
-  uint32 lastid = 1;
+  uint32 last_id = 1;
   uint32 offset = 2;
   uint32 limit = 3;
-  uint32 group = 4;
-  uint32 uid = 5;
+  uint32 team = 4;
+  uint32 group = 5; // 0 则不筛选
 }
 
 message ListResponse {
@@ -69,5 +83,11 @@ message Response {}
 
 message User {
   uint32 id = 1;
-  string avatar = 2;
+  string nick = 2;
+  string name = 3;
+  string email = 4;
+  string avatar = 5;
+  uint32 role = 6;
+  uint32 team = 7;
+  uint32 group = 8;
 }
