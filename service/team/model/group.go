@@ -14,6 +14,14 @@ type GroupModel struct {
 	Time    string `json:"time" gorm:"column:time;" binding:"required"`
 }
 
+const (
+	NOBODY = 0     // 无权限用户
+	NORMAL = 1     // 普通用户
+	ADMIN = 3      // 管理员
+	SUPERADMIN = 7 // 超管
+
+)
+
 func (g *GroupModel) TableName() string{
 	return "groups"
 }
@@ -39,6 +47,13 @@ func GetGroup(id uint32) (*GroupModel, error) {
 	g := &GroupModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&g)
 	return g, d.Error
+}
+
+//get groupid by groupname
+func GetGroupId(name string) (uint32, error) {
+	g := &GroupModel{}
+	d := m.DB.Self.Where("name = ?", name).First(&g)
+	return g.ID, d.Error
 }
 
 //list all of group
