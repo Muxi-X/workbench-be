@@ -7,6 +7,9 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-ole/go-ole v1.2.4 // indirect
+	github.com/micro/go-micro v1.18.0
+	github.com/micro/go-plugins v1.5.1
+	github.com/opentracing/opentracing-go v1.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	github.com/spf13/pflag v1.0.5
@@ -15,7 +18,6 @@ require (
 	github.com/willf/pad v0.0.0-20190207183901-eccfe5d84172
 	go.uber.org/zap v1.13.0
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
-	golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2 // indirect
 	gopkg.in/go-playground/validator.v9 v9.30.2 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
