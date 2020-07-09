@@ -1,19 +1,18 @@
 package errno
 
 import (
-	err "github.com/Muxi-X/workbench-be/pkg/err"
+	"muxi-workbench/pkg/err"
 )
 
 var (
-	OK  = &err.Errno{Code: 0, Message: "OK"}
+	OK = &err.Errno{Code: 0, Message: "OK"}
 
 	ErrDatabase = &err.Errno{Code: 10001, Message: "Database error"}
+	ErrClient   = &err.Errno{Code: 10002, Message: "Client error"}
 
-    //group
+	//group
 	ErrPermissionDenied = &err.Errno{Code: 20101, Message: "Permission Denied"}
 
 	//invitation
-	ErrLinkExpiration = &err.Errno{Code: 20201, Message:"Link expiration"}
-	)
-
-
+	ErrLinkExpiration = &err.Errno{Code: 20201, Message: "Link expiration"}
+)

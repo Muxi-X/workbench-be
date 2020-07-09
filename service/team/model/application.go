@@ -1,8 +1,8 @@
 package model
 
 import (
-	m "github.com/Muxi-X/workbench-be/model"
-	"github.com/Muxi-X/workbench-be/pkg/constvar"
+	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
 )
 
 type ApplyModel struct {
@@ -16,7 +16,7 @@ type ApplyUserItem struct {
 	Eamil string
 }
 
-func (a *ApplyModel) TableName() string{
+func (a *ApplyModel) TableName() string {
 	return "applys"
 }
 
@@ -30,7 +30,7 @@ func DeleteApply(userid uint32) error {
 	return m.DB.Self.Delete(&apply).Error
 }
 
-func ListApplictions(offset uint32, limit uint32, pagination bool) (, uint64, error) {
+func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
@@ -46,8 +46,16 @@ func ListApplictions(offset uint32, limit uint32, pagination bool) (, uint64, er
 	var count uint64
 
 	if err := query.Scan(&applicationlist).Count(&count).Error; err != nil {
-
+		return applicationlist, count, err
 	}
 
+	return applicationlist, count, nil
+}
 
+func GetUsersidByApplys(applys []*ApplyModel) []uint32 {
+	ret := make([]uint32, 0)
+	for _, value := range applys {
+		ret = append(ret, value.UserID)
+	}
+	return ret
 }

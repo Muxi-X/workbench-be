@@ -1,11 +1,15 @@
 package main
 
 import (
-	"github.com/opentracing/opentracing-go"
-	"muxi-workbench-team-client/tracer"
-	"muxi-workbench/pkg/handler"
-	"github.com/micro/go-micro"
 	"log"
+
+	"muxi-workbench-team-client/tracer"
+	pb "muxi-workbench-team/proto"
+	"muxi-workbench/pkg/handler"
+
+	"github.com/micro/go-micro"
+	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 )
 
 const (
@@ -25,9 +29,11 @@ func main() {
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
 		),
-		micro.WrapCall(handler.ClientErrorHandlerWrapper()))
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
+
 	service.Init()
 
-	client := pb.NewProjectServiceClient("workbench.service.team", service.Client())
+	//client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
 
 }

@@ -1,11 +1,11 @@
 package tracer
 
 import (
-	"io"
-	"time"
 	opentracing "github.com/opentracing/opentracing-go"
 	jaeger "github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
+	"io"
+	"time"
 )
 
 func NewTracer(servicename string, addr string) (opentracing.Tracer, io.Closer, error) {

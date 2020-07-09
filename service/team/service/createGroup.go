@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
-	e "github.com/Muxi-X/workbench-be/pkg/err"
-	errno "github.com/Muxi-X/workbench-be/service/team/errno"
-	"github.com/Muxi-X/workbench-be/service/team/model"
-	pb "github.com/Muxi-X/workbench-be/service/team/proto"
+	errno "muxi-workbench-team/errno"
+	"muxi-workbench-team/model"
+	pb "muxi-workbench-team/proto"
+	e "muxi-workbench/pkg/err"
 	"time"
 )
 
@@ -27,15 +27,14 @@ func (ts *TeamService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	if err := group.Create(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-    //获取新建好的组别id, 并且设置好组别内成员的group_id
-    groupid, err := model.GetGroupId(req.GroupName)
-    if err != nil {
+	//获取新建好的组别id, 并且设置好组别内成员的group_id
+	groupid, err := model.GetGroupId(req.GroupName)
+	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-    if err := UpdateUsersGroupidOrTeamid(req.UserList, groupid, model.GROUP); err != nil {
+	if err := model.UpdateUsersGroupidOrTeamid(req.UserList, groupid, model.GROUP); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
 
 	return nil
 }

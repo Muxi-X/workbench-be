@@ -2,14 +2,22 @@ package service
 
 import (
 	"context"
-	pb "github.com/Muxi-X/workbench-be/service/team/proto"
+	errno "muxi-workbench-team/errno"
+	"muxi-workbench-team/model"
+	pb "muxi-workbench-team/proto"
+	e "muxi-workbench/pkg/err"
 )
 
-/*
-func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationListRequest,res *pb.ApplicationListResponse) error {
-	list, count, err := model.ListApplictions(req.Offset, req.Limit, req.Pagination)
+//List …… 列举申请
+func (ts *TeamService) GetApplications(ctx context.Context, req *pb.ApplicationListRequest, res *pb.ApplicationListResponse) error {
+	applys, count, err := model.ListApplys(req.Offset, req.Limit, req.Pagination)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	list, _, err := model.GetUsersByApplys(applys, count)
+	if err != nil {
+		return e.ServerErr(errno.ErrClient, err.Error())
 	}
 
 	resList := make([]*pb.ApplyUserItem, 0)
@@ -17,9 +25,9 @@ func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationLi
 	for index := 0; index < len(list); index++ {
 		item := list[index]
 		resList = append(resList, &pb.ApplyUserItem{
-			Id:                   item.ID,
-			Name:                 item.Name,
-			Email:                item.Eamil,
+			Id:    item.ID,
+			Name:  item.Name,
+			Email: item.Eamil,
 		})
 	}
 
@@ -27,9 +35,5 @@ func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationLi
 	res.List = resList
 
 	return nil
-}
- */
-
-func (ts *TeamService) GetApplications(ctx context.Context,req *pb.ApplicationListRequest,res *pb.ApplicationListResponse) error {
 
 }

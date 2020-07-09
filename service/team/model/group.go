@@ -1,8 +1,8 @@
 package model
 
-import(
-	m "github.com/Muxi-X/workbench-be/model"
-	"github.com/Muxi-X/workbench-be/pkg/constvar"
+import (
+	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
 )
 
 type GroupModel struct {
@@ -15,21 +15,21 @@ type GroupModel struct {
 }
 
 const (
-	NOBODY = 0     // 无权限用户
-	NORMAL = 1     // 普通用户
-	ADMIN = 3      // 管理员
+	NOBODY     = 0 // 无权限用户
+	NORMAL     = 1 // 普通用户
+	ADMIN      = 3 // 管理员
 	SUPERADMIN = 7 // 超管
 
 )
 
 const (
-	TEAM = 1   //对象:团队
-	GROUP = 2 //对象:组别
+	TEAM    = 1 //对象:团队
+	GROUP   = 2 //对象:组别
 	NOGROUP = 0
-	NOTEAM = 0
+	NOTEAM  = 0
 )
 
-func (g *GroupModel) TableName() string{
+func (g *GroupModel) TableName() string {
 	return "groups"
 }
 
@@ -49,6 +49,7 @@ func DeleteGroup(id uint32) error {
 func (g *GroupModel) Update() error {
 	return m.DB.Self.Save(g).Error
 }
+
 //get group by groupid
 func GetGroup(id uint32) (*GroupModel, error) {
 	g := &GroupModel{}
@@ -64,7 +65,7 @@ func GetGroupId(name string) (uint32, error) {
 }
 
 //list all of group
-func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel,uint64,error) {
+func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
@@ -78,7 +79,7 @@ func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel,uint
 		query = query.Offset(offset).Limit(limit)
 	}
 
-    var count uint64
+	var count uint64
 
 	if err := query.Scan(&grouplist).Count(&count).Error; err != nil {
 		return grouplist, count, err
@@ -86,26 +87,3 @@ func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel,uint
 
 	return grouplist, count, nil
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

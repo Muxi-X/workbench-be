@@ -7,9 +7,9 @@ db:  # DB 配置 部署时环境变量覆盖
   name: workbench
   addr: 0.0.0.0:3306
   username: root
-  password: root
+  password:
 redis:
   addr: 127.0.0.1:6379
   password:
 aes:
-  sercet_key:
+  sercet_key: 

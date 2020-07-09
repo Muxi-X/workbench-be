@@ -87,8 +87,7 @@ message CreateInvitationRequest {
 }
 
 message CreateInvitationResponse {
-    string url = 1;
-    string hash = 2;
+    string hash = 1;
 }
 
 message ParseInvitationRequest {
