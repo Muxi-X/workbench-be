@@ -10,4 +10,6 @@ var (
 	ErrAccessToken = &err.Errno{Code: 10003, Message: "Error occurred while getting access token from oauth2 server"}
 	ErrAuthToken   = &err.Errno{Code: 10004, Message: "Error occurred while handling the auth token"}
 	ErrBadRequest  = &err.Errno{Code: 10005, Message: "Request error"}
+	ErrRegister    = &err.Errno{Code: 10006, Message: "Error occurred while registering on auth-server"}
+	ErrUserExisted = &err.Errno{Code: 10007, Message: "User has existed"}
 )

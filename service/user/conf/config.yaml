@@ -1,6 +1,7 @@
 local_name: workbench.service.user # 本地服务名
 k8s_service_name: workbench.user-be # k8s 服务名
 runmode: debug                 # 开发模式, debug, release, test 部署时环境变量覆盖
+jwt_key: workbenchmuxihacker
 tracing:
   jager: localhost:6831 # opentracing
 db:  # DB 配置 部署时环境变量覆盖
@@ -8,4 +9,7 @@ db:  # DB 配置 部署时环境变量覆盖
   addr: 0.0.0.0:3306
   username: root
   password: root
-auth_addr: localhost:8083
+auth_server:  # auth 内网
+  host: localhost:8083
+  client_id: 4b194ad8-7d97-4dca-b078-6c3c65b31c75
+  client_secret: 8c066b19-e507-4887-88f3-7e7edd99bfd8

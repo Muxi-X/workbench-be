@@ -2,45 +2,92 @@ package service
 
 import (
 	"context"
-	"fmt"
 
-	errno "muxi-workbench-user/errno"
-	model "muxi-workbench-user/model"
+	"muxi-workbench-user/errno"
+	"muxi-workbench-user/model"
+	"muxi-workbench-user/pkg/auth"
 	pb "muxi-workbench-user/proto"
-	"muxi-workbench-user/util"
 	e "muxi-workbench/pkg/err"
-)
-
-var (
-	registerURL = ""
 )
 
 // Register ... 注册
 func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res *pb.Response) error {
 
 	// muxi-auth-service 注册用户
-
-	bodyData := map[string]string{"username": req.Email, "password": req.Password}
-
-	body, err := util.SendHTTPRequest(registerURL, "POST", &util.RequestData{
-		BodyData:    bodyData,
-		ContentType: util.JsonData,
-	})
-	if err != nil {
-
+	if err := auth.RegisterRequest(req.Name, req.Email, req.Password); err != nil {
+		return e.ServerErr(errno.ErrRegister, err.Error())
 	}
-	fmt.Println(body)
 
 	// 本地 user 数据库创建用户
 
+	// 用户是否存在
+	if CheckUserExisted(req.Name, req.Email) {
+		return e.ServerErr(errno.ErrUserExisted, "")
+	}
+
+	// 创建用户
 	user := &model.UserModel{
 		Name:  req.Name,
 		Email: req.Email,
 	}
-
 	if err := user.Create(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
 	return nil
+}
+
+func CheckUserExisted(name, email string) bool {
+	sameEmailChannel, sameNameChannel, done := make(chan bool), make(chan bool), make(chan struct{})
+	defer close(done)
+	defer close(sameEmailChannel)
+	defer close(sameNameChannel)
+
+	// 检查邮箱
+	go func(email string) {
+		u, _ := model.GetUserByEmail(email)
+		select {
+		case <-done:
+			return
+		default:
+			if u != nil {
+				sameEmailChannel <- false
+			} else {
+				sameEmailChannel <- true
+			}
+		}
+	}(email)
+
+	// 检查用户名
+	go func(name string) {
+		u, _ := model.GetUserByName(name)
+		select {
+		case <-done:
+			return
+		default:
+			if u != nil {
+				sameNameChannel <- false
+			} else {
+				sameNameChannel <- true
+			}
+		}
+	}(name)
+
+	var userExisted = false
+
+	// 最多循环两次
+	for round := 0; !userExisted && round < 2; round++ {
+		select {
+		case result := <-sameEmailChannel:
+			if !result {
+				userExisted = true
+				break
+			}
+		case result := <-sameNameChannel:
+			if !result {
+				userExisted = true
+				break
+			}
+		}
+	}
+	return userExisted
 }

@@ -12,7 +12,7 @@ service UserService {
   //rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
   rpc UpdateTeamAndGroupForUsers(UpdateTeamGroupRequest) returns (Response) {}
 
-  rpc GetClientID(Request) returns (ClientResponse) {}
+  rpc SetClient(ClientRequest) returns (Response) {}
 }
 
 message UpdateTeamGroupRequest {
@@ -103,6 +103,7 @@ message User {
   uint32 group = 8;
 }
 
-message ClientResponse {
+message ClientRequest {
   string id = 1;
+  string secret = 2;
 }

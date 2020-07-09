@@ -63,7 +63,17 @@ func GetUserByEmail(email string) (*UserModel, error) {
 	if gorm.IsRecordNotFoundError(err) {
 		return nil, nil
 	}
-	return u, nil
+	return u, err
+}
+
+// GetUserByName get a user by name.
+func GetUserByName(name string) (*UserModel, error) {
+	u := &UserModel{}
+	err := m.DB.Self.Where("name = ?", name).First(u).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, nil
+	}
+	return u, err
 }
 
 // ListUser list users

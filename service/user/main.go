@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"muxi-workbench-user/pkg/auth"
 	pb "muxi-workbench-user/proto"
 	s "muxi-workbench-user/service"
 	"muxi-workbench/config"
@@ -36,6 +37,10 @@ func main() {
 	// init db
 	model.DB.Init()
 	defer model.DB.Close()
+
+	// init oauth-manager and some variables
+	auth.InitVar()
+	auth.OauthManager.Init()
 
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),

@@ -16,15 +16,20 @@ const (
 )
 
 type RequestData struct {
-	Query       map[string]string
-	BodyData    map[string]string
-	ContentType string
+	Query       map[string]string `json:"query"`
+	BodyData    map[string]string `json:"body_data"`
+	Header      map[string]string `json:"header"`
+	ContentType string            `json:"content_type"`
 }
 
 type Response struct {
-	Code    int
-	Message string
-	Data    map[string]interface{}
+	BasicResponse
+	Data map[string]interface{}
+}
+
+type BasicResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
 func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, error) {
@@ -34,27 +39,24 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 	for key, value := range data.Query {
 		requestURL += fmt.Sprintf("%s=%s&", key, value)
 	}
-	fmt.Println(requestURL)
 
 	var payload string
 
-	if data.ContentType == JsonData {
-		body, err := json.Marshal(data.BodyData)
-		if err != nil {
-			return nil, err
+	if len(data.BodyData) != 0 {
+		if data.ContentType == JsonData {
+			body, err := json.Marshal(data.BodyData)
+			if err != nil {
+				return nil, err
+			}
+			payload = string(body)
+		} else if data.ContentType == FormData {
+			body := url.Values{}
+			for key, value := range data.BodyData {
+				body.Set(key, value)
+			}
+			payload = body.Encode()
 		}
-		payload = string(body)
-	} else if data.ContentType == FormData {
-		body := url.Values{}
-		for key, value := range data.BodyData {
-			body.Set(key, value)
-		}
-		payload = body.Encode()
-	} else {
-		return nil, errors.New("content type error")
 	}
-
-	fmt.Println(payload)
 
 	req, err := http.NewRequest(method, requestURL, strings.NewReader(payload))
 	if err != nil {
@@ -62,6 +64,10 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 	}
 
 	req.Header.Set("Content-Type", data.ContentType)
+
+	for key, value := range data.Header {
+		req.Header.Set(key, value)
+	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -75,19 +81,22 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 		return nil, err
 	}
 
-	fmt.Println(string(body))
+	// fmt.Println(string(body))
 
 	return body, nil
 }
 
 func MarshalBody(body []byte) (map[string]interface{}, error) {
-	var data Response
-	if err := json.Unmarshal(body, &data); err != nil {
+	var rp Response
+	if err := json.Unmarshal(body, &rp); err != nil {
 		return nil, err
 	}
-	return data.Data, nil
+	if rp.Code != 0 {
+		return nil, errors.New(rp.Message)
+	}
+	return rp.Data, nil
 }
 
-func MarshalBodyForCustomData(body []byte, data interface{}) error {
-	return json.Unmarshal(body, &data)
+func MarshalBodyForCustomData(body []byte, rp interface{}) error {
+	return json.Unmarshal(body, &rp)
 }

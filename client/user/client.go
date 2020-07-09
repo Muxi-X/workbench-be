@@ -36,18 +36,49 @@ func main() {
 
 	client := pb.NewUserServiceClient("workbench.service.user", service.Client())
 
-	// 获取 user
-	req := &pb.ListRequest{
-		LastId: 0,
-		Offset: 5,
-		Limit:  10,
-		Team:   1,
-		Group:  2,
-	}
+	// get user list
+	// func() {
+	// 	req := &pb.ListRequest{
+	// 		LastId: 0,
+	// 		Offset: 5,
+	// 		Limit:  10,
+	// 		Team:   1,
+	// 		Group:  2,
+	// 	}
 
-	resp, err := client.List(context.Background(), req)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(resp)
+	// 	resp, err := client.List(context.Background(), req)
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	fmt.Println(resp)
+	// }()
+
+	// register
+	func() {
+		req := &pb.RegisterRequest{
+			Email:    "muxi@304.com",
+			Name:     "muxi",
+			Password: "muxi",
+		}
+
+		resp, err := client.Register(context.Background(), req)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(resp)
+	}()
+
+	// login
+	// func() {
+	// 	req := &pb.LoginRequest{
+	// 		Email:     "1142319190@qq.com",
+	// 		OauthCode: "NKPSPF0IOWWZSACLZ0OKAQ",
+	// 	}
+
+	// 	resp, err := client.Login(context.Background(), req)
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// 	fmt.Println(resp)
+	// }()
 }
