@@ -11,11 +11,11 @@ import (
 
 var jwtKey string
 
+// getJwtKey get jwtKey.
 func getJwtKey() string {
 	if jwtKey == "" {
 		jwtKey = viper.GetString("jwt_key")
 	}
-	// fmt.Println(jwtKey)
 	return jwtKey
 }
 
@@ -34,6 +34,7 @@ type TokenResolve struct {
 	Expired int64  `json:"expired"`
 }
 
+// GenerateToken generate token.
 func GenerateToken(payload TokenPayload) (string, error) {
 	claims := &TokenClaims{
 		ID: payload.ID,
@@ -46,6 +47,7 @@ func GenerateToken(payload TokenPayload) (string, error) {
 	return token.SignedString([]byte(getJwtKey()))
 }
 
+// ResolveToken resolve token，return id and error.
 func ResolveToken(tokenStr string) (uint32, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

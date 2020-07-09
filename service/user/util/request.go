@@ -22,6 +22,7 @@ type RequestData struct {
 	ContentType string            `json:"content_type"`
 }
 
+// Default Response
 type Response struct {
 	BasicResponse
 	Data map[string]interface{}
@@ -32,7 +33,9 @@ type BasicResponse struct {
 	Message string `json:"message"`
 }
 
+// SendHTTPRequest send generic HTTP request, with url, method and request data.
 func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, error) {
+	// Query params
 	if len(data.Query) != 0 {
 		requestURL += "?"
 	}
@@ -42,6 +45,7 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 
 	var payload string
 
+	// Body data
 	if len(data.BodyData) != 0 {
 		if data.ContentType == JsonData {
 			body, err := json.Marshal(data.BodyData)
@@ -65,6 +69,7 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 
 	req.Header.Set("Content-Type", data.ContentType)
 
+	// Headers' data
 	for key, value := range data.Header {
 		req.Header.Set(key, value)
 	}
@@ -84,7 +89,8 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 	return body, nil
 }
 
-func MarshalBody(body []byte) (map[string]interface{}, error) {
+// UnmarshalBody unmarshal body data, return map and error.
+func UnmarshalBody(body []byte) (map[string]interface{}, error) {
 	var rp Response
 	if err := json.Unmarshal(body, &rp); err != nil {
 		return nil, err
@@ -95,6 +101,7 @@ func MarshalBody(body []byte) (map[string]interface{}, error) {
 	return rp.Data, nil
 }
 
-func MarshalBodyForCustomData(body []byte, rp interface{}) error {
+// UnmarshalBodyForCustomData unmarshal body data to custom type.
+func UnmarshalBodyForCustomData(body []byte, rp interface{}) error {
 	return json.Unmarshal(body, &rp)
 }

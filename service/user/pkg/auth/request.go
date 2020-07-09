@@ -33,13 +33,6 @@ type UserItem struct {
 	Left      bool   `json:"left"`
 	Info      string `json:"info"`
 	AvatarURL string `json:"avatar_url"`
-	// Birthday     string `json:"birthday"`
-	// Hometown     string `json:"hometown"`
-	// PersonalBlog string `json:"personal_blog"`
-	// Github    string `json:"github"`
-	// Flickr       string `json:"flickr" column:"flickr"`
-	// Weibo        string `json:"weibo" column:"weibo"`
-	// Zhihu        string `json:"zhihu" column:"zhihu"`
 }
 
 // RegisterRequest send register request.
@@ -55,7 +48,7 @@ func RegisterRequest(name, email, password string) error {
 	}
 
 	var rp util.Response
-	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
+	if err := util.UnmarshalBodyForCustomData(body, &rp); err != nil {
 		return err
 	}
 
@@ -80,7 +73,7 @@ func GetTokenRequest(code, clientID, clientSecret string) (*TokenItem, error) {
 	}
 
 	var rp OauthTokenResponse
-	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
+	if err := util.UnmarshalBodyForCustomData(body, &rp); err != nil {
 		return nil, err
 	}
 
@@ -109,7 +102,7 @@ func RefreshTokenRequest(refreshToken, clientID, clientSecret string) (*TokenIte
 	}
 
 	var rp OauthTokenResponse
-	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
+	if err := util.UnmarshalBodyForCustomData(body, &rp); err != nil {
 		return nil, err
 	}
 
@@ -133,7 +126,7 @@ func GetInfoRequest(token string) (*UserItem, error) {
 	}
 
 	var rp AuthUserInfoResponse
-	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
+	if err := util.UnmarshalBodyForCustomData(body, &rp); err != nil {
 		return nil, err
 	}
 

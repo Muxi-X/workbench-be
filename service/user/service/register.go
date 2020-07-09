@@ -36,6 +36,7 @@ func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res
 	return nil
 }
 
+// CheckUserExisted check whether the user exists by name and email.
 func CheckUserExisted(name, email string) bool {
 	sameEmailChannel, sameNameChannel, done := make(chan bool), make(chan bool), make(chan struct{})
 	defer close(done)
