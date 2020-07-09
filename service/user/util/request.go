@@ -81,8 +81,6 @@ func SendHTTPRequest(requestURL, method string, data *RequestData) ([]byte, erro
 		return nil, err
 	}
 
-	// fmt.Println(string(body))
-
 	return body, nil
 }
 

@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 
 	"muxi-workbench-user/util"
 )
@@ -54,7 +53,6 @@ func RegisterRequest(name, email, password string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(body))
 
 	var rp util.Response
 	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
@@ -85,7 +83,6 @@ func GetTokenRequest(code, clientID, clientSecret string) (*TokenItem, error) {
 	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
 		return nil, err
 	}
-	fmt.Println(rp.Data)
 
 	if rp.Code != 0 {
 		return nil, errors.New(rp.Message)
@@ -115,7 +112,6 @@ func RefreshTokenRequest(refreshToken, clientID, clientSecret string) (*TokenIte
 	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
 		return nil, err
 	}
-	fmt.Println(rp.Data)
 
 	if rp.Code != 0 {
 		return nil, errors.New(rp.Message)
@@ -135,7 +131,6 @@ func GetInfoRequest(token string) (*UserItem, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(body))
 
 	var rp AuthUserInfoResponse
 	if err := util.MarshalBodyForCustomData(body, &rp); err != nil {
