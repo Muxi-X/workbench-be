@@ -1,6 +1,6 @@
 package handler
 
-/*import (
+import (
     "context"
     "fmt"
     "log"
@@ -18,48 +18,342 @@ package handler
     micro "github.com/micro/go-micro"
 )
 
-func GetProjectList()
+var ProjectService micro.Service
+var ProjectClient pb.ProjectServiceClient
 
-func GetProjectInfo()
+func ProjectInit(ProjectService micro.Service,ProjectClient pb.ProjectServiceClient){
+    ProjectService=micro.NewService(micro.Name("workbench.cli.project"),
+        micro.WrapClient(
+            opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
+        ),
+        micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+    )
 
-func UpdateProjectIfno()
+    ProjectService.Init()
 
-func DeleteProject()
+    ProjectClient = pb.NewFeedServiceClient("workbench.service.project", FeedService.Client())
+}
 
-func GetFileTree()
+func GetProjectList(c *gin.Context){
+    var req pb.GetProjectListRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func GetDocTree()
+    resp,err:=ProjectClient.List(context.Background(),req)
+    if err != nil{
+        panic(err)//not panic
+    }
+    //response
+}
 
-func UpdateFileTree()
+func GetProjectInfo(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func UpdateDocTree()
+    resp,err:=ProjectClient.GetProjectInfo(context.Background(),req)
+    if err !=nil{
+        //do something
+    }
 
-func GetMembers()
+    //response
+}
 
-func UpdateMembers()
+func UpdateProjectIfno(c *gin.Context){
+    var req pb.ProjectInfo
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func GetProjectIdsForUser()
+    _,err:=ProjectClinet.UpdateProjectInfo(context.Background(),req)
+    if err != nil{
+        //
+    }
+    //
+}
 
-func CreateFile()
+func DeleteProject(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err != nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func DeleteFile()
+    _,err:=ProjectClient.DeleteProject(context.Background(),req)
+    if err != nil{
+        //
+    }
+    //
+}
 
-func GetFileDetail()
+func GetFileTree(c *gin.Context){
+    var req pb.GetRequest
+    if err := c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func GetFileInfoList()
+    resp,err:=ProjectClient.GetFileTree(context.Background(),req)
+    if err != nil{
+        //
+    }
 
-func GetFileFolderInfoList()
+    //
+}
 
-func GetFileFolderInfoList()
+func GetDocTree(c *gin.Context){
+    var req pb.GetRequest
+    if err := c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func CreateDoc()
+    resp,err:=ProjectClient.GetDocTree(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
 
-func UpdateDoc()
+func UpdateFileTree(c *gin.Context){
+    var req pb.UpdateTreeRequest
+    if err := c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func DeleteDoc()
+    _,err:=ProjectClient.UpdateFileTree(context.Background(),req)
+    if err!=nil{
+        //
+    }
+}
 
-func GetDocDetail()
+func UpdateDocTree(c *gin.Context){
+    var req pb.UpdateTreeRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
-func GetDocInfoList()
+    _,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+}
 
-func GetDocFolderInfoList()*/
+func GetMembers(c *gin.Context){
+    var req pb.GetMemberListRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient.GetMembers(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
+
+func UpdateMembers(c *gin.Context){
+    var req pb.UpdateMemberRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    _,err:=ProjectClient(context.Background(),req)
+    if err != nil{
+        //
+    }
+}
+
+func GetProjectIdsForUser(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+            })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err != nil{
+        //
+    }
+    //
+}
+
+func CreateFile(c *gin.Context){
+    var req pb.CreateFileRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    _,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+}
+
+func DeleteFile(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    _,err:=ProjectClient(context.Background(),req)
+    if err != nil{
+        //
+    }
+}
+
+func GetFileDetail(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
+
+func GetFileInfoList(c *gin.Context){
+    var req pb.GetInfoByIdsRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
+
+func GetFileFolderInfoList(c *gin.Context){
+    var req pb.GetInfoByIdsRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
+
+func CreateDoc(c *gin.Context){
+    var req pb.CreateDocRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    _,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+}
+
+func UpdateDoc(c *gin.Context){
+    var req pb.UpdateDocRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    _,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+}
+
+func DeleteDoc(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    _,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+}
+
+func GetDocDetail(c *gin.Context){
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
+
+func GetDocInfoList(c *gin.Context){
+    var req pb.GetInfoByIdsRequest
+    if err:=c.BindJSON(&req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err!=nil{
+        //
+    }
+    //
+}
+
+func GetDocFolderInfoList(c *gin.Context){
+    var req pb.GetInfoByIdsRequest
+    if err:=c.BindJSON(req);err!=nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
+
+    resp,err:=ProjectClient(context.Background(),req)
+    if err != nil{
+        //
+    }
+    //
+}

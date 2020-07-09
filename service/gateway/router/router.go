@@ -55,59 +55,45 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
         feed.POST("/push",handler.FeedPush)
     }
 
-    /*
+
     //status
     status:=g.Group("/status")
     {
-        status.GET("/source",handler.StatusGet)
-        status.GET("/:page",handler.StatusList)
-        status.POST("/:sid",handler.StatusCreate)
-        status.POST("/:sid",handler.StatusUpdate)
-        status.POST("/:sid",handler.StatusDelete)
-        status.PUT("/:sid/like",handler.StatusLike)
-        status.POST("/:sid/comment",handler.StatusCreateComment)
-        status.GET("/comments/:page",handler.StatusListComment)
+        status.GET("/get",handler.StatusGet)
+        status.GET("/list",handler.StatusList)
+        status.POST("/create",handler.StatusCreate)
+        status.POST("/update",handler.StatusUpdate)
+        status.POST("/delete",handler.StatusDelete)
+        status.PUT("/like",handler.StatusLike)
+        status.POST("/comment",handler.StatusCreateComment)
+        status.GET("/comments",handler.StatusListComment)
     }
 
     //project
-    g.POST("/project/new")
-
-    project:=g.Group("/project/:pid")
-    {
-        project.GET("/",)
-        project.DELETE("/",)
-        project.POST("/",)
+    project:=g.Group("/project"){
+        project.GET("/list",handler.GetPeojectList)
+        project.GET("/info",handler.GetProjectInfo)
+        project.POST("/info/update",handler.UpdateProjectInfo)
+        project.DELETE("/delete",handler.DeleteProject)
+        project.GET("/file/tree",handler.GetFileTree)
+        project.GET("/doc/tree",handler.GetDocTree)
+        project.POST("/file/tree",handler.UpdateFileTree)
+        project.post("/doc/tree",handler.UpdateDocTree)
+        project.GET("/members",handler.GetMembers)
+        project.POST("/members",handler.UpdateMembers)
+        project.GET("/ids",handler.GetProjectIdsForUser)
+        project.POST("/file",handler.CreateFile)
+        project.DELETE("file",handler.DeleteFile)
+        project.GET("/file",handler.GetFileDetail)
+        project.GET("/file/list",handler.GetFileInfoList)
+        project.GET("/file/folder"handler.GetFileFolderInfoList)
+        project.POST("/doc/new",handler.CreateDoc)
+        project.POST("/doc",handler.UpdateDoc)
+        project.DELETE("/doc",handler.DeleteDoc)
+        project.GET("/doc",handler.GetDocDetail)
+        project.GET("/doc/list",handler.GetDocInfoList)
+        project.GET("/doc/folder",handler.GetDocFolderInfoList)
     }
-
-    proMem:=g.Group("/project/:pid/member")
-    {
-        project.GET("/",)
-        project.PUT("/",)
-    }
-
-    proDoc:=g.Group("/project/:pid/doc/:fid")
-    {
-        project.POST("/comments",)
-        project.GET("/comments",)
-        project.DELETE("/comment/:cid",)
-        project.GET("/comment/:cid",)
-    }
-
-    proFile:=g.Group("/project/:pid/file/:fid")
-    {
-        project.GET("/comments",)
-        project.POST("/comments",)
-        project.GET("/comment/:cid",)
-        project.DELETE("/comment/:cid",)
-    }
-
-    folder:=g.Group("/folder")
-    {
-        folder.GET("/filetree/:pid",)
-        folder.PUT("/filetree/:pid",)
-        folder.GET("/doctree/:pid",)
-        folder.PUT("/doctree/:pid",)
-    }*/
 
 	return g
 }

@@ -16,7 +16,7 @@ import(
 var FeedService micro.Service
 var FeedClient pb.FeedServiceClient
 
-func FeedInit(FeedService micro.Service,FeedClient){
+func FeedInit(FeedService micro.Service,FeedClient pb.FeedServiceClient){
     FeedService=micro.NewService(micro.Name("workbench.cli.feed"),
         micro.WrapClient(
             opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
@@ -51,7 +51,7 @@ func FeedList(c *gin.Context){
         },
     }*/
 
-    resp, err := FeedClient.List(context.Background(), &req)
+    resp, err := FeedClient.List(context.Background(), req)
     if err != nil {
         panic(err)
     }
@@ -62,7 +62,11 @@ func FeedList(c *gin.Context){
 //Feed的Push接口
 func FeedPush(c *gin.Context){
     var addReq pb.PushRequest
-    c.BindJSON(&addReq)
+    if err := c.BindJSON(&addReq);err != nil{
+        c.JSON(400,gin.H{
+            "message":"wrong",
+        })
+    }
 
     /*addReq := &pb.PushRequest{
       Action: "创建",
@@ -75,7 +79,7 @@ func FeedPush(c *gin.Context){
           ProjectName: "",     // 固定数据
       },
     }*/
-    addResp, err := FeedClient.Push(context.Background(), &addReq)
+    addResp, err := FeedClient.Push(context.Background(), addReq)
     if err != nil {
       panic(err)
     }
