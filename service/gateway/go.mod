@@ -13,11 +13,28 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.6.1
+	github.com/spf13/viper v1.6.2
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
 	github.com/willf/pad v0.0.0-20190207183901-eccfe5d84172
-	go.uber.org/zap v1.13.0
-	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
+	go.uber.org/zap v1.14.1
+	golang.org/x/crypto v0.0.0-20200221231518-2aa609cf4a9d
 	gopkg.in/go-playground/validator.v9 v9.30.2 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	muxi-workbench v0.0.0-00010101000000-000000000000
+	muxi-workbench-feed v0.0.0-00010101000000-000000000000
+	muxi-workbench-project v0.0.0-00010101000000-000000000000
+	muxi-workbench-status v0.0.0-00010101000000-000000000000
+	muxi-workbench-user v0.0.0-00010101000000-000000000000 // indirect
 )
+
+replace muxi-workbench-gateway => ./
+
+replace muxi-workbench-feed => ../feed
+
+replace muxi-workbench-status => ../status
+
+replace muxi-workbench-project => ../project
+
+replace muxi-workbench => ../../
+
+replace muxi-workbench-user => ../user

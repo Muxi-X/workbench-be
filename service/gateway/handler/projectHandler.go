@@ -2,12 +2,12 @@ package handler
 
 import (
     "context"
-    "fmt"
+    //"fmt"
     "log"
 
     "github.com/opentracing/opentracing-go"
 
-    tracer "muxi-workbench-project-client/tracer"
+    //tracer "muxi-workbench-project-client/tracer"
 
     opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 
@@ -16,6 +16,8 @@ import (
     handler "muxi-workbench/pkg/handler"
 
     micro "github.com/micro/go-micro"
+
+    "github.com/gin-gonic/gin"
 )
 
 var ProjectService micro.Service
@@ -31,7 +33,7 @@ func ProjectInit(ProjectService micro.Service,ProjectClient pb.ProjectServiceCli
 
     ProjectService.Init()
 
-    ProjectClient = pb.NewFeedServiceClient("workbench.service.project", FeedService.Client())
+    ProjectClient = pb.NewProjectServiceClient("workbench.service.project", ProjectService.Client())
 }
 
 func GetProjectList(c *gin.Context){
@@ -43,7 +45,7 @@ func GetProjectList(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient.List(context.Background(),req)
+    resp,err2:=ProjectClient.GetProjectList(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -64,7 +66,7 @@ func GetProjectInfo(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient.GetProjectInfo(context.Background(),req)
+    resp,err2:=ProjectClient.GetProjectInfo(context.Background(),&req)
     if err2 !=nil{
         //do something
         log.Fatalf("Could not greet: %v",err2)
@@ -78,7 +80,7 @@ func GetProjectInfo(c *gin.Context){
     c.JSON(200,resp)
 }
 
-func UpdateProjectIfno(c *gin.Context){
+func UpdateProjectInfo(c *gin.Context){
     var req pb.ProjectInfo
     if err:=c.BindJSON(&req);err!=nil{
         c.JSON(400,gin.H{
@@ -87,7 +89,7 @@ func UpdateProjectIfno(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClinet.UpdateProjectInfo(context.Background(),req)
+    _,err2:=ProjectClient.UpdateProjectInfo(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -110,7 +112,7 @@ func DeleteProject(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient.DeleteProject(context.Background(),req)
+    _,err2:=ProjectClient.DeleteProject(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -133,7 +135,7 @@ func GetFileTree(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient.GetFileTree(context.Background(),req)
+    resp,err2:=ProjectClient.GetFileTree(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -154,7 +156,7 @@ func GetDocTree(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient.GetDocTree(context.Background(),req)
+    resp,err2:=ProjectClient.GetDocTree(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -175,7 +177,7 @@ func UpdateFileTree(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient.UpdateFileTree(context.Background(),req)
+    _,err2:=ProjectClient.UpdateFileTree(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -198,7 +200,7 @@ func UpdateDocTree(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.UpdateDocTree(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -221,7 +223,7 @@ func GetMembers(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient.GetMembers(context.Background(),req)
+    resp,err2:=ProjectClient.GetMembers(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -242,7 +244,7 @@ func UpdateMembers(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.UpdateMembers(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -265,7 +267,7 @@ func GetProjectIdsForUser(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
+    resp,err2:=ProjectClient.GetProjectIdsForUser(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -286,7 +288,7 @@ func CreateFile(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.CreateFile(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -309,7 +311,7 @@ func DeleteFile(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.DeleteFile(context.Background(),&req)
     if err2 != nil{
         log.Fatal("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -332,7 +334,7 @@ func GetFileDetail(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
+    resp,err2:=ProjectClient.GetFileDetail(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -353,7 +355,7 @@ func GetFileInfoList(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
+    resp,err2:=ProjectClient.GetFileInfoList(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -374,7 +376,7 @@ func GetFileFolderInfoList(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
+    resp,err2:=ProjectClient.GetFileFolderInfoList(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -395,7 +397,7 @@ func CreateDoc(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.CreateDoc(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -418,7 +420,7 @@ func UpdateDoc(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.UpdateDoc(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -441,7 +443,7 @@ func DeleteDoc(c *gin.Context){
         return
     }
 
-    _,err2:=ProjectClient(context.Background(),req)
+    _,err2:=ProjectClient.DeleteDoc(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -464,7 +466,7 @@ func GetDocDetail(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
+    resp,err2:=ProjectClient.GetDocDetail(context.Background(),&req)
     if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -485,8 +487,8 @@ func GetDocInfoList(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
-    if err!=nil{
+    resp,err2:=ProjectClient.GetDocInfoList(context.Background(),&req)
+    if err2!=nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
             "message":"wrong",
@@ -506,7 +508,7 @@ func GetDocFolderInfoList(c *gin.Context){
         return
     }
 
-    resp,err2:=ProjectClient(context.Background(),req)
+    resp,err2:=ProjectClient.GetDocFolderInfoList(context.Background(),&req)
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{

@@ -2,19 +2,21 @@ package handler
 
 import (
      "context"
-    "fmt"
+    //"fmt"
     "github.com/opentracing/opentracing-go"
     "log"
 
     //tracer "muxi-workbench-status-client/tracer"
 
-    //opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+    opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 
     pb "muxi-workbench-status/proto"
 
     handler "muxi-workbench/pkg/handler"
 
     micro "github.com/micro/go-micro"
+
+    "github.com/gin-gonic/gin"
 )
 
 var StatusService micro.Service
@@ -28,7 +30,7 @@ func StatusInit(StatusService micro.Service,StatusClient pb.StatusServiceClient)
         micro.WrapCall(handler.ClientErrorHandlerWrapper()))
     StatusService.Init()
 
-    Statusclient = pb.NewStatusServiceClient("workbench.service.status", StatusService.Client())
+    StatusClient = pb.NewStatusServiceClient("workbench.service.status", StatusService.Client())
 
 }
 
@@ -41,7 +43,7 @@ func StatusGet(c *gin.Context) {
             })
         return
     }
-    resp, err2 := StatusClient.Get(context.Background(), req)
+    resp, err2 := StatusClient.Get(context.Background(), &req)
 
     if err2 != nil {
         log.Fatalf("Could not greet: %v", err2)
@@ -63,7 +65,7 @@ func StatusList(c *gin.Context){
         return
     }
 
-    resp, err2 := StatusClient.List(context.Background(), req)
+    resp, err2 := StatusClient.List(context.Background(), &req)
     if err2 != nil {
         log.Fatalf("Could not greet: %v", err2)
         c.JSON(500,gin.H{
@@ -90,7 +92,7 @@ func StatusCreate(c *gin.Context){
         Content: "后废物废物分为",
     }*/
 
-    _, err2 = StatusClient.Create(context.Background(), req)
+    _, err2 := StatusClient.Create(context.Background(), &req)
 
     if err2 != nil {
         log.Fatalf("Could not greet: %v",err2)
@@ -107,15 +109,15 @@ func StatusCreate(c *gin.Context){
 
 //update
 func StatusUpdate(c *gin.Context){
-    var updateRequest pb.UpdateRequest
-    if err:=c.BindJSON(&updateRequest);err!=nil{
+    var req pb.UpdateRequest
+    if err:=c.BindJSON(&req);err!=nil{
         c.JSON(400,gin.H{
             "message":"wrong",
         })
         return
     }
 
-    _,err2=StatusClient.Update(context.Background(),updateRequest)
+    _,err2:=StatusClient.Update(context.Background(),&req)
 
     if err2 != nil {
         log.Fatalf("Could not greet: %v",err2)
@@ -131,15 +133,15 @@ func StatusUpdate(c *gin.Context){
 }
 //Delete
 func StatusDelete(c *gin.Context){
-    var getRequest pb.GetResquest
-    if err:=BindJSON(&getRequest);err!=nil{
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err!=nil{
         c.JSON(400,gin.H{
             "message":"wrong",
         })
         return
     }
 
-    _,err2=StatusClient.Delete(context.Background(),getRequest)
+    _,err2:=StatusClient.Delete(context.Background(),&req)
 
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
@@ -156,15 +158,15 @@ func StatusDelete(c *gin.Context){
 
 //Like
 func StatusLike(c *gin.Context){
-    var likeRequest pb.LikeRequest
-    if err:=c.BindJSON(&likeRquest);err!=nil{
+    var req pb.LikeRequest
+    if err:=c.BindJSON(&req);err!=nil{
         c.JSON(400,gin.H{
             "message":"wrong",
         })
         return
     }
 
-    _,err2=StatusClient.Like(context.Background(),likeRequest)
+    _,err2:=StatusClient.Like(context.Background(),&req)
 
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
@@ -180,7 +182,7 @@ func StatusLike(c *gin.Context){
 }
 
 func StatusCreateComment(c *gin.Context){
-    var req pb.CreatCommentRequest
+    var req pb.CreateCommentRequest
     if err:=c.BindJSON(&req);err!=nil{
         c.JSON(400,gin.H{
             "message":"wrong",
@@ -194,7 +196,7 @@ func StatusCreateComment(c *gin.Context){
         Content: "后废物废物分为",
     }*/
 
-    _, err2 = StatusClient.CreateComment(context.Background(), req)
+    _, err2 := StatusClient.CreateComment(context.Background(), &req)
 
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)
@@ -224,7 +226,7 @@ func StatusListComment(c *gin.Context){
         Lastid: 0,
     }*/
 
-    resp, err2 := StatusClient.ListComment(context.Background(), req)
+    resp, err2 := StatusClient.ListComment(context.Background(), &req)
 
     if err2 != nil{
         log.Fatalf("Could not greet: %v",err2)

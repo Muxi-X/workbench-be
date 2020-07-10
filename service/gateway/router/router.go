@@ -70,15 +70,16 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
     }
 
     //project
-    project:=g.Group("/project"){
-        project.GET("/list",handler.GetPeojectList)
+    project:=g.Group("/project")
+    {
+        project.GET("/list",handler.GetProjectList)
         project.GET("/info",handler.GetProjectInfo)
         project.POST("/info/update",handler.UpdateProjectInfo)
         project.DELETE("/delete",handler.DeleteProject)
         project.GET("/file/tree",handler.GetFileTree)
         project.GET("/doc/tree",handler.GetDocTree)
         project.POST("/file/tree",handler.UpdateFileTree)
-        project.post("/doc/tree",handler.UpdateDocTree)
+        project.POST("/doc/tree",handler.UpdateDocTree)
         project.GET("/members",handler.GetMembers)
         project.POST("/members",handler.UpdateMembers)
         project.GET("/ids",handler.GetProjectIdsForUser)
@@ -86,7 +87,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
         project.DELETE("file",handler.DeleteFile)
         project.GET("/file",handler.GetFileDetail)
         project.GET("/file/list",handler.GetFileInfoList)
-        project.GET("/file/folder"handler.GetFileFolderInfoList)
+        project.GET("/file/folder",handler.GetFileFolderInfoList)
         project.POST("/doc/new",handler.CreateDoc)
         project.POST("/doc",handler.UpdateDoc)
         project.DELETE("/doc",handler.DeleteDoc)

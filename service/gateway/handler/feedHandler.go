@@ -2,14 +2,17 @@ package handler
 
 import(
     "context"
-    "fmt"
+    //"fmt"
     "log"
 
-    "muxi-workbench-feed-client/tracer"
+    //"muxi-workbench-feed-client/tracer"
     pb "muxi-workbench-feed/proto"
     "muxi-workbench/pkg/handler"
 
-    "github.com/micro/go-micro"
+    micro "github.com/micro/go-micro"
+    opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+    "github.com/opentracing/opentracing-go"
+
     "github.com/gin-gonic/gin"
 )
 
@@ -52,7 +55,7 @@ func FeedList(c *gin.Context){
         },
     }*/
 
-    resp, err2 := FeedClient.List(context.Background(), req)
+    resp, err2 := FeedClient.List(context.Background(), &req)
     if err2 != nil {
         log.Fatalf("Could not greet: %v",err2)
         c.JSON(500,gin.H{
@@ -68,7 +71,7 @@ func FeedList(c *gin.Context){
 //Feed的Push接口
 func FeedPush(c *gin.Context){
     var req pb.PushRequest
-    if err := c.BindJSON(&addReq);err != nil{
+    if err := c.BindJSON(&req);err != nil{
         c.JSON(400,gin.H{
             "message":"wrong",
         })
@@ -86,8 +89,8 @@ func FeedPush(c *gin.Context){
           ProjectName: "",     // 固定数据
       },
     }*/
-    resp, err2 := FeedClient.Push(context.Background(), req)
-    if err != nil {
+    resp, err2 := FeedClient.Push(context.Background(), &req)
+    if err2 != nil {
       log.Fatalf("Could not greet: %v",err2)
       c.JSON(500,gin.H{
           "message":"wrong",

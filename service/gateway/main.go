@@ -25,9 +25,9 @@ var (
 )
 
 func init(){
-    FeedInit(handler.FeedService,handler.FeedClient)
-    StatusInit(handler.StatusService,handler.StatusClient)
-    projectInit(handler.ProjectService,handler.ProjectClient)
+    handler.FeedInit(handler.FeedService,handler.FeedClient)
+    handler.StatusInit(handler.StatusService,handler.StatusClient)
+    handler.ProjectInit(handler.ProjectService,handler.ProjectClient)
 }
 
 func main() {

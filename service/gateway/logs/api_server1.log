@@ -1,0 +1,2 @@
+{"level":"info","time":"2020-07-10T14:12:44.096+0800","linenum":"/home/jacksie/go/src/muxi_workbench/workbench-be/service/gateway/log/log.go:70","msg":"Start to listening the incoming requests on http address: :8080","serviceName":"serviceName"}
+{"level":"info","time":"2020-07-10T14:12:44.097+0800","linenum":"/home/jacksie/go/src/muxi_workbench/workbench-be/service/gateway/log/log.go:70","msg":"The router has been deployed successfully.","serviceName":"serviceName"}
