@@ -38,6 +38,7 @@ func FeedList(c *gin.Context){
         c.JSON(400, gin.H{
             "message":"Wrong",
         })
+        return
     }
 
     /*req := &pb.ListRequest{
@@ -51,21 +52,27 @@ func FeedList(c *gin.Context){
         },
     }*/
 
-    resp, err := FeedClient.List(context.Background(), req)
-    if err != nil {
-        panic(err)
+    resp, err2 := FeedClient.List(context.Background(), req)
+    if err2 != nil {
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
-    fmt.Println(resp)
+    //fmt.Println(resp)
+    c.JSON(200,resp)
 
 }
 
 //Feed的Push接口
 func FeedPush(c *gin.Context){
-    var addReq pb.PushRequest
+    var req pb.PushRequest
     if err := c.BindJSON(&addReq);err != nil{
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
     /*addReq := &pb.PushRequest{
@@ -79,9 +86,14 @@ func FeedPush(c *gin.Context){
           ProjectName: "",     // 固定数据
       },
     }*/
-    addResp, err := FeedClient.Push(context.Background(), addReq)
+    resp, err2 := FeedClient.Push(context.Background(), req)
     if err != nil {
-      panic(err)
+      log.Fatalf("Could not greet: %v",err2)
+      c.JSON(500,gin.H{
+          "message":"wrong",
+      })
+      return
     }
-    fmt.Println(addResp)
+    //fmt.Println(addResp)
+    c.JSON(200,resp)
 }

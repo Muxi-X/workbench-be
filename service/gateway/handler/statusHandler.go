@@ -34,33 +34,45 @@ func StatusInit(StatusService micro.Service,StatusClient pb.StatusServiceClient)
 
 
 func StatusGet(c *gin.Context) {
-    var getId int
-    if err:=c.BindJSON(&Id);err != nil{
+    var req pb.GetRequest
+    if err:=c.BindJSON(&req);err != nil{
         c.JSON(400,gin.H{
             "message":"wrong",
             })
+        return
     }
-    resp, err := StatusClient.Get(context.Background(), &pb.GetRequest{
-      Id: getId,
-    })
+    resp, err2 := StatusClient.Get(context.Background(), req)
 
-    if err != nil {
-        log.Fatalf("Could not greet: %v", err)
+    if err2 != nil {
+        log.Fatalf("Could not greet: %v", err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,resp)
 }
 
 func StatusList(c *gin.Context){
-    var listRequest pb.ListRequest
-    if err:=c.BindJSON(&listRequest);err != nil{
+    var req pb.ListRequest
+    if err:=c.BindJSON(&req);err != nil{
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
-    resp, err := Status.Client.List(context.Background(), listRequest)
-    if err != nil {
-        log.Fatalf("Could not greet: %v", err)
+    resp, err2 := StatusClient.List(context.Background(), req)
+    if err2 != nil {
+        log.Fatalf("Could not greet: %v", err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,resp)
 }
 
 func StatusCreate(c *gin.Context){
@@ -69,6 +81,7 @@ func StatusCreate(c *gin.Context){
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
     /*req := &pb.CreateRequest{
@@ -77,11 +90,19 @@ func StatusCreate(c *gin.Context){
         Content: "后废物废物分为",
     }*/
 
-    _, err = StatusClient.Create(context.Background(), req)
+    _, err2 = StatusClient.Create(context.Background(), req)
 
-    if err != nil {
-        log.Fatalf("Could not greet: %v",err)
+    if err2 != nil {
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,gin.H{
+        "message":"ok",
+    })
 }
 
 //update
@@ -91,13 +112,22 @@ func StatusUpdate(c *gin.Context){
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
-    _,err=StatusClient.Update(context.Background(),updateRequest)
+    _,err2=StatusClient.Update(context.Background(),updateRequest)
 
-    if err != nil {
-        log.Fatalf("Could not greet: %v",err)
+    if err2 != nil {
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,gin.H{
+        "message":"ok",
+    })
 }
 //Delete
 func StatusDelete(c *gin.Context){
@@ -106,13 +136,22 @@ func StatusDelete(c *gin.Context){
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
-    _,err=StatusClient.Delete(context.Background(),getRequest)
+    _,err2=StatusClient.Delete(context.Background(),getRequest)
 
-    if err != nil{
-        log.Fatalf("Could not greet: %v",err)
+    if err2 != nil{
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,gin.H{
+        "message":"ok",
+    })
 }
 
 //Like
@@ -122,13 +161,22 @@ func StatusLike(c *gin.Context){
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
-    _,err=StatusClient.Like(context.Background(),likeRequest)
+    _,err2=StatusClient.Like(context.Background(),likeRequest)
 
-    if err != nil{
-        log.Fatalf("Could not greet: %v",err)
+    if err2 != nil{
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,gin.H{
+        "message":"ok",
+    })
 }
 
 func StatusCreateComment(c *gin.Context){
@@ -137,6 +185,7 @@ func StatusCreateComment(c *gin.Context){
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
 
     /*req := &pb.CreateCommentRequest{
@@ -145,11 +194,19 @@ func StatusCreateComment(c *gin.Context){
         Content: "后废物废物分为",
     }*/
 
-    _, err = StatusClient.CreateComment(context.Background(), req)
+    _, err2 = StatusClient.CreateComment(context.Background(), req)
 
-    if err != nil{
-        log.Fatalf("Could not greet: %v",err)
+    if err2 != nil{
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
+
+    c.JSON(200,gin.H{
+        "message":"ok",
+    })
 }
 
 func StatusListComment(c *gin.Context){
@@ -158,6 +215,7 @@ func StatusListComment(c *gin.Context){
         c.JSON(400,gin.H{
             "message":"wrong",
         })
+        return
     }
     /*req := &pb.CommentListRequest{
         StatusId: 3488,
@@ -166,11 +224,16 @@ func StatusListComment(c *gin.Context){
         Lastid: 0,
     }*/
 
-    resp, err := client.ListComment(context.Background(), req)
+    resp, err2 := StatusClient.ListComment(context.Background(), req)
 
-    if err != nil{
-        log.Fatalf("Could not greet: %v",err)
+    if err2 != nil{
+        log.Fatalf("Could not greet: %v",err2)
+        c.JSON(500,gin.H{
+            "message":"wrong",
+        })
+        return
     }
 
-    fmt.Println(resp.List, resp.Count)
+    //fmt.Println(resp.List, resp.Count)
+    c.JSON(200,resp)
 }
