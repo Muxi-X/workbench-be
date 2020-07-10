@@ -6,7 +6,7 @@ import (
 	"muxi-workbench-gateway/handler/sd"
 	"muxi-workbench-gateway/router/middleware"
 
-    "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/handler"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,53 +47,60 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/ram", sd.RAMCheck)
 	}
 
-    //下面是我写的路由
-    //feed
-    feed:=g.Group("/feed")
+	//下面是我写的路由
+	//feed
+	feed := g.Group("/feed")
+	{
+		feed.GET("/", handler.FeedList)
+		feed.POST("/", handler.FeedPush)
+	}
+
+	//status
+	status := g.Group("/status")
+	{
+		status.GET("/:sid", handler.StatusGet)
+		status.GET("/", handler.StatusList)
+		status.POST("/", handler.StatusCreate)
+		status.PUT("/:sid", handler.StatusUpdate)
+		status.DELETE("/:sid", handler.StatusDelete)
+		status.PUT("/:sid/like", handler.StatusLike)
+		status.POST("/:sid/comments", handler.StatusCreateComment)
+		status.GET("/:sid/comments/:page", handler.StatusListComment)
+	}
+
+	//project
+	project := g.Group("/project")
+	{
+		project.GET("/", handler.GetProjectList)
+		project.GET("/:pid", handler.GetProjectInfo)
+		project.PUT("/:pid", handler.UpdateProjectInfo)
+		project.DELETE("/:pid", handler.DeleteProject)
+        project.GET("/:pid/member", handler.GetMembers)
+        project.PUT("/:pid/member", handler.UpdateMembers)
+        project.GET("/:pid/profile/:uid", handler.GetProjectIdsForUser)
+	}
+
+    folder:=g.Group("/folder")
     {
-        feed.GET("/list",handler.FeedList)
-        feed.POST("/push",handler.FeedPush)
+        folder.GET("/filetree/:pid", handler.GetFileTree)
+		folder.GET("/doctree/:pid", handler.GetDocTree)
+		folder.PUT("/filetree/:pid", handler.UpdateFileTree)
+		folder.PUT("/doctree/:pid", handler.UpdateDocTree)
+		folder.POST("/file", handler.CreateFile)
+		folder.DELETE("/file/:id", handler.DeleteFile)
+		folder.GET("/file/:id", handler.GetFileDetail)
+	    folder.GET("/file", handler.GetFileInfoList)
+		folder.GET("/list/:page", handler.GetFileFolderInfoList)
     }
 
-
-    //status
-    status:=g.Group("/status")
+    file:=g.Group("/file")
     {
-        status.GET("/get",handler.StatusGet)
-        status.GET("/list",handler.StatusList)
-        status.POST("/create",handler.StatusCreate)
-        status.POST("/update",handler.StatusUpdate)
-        status.POST("/delete",handler.StatusDelete)
-        status.PUT("/like",handler.StatusLike)
-        status.POST("/comment",handler.StatusCreateComment)
-        status.GET("/comments",handler.StatusListComment)
-    }
-
-    //project
-    project:=g.Group("/project")
-    {
-        project.GET("/list",handler.GetProjectList)
-        project.GET("/info",handler.GetProjectInfo)
-        project.POST("/info/update",handler.UpdateProjectInfo)
-        project.DELETE("/delete",handler.DeleteProject)
-        project.GET("/file/tree",handler.GetFileTree)
-        project.GET("/doc/tree",handler.GetDocTree)
-        project.POST("/file/tree",handler.UpdateFileTree)
-        project.POST("/doc/tree",handler.UpdateDocTree)
-        project.GET("/members",handler.GetMembers)
-        project.POST("/members",handler.UpdateMembers)
-        project.GET("/ids",handler.GetProjectIdsForUser)
-        project.POST("/file",handler.CreateFile)
-        project.DELETE("file",handler.DeleteFile)
-        project.GET("/file",handler.GetFileDetail)
-        project.GET("/file/list",handler.GetFileInfoList)
-        project.GET("/file/folder",handler.GetFileFolderInfoList)
-        project.POST("/doc/new",handler.CreateDoc)
-        project.POST("/doc",handler.UpdateDoc)
-        project.DELETE("/doc",handler.DeleteDoc)
-        project.GET("/doc",handler.GetDocDetail)
-        project.GET("/doc/list",handler.GetDocInfoList)
-        project.GET("/doc/folder",handler.GetDocFolderInfoList)
+        file.POST("/doc", handler.CreateDoc)
+		file.PUT("/doc/:id", handler.UpdateDoc)
+		file.DELETE("/doc/:id", handler.DeleteDoc)
+		file.GET("/doc/:id", handler.GetDocDetail)
+		file.GET("/doc", handler.GetDocInfoList)
+		file.GET("/list/:page", handler.GetDocFolderInfoList)
     }
 
 	return g

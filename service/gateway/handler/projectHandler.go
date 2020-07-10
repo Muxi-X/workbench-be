@@ -1,521 +1,521 @@
 package handler
 
 import (
-    "context"
-    //"fmt"
-    "log"
+	"context"
+	//"fmt"
+	"log"
 
-    "github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go"
 
-    //tracer "muxi-workbench-project-client/tracer"
+	//tracer "muxi-workbench-project-client/tracer"
 
-    opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 
-    pb "muxi-workbench-project/proto"
+	pb "muxi-workbench-project/proto"
 
-    handler "muxi-workbench/pkg/handler"
+	handler "muxi-workbench/pkg/handler"
 
-    micro "github.com/micro/go-micro"
+	micro "github.com/micro/go-micro"
 
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 var ProjectService micro.Service
 var ProjectClient pb.ProjectServiceClient
 
-func ProjectInit(ProjectService micro.Service,ProjectClient pb.ProjectServiceClient){
-    ProjectService=micro.NewService(micro.Name("workbench.cli.project"),
-        micro.WrapClient(
-            opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
-        ),
-        micro.WrapCall(handler.ClientErrorHandlerWrapper()),
-    )
+func ProjectInit(ProjectService micro.Service, ProjectClient pb.ProjectServiceClient) {
+	ProjectService = micro.NewService(micro.Name("workbench.cli.project"),
+		micro.WrapClient(
+			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
+		),
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
 
-    ProjectService.Init()
+	ProjectService.Init()
 
-    ProjectClient = pb.NewProjectServiceClient("workbench.service.project", ProjectService.Client())
+	ProjectClient = pb.NewProjectServiceClient("workbench.service.project", ProjectService.Client())
 }
 
-func GetProjectList(c *gin.Context){
-    var req pb.GetProjectListRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetProjectList(c *gin.Context) {
+	var req pb.GetProjectListRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetProjectList(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
-    //response
-    c.JSON(200,resp)
+	resp, err2 := ProjectClient.GetProjectList(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
+	//response
+	c.JSON(200, resp)
 }
 
-func GetProjectInfo(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetProjectInfo(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetProjectInfo(context.Background(),&req)
-    if err2 !=nil{
-        //do something
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetProjectInfo(context.Background(), &req)
+	if err2 != nil {
+		//do something
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    //response
-    c.JSON(200,resp)
+	//response
+	c.JSON(200, resp)
 }
 
-func UpdateProjectInfo(c *gin.Context){
-    var req pb.ProjectInfo
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func UpdateProjectInfo(c *gin.Context) {
+	var req pb.ProjectInfo
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.UpdateProjectInfo(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.UpdateProjectInfo(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func DeleteProject(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err != nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func DeleteProject(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.DeleteProject(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.DeleteProject(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func GetFileTree(c *gin.Context){
-    var req pb.GetRequest
-    if err := c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetFileTree(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetFileTree(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetFileTree(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func GetDocTree(c *gin.Context){
-    var req pb.GetRequest
-    if err := c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetDocTree(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetDocTree(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetDocTree(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func UpdateFileTree(c *gin.Context){
-    var req pb.UpdateTreeRequest
-    if err := c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func UpdateFileTree(c *gin.Context) {
+	var req pb.UpdateTreeRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.UpdateFileTree(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.UpdateFileTree(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func UpdateDocTree(c *gin.Context){
-    var req pb.UpdateTreeRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func UpdateDocTree(c *gin.Context) {
+	var req pb.UpdateTreeRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.UpdateDocTree(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.UpdateDocTree(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func GetMembers(c *gin.Context){
-    var req pb.GetMemberListRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetMembers(c *gin.Context) {
+	var req pb.GetMemberListRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetMembers(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetMembers(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func UpdateMembers(c *gin.Context){
-    var req pb.UpdateMemberRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func UpdateMembers(c *gin.Context) {
+	var req pb.UpdateMemberRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.UpdateMembers(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.UpdateMembers(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func GetProjectIdsForUser(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-            })
-        return
-    }
+func GetProjectIdsForUser(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetProjectIdsForUser(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetProjectIdsForUser(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func CreateFile(c *gin.Context){
-    var req pb.CreateFileRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func CreateFile(c *gin.Context) {
+	var req pb.CreateFileRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.CreateFile(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.CreateFile(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func DeleteFile(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func DeleteFile(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.DeleteFile(context.Background(),&req)
-    if err2 != nil{
-        log.Fatal("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.DeleteFile(context.Background(), &req)
+	if err2 != nil {
+		log.Fatal("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func GetFileDetail(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetFileDetail(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetFileDetail(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetFileDetail(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func GetFileInfoList(c *gin.Context){
-    var req pb.GetInfoByIdsRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetFileInfoList(c *gin.Context) {
+	var req pb.GetInfoByIdsRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetFileInfoList(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetFileInfoList(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func GetFileFolderInfoList(c *gin.Context){
-    var req pb.GetInfoByIdsRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetFileFolderInfoList(c *gin.Context) {
+	var req pb.GetInfoByIdsRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetFileFolderInfoList(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetFileFolderInfoList(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func CreateDoc(c *gin.Context){
-    var req pb.CreateDocRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func CreateDoc(c *gin.Context) {
+	var req pb.CreateDocRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.CreateDoc(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.CreateDoc(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func UpdateDoc(c *gin.Context){
-    var req pb.UpdateDocRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func UpdateDoc(c *gin.Context) {
+	var req pb.UpdateDocRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.UpdateDoc(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.UpdateDoc(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func DeleteDoc(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func DeleteDoc(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    _,err2:=ProjectClient.DeleteDoc(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	_, err2 := ProjectClient.DeleteDoc(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,gin.H{
-        "message":"ok",
-    })
+	c.JSON(200, gin.H{
+		"message": "ok",
+	})
 }
 
-func GetDocDetail(c *gin.Context){
-    var req pb.GetRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetDocDetail(c *gin.Context) {
+	var req pb.GetRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetDocDetail(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetDocDetail(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func GetDocInfoList(c *gin.Context){
-    var req pb.GetInfoByIdsRequest
-    if err:=c.BindJSON(&req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetDocInfoList(c *gin.Context) {
+	var req pb.GetInfoByIdsRequest
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetDocInfoList(context.Background(),&req)
-    if err2!=nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetDocInfoList(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }
 
-func GetDocFolderInfoList(c *gin.Context){
-    var req pb.GetInfoByIdsRequest
-    if err:=c.BindJSON(req);err!=nil{
-        c.JSON(400,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+func GetDocFolderInfoList(c *gin.Context) {
+	var req pb.GetInfoByIdsRequest
+	if err := c.BindJSON(req); err != nil {
+		c.JSON(400, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    resp,err2:=ProjectClient.GetDocFolderInfoList(context.Background(),&req)
-    if err2 != nil{
-        log.Fatalf("Could not greet: %v",err2)
-        c.JSON(500,gin.H{
-            "message":"wrong",
-        })
-        return
-    }
+	resp, err2 := ProjectClient.GetDocFolderInfoList(context.Background(), &req)
+	if err2 != nil {
+		log.Fatalf("Could not greet: %v", err2)
+		c.JSON(500, gin.H{
+			"message": "wrong",
+		})
+		return
+	}
 
-    c.JSON(200,resp)
+	c.JSON(200, resp)
 }

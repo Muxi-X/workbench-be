@@ -11,7 +11,7 @@ import (
 	"muxi-workbench-gateway/router"
 	"muxi-workbench-gateway/router/middleware"
 
-    "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/handler"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
@@ -24,10 +24,10 @@ var (
 	cfg = pflag.StringP("config", "c", "", "apiserver config file path.")
 )
 
-func init(){
-    handler.FeedInit(handler.FeedService,handler.FeedClient)
-    handler.StatusInit(handler.StatusService,handler.StatusClient)
-    handler.ProjectInit(handler.ProjectService,handler.ProjectClient)
+func init() {
+	handler.FeedInit(handler.FeedService, handler.FeedClient)
+	handler.StatusInit(handler.StatusService, handler.StatusClient)
+	handler.ProjectInit(handler.ProjectService, handler.ProjectClient)
 }
 
 func main() {
