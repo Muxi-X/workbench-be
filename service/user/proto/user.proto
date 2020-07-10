@@ -11,8 +11,6 @@ service UserService {
 
   //rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
   rpc UpdateTeamAndGroupForUsers(UpdateTeamGroupRequest) returns (Response) {}
-
-  rpc SetClient(ClientRequest) returns (Response) {}
 }
 
 message UpdateTeamGroupRequest {
@@ -42,7 +40,6 @@ message RegisterRequest {
 
 message LoginRequest {
   string email = 1;
-  //string auth_token = 2;
   string oauth_code = 2;
 }
 
@@ -101,9 +98,4 @@ message User {
   uint32 role = 6;
   uint32 team = 7;
   uint32 group = 8;
-}
-
-message ClientRequest {
-  string id = 1;
-  string secret = 2;
 }

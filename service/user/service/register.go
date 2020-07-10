@@ -21,7 +21,9 @@ func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res
 	// 本地 user 数据库创建用户
 
 	// 用户是否存在
-	if CheckUserExisted(req.Name, req.Email) {
+	if userExisted, err := CheckUserExisted(req.Name, req.Email); err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	} else if userExisted {
 		return e.ServerErr(errno.ErrUserExisted, "")
 	}
 
@@ -37,58 +39,55 @@ func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res
 }
 
 // CheckUserExisted check whether the user exists by name and email.
-func CheckUserExisted(name, email string) bool {
-	sameEmailChannel, sameNameChannel, done := make(chan bool), make(chan bool), make(chan struct{})
-	defer close(done)
-	defer close(sameEmailChannel)
-	defer close(sameNameChannel)
+func CheckUserExisted(name, email string) (bool, error) {
+	sameEmailChannel, sameNameChannel, errChannel := make(chan bool), make(chan bool), make(chan error)
 
 	// 检查邮箱
 	go func(email string) {
-		u, _ := model.GetUserByEmail(email)
-		select {
-		case <-done:
-			return
-		default:
-			if u != nil {
-				sameEmailChannel <- false
-			} else {
-				sameEmailChannel <- true
-			}
+		u, err := model.GetUserByEmail(email)
+		if err != nil {
+			errChannel <- err
+		} else if u != nil {
+			sameEmailChannel <- true
+		} else {
+			sameEmailChannel <- false
 		}
 	}(email)
 
 	// 检查用户名
 	go func(name string) {
-		u, _ := model.GetUserByName(name)
-		select {
-		case <-done:
-			return
-		default:
-			if u != nil {
-				sameNameChannel <- false
-			} else {
-				sameNameChannel <- true
-			}
+		u, err := model.GetUserByName(name)
+		if err != nil {
+			errChannel <- err
+		} else if u != nil {
+			sameNameChannel <- true
+		} else {
+			sameNameChannel <- false
 		}
 	}(name)
 
 	var userExisted = false
+	var err error
 
-	// 最多循环两次
-	for round := 0; !userExisted && round < 2; round++ {
+	// 循环两次
+	for round := 0; round < 2; round++ {
 		select {
+		case curErr := <-errChannel:
+			err = curErr
 		case result := <-sameEmailChannel:
-			if !result {
+			if result {
 				userExisted = true
-				break
 			}
 		case result := <-sameNameChannel:
-			if !result {
+			if result {
 				userExisted = true
-				break
 			}
 		}
 	}
-	return userExisted
+
+	close(sameEmailChannel)
+	close(sameNameChannel)
+	close(errChannel)
+
+	return userExisted, err
 }
