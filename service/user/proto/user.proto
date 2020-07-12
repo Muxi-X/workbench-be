@@ -39,8 +39,7 @@ message RegisterRequest {
 }
 
 message LoginRequest {
-  string email = 1;
-  string oauth_code = 2;
+  string oauth_code = 1;
 }
 
 message LoginResponse {

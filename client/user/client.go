@@ -71,7 +71,6 @@ func main() {
 	// login
 	// func() {
 	// 	req := &pb.LoginRequest{
-	// 		Email:     "1142319190@qq.com",
 	// 		OauthCode: "NKPSPF0IOWWZSACLZ0OKAQ",
 	// 	}
 

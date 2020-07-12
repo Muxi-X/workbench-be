@@ -21,17 +21,30 @@ func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest, res *pb.L
 		return nil
 	}
 
-	// 根据 eamil 查询 user
-	user, err := model.GetUserByEmail(req.Email)
+	// get access token by auth code from auth-server
+	if err := auth.OauthManager.ExchangeAccessTokenWithCode(req.OauthCode); err != nil {
+		return e.ServerErr(errno.ErrRemoteAccessToken, err.Error())
+	}
+
+	// 尝试获取 access token，
+	// 并在其中检查是否有效，如失效则尝试从 auth-server 更新
+	accessToken, err := auth.OauthManager.GetAccessToken()
+	if err != nil {
+		return e.ServerErr(errno.ErrLocalAccessToken, err.Error())
+	}
+
+	// get user info by access token from auth-server
+	userInfo, err := auth.GetInfoRequest(accessToken)
+	if err != nil {
+		return e.ServerErr(errno.ErrGetUserInfo, err.Error())
+	}
+
+	// 根据 eamil 在本地 DB 查询 user
+	user, err := model.GetUserByEmail(userInfo.Email)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	} else if user == nil {
-		return e.ServerErr(errno.ErrBadRequest, "email error or user does not exist")
-	}
-
-	// 获取 access token
-	if err := auth.OauthManager.ExchangeAccessTokenWithCode(req.OauthCode); err != nil {
-		return e.ServerErr(errno.ErrAccessToken, err.Error())
+		return e.ServerErr(errno.ErrDatabase, "user does not exist")
 	}
 
 	// 生成 auth token
