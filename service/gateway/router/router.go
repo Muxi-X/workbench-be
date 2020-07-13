@@ -3,10 +3,10 @@ package router
 import (
 	"net/http"
 
+	"muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/handler/feed"
 	"muxi-workbench-gateway/handler/sd"
 	"muxi-workbench-gateway/router/middleware"
-
-	"muxi-workbench-gateway/handler"
 
 	"github.com/gin-gonic/gin"
 )
@@ -47,15 +47,16 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/ram", sd.RAMCheck)
 	}
 
-	//下面是我写的路由
-	//feed
-	feed := g.Group("/feed")
+	// 下面是我写的路由
+	// feed
+	feed := g.Group("api/v1/feed")
 	{
-		feed.GET("/", handler.FeedList)
-		feed.POST("/", handler.FeedPush)
+		feed.GET("/list", feed.List)
+		feed.GET("/list/:uid", feed.ListUser)
+		feed.GET("/list/:uid/:gid", feed.ListGroup)
 	}
 
-	//status
+	// status 下面还没改
 	status := g.Group("/status")
 	{
 		status.GET("/:sid", handler.StatusGet)
@@ -75,33 +76,33 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		project.GET("/:pid", handler.GetProjectInfo)
 		project.PUT("/:pid", handler.UpdateProjectInfo)
 		project.DELETE("/:pid", handler.DeleteProject)
-        project.GET("/:pid/member", handler.GetMembers)
-        project.PUT("/:pid/member", handler.UpdateMembers)
-        project.GET("/:pid/profile/:uid", handler.GetProjectIdsForUser)
+		project.GET("/:pid/member", handler.GetMembers)
+		project.PUT("/:pid/member", handler.UpdateMembers)
+		project.GET("/:pid/profile/:uid", handler.GetProjectIdsForUser)
 	}
 
-    folder:=g.Group("/folder")
-    {
-        folder.GET("/filetree/:pid", handler.GetFileTree)
+	folder := g.Group("/folder")
+	{
+		folder.GET("/filetree/:pid", handler.GetFileTree)
 		folder.GET("/doctree/:pid", handler.GetDocTree)
 		folder.PUT("/filetree/:pid", handler.UpdateFileTree)
 		folder.PUT("/doctree/:pid", handler.UpdateDocTree)
 		folder.POST("/file", handler.CreateFile)
 		folder.DELETE("/file/:id", handler.DeleteFile)
 		folder.GET("/file/:id", handler.GetFileDetail)
-	    folder.GET("/file", handler.GetFileInfoList)
+		folder.GET("/file", handler.GetFileInfoList)
 		folder.GET("/list/:page", handler.GetFileFolderInfoList)
-    }
+	}
 
-    file:=g.Group("/file")
-    {
-        file.POST("/doc", handler.CreateDoc)
+	file := g.Group("/file")
+	{
+		file.POST("/doc", handler.CreateDoc)
 		file.PUT("/doc/:id", handler.UpdateDoc)
 		file.DELETE("/doc/:id", handler.DeleteDoc)
 		file.GET("/doc/:id", handler.GetDocDetail)
 		file.GET("/doc", handler.GetDocInfoList)
 		file.GET("/list/:page", handler.GetDocFolderInfoList)
-    }
+	}
 
 	return g
 }
