@@ -34,5 +34,5 @@ func FeedInit(FeedService micro.Service, FeedClient pb.FeedServiceClient) {
 
 type listRequest struct {
 	Role   int `json:"role"`
-	Userid int `json:"muserid"`
+	Userid int `json:"userid"`
 }
