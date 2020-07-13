@@ -4,7 +4,7 @@ package user;
 
 service UserService {
   rpc Register(RegisterRequest) returns (Response) {}
-  rpc Login(LoginRequest) returns (Response) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc GetInfo(GetInfoRequest) returns (UserInfoResponse) {}
   rpc GetProfile(GetRequest) returns (UserProfile) {}
   rpc List(ListRequest) returns (ListResponse) {}
@@ -35,11 +35,16 @@ message GetInfoRequest {
 message RegisterRequest {
   string email = 1;
   string name = 2;
+  string password = 3;
 }
 
 message LoginRequest {
-  string email = 1;
-  string auth_token = 2;
+  string oauth_code = 1;
+}
+
+message LoginResponse {
+  string token = 1;
+  string redirect_url = 2;
 }
 
 message UserInfo {
@@ -78,6 +83,8 @@ message ListResponse {
   uint32 count = 1;
   repeated User list = 2;
 }
+
+message Request {}
 
 message Response {}
 

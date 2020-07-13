@@ -12,11 +12,13 @@ import (
 // List ... 获取用户列表
 func (s *UserService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
 
+	// 过滤条件
 	filter := &model.UserModel{TeamID: req.Team}
 	if req.Group != 0 {
 		filter.GroupID = req.Group
 	}
 
+	// DB 查询
 	list, err := model.ListUser(req.Offset, req.Limit, req.LastId, filter)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

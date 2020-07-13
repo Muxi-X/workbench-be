@@ -3,6 +3,8 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 type UserModel struct {
@@ -52,6 +54,26 @@ func GetUserByIds(ids []uint32) ([]*UserModel, error) {
 		return list, err
 	}
 	return list, nil
+}
+
+// GetUserByEmail get a user by email.
+func GetUserByEmail(email string) (*UserModel, error) {
+	u := &UserModel{}
+	err := m.DB.Self.Where("email = ?", email).First(u).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, nil
+	}
+	return u, err
+}
+
+// GetUserByName get a user by name.
+func GetUserByName(name string) (*UserModel, error) {
+	u := &UserModel{}
+	err := m.DB.Self.Where("name = ?", name).First(u).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, nil
+	}
+	return u, err
 }
 
 // ListUser list users
