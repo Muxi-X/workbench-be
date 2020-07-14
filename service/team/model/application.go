@@ -25,9 +25,7 @@ func (a *ApplyModel) Create() error {
 }
 
 func DeleteApply(userid uint32) error {
-	apply := &ApplyModel{}
-	apply.UserID = userid
-	return m.DB.Self.Delete(&apply).Error
+	return m.DB.Self.Where("user_id = ?", userid).Delete(&ApplyModel{}).Error
 }
 
 func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, uint64, error) {

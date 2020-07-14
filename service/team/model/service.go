@@ -47,7 +47,7 @@ func GetUsersId(groupid uint32) ([]uint32, error) {
 }
 
 //list all members of a group
-func GetMemberInfo(groupid uint32, limit uint32, offset uint32, pagination bool) ([]*model.MemberModel, uint64, error) {
+func GetMemberInfo(groupid uint32, limit uint32, offset uint32, pagination bool) ([]*MemberModel, uint64, error) {
 	service := micro.NewService()
 	service.Init()
 

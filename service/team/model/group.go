@@ -9,7 +9,7 @@ type GroupModel struct {
 	ID      uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Name    string `json:"name" gorm:"column:name;" binding:"required"`
 	Order   uint32 `json:"order" gorm:"column:order;" binding:"required"`
-	Counter uint32 `json:"counter" gorm:"column:counter;" binding:"required"`
+	Count   uint32 `json:"count" gorm:"column:count;" binding:"required"`
 	Leader  uint32 `json:"leader" gorm:"column:leader;" binding:"required"`
 	Time    string `json:"time" gorm:"column:time;" binding:"required"`
 }
@@ -57,13 +57,6 @@ func GetGroup(id uint32) (*GroupModel, error) {
 	return g, d.Error
 }
 
-//get groupid by groupname
-func GetGroupId(name string) (uint32, error) {
-	g := &GroupModel{}
-	d := m.DB.Self.Where("name = ?", name).First(&g)
-	return g.ID, d.Error
-}
-
 //list all of group
 func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel, uint64, error) {
 	if limit == 0 {
@@ -73,10 +66,10 @@ func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel, uin
 	grouplist := make([]*GroupModel, 0)
 
 	//order 根据groups.id降序输出，即优先输出最近创建group
-	query := m.DB.Self.Table("groups").Select("id").Order("id desc")
+	query := m.DB.Self.Table("groups").Limit(limit).Offset(offset).Order("id desc")
 
-	if pagination {
-		query = query.Offset(offset).Limit(limit)
+	if !pagination {
+		query = query.Offset(-1)
 	}
 
 	var count uint64
