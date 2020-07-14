@@ -56,20 +56,22 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		feed.GET("/list/:uid/:gid", feed.ListGroup)
 	}
 
-	// status 下面还没改
-	status := g.Group("/status")
+	// status
+	status := g.Group("api/v1/status")
 	{
-		status.GET("/:sid", handler.StatusGet)
-		status.GET("/", handler.StatusList)
-		status.POST("/", handler.StatusCreate)
-		status.PUT("/:sid", handler.StatusUpdate)
-		status.DELETE("/:sid", handler.StatusDelete)
-		status.PUT("/:sid/like", handler.StatusLike)
-		status.POST("/:sid/comments", handler.StatusCreateComment)
-		status.GET("/:sid/comments/:page", handler.StatusListComment)
+		status.GET("/:sid", status.Get)
+		status.POST("/", status.Create)
+		status.PUT("/:sid", status.Update)
+		status.DELETE("/:sid", status.Delete)
+		status.GET("/", status.List) // 暂时这样写
+		status.GET("/:sid/filter/:uid", status.ListUser)
+		status.GET("/:sid/filter/:uid/:gid", status.ListGroup)
+		status.PUT("/:sid/like", status.Like)
+		status.POST("/:sid/comments", status.CreateComment)
+		// status.DELETE("/:sid/comment", status.DeleteComment)
 	}
 
-	//project
+	// project
 	project := g.Group("/project")
 	{
 		project.GET("/", handler.GetProjectList)
