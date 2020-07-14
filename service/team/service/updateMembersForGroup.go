@@ -19,7 +19,7 @@ func (ts *TeamService) UpdateMembersForGroup(ctx context.Context, req *pb.Update
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-	g.Counter = uint32(len(req.UserList))
+	g.Count = uint32(len(req.UserList))
 	if err := g.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

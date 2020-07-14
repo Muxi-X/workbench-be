@@ -20,7 +20,7 @@ func (ts *TeamService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	group := &model.GroupModel{
 		Name:    req.GroupName,
 		Order:   0,
-		Counter: uint32(len(req.UserList)),
+		Count:   uint32(len(req.UserList)),
 		Leader:  0,
 		Time:    t.Format("2006-01-02 15:04:05"),
 	}
@@ -28,11 +28,7 @@ func (ts *TeamService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 	//获取新建好的组别id, 并且设置好组别内成员的group_id
-	groupid, err := model.GetGroupId(req.GroupName)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
-	if err := model.UpdateUsersGroupidOrTeamid(req.UserList, groupid, model.GROUP); err != nil {
+	if err := model.UpdateUsersGroupidOrTeamid(req.UserList, group.ID, model.GROUP); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
