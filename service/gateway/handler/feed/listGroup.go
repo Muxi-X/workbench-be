@@ -19,7 +19,7 @@ import (
 
 // Feed 的 ListGroup 接口
 func ListGroup(c *gin.Context) {
-	log.Info("Feed list function called.")
+	log.Info("Feed list Group function called.")
 	// 从 Query Param 中获得 limit 和 lastid
 	var limit int
 	var lastid int
@@ -51,7 +51,7 @@ func ListGroup(c *gin.Context) {
 		return
 	}
 
-	listreq := &pb.ListRequest{
+	listReq := &pb.ListRequest{
 		LastId: lastid,
 		Limit:  limit,
 		Role:   req.Role,
@@ -62,12 +62,27 @@ func ListGroup(c *gin.Context) {
 		},
 	}
 
-	resp, err2 := FeedClient.List(context.Background(), listreq)
+	listResp, err2 := FeedClient.List(context.Background(), listReq)
 	if err2 != nil {
 		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
+
+	// 构造返回 response
+	var resp listResponse
+	for i := 0; i < len(resp.FeedItem); i++ {
+		resp.FeedItem = append(resp.FeedItem, feedItem{
+			Id:          listResp.FeedItem[i].Id,
+			Action:      listResp.FeedItem[i].Actionhow,
+			ShowDivider: listResp.FeedItem[i].ShowDivider,
+			Date:        listResp.FeedItem[i].Date,
+			Time:        listResp.FeedItem[i].Time,
+			User:        listResp.FeedItem[i].User,
+			Source:      listResp.FeedItem[i].Source,
+		})
+	}
+	resp.Count = listResp.Count
 
 	SendResponse(c, nil, resp)
 }

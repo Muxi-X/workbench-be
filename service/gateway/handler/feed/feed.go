@@ -36,3 +36,24 @@ type listRequest struct {
 	Role   int `json:"role"`
 	Userid int `json:"userid"`
 }
+
+type user struct {
+	Name      string `json:"name"`
+	Id        int    `json:"id"`
+	AvatarUrl string `json:avatar_url":`
+}
+
+type feedItem struct {
+	Id          int    `json:"id"`
+	Action      string `json:"action"`
+	ShowDivider bool   `json:"show_divider"`
+	Date        string `json:"date"`
+	Time        string `json:time"`
+	User        user   `json:"user"`
+	Source      source `json:"source"`
+}
+
+type listResponse struct {
+	Count    int        `json:"count"`
+	FeedItem []feedItem `json":feeditem"`
+}
