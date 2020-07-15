@@ -10,7 +10,7 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.18.0
-	github.com/micro/go-plugins/wrapper/trace/opentracing v0.0.0-20200119172437-4fe21aa238fd
+    github.com/micro/go-plugins v1.5.1
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.7.0 // indirectopentracing "github.com/opentracing/opentracing-go"
 	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5
