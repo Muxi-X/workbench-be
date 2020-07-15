@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 
 	"muxi-workbench-team-client/tracer"
@@ -34,6 +36,56 @@ func main() {
 
 	service.Init()
 
-	//client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
+	client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
+
+    //列举applicationlist
+	req := &pb.ApplicationListRequest{
+		Offset:               1,
+		Limit:                2,
+		Pagination:           true,
+	}
+	resp, err := client.GetApplications(context.Background(), req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, item := range resp.List{
+		fmt.Println(item.Id,item.Name,item.Email)
+	}
+	fmt.Println(resp.Count)
+
+
+	/*
+    //列举group中的members
+	req := &pb.MemberListRequest{
+		GroupId:    28,
+		Offset:     1,
+		Limit:      3,
+		Pagination: false,
+	}
+    resp, err := client.GetMemberList(context.Background(), req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, item := range resp.List{
+		fmt.Println(item.Name, item.TeamId, item.GroupId, item.GroupName, item.Email, item.Id)
+	}
+	fmt.Println(resp.Count)
+	 */
+
+    /*
+    //列举grouplist
+	req := &pb.GroupListRequest{
+		Offset:               1,
+		Limit:                2,
+		Pagination:           false,
+	}
+
+	resp, err := client.GetGroupList(context.Background(), req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(resp.List)
+	fmt.Println(resp.Count)
+     */
 
 }
