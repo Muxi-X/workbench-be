@@ -20,7 +20,7 @@ func (ts *TeamService) GetMemberList(ctx context.Context, req *pb.MemberListRequ
 	for index := 0; index < len(list); index++ {
 		item := list[index]
 		resList = append(resList, &pb.Member{
-			Id:        item.UserId,
+			Id:        item.UserID,
 			Name:      item.Name,
 			TeamId:    item.TeamID,
 			GroupId:   item.GroupID,

@@ -22,7 +22,7 @@ func (ts *TeamService) GetGroupList(ctx context.Context, req *pb.GroupListReques
 		resList = append(resList, &pb.GroupItem{
 			Id:        item.ID,
 			Name:      item.Name,
-			UserCount: item.Counter,
+			UserCount: item.Count,
 		})
 	}
 

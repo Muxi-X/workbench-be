@@ -35,15 +35,20 @@ func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, ui
 
 	applicationlist := make([]*ApplyModel, 0)
 
-	query := m.DB.Self.Table("applys").Select("id").Order("id desc")
-
-	if pagination {
-		query = query.Offset(offset).Limit(limit)
-	}
+	query := m.DB.Self.Table("applys").Select("id, user_id").Order("id desc").Limit(limit)
 
 	var count uint64
 
-	if err := query.Scan(&applicationlist).Count(&count).Error; err != nil {
+	if err := query.Count(&count).Error; err != nil {
+		return applicationlist, count, err
+	}
+
+	if pagination {
+		query = query.Offset(offset)
+	}
+
+
+	if err := query.Scan(&applicationlist).Error; err != nil {
 		return applicationlist, count, err
 	}
 

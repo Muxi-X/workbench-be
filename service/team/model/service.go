@@ -54,7 +54,6 @@ func GetMemberInfo(groupid uint32, limit uint32, offset uint32, pagination bool)
 	client := upb.NewUserServiceClient("workbench.service.user", service.Client())
 
 	if !pagination {
-		limit = 0
 		offset = 0
 	}
 
@@ -62,8 +61,8 @@ func GetMemberInfo(groupid uint32, limit uint32, offset uint32, pagination bool)
 
 	rsp, err := client.List(context.Background(), &upb.ListRequest{
 		LastId: 0,
-		Offset: limit,
-		Limit:  offset,
+		Offset: offset,
+		Limit:  limit,
 		Team:   MUXI,
 		Group:  groupid,
 	})

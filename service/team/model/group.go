@@ -66,15 +66,20 @@ func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel, uin
 	grouplist := make([]*GroupModel, 0)
 
 	//order 根据groups.id降序输出，即优先输出最近创建group
-	query := m.DB.Self.Table("groups").Limit(limit).Offset(offset).Order("id desc")
-
-	if !pagination {
-		query = query.Offset(-1)
-	}
+	query := m.DB.Self.Table("groups").Limit(limit).Order("id desc")
 
 	var count uint64
 
-	if err := query.Scan(&grouplist).Count(&count).Error; err != nil {
+	if err := query.Count(&count).Error; err != nil {
+		return grouplist, count, err
+	}
+
+	if pagination {
+		query = query.Offset(offset)
+	}
+
+
+	if err := query.Scan(&grouplist).Error; err != nil {
 		return grouplist, count, err
 	}
 
