@@ -65,31 +65,62 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		status.DELETE("/:sid", status.Delete)
 		status.GET("/", status.List) // 暂时这样写
 		status.GET("/:sid/filter/:uid", status.ListUser)
-		status.GET("/:sid/filter/:uid/:gid", status.ListGroup)
+
+        // 多了一个筛选 group 的 api
+        status.GET("/:sid/filter/:uid/:gid", status.ListGroup)
 		status.PUT("/:sid/like", status.Like)
 		status.POST("/:sid/comments", status.CreateComment)
+
+        // 少了一个删除评论 api
 		// status.DELETE("/:sid/comment", status.DeleteComment)
 	}
 
 	// project
 	project := g.Group("/project")
 	{
-		project.GET("/", handler.GetProjectList)
-		project.GET("/:pid", handler.GetProjectInfo)
-		project.PUT("/:pid", handler.UpdateProjectInfo)
-		project.DELETE("/:pid", handler.DeleteProject)
-		project.GET("/:pid/member", handler.GetMembers)
-		project.PUT("/:pid/member", handler.UpdateMembers)
+        // 创建一个 project  缺少 api
+		// project.POST("/",project.CreateProject)
+
+        // 获取一个 project 的信息，简介，之类的
+        project.GET("/:pid",project.GetProjectInfo)//
+
+        // 删除一个 project
+        project.DELETE("/:pid",project.DeleteProject)//
+
+        // 修改 project 的信息，简介之类的
+        project.PUT("/:pid",project.UpdateProjectInfo)//
+
+        // 获取一个 project 的成员
+        project.GET("/:pid/member",project.GetMember)//
+
+        // 编辑一个 project 的成员
+        project.PUT("/:pid/member",project.UpdateMember)// 请求参数string有问题
+
+        // 获取 project 的 list ,  swagger 里面没有
+        project.GET("/",project.GetProjectList)//
+
+        // 有关 project file doc 的评论的 api 全部没有
+
+        // 好像是获取一个 user 的全部 project 的 id , 可能是用于别的 api 里面
 		project.GET("/:pid/profile/:uid", handler.GetProjectIdsForUser)
 	}
 
 	folder := g.Group("/folder")
 	{
-		folder.GET("/filetree/:pid", handler.GetFileTree)
-		folder.GET("/doctree/:pid", handler.GetDocTree)
-		folder.PUT("/filetree/:pid", handler.UpdateFileTree)
-		folder.PUT("/doctree/:pid", handler.UpdateDocTree)
-		folder.POST("/file", handler.CreateFile)
+        // 获取文件树
+		folder.GET("/filetree/:pid", project.GetFileTree)//
+
+		// 获取文档树
+        folder.GET("/doctree/:pid", project.GetDocTree)//
+
+        // 编辑文件树
+        folder.PUT("/filetree/:pid", project.UpdateFileTree)//
+
+        // 编辑文档树
+        folder.PUT("/doctree/:pid", project.UpdateDocTree)//
+
+        // 待修改
+        folder.POST("/file", handle.CreateFile)
 		folder.DELETE("/file/:id", handler.DeleteFile)
 		folder.GET("/file/:id", handler.GetFileDetail)
 		folder.GET("/file", handler.GetFileInfoList)
@@ -98,6 +129,17 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	file := g.Group("/file")
 	{
+        // 没有创建/编辑/删除 file/doc 文件夹的 api
+        file.POST("/file",project.CreateFile)//
+        file.DELETE("/file/:id",project.DeleteFile)//
+        file.PUT("/file/:id",project.UpdateFile)//没有
+        file.POST("/doc",project.CreateDoc)//
+        file.GET("/doc/:id",project.GetDocDetail)//
+        file.DELETE("/doc/:id",project.DeleteDoc)//
+        file.PUT("/doc/:id",project.UpdateDoc)//
+
+
+        // 待修改
 		file.POST("/doc", handler.CreateDoc)
 		file.PUT("/doc/:id", handler.UpdateDoc)
 		file.DELETE("/doc/:id", handler.DeleteDoc)

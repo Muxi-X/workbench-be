@@ -65,13 +65,13 @@ func List(c *gin.Context) {
 	var resp listResponse
 	for i := 0; i < len(resp.FeedItem); i++ {
 		resp.FeedItem = append(resp.FeedItem, feedItem{
-			Id:          listResp.FeedItem[i].Id,
-			Action:      listResp.FeedItem[i].Actionhow,
-			ShowDivider: listResp.FeedItem[i].ShowDivider,
-			Date:        listResp.FeedItem[i].Date,
-			Time:        listResp.FeedItem[i].Time,
-			User:        listResp.FeedItem[i].User,
-			Source:      listResp.FeedItem[i].Source,
+			Id:          listResp.List[i].Id,
+			Action:      listResp.List[i].Actionhow,
+			ShowDivider: listResp.List[i].ShowDivider,
+			Date:        listResp.List[i].Date,
+			Time:        listResp.List[i].Time,
+			User:        listResp.List[i].User,
+			Source:      listResp.List[i].Source,
 		})
 	}
 	resp.Count = listResp.Count

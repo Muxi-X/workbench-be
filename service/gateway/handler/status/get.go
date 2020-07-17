@@ -91,12 +91,12 @@ func Get(c *gin.Context) {
 
 	for i := 0; i < len(listComResp.Comment); i++ {
 		resp.Commentlist = append(resp.Commentlist, comment{
-			Cid:      listComResp.Comment[i].Id,
-			Uid:      listComResp.Comment[i].Userid,
-			Username: listComResp.Comment[i].Username,
-			Avatar:   listComResp.Comment[i].Avatar,
-			Time:     listComResp.Comment[i].Time,
-			Content:  listComResp.Comment[i].Content,
+			Cid:      listComResp.List[i].Id,
+			Uid:      listComResp.List[i].Userid,
+			Username: listComResp.List[i].Username,
+			Avatar:   listComResp.List[i].Avatar,
+			Time:     listComResp.List[i].Time,
+			Content:  listComResp.List[i].Content,
 		})
 	}
 

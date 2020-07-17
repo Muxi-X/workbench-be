@@ -1,44 +1,45 @@
-package status
+package handler
 
 import (
 	"context"
 	//"fmt"
 	"log"
 
-	//tracer "muxi-workbench-status-client/tracer"
-	pbs "muxi-workbench-status/proto"
+	//tracer "muxi-workbench-project-client/tracer"
+	pbf "muxi-workbench-feed/proto"
+	pbp "muxi-workbench-project/proto"
 	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
 	micro "github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 )
 
-// 需要调用 status create 和 feed push
-func CreateComment(c *gin.Context) {
-	log.Info("Status createcomment function call.")
+// 需要 delete 和 feed push
+func DeleteProject(c *gin.Context) {
+	log.Info("Project delete function call.")
 
-	// 获取 sid
-	var sid int
+	// 获取 pid
+	var pid int
 	var err error
 
-	sid, err = strconv.Atoi(c.Param("sid"))
+	pid, err = strconv.Atoi(c.Param("pid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
 		return
 	}
 
 	// 获取请求
-	var req createCommentRequest
+	var req deleteRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
 		return
 	}
 
-	_, err2 := StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
-		UserId:   req.Userid,
-		StatusId: sid,
-		Content:  req.Content,
+	// 发送 delete 请求
+	_, err2 := ProjectClient.DeleteProject(context.Background(), &pbp.GetRequest{
+		Id: pid,
 	})
 	if err2 != nil {
 		log.Fatalf("Could not greet: %v", err2)
@@ -48,18 +49,18 @@ func CreateComment(c *gin.Context) {
 
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
-		Action: "评论",
+		Action: "删除",
 		UserId: req.UserId,
 		Source: &pbf.Source{
-			Kind:        6,
-			Id:          sid, // 暂时从前端获取
-			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
+			Kind:        2,
+			Id:          0, // 暂时从前端获取
+			Name:        "",
+			ProjectId:   pid,
+			ProjectName: req.Projectname,
 		},
 	}
 
-	// 向 feed 发送请求
+	// 发送 push 请求
 	_, err3 := feed.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
 		log.Fatalf("Could not greet: %v", err2)

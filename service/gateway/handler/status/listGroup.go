@@ -70,13 +70,13 @@ func List(c *gin.Context) {
 	var resp listResponse
 	for i := 0; i < len(listResp.Status); i++ {
 		resp.Status = append(resp.Status, status{
-			Id:       listResp.Status[i].Id,
-			Title:    listResp.Status[i].Title,
-			Content:  listResp.Status[i].Content,
-			UserId:   listResp.Status[i].UserId,
-			Time:     listResp.Status[i].Time,
-			Avatar:   listResp.Status[i].Avatar,
-			Username: listResp.Status[i].Username,
+			Id:       listResp.List[i].Id,
+			Title:    listResp.List[i].Title,
+			Content:  listResp.List[i].Content,
+			UserId:   listResp.List[i].UserId,
+			Time:     listResp.List[i].Time,
+			Avatar:   listResp.List[i].Avatar,
+			Username: listResp.List[i].Username,
 		})
 	}
 	resp.Count = listResp.Count
