@@ -102,29 +102,50 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
         // 有关 project file doc 的评论的 api 全部没有
 
         // 好像是获取一个 user 的全部 project 的 id , 可能是用于别的 api 里面
-		project.GET("/:pid/profile/:uid", handler.GetProjectIdsForUser)
+		project.GET("/:pid/profile/:id", handler.GetProjectIdsForUser)// uid
+
+        // 待修改
+        project.GET("/:pid/re",)
+        project.PUT("/:pid/re",)
+        project.DELETE("/:pid/re",)
+
+        // comment
+        project.POST("/:pid/doc/:id/comments",)// fid
+        project.GET("/:pid/doc/:id/comments",)
+        project.DELETE("/:pid/doc/:id/comment/:cid",)
+        project.GET("/:pid/doc/:id/comment/:cid",)
+        project.GET("/:pid/file/:id/comments",)
+        project.POST("/:pid/file:id/comments",)
+        project.GET("/:pid/file/:id/comment/:cid",)
+        project.DELETE("/:pid/file/:id/comment/:cid",)
 	}
 
 	folder := g.Group("/folder")
 	{
         // 获取文件树
-		folder.GET("/filetree/:pid", project.GetFileTree)//
+		folder.GET("/filetree/:id", project.GetFileTree)//
 
 		// 获取文档树
-        folder.GET("/doctree/:pid", project.GetDocTree)//
+        folder.GET("/doctree/:id", project.GetDocTree)//
 
         // 编辑文件树
-        folder.PUT("/filetree/:pid", project.UpdateFileTree)//
+        folder.PUT("/filetree/:id", project.UpdateFileTree)//
 
         // 编辑文档树
-        folder.PUT("/doctree/:pid", project.UpdateDocTree)//
+        folder.PUT("/doctree/:id", project.UpdateDocTree)//
 
         // 待修改
-        folder.POST("/file", handle.CreateFile)
-		folder.DELETE("/file/:id", handler.DeleteFile)
 		folder.GET("/file/:id", handler.GetFileDetail)
 		folder.GET("/file", handler.GetFileInfoList)
-		folder.GET("/list/:page", handler.GetFileFolderInfoList)
+		folder.GET("/list", handler.GetFileFolderInfoList)
+        folder.POST("/file",)// create file folder
+        folder.PUT("/file/:id",)// change folder name
+        folder.DELETE("/file/:id",)// delete file folder
+        folder.POST("/doc",)// create doc folder
+        folder.PUT("/doc/:id",)// change doc folder name
+        folder.DELETE("/doc/:id")// delete doc folder
+        folder.POST("/file/:id/children",)// file children
+        folder.POST("/doc/:id/children",)// doc children
 	}
 
 	file := g.Group("/file")
@@ -145,7 +166,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		file.DELETE("/doc/:id", handler.DeleteDoc)
 		file.GET("/doc/:id", handler.GetDocDetail)
 		file.GET("/doc", handler.GetDocInfoList)
-		file.GET("/list/:page", handler.GetDocFolderInfoList)
+		file.GET("/list", handler.GetDocFolderInfoList)
 	}
 
 	return g
