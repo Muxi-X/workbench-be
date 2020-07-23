@@ -38,11 +38,12 @@ func main() {
 
 	client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
 
+	/*
     //列举applicationlist
 	req := &pb.ApplicationListRequest{
 		Offset:               1,
-		Limit:                2,
-		Pagination:           true,
+		Limit:                0,
+		Pagination:           false,
 	}
 	resp, err := client.GetApplications(context.Background(), req)
 	if err != nil {
@@ -52,6 +53,7 @@ func main() {
 		fmt.Println(item.Id,item.Name,item.Email)
 	}
 	fmt.Println(resp.Count)
+	 */
 
 
 	/*
@@ -72,12 +74,12 @@ func main() {
 	fmt.Println(resp.Count)
 	 */
 
-    /*
+
     //列举grouplist
 	req := &pb.GroupListRequest{
 		Offset:               1,
-		Limit:                2,
-		Pagination:           false,
+		Limit:                3,
+		Pagination:           true,
 	}
 
 	resp, err := client.GetGroupList(context.Background(), req)
@@ -86,6 +88,6 @@ func main() {
 	}
 	fmt.Println(resp.List)
 	fmt.Println(resp.Count)
-     */
+
 
 }

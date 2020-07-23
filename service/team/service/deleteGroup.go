@@ -17,7 +17,7 @@ func (ts *TeamService) DeleteGroup(ctx context.Context, req *pb.DeleteGroupReque
 	}
 
 	//获取usersid
-	usersid, err := model.GetUsersId(req.GroupId)
+	usersid, err := model.GetUsersIdByGroupid(req.GroupId)
 	if err := model.UpdateUsersGroupidOrTeamid(usersid, model.NOGROUP, model.GROUP); err != nil {
 		log.Println(err)
 		return e.ServerErr(errno.ErrDatabase, err.Error())

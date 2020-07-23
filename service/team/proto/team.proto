@@ -16,6 +16,9 @@ service TeamService {
     rpc Remove(RemoveRequest) returns (Response) {}
     rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {}
     rpc ParseInvitation(ParseInvitationRequest) returns (ParseInvitationResponse) {}
+    rpc CreateTeam(CreateTeamRequest) returns (Response) {}
+    rpc DropTeam(DropTeamRequest) returns (Response) {}
+    rpc UpdateTeamInfo(UpdateTeamInfoRequest) returns (Response) {}
 
     // 申请
     rpc GetApplications(ApplicationListRequest) returns (ApplicationListResponse) {}
@@ -96,6 +99,23 @@ message ParseInvitationRequest {
 
 message ParseInvitationResponse {
     uint32 team_id = 1;
+}
+
+message CreateTeamRequest {
+    string team_name = 1;
+    uint32 creator_id = 2;
+    uint32 role = 4;
+}
+
+message DropTeamRequest {
+    uint32 team_id = 1;
+    uint32 role = 2;
+}
+
+message UpdateTeamInfoRequest{
+    uint32 team_id = 1;
+    string new_name = 2;
+    uint32 role = 3;
 }
 
 message ApplicationListRequest {

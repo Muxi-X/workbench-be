@@ -22,7 +22,7 @@ func UpdateUsersGroupidOrTeamid(userid []uint32, value uint32, kind uint32) erro
 }
 
 //GetUserInfo get users' infos by groupid
-func GetUsersId(groupid uint32) ([]uint32, error) {
+func GetUsersIdByGroupid(groupid uint32) ([]uint32, error) {
 	service := micro.NewService()
 	service.Init()
 
@@ -34,6 +34,30 @@ func GetUsersId(groupid uint32) ([]uint32, error) {
 		Limit:  0,
 		Team:   MUXI,
 		Group:  groupid,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	users := make([]uint32, 0)
+	for _, item := range rsp.List {
+		users = append(users, item.Id)
+	}
+	return users, nil
+}
+
+//GetUserInfo get users' infos by teamid
+func GetUsersIdByTeamId(teamid uint32) ([]uint32, error) {
+	service := micro.NewService()
+	service.Init()
+
+	client := upb.NewUserServiceClient("workbench.service.user", service.Client())
+
+	rsp, err := client.List(context.Background(), &upb.ListRequest{
+		LastId: 0,
+		Offset: 0,
+		Limit:  0,
+		Team:   teamid,
 	})
 	if err != nil {
 		return nil, err

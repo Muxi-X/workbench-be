@@ -19,9 +19,7 @@ func (ts *TeamService) CreateGroup(ctx context.Context, req *pb.CreateGroupReque
 	t := time.Now()
 	group := &model.GroupModel{
 		Name:    req.GroupName,
-		Order:   0,
 		Count:   uint32(len(req.UserList)),
-		Leader:  0,
 		Time:    t.Format("2006-01-02 15:04:05"),
 	}
 	if err := group.Create(); err != nil {

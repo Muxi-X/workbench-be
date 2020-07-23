@@ -37,22 +37,18 @@ func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, ui
 
 	query := m.DB.Self.Table("applys").Select("id, user_id").Order("id desc").Limit(limit)
 
-	var count uint64
-
-	if err := query.Count(&count).Error; err != nil {
-		return applicationlist, count, err
-	}
-
 	if pagination {
 		query = query.Offset(offset)
 	}
 
 
 	if err := query.Scan(&applicationlist).Error; err != nil {
-		return applicationlist, count, err
+		count := len(applicationlist)
+		return applicationlist, uint64(count), err
 	}
 
-	return applicationlist, count, nil
+	count := len(applicationlist)
+	return applicationlist, uint64(count), nil
 }
 
 func GetUsersidByApplys(applys []*ApplyModel) []uint32 {
