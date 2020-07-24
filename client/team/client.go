@@ -38,56 +38,90 @@ func main() {
 
 	client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
 
-	/*
-    //列举applicationlist
-	req := &pb.ApplicationListRequest{
-		Offset:               1,
-		Limit:                0,
-		Pagination:           false,
+    //update members
+	req := &pb.UpdateMembersRequest{
+		GroupId:              37,
+		Role:                 7,
+		UserList:             []uint32{1,4,5},
 	}
-	resp, err := client.GetApplications(context.Background(), req)
+	resp, err := client.UpdateMembersForGroup(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, item := range resp.List{
-		fmt.Println(item.Id,item.Name,item.Email)
-	}
-	fmt.Println(resp.Count)
-	 */
+	fmt.Println(resp)
 
 
 	/*
-    //列举group中的members
+	//list all members
 	req := &pb.MemberListRequest{
-		GroupId:    28,
-		Offset:     1,
-		Limit:      3,
-		Pagination: false,
+		GroupId:              37,
+		Offset:               0,
+		Limit:                2,
+		Pagination:           true,
 	}
-    resp, err := client.GetMemberList(context.Background(), req)
+	resp, err := client.GetMemberList(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, item := range resp.List{
-		fmt.Println(item.Name, item.TeamId, item.GroupId, item.GroupName, item.Email, item.Id)
-	}
-	fmt.Println(resp.Count)
+	fmt.Println(resp)
 	 */
 
-
-    //列举grouplist
+	/*
+	//list all groups
 	req := &pb.GroupListRequest{
-		Offset:               1,
+		Offset:               2,
 		Limit:                3,
 		Pagination:           true,
 	}
-
 	resp, err := client.GetGroupList(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(resp.List)
-	fmt.Println(resp.Count)
+	fmt.Println(resp)
+	 */
+
+	/*
+	//test updategroupinfo
+	req := &pb.UpdateGroupInfoRequest{
+		GroupId:              37,
+		NewName:              "产品",
+		Role:                 7,
+	}
+	resp, err := client.UpdateGroupInfo(context.Background(), req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(resp)
+	 */
+
+	/*
+	//test deletegroup
+	req := &pb.DeleteGroupRequest{
+		GroupId:              38,
+		Role:                 7,
+	}
+	resp, err := client.DeleteGroup(context.Background(), req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(resp)
+	 */
+
+
+	/*
+    //test createGroup
+    req := &pb.CreateGroupRequest{
+		GroupName:            "产品",
+		Role:                 7,
+		UserList:             []uint32{4,5},
+	}
+	resp, err := client.CreateGroup(context.Background(), req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(resp)
+	 */
+
 
 
 }
