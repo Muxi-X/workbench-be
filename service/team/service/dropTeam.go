@@ -25,5 +25,5 @@ func (ts *TeamService) DropTeam(ctx context.Context, req *pb.DropTeamRequest, re
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
+	return nil
 }

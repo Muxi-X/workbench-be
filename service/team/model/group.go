@@ -8,7 +8,7 @@ import (
 type GroupModel struct {
 	ID      uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Name    string `json:"name" gorm:"column:name;" binding:"required"`
-	Order   uint32 `json:"order" gorm:"column:order;" binding:"required"`
+	Order   uint32 `json:"order" gorm:"column:order; default:'null'" binding:"required"`
 	Count   uint32 `json:"count" gorm:"column:count;" binding:"required"`
 	Leader  uint32 `json:"leader" gorm:"column:leader;" binding:"required"`
 	Time    string `json:"time" gorm:"column:time;" binding:"required"`

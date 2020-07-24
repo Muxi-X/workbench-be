@@ -12,7 +12,7 @@ import (
 //Delete … 删除组别
 func (ts *TeamService) DeleteGroup(ctx context.Context, req *pb.DeleteGroupRequest, res *pb.Response) error {
 	//判断权限
-	if req.Role != model.SUPERADMIN {
+	if req.Role != model.SUPERADMIN && req.Role != model.ADMIN{
 		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")
 	}
 
