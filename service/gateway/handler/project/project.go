@@ -1,82 +1,52 @@
-package handler
-
-import (
-	"context"
-	//"fmt"
-	"log"
-
-	//tracer "muxi-workbench-project-client/tracer"
-	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
-
-	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
-)
-
-var ProjectService micro.Service
-var ProjectClient pb.ProjectServiceClient
-
-func ProjectInit(ProjectService micro.Service, ProjectClient pb.ProjectServiceClient) {
-	ProjectService = micro.NewService(micro.Name("workbench.cli.project"),
-		micro.WrapClient(
-			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
-		),
-		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
-	)
-
-	ProjectService.Init()
-
-	ProjectClient = pb.NewProjectServiceClient("workbench.service.project", ProjectService.Client())
-}
+package project
 
 type getProInfoResponse struct {
-	Projectid   int    `json:"projectid"`
+	Projectid   uint32 `json:"projectid"`
 	Projectname string `json:"projectname"`
 	Intro       string `json:"intro"`
-	Usercount   int    `json:"usercount"`
+	Usercount   uint32 `json:"usercount"`
 }
 
 type deleteRequest struct {
-	UserId      int    `json:"userid"`
+	UserId      uint32 `json:"userid"`
 	Projectname string `json:"projectname"`
 }
 
 type updateRequest struct {
-	UserId      int    `json:"userid"`
+	UserId      uint32 `json:"userid"`
 	Projectname string `json:projectname"`
 	Intro       string `json:"intro"`
-	Usercount   int    `json:"usercount"`
+	Usercount   uint32 `json:"usercount"`
 }
 
 type projectListItem struct {
-	Id   int    `json:"uid"`
+	Id   uint32 `json:"uid"`
 	Name string `json:"username"`
 	Logo string `json:logo"`
 }
 
 type memberListItem struct {
-	Id        int    `json:"id"`
+	Id        uint32 `json:"id"`
 	Name      string `json:"name"`
 	Avatar    string `json:"avatar"`
 	GroupName string `json:"groupname"`
-	Role      int    `json:"role"`
+	Role      uint32 `json:"role"`
 }
 
 type getMemberResponse struct {
-	Count      int              `json:"count"`
+	Count      uint32           `json:"count"`
 	Memberlist []memberListItem `json:"memberlist"`
 }
 
+// UserList 是 uint32
 type updateMemberRequest struct {
-	UserId      int    `json:"userid"`
-	ProjectName string `json:"projectname"`
-	Userlist    []int  `json:"userlist"`
+	UserId      uint32   `json:"userid"`
+	ProjectName string   `json:"projectname"`
+	Userlist    []string `json:"userlist"`
 }
 
 type getProjectListRequest struct {
-	UserId int `json:"userid"`
+	UserId uint32 `json:"userid"`
 }
 
 type getProjectListResponse struct {
@@ -88,7 +58,7 @@ type getFileTreeResponse struct {
 }
 
 type updateFileTreeRequest struct {
-	UserId      int    `json:"userid"`
+	UserId      uint32 `json:"userid"`
 	Projectname string `json:"projectname"`
 	Filetree    string `json:"filetree"`
 }
@@ -98,35 +68,35 @@ type getDocTreeResponse struct {
 }
 
 type updateDocTreeRequest struct {
-	UserId      int    `json:"userid"`
+	UserId      uint32 `json:"userid"`
 	Projectname string `json:"projectname"`
 	Doctree     string `json:"doctree"`
 }
 
 type createFileRequest struct {
-	UserId   int    `json:"userid"`
-	Pid      int    `json:"projectid"`
+	UserId   uint32 `json:"userid"`
+	Pid      uint32 `json:"projectid"`
 	Filename string `json:"filename"`
 	Hashname string `json:"hashname"`
 	Url      string `json:"url"`
-	Fid      int    `json:"fid"`
+	Fid      uint32 `json:"fid"`
 }
 
 type deleteFileRequest struct {
-	UserId   int    `json:"userid"`
+	UserId   uint32 `json:"userid"`
 	Filename string `json:"filename"`
 }
 
 type createDocRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-	Pid     int    `json:"projectid"`
+	Pid     uint32 `json:"projectid"`
 	Docname string `json:"docname"`
-	UserId  int    `json:"userid"`
+	UserId  uint32 `json:"userid"`
 }
 
 type getDocDetailResponse struct {
-	Id           int    `json:"docid"`
+	Id           uint32 `json:"docid"`
 	Title        string `json:"title"`
 	Content      string `json:"content"`
 	Creator      string `json:"creator"`
@@ -136,17 +106,18 @@ type getDocDetailResponse struct {
 }
 
 type deleteDocRequest struct {
-	UserId  int    `json:"userid"`
+	UserId  uint32 `json:"userid"`
 	Docname string `json:"docname"`
 }
 
 type updateDocRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-	UserId  int    `json:"userId"`
+	UserId  uint32 `json:"userId"`
 }
 
 // 下面是待抽离的 api
+/*
 func GetProjectIdsForUser(c *gin.Context) {
 	var req pb.GetRequest
 	if err := c.BindJSON(&req); err != nil {
@@ -272,3 +243,4 @@ func GetDocFolderInfoList(c *gin.Context) {
 
 	c.JSON(200, resp)
 }
+*/

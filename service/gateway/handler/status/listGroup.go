@@ -2,24 +2,26 @@ package status
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-status-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 )
 
 // 只用调用一次 list  lastid limit 要从 query param 获取 还要获取gid
-func List(c *gin.Context) {
-	log.Info("Status list group function call")
+func ListGroup(c *gin.Context) {
+	log.Info("Status list group function call",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 gid 和 limt lastid
-	var limt int
+	// 获取 gid 和 limit lastid
+	var limit int
 	var lastid int
 	var gid int
 	var page int
@@ -37,7 +39,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.Query("lastid", "0"))
+	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
 		return
@@ -52,23 +54,22 @@ func List(c *gin.Context) {
 
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
-		Lastid: lastid,
-		Offset: page,
-		Limit:  limit,
-		Group:  gid,
+		Lastid: uint32(lastid),
+		Offset: uint32(page),
+		Limit:  uint32(limit),
+		Group:  uint32(gid),
 		Uid:    0,
 	}
 
-	listResp, err2 := StatusClient.List(context.Background(), listReq)
+	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
 
 	// 构造返回 response
 	var resp listResponse
-	for i := 0; i < len(listResp.Status); i++ {
+	for i := 0; i < len(listResp.List); i++ {
 		resp.Status = append(resp.Status, status{
 			Id:       listResp.List[i].Id,
 			Title:    listResp.List[i].Title,
@@ -76,7 +77,7 @@ func List(c *gin.Context) {
 			UserId:   listResp.List[i].UserId,
 			Time:     listResp.List[i].Time,
 			Avatar:   listResp.List[i].Avatar,
-			Username: listResp.List[i].Username,
+			Username: listResp.List[i].UserName,
 		})
 	}
 	resp.Count = listResp.Count

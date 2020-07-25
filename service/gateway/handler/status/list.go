@@ -2,25 +2,28 @@ package status
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-status-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 )
 
 // 只用调用一次 list  lastid limit page 要从 query param 获取
 func List(c *gin.Context) {
-	log.Info("Status list function call")
+	log.Info("Status list function call",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 gid 和 limt lastid
-	var limt int
+	var limit int
 	var lastid int
+	var page int
 	var err error
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
@@ -44,23 +47,22 @@ func List(c *gin.Context) {
 
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
-		Lastid: lastid,
-		Offset: page,
-		Limit:  limit,
+		Lastid: uint32(lastid),
+		Offset: uint32(page),
+		Limit:  uint32(limit),
 		Group:  0,
 		Uid:    0,
 	}
 
-	listResp, err2 := StatusClient.List(context.Background(), listReq)
+	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
 
 	// 构造返回 response
 	var resp listResponse
-	for i := 0; i < len(listResp.Status); i++ {
+	for i := 0; i < len(listResp.List); i++ {
 		resp.Status = append(resp.Status, status{
 			Id:       listResp.List[i].Id,
 			Title:    listResp.List[i].Title,
@@ -68,7 +70,7 @@ func List(c *gin.Context) {
 			UserId:   listResp.List[i].UserId,
 			Time:     listResp.List[i].Time,
 			Avatar:   listResp.List[i].Avatar,
-			Username: listResp.List[i].Username,
+			Username: listResp.List[i].UserName,
 		})
 	}
 	resp.Count = listResp.Count

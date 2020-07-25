@@ -1,23 +1,24 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 只调用一次 project info
 func GetProjectInfo(c *gin.Context) {
-	log.Info("Project Info get function call")
+	log.Info("Project Info get function call",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	var pid int
 	var err error
@@ -30,11 +31,10 @@ func GetProjectInfo(c *gin.Context) {
 	}
 
 	// 发送请求
-	getProInfoResp, err2 := ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
-		Id: pid,
+	getProInfoResp, err2 := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
+		Id: uint32(pid),
 	})
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
@@ -44,7 +44,7 @@ func GetProjectInfo(c *gin.Context) {
 		Projectid:   getProInfoResp.Id,
 		Projectname: getProInfoResp.Name,
 		Intro:       getProInfoResp.Intro,
-		Usercount:   getProInfoResp.Usercount,
+		Usercount:   getProInfoResp.UserCount,
 	}
 
 	// 返回结果

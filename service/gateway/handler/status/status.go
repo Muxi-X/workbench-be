@@ -1,44 +1,15 @@
 package status
 
-import (
-	"context"
-	//"fmt"
-	"log"
-
-	//tracer "muxi-workbench-status-client/tracer"
-	pbs "muxi-workbench-status/proto"
-	handler "muxi-workbench/pkg/handler"
-
-	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-)
-
-var StatusService micro.Servic
-var StatusClient pbs.StatusServiceClient
-
-func StatusInit(StatusService micro.Service, StatusClient pbs.StatusServiceClient) {
-	StatusService = micro.NewService(micro.Name("workbench.cli.status"),
-		micro.WrapClient(
-			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
-		),
-		micro.WrapCall(handler.ClientErrorHandlerWrapper()))
-	StatusService.Init()
-
-	StatusClient = pbs.NewStatusServiceClient("workbench.service.status", StatusService.Client())
-
-}
-
 type createRequest struct {
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	UserId   int    `json:"userid"`
-	Statusid int    `json:"stautsid"`
+	UserId   uint32 `json:"userid"`
+	Statusid uint32 `json:"stautsid"`
 }
 
 type comment struct {
-	Cid      int    `json:"cid"`
-	Uid      int    `json:"uid"`
+	Cid      uint32 `json:"cid"`
+	Uid      uint32 `json:"uid"`
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
@@ -46,49 +17,49 @@ type comment struct {
 }
 
 type getResponse struct {
-	Sid         int       `json:"sid"`
-	Title       int       `json:"title"`
+	Sid         uint32    `json:"sid"`
+	Title       string    `json:"title"`
 	Content     string    `json:"content"`
-	UserId      int       `json:userid"`
+	UserId      uint32    `json:userid"`
 	Time        string    `json:"time"`
 	Avatar      string    `json:"avatar"`
 	Username    string    `json:"username"`
-	Count       int       `json:"count"`
+	Count       uint32    `json:"count"`
 	Commentlist []comment `json:"commentlist"`
 }
 
 type updateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-	UserId  int    `json:"userid"`
+	UserId  uint32 `json:"userid"`
 }
 
 type deleteRequest struct {
-	UserId int `json:"userid"`
-	Title  int `json:title"`
+	UserId uint32 `json:"userid"`
+	Title  string `json:title"`
 }
 
 type status struct {
-	Id       int    `json:"id"`
+	Id       uint32 `json:"id"`
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	UserId   int    `json:"userid"`
+	UserId   uint32 `json:"userid"`
 	Time     string `json:"time"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`
 }
 
 type listResponse struct {
-	Count  int      `json:"count"`
+	Count  uint32   `json:"count"`
 	Status []status `json:"stauts"`
 }
 
 type likeRequest struct {
-	UserId int `json:"userid"`
+	UserId uint32 `json:"userid"`
 }
 
-type CreateCommentRequest struct {
+type createCommentRequest struct {
 	Content string `json:"content"`
-	UserId  int    `json:"userid"`
+	UserId  uint32 `json:"userid"`
 	Title   string `json:"title"`
 }

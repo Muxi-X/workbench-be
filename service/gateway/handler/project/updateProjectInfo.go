@@ -1,24 +1,25 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 需要调用 update 和 feed push
 func UpdateProjectInfo(c *gin.Context) {
-	log.Info("Project info update function call")
+	log.Info("Project info update function call",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
 	var pid int
@@ -39,16 +40,15 @@ func UpdateProjectInfo(c *gin.Context) {
 
 	// 构造 update 请求
 	updateReq := &pbp.ProjectInfo{
-		Id:        pid,
+		Id:        uint32(pid),
 		Name:      req.Projectname,
-		intro:     req.Intro,
+		Intro:     req.Intro,
 		UserCount: req.Usercount,
 	}
 
 	// 发送 update 请求
-	_, err2 := ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
+	_, err2 := service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err2.Error())
 		return
 	}
@@ -61,15 +61,14 @@ func UpdateProjectInfo(c *gin.Context) {
 			Kind:        2,
 			Id:          0, // 暂时从前端获取
 			Name:        "",
-			ProjectId:   pid,
+			ProjectId:   uint32(pid),
 			ProjectName: req.Projectname,
 		},
 	}
 
 	// 向 feed 发送请求
-	_, err3 := feed.FeedClient.Push(context.Background(), pushReq)
+	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		log.Fatalf("Could not greet: %v", err3)
 		SendError(c, errno.InternalServerError, nil, err3.Error())
 		return
 	}

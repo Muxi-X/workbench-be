@@ -2,21 +2,24 @@ package status
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-status-client/tracer"
+	"go.uber.org/zap"
+	pbf "muxi-workbench-feed/proto"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 )
 
 // 需要调用 status create 和 feed push
 func CreateComment(c *gin.Context) {
-	log.Info("Status createcomment function call.")
+	log.Info("Status createcomment function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 sid
 	var sid int
@@ -35,13 +38,12 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
-	_, err2 := StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
-		UserId:   req.Userid,
-		StatusId: sid,
+	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
+		UserId:   req.UserId,
+		StatusId: uint32(sid),
 		Content:  req.Content,
 	})
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
@@ -52,7 +54,7 @@ func CreateComment(c *gin.Context) {
 		UserId: req.UserId,
 		Source: &pbf.Source{
 			Kind:        6,
-			Id:          sid, // 暂时从前端获取
+			Id:          uint32(sid), // 暂时从前端获取
 			Name:        req.Title,
 			ProjectId:   0,
 			ProjectName: "",
@@ -60,9 +62,8 @@ func CreateComment(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err3 := feed.FeedClient.Push(context.Background(), pushReq)
+	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err3.Error())
 		return
 	}

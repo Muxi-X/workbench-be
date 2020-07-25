@@ -1,23 +1,24 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 只用调用一次 getfiletree
 func GetFileTree(c *gin.Context) {
-	log.Info("Project filetree get function call.")
+	log.Info("Project filetree get function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
 	var pid int
@@ -30,18 +31,17 @@ func GetFileTree(c *gin.Context) {
 	}
 
 	// 发送请求
-	getFileTreeResp, err2 := ProjectClient.GetFileTree(context.Background(), &pbp.GetRequest{
-		Id: pid,
+	getFileTreeResp, err2 := service.ProjectClient.GetFileTree(context.Background(), &pbp.GetRequest{
+		Id: uint32(pid),
 	})
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
 
 	// 构造返回
 	resp := getFileTreeResponse{
-		Filetree: getFileTreeResp.Filetree,
+		Filetree: getFileTreeResp.Tree,
 	}
 
 	SendResponse(c, nil, resp)

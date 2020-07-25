@@ -1,22 +1,23 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 func GetDocTree(c *gin.Context) {
-	log.Info("Project doctree get function call.")
+	log.Info("Project doctree get function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
 	var pid int
@@ -29,11 +30,10 @@ func GetDocTree(c *gin.Context) {
 	}
 
 	// 发送请求
-	getDocTreeResp, err2 := ProjectClient.GetDocTree(context.Background(), &pbp.GetRequest{
-		Id: pid,
+	getDocTreeResp, err2 := service.ProjectClient.GetDocTree(context.Background(), &pbp.GetRequest{
+		Id: uint32(pid),
 	})
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}

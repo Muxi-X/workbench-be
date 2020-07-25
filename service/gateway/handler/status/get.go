@@ -2,21 +2,23 @@ package status
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-status-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 )
 
 // 需要调用 get 和 listcomment
 func Get(c *gin.Context) {
-	log.Info("Status get function call.")
+	log.Info("Status get function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 从 Query Param 中获取 lastid 和 limit
 	var limit int
@@ -52,48 +54,46 @@ func Get(c *gin.Context) {
 
 	// 构造 get status 请求并发送
 	getReq := &pbs.GetRequest{
-		Id: sid,
+		Id: uint32(sid),
 	}
 
-	getResp, err2 := StatusClient.Get(context.Background(), &getReq)
+	getResp, err2 := service.StatusClient.Get(context.Background(), getReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err2.Error())
 		return
 	}
 
 	// 构造 listcomment 请求并发送
 	listComReq := &pbs.CommentListRequest{
-		StatusId: sid,
-		Offset:   page,
-		Limit:    limit,
-		Lastid:   lastid,
+		StatusId: uint32(sid),
+		Offset:   uint32(page),
+		Limit:    uint32(limit),
+		Lastid:   uint32(lastid),
 	}
 
-	listComResp, err3 := StatusClient.ListComment(context.Background(), listComReq)
+	listComResp, err3 := service.StatusClient.ListComment(context.Background(), listComReq)
 	if err3 != nil {
-		log.Fatalf("Could not greet: %v", err3)
 		SendError(c, errno.InternalServerError, nil, err3.Error())
 		return
 	}
 
 	// 构造返回 response
 	resp := getResponse{
-		Sid:      getResp.Id,
-		Title:    getResp.Title,
-		Content:  getResp.Content,
-		UserId:   getResp.UserId,
-		Time:     getResp.Time,
-		Avatar:   getResp.Avatar,
-		Username: getResp.Username,
+		Sid:      uint32(sid),
+		Title:    getResp.Status.Title,
+		Content:  getResp.Status.Content,
+		UserId:   getResp.Status.UserId,
+		Time:     getResp.Status.Time,
+		Avatar:   getResp.Status.Avatar,
+		Username: getResp.Status.UserName,
 		Count:    listComResp.Count,
 	}
 
-	for i := 0; i < len(listComResp.Comment); i++ {
+	for i := 0; i < len(listComResp.List); i++ {
 		resp.Commentlist = append(resp.Commentlist, comment{
 			Cid:      listComResp.List[i].Id,
-			Uid:      listComResp.List[i].Userid,
-			Username: listComResp.List[i].Username,
+			Uid:      listComResp.List[i].UserId,
+			Username: listComResp.List[i].UserName,
 			Avatar:   listComResp.List[i].Avatar,
 			Time:     listComResp.List[i].Time,
 			Content:  listComResp.List[i].Content,

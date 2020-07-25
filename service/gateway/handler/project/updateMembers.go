@@ -1,24 +1,25 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
-	pbs "muxi-workbench-feed/proto"
+	"go.uber.org/zap"
+	pbf "muxi-workbench-feed/proto"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 调用一次 update 和一次 feed push
 func UpdateMembers(c *gin.Context) {
-	log.Info("Project member update function call.")
+	log.Info("Project member update function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
 	var pid int
@@ -38,17 +39,17 @@ func UpdateMembers(c *gin.Context) {
 	}
 
 	// 构造请求
-	updateMemReq := pbp.UpdateMemberRequest{
-		Id: pid,
+	// 这里 list 应该是 uint32 表示 uid
+	updateMemReq := &pbp.UpdateMemberRequest{
+		Id: uint32(pid),
 	}
 	for i := 0; i < len(req.Userlist); i++ {
 		updateMemReq.List = append(updateMemReq.List, req.Userlist[i])
 	}
 
 	// 发送请求
-	_, err2 := ProjectClient.UpdateMembers(context.Background(), updateMemReq)
+	_, err2 := service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
@@ -61,18 +62,17 @@ func UpdateMembers(c *gin.Context) {
 			Kind:        2,
 			Id:          0, // 暂时从前端获取
 			Name:        "",
-			ProjectId:   pid,
-			ProjectName: req.Projectame,
+			ProjectId:   uint32(pid),
+			ProjectName: req.ProjectName,
 		},
 	}
 
 	// 向 feed 发送请求
-	_, err3 := feed.FeedClient.Push(context.Background(), pushReq)
+	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		log.Fatalf("Could not greet: %v", err3)
 		SendError(c, errno.InternalServerError, nil, err3.Error())
 		return
 	}
 
-	SendResponse(c, nil, resp)
+	SendResponse(c, errno.OK, nil)
 }

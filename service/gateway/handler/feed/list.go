@@ -2,24 +2,24 @@ package feed
 
 import (
 	"context"
-	//"fmt"
-	"log"
 	"strconv"
 
-	"muxi-workbench/pkg/handler"
-	//"muxi-workbench-feed-client/tracer"
+	"go.uber.org/zap"
 	pb "muxi-workbench-feed/proto"
-	"muxi-workbench/pkg/errno"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // Feed 的 List 接口
 func List(c *gin.Context) {
-	log.Info("Feed list function called.")
+	log.Info("Feed list function called.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
+
 	// 从 Query Param 中获得 limit 和 lastid
 	var limit int
 	var lastid int
@@ -44,8 +44,8 @@ func List(c *gin.Context) {
 	}
 
 	listReq := &pb.ListRequest{
-		LastId: lastid,
-		Limit:  limit,
+		LastId: uint32(lastid),
+		Limit:  uint32(limit),
 		Role:   req.Role,
 		UserId: req.Userid,
 		Filter: &pb.Filter{
@@ -54,9 +54,8 @@ func List(c *gin.Context) {
 		},
 	}
 
-	listResp, err2 := FeedClient.List(context.Background(), listReq)
+	listResp, err2 := service.FeedClient.List(context.Background(), listReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
@@ -66,12 +65,22 @@ func List(c *gin.Context) {
 	for i := 0; i < len(resp.FeedItem); i++ {
 		resp.FeedItem = append(resp.FeedItem, feedItem{
 			Id:          listResp.List[i].Id,
-			Action:      listResp.List[i].Actionhow,
+			Action:      listResp.List[i].Action,
 			ShowDivider: listResp.List[i].ShowDivider,
 			Date:        listResp.List[i].Date,
 			Time:        listResp.List[i].Time,
-			User:        listResp.List[i].User,
-			Source:      listResp.List[i].Source,
+			User: user{
+				Name:      listResp.List[i].User.Name,
+				Id:        listResp.List[i].User.Id,
+				AvatarUrl: listResp.List[i].User.AvatarUrl,
+			},
+			Source: source{
+				Kind:        listResp.List[i].Source.Kind,
+				Id:          listResp.List[i].Source.Id,
+				Name:        listResp.List[i].Source.Name,
+				ProjectId:   listResp.List[i].Source.ProjectId,
+				ProjectName: listResp.List[i].Source.ProjectName,
+			},
 		})
 	}
 	resp.Count = listResp.Count

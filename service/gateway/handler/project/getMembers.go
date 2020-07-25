@@ -1,25 +1,27 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 只用调用一次 get member
 func GetMembers(c *gin.Context) {
-	log.Info("Project get member function call.")
+	log.Info("Project get member function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 要从 query param 获取 lastid limit page pagination
+	var pid int
 	var limit int
 	var lastid int
 	var page int
@@ -57,18 +59,23 @@ func GetMembers(c *gin.Context) {
 		return
 	}
 
-	// 构造请求
-	getMemReq := &pbp.GetMemberListRequest{
-		ProjectId:  pid,
-		Lastid:     lastid,
-		Offset:     page,
-		Limit:      limit,
-		Pagination: pagination,
+	var pageBool bool
+
+	if pagination == 1 {
+		pageBool = true
 	}
 
-	getMemResp, err2 := ProjectClient.GetMembers(context.Background(), getMemReq)
+	// 构造请求
+	getMemReq := &pbp.GetMemberListRequest{
+		ProjectId:  uint32(pid),
+		Lastid:     uint32(lastid),
+		Offset:     uint32(page),
+		Limit:      uint32(limit),
+		Pagination: pageBool,
+	}
+
+	getMemResp, err2 := service.ProjectClient.GetMembers(context.Background(), getMemReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
@@ -82,7 +89,7 @@ func GetMembers(c *gin.Context) {
 			Id:        getMemResp.List[i].Id,
 			Name:      getMemResp.List[i].Name,
 			Avatar:    getMemResp.List[i].Avatar,
-			Groupname: getMemResp.List[i].GroupName,
+			GroupName: getMemResp.List[i].GroupName,
 			Role:      getMemResp.List[i].Role,
 		})
 	}

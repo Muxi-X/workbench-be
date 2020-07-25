@@ -1,24 +1,25 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
+	"strconv"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 调用 deletefile 和 feed push
 func DeleteFile(c *gin.Context) {
-	log.Info("File delete function call.")
+	log.Info("File delete function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 fid
 	var fid int
@@ -38,11 +39,10 @@ func DeleteFile(c *gin.Context) {
 	}
 
 	// 请求
-	_, err2 := ProjectClient.DeleteFile(context.Background(), &pbp.GetRequest{
-		Id: fid,
+	_, err2 := service.ProjectClient.DeleteFile(context.Background(), &pbp.GetRequest{
+		Id: uint32(fid),
 	})
 	if err2 != nil {
-		log.Fatal("Could not greet: %v", err2)
 		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
@@ -54,7 +54,7 @@ func DeleteFile(c *gin.Context) {
 		UserId: req.UserId,
 		Source: &pbf.Source{
 			Kind:        4,
-			Id:          fid, // 暂时从前端获取
+			Id:          uint32(fid), // 暂时从前端获取
 			Name:        req.Filename,
 			ProjectId:   0,
 			ProjectName: "",
@@ -62,10 +62,9 @@ func DeleteFile(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err2 := feed.FeedClient.Push(context.Background(), pushReq)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
+	if err3 != nil {
+		SendError(c, errno.InternalServerError, nil, err3.Error())
 		return
 	}
 

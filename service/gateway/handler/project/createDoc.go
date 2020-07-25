@@ -1,27 +1,27 @@
-package handler
+package project
 
 import (
 	"context"
-	//"fmt"
-	"log"
 
-	//tracer "muxi-workbench-project-client/tracer"
+	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
+	. "muxi-workbench-gateway/handler"
+	"muxi-workbench-gateway/log"
+	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/service"
+	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-	handler "muxi-workbench/pkg/handler"
 
 	"github.com/gin-gonic/gin"
-	micro "github.com/micro/go-micro"
-	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // 调用一次 doc create 和 feed push
 func CreateDoc(c *gin.Context) {
-	log.Info("Doc create function call.")
+	log.Info("Doc create function call.",
+		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获得请求
-	var req createDorRequest
+	var req createDocRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
 		return
@@ -33,10 +33,9 @@ func CreateDoc(c *gin.Context) {
 		ProjectId: req.Pid,
 		UserId:    req.UserId,
 	}
-	_, err2 := ProjectClient.CreateDoc(context.Background(), createDocReq)
+	_, err2 := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
 	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error())
 		return
 	}
 
@@ -48,15 +47,14 @@ func CreateDoc(c *gin.Context) {
 			Kind:        3,
 			Id:          0, // 暂时从前端获取
 			Name:        req.Docname,
-			ProjectId:   0,
-			ProjectName: req.Pid,
+			ProjectId:   req.Pid,
+			ProjectName: "",
 		},
 	}
 
 	// 向 feed 发送请求
-	_, err3 := feed.FeedClient.Push(context.Background(), pushReq)
+	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		log.Fatalf("Could not greet: %v", err3)
 		SendError(c, errno.InternalServerError, nil, err3.Error())
 		return
 	}

@@ -3,9 +3,10 @@ package router
 import (
 	"net/http"
 
-	"muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/handler/feed"
+	"muxi-workbench-gateway/handler/project"
 	"muxi-workbench-gateway/handler/sd"
+	"muxi-workbench-gateway/handler/status"
 	"muxi-workbench-gateway/router/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -49,123 +50,131 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// 下面是我写的路由
 	// feed
-	feed := g.Group("api/v1/feed")
+	feedRouter := g.Group("api/v1/feed")
 	{
-		feed.GET("/list", feed.List)
-		feed.GET("/list/:uid", feed.ListUser)
-		feed.GET("/list/:uid/:gid", feed.ListGroup)
+		feedRouter.GET("/list", feed.List)
+		feedRouter.GET("/list/:uid", feed.ListUser)
+		feedRouter.GET("/list/:uid/:gid", feed.ListGroup)
 	}
 
 	// status
-	status := g.Group("api/v1/status")
+	statusRouter := g.Group("api/v1/status")
 	{
-		status.GET("/:sid", status.Get)
-		status.POST("/", status.Create)
-		status.PUT("/:sid", status.Update)
-		status.DELETE("/:sid", status.Delete)
-		status.GET("/", status.List) // 暂时这样写
-		status.GET("/:sid/filter/:uid", status.ListUser)
+		statusRouter.GET("/:sid", status.Get)
+		statusRouter.POST("/", status.Create)
+		statusRouter.PUT("/:sid", status.Update)
+		statusRouter.DELETE("/:sid", status.Delete)
+		statusRouter.GET("/", status.List) // 暂时这样写
+		statusRouter.GET("/:sid/filter/:uid", status.ListUser)
 
 		// 多了一个筛选 group 的 api
-		status.GET("/:sid/filter/:uid/:gid", status.ListGroup)
-		status.PUT("/:sid/like", status.Like)
-		status.POST("/:sid/comments", status.CreateComment)
+		statusRouter.GET("/:sid/filter/:uid/:gid", status.ListGroup)
+		statusRouter.PUT("/:sid/like", status.Like)
+		statusRouter.POST("/:sid/comments", status.CreateComment)
 
 		// 少了一个删除评论 api
-		// status.DELETE("/:sid/comment", status.DeleteComment)
+		// statusRouter.DELETE("/:sid/comment", status.DeleteComment)
 	}
 
 	// project
-	project := g.Group("/project")
+	projectRouter := g.Group("/project")
 	{
 		// 创建一个 project  缺少 api
-		// project.POST("/",project.CreateProject)
+		// projectRouter.POST("/",project.CreateProject)
 
 		// 获取一个 project 的信息，简介，之类的
-		project.GET("/:pid", project.GetProjectInfo) //
+		projectRouter.GET("/:pid", project.GetProjectInfo)
 
 		// 删除一个 project
-		project.DELETE("/:pid", project.DeleteProject) //
+		projectRouter.DELETE("/:pid", project.DeleteProject)
 
 		// 修改 project 的信息，简介之类的
-		project.PUT("/:pid", project.UpdateProjectInfo) //
+		projectRouter.PUT("/:pid", project.UpdateProjectInfo)
 
 		// 获取一个 project 的成员
-		project.GET("/:pid/member", project.GetMember) //
+		projectRouter.GET("/:pid/member", project.GetMembers)
 
 		// 编辑一个 project 的成员
-		project.PUT("/:pid/member", project.UpdateMember) // 请求参数string有问题
+		projectRouter.PUT("/:pid/member", project.UpdateMembers) // 请求参数string有问题
 
 		// 获取 project 的 list ,  swagger 里面没有
-		project.GET("/", project.GetProjectList) //
+		projectRouter.GET("/", project.GetProjectList)
 
 		// 有关 project file doc 的评论的 api 全部没有
 
 		// 好像是获取一个 user 的全部 project 的 id , 可能是用于别的 api 里面
-		project.GET("/:pid/profile/:id", handler.GetProjectIdsForUser) // uid
+		// projectRouter.GET("/:pid/profile/:id", project.GetProjectIdsForUser) // uid
 
 		// 待修改
-		project.GET("/:pid/re")
-		project.PUT("/:pid/re")
-		project.DELETE("/:pid/re")
+		/*
+		   projectRouter.GET("/:pid/re")
+		   projectRouter.PUT("/:pid/re")
+		   projectRouter.DELETE("/:pid/re")
+		*/
 
 		// comment
-		project.POST("/:pid/doc/:id/comments") // fid
-		project.GET("/:pid/doc/:id/comments")
-		project.DELETE("/:pid/doc/:id/comment/:cid")
-		project.GET("/:pid/doc/:id/comment/:cid")
-		project.GET("/:pid/file/:id/comments")
-		project.POST("/:pid/file:id/comments")
-		project.GET("/:pid/file/:id/comment/:cid")
-		project.DELETE("/:pid/file/:id/comment/:cid")
+		/*
+		   projectRouter.POST("/:pid/doc/:id/comments") // fid
+		   projectRouter.GET("/:pid/doc/:id/comments")
+		   projectRouter.DELETE("/:pid/doc/:id/comment/:cid")
+		   projectRouter.GET("/:pid/doc/:id/comment/:cid")
+		   projectRouter.GET("/:pid/file/:id/comments")
+		   projectRouter.POST("/:pid/file:id/comments")
+		   projectRouter.GET("/:pid/file/:id/comment/:cid")
+		   projectRouter.DELETE("/:pid/file/:id/comment/:cid")
+		*/
 	}
 
-	folder := g.Group("/folder")
+	folderRouter := g.Group("/folder")
 	{
 		// 获取文件树
-		folder.GET("/filetree/:id", project.GetFileTree) //
+		folderRouter.GET("/filetree/:id", project.GetFileTree)
 
 		// 获取文档树
-		folder.GET("/doctree/:id", project.GetDocTree) //
+		folderRouter.GET("/doctree/:id", project.GetDocTree)
 
 		// 编辑文件树
-		folder.PUT("/filetree/:id", project.UpdateFileTree) //
+		folderRouter.PUT("/filetree/:id", project.UpdateFileTree)
 
 		// 编辑文档树
-		folder.PUT("/doctree/:id", project.UpdateDocTree) //
+		folderRouter.PUT("/doctree/:id", project.UpdateDocTree)
 
 		// 待修改
-		folder.GET("/file/:id", handler.GetFileDetail)
-		folder.GET("/file", handler.GetFileInfoList)
-		folder.GET("/list", handler.GetFileFolderInfoList)
-		folder.POST("/file")              // create file folder
-		folder.PUT("/file/:id")           // change folder name
-		folder.DELETE("/file/:id")        // delete file folder
-		folder.POST("/doc")               // create doc folder
-		folder.PUT("/doc/:id")            // change doc folder name
-		folder.DELETE("/doc/:id")         // delete doc folder
-		folder.POST("/file/:id/children") // file children
-		folder.POST("/doc/:id/children")  // doc children
+		/*
+		   folderRouter.GET("/file/:id", handler.GetFileDetail)
+		   folderRouter.GET("/file", handler.GetFileInfoList)
+		   folderRouter.GET("/list", handler.GetFileFolderInfoList)
+		   folderRouter.POST("/file")              // create file folder
+		   folderRouter.PUT("/file/:id")           // change folder name
+		   folderRouter.DELETE("/file/:id")        // delete file folder
+		   folderRouter.POST("/doc")               // create doc folder
+		   folderRouter.PUT("/doc/:id")            // change doc folder name
+		   folderRouter.DELETE("/doc/:id")         // delete doc folder
+		   folderRouter.POST("/file/:id/children") // file children
+		   folderRouter.POST("/doc/:id/children")  // doc children
+		*/
 	}
 
-	file := g.Group("/file")
+	fileRouter := g.Group("/file")
 	{
 		// 没有创建/编辑/删除 file/doc 文件夹的 api
-		file.POST("/file", project.CreateFile)       //
-		file.DELETE("/file/:id", project.DeleteFile) //
-		file.PUT("/file/:id", project.UpdateFile)    //没有
-		file.POST("/doc", project.CreateDoc)         //
-		file.GET("/doc/:id", project.GetDocDetail)   //
-		file.DELETE("/doc/:id", project.DeleteDoc)   //
-		file.PUT("/doc/:id", project.UpdateDoc)      //
+		fileRouter.POST("/file", project.CreateFile)       //
+		fileRouter.DELETE("/file/:id", project.DeleteFile) //
+		// fileRouter.PUT("/file/:id", project.UpdateFile)    //没有
+		fileRouter.POST("/doc", project.CreateDoc)       //
+		fileRouter.GET("/doc/:id", project.GetDocDetail) //
+		fileRouter.DELETE("/doc/:id", project.DeleteDoc) //
+		fileRouter.PUT("/doc/:id", project.UpdateDoc)    //
 
 		// 待修改
-		file.POST("/doc", handler.CreateDoc)
-		file.PUT("/doc/:id", handler.UpdateDoc)
-		file.DELETE("/doc/:id", handler.DeleteDoc)
-		file.GET("/doc/:id", handler.GetDocDetail)
-		file.GET("/doc", handler.GetDocInfoList)
-		file.GET("/list", handler.GetDocFolderInfoList)
+		/*
+		   fileRouter.POST("/doc", handler.CreateDoc)
+		   fileRouter.PUT("/doc/:id", handler.UpdateDoc)
+		   fileRouter.DELETE("/doc/:id", handler.DeleteDoc)
+		   fileRouter.GET("/doc/:id", handler.GetDocDetail)
+		   fileRouter.GET("/doc", handler.GetDocInfoList)
+		   fileRouter.GET("/list", handler.GetDocFolderInfoList)
+		*/
 	}
 
 	return g

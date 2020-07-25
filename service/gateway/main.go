@@ -10,9 +10,7 @@ import (
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/router"
 	"muxi-workbench-gateway/router/middleware"
-
-	"muxi-workbench-gateway/handler"
-    "muxi_workbench-gateway/handler/feed"
+	"muxi-workbench-gateway/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
@@ -26,9 +24,9 @@ var (
 )
 
 func init() {
-	handler.FeedInit(handler.FeedService, handler.FeedClient)
-	handler.StatusInit(handler.StatusService, handler.StatusClient)
-	handler.ProjectInit(handler.ProjectService, handler.ProjectClient)
+	service.FeedInit(service.FeedService, service.FeedClient)
+	service.StatusInit(service.StatusService, service.StatusClient)
+	service.ProjectInit(service.ProjectService, service.ProjectClient)
 }
 
 func main() {
