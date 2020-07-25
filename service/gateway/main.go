@@ -12,6 +12,7 @@ import (
 	"muxi-workbench-gateway/router/middleware"
 
 	"muxi-workbench-gateway/handler"
+    "muxi_workbench-gateway/handler/feed"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
