@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"github.com/spf13/viper"
 	"strconv"
 	"time"
@@ -25,9 +26,9 @@ func ParseInvitation(hash string) (uint32, error) {
 		}
 	}
 	//string to int64
-	datetime, err := strconv.ParseInt(words[i+1:], 10, 64)
+	datetime, _ := strconv.ParseInt(words[i+1:], 10, 64)
 	if t >= datetime {
-		return 0, err
+		return 0, errors.New("链接已过期")
 	}
 
 	//teamid,_ := strconv.ParseUint(words[:i],10,64)

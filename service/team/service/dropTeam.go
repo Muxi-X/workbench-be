@@ -8,6 +8,7 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
+//Drop … Team 删除团队
 func (ts *TeamService) DropTeam(ctx context.Context, req *pb.DropTeamRequest, res *pb.Response) error {
 	//判断权限
 	if req.Role != model.SUPERADMIN {

@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+//Create … Team 创建团队
 func (ts *TeamService) CreateTeam(ctx context.Context, req *pb.CreateTeamRequest, res *pb.Response) error {
 	if req.Role != model.SUPERADMIN && req.Role != model.ADMIN{
 		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")

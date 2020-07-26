@@ -10,7 +10,7 @@ import (
 )
 
 
-//Update …… 更新组别信息
+//Update …… 更新团队信息
 func (ts *TeamService) UpdateTeamInfo(ctx context.Context, req *pb.UpdateTeamInfoRequest, res *pb.Response) error {
 	//判断权限
 	if req.Role != model.SUPERADMIN && req.Role != model.ADMIN {
