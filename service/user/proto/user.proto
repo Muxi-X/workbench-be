@@ -52,6 +52,7 @@ message UserInfo {
   string nick = 2;
   string name = 3;
   string avatar_url = 4;
+  string email = 5;
 }
 
 message UserInfoResponse {
@@ -62,9 +63,12 @@ message UserProfile {
   uint32 id = 1;
   string nick = 2;
   string name = 3;
-  string avatar_url = 4;
-  string intro = 5;
-  string email = 6;
+  string avatar = 4;
+  string email = 5;
+  string tel = 6;
+  uint32 role = 7;
+  uint32 team = 8;
+  uint32 group = 9;
 }
 
 message GetResponse {

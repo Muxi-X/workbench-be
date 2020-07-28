@@ -26,6 +26,7 @@ func (s *UserService) GetInfo(ctx context.Context, req *pb.GetInfoRequest, res *
 			Nick:      user.Name,
 			Name:      user.RealName,
 			AvatarUrl: user.Avatar,
+			Email:     user.Email,
 		})
 	}
 

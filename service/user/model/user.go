@@ -28,23 +28,14 @@ func (u *UserModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
-// // Delete status
-// func DeleteStatus(id uint32) error {
-// 	status := &StatusModel{}
-// 	status.ID = id
-// 	return m.DB.Self.Delete(&status).Error
-// }
-
-// // Update status
-// func (u *StatusModel) Update() error {
-// 	return m.DB.Self.Save(u).Error
-// }
-
 // GetUser get a single user by id
 func GetUser(id uint32) (*UserModel, error) {
-	s := &UserModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&s)
-	return s, d.Error
+	user := &UserModel{}
+	d := m.DB.Self.Where("id = ?", id).First(user)
+	if d.Error == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	return user, d.Error
 }
 
 // GetUserByIds get user by id array
