@@ -25,7 +25,12 @@ func (u *UserModel) TableName() string {
 
 // Create ... create user
 func (u *UserModel) Create() error {
-	return m.DB.Self.Create(&u).Error
+	return m.DB.Self.Create(u).Error
+}
+
+// Save save user.
+func (u *UserModel) Save() error {
+	return m.DB.Self.Save(u).Error
 }
 
 // GetUser get a single user by id
@@ -88,24 +93,7 @@ func ListUser(offset, limit, lastId uint32, filter *UserModel) ([]*UserModel, er
 	return list, nil
 }
 
-// // Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
-// func (u *UserModel) Compare(pwd string) (err error) {
-// 	err = auth.Compare(u.Password, pwd)
-// 	return
-// }
-
-// // Encrypt the user password.
-// func (u *UserModel) Encrypt() (err error) {
-// 	u.Password, err = auth.Encrypt(u.Password)
-// 	return
-// }
-
-// // Validate the fields.
-// func (u *UserModel) Validate() error {
-// 	validate := validator.New()
-// 	return validate.Struct(u)
-// }
-
+// UpdateTeamAndGroup update user's team_id and group_id.
 func UpdateTeamAndGroup(ids []uint32, value, kind uint32) (err error) {
 	query := m.DB.Self.Table("users").Where("id In (?)", ids)
 	if kind == 1 {

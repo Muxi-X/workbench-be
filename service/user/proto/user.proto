@@ -9,7 +9,7 @@ service UserService {
   rpc GetProfile(GetRequest) returns (UserProfile) {}
   rpc List(ListRequest) returns (ListResponse) {}
 
-  //rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
+  rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
   rpc UpdateTeamAndGroupForUsers(UpdateTeamGroupRequest) returns (Response) {}
 }
 
