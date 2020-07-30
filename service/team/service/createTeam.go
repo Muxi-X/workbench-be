@@ -2,23 +2,24 @@ package service
 
 import (
 	"context"
-	errno "muxi-workbench-team/errno"
+	"time"
+
+	"muxi-workbench-team/errno"
 	"muxi-workbench-team/model"
 	pb "muxi-workbench-team/proto"
 	e "muxi-workbench/pkg/err"
-	"time"
 )
 
-//Create … Team 创建团队
+// CreateTeam … 创建团队
 func (ts *TeamService) CreateTeam(ctx context.Context, req *pb.CreateTeamRequest, res *pb.Response) error {
-	if req.Role != model.SUPERADMIN && req.Role != model.ADMIN{
+	if req.Role != model.SUPERADMIN && req.Role != model.ADMIN {
 		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")
 	}
 
 	t := time.Now()
 	team := &model.TeamModel{
 		Name:      req.TeamName,
-		CreatorId: req.CreatorId,
+		CreatorID: req.CreatorId,
 		Time:      t.Format("2006-01-02 15:04:05"),
 		Count:     1,
 	}
@@ -28,4 +29,3 @@ func (ts *TeamService) CreateTeam(ctx context.Context, req *pb.CreateTeamRequest
 
 	return nil
 }
-

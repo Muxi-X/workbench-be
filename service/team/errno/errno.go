@@ -10,9 +10,9 @@ var (
 	ErrDatabase = &err.Errno{Code: 10001, Message: "Database error"}
 	ErrClient   = &err.Errno{Code: 10002, Message: "Client error"}
 
-	//group
+	// group errors
 	ErrPermissionDenied = &err.Errno{Code: 20101, Message: "Permission Denied"}
 
-	//invitation
+	// invitation errors
 	ErrLinkExpiration = &err.Errno{Code: 20201, Message: "Link expiration"}
 )

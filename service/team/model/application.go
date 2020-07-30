@@ -6,8 +6,8 @@ import (
 )
 
 type ApplyModel struct {
-	ID     uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	UserID uint32 `json:"user_id" gorm:"column:user_id;" binding:"required"`
+	ID     uint32 `json:"id" gorm:"column:id;not null"`
+	UserID uint32 `json:"user_id" gorm:"column:user_id;"`
 }
 
 type ApplyUserItem struct {
@@ -20,14 +20,17 @@ func (a *ApplyModel) TableName() string {
 	return "applys"
 }
 
+// Create apply
 func (a *ApplyModel) Create() error {
 	return m.DB.Self.Create(&a).Error
 }
 
-func DeleteApply(userid uint32) error {
-	return m.DB.Self.Where("user_id = ?", userid).Delete(&ApplyModel{}).Error
+// DeleteApply delete an apply by id
+func DeleteApply(userID uint32) error {
+	return m.DB.Self.Where("user_id = ?", userID).Delete(&ApplyModel{}).Error
 }
 
+// ListApplys list all applys
 func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
@@ -35,26 +38,16 @@ func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, ui
 
 	applicationlist := make([]*ApplyModel, 0)
 
-	query := m.DB.Self.Table("applys").Select("id, user_id").Order("id desc").Limit(limit)
+	query := m.DB.Self.Table("applys").Select("id, user_id")
 
 	if pagination {
-		query = query.Offset(offset)
+		query = query.Offset(offset).Limit(limit)
 	}
 
-
 	if err := query.Scan(&applicationlist).Error; err != nil {
-		count := len(applicationlist)
-		return applicationlist, uint64(count), err
+		return nil, 0, nil
 	}
 
 	count := len(applicationlist)
 	return applicationlist, uint64(count), nil
-}
-
-func GetUsersidByApplys(applys []*ApplyModel) []uint32 {
-	ret := make([]uint32, 0)
-	for _, value := range applys {
-		ret = append(ret, value.UserID)
-	}
-	return ret
 }

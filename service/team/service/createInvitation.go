@@ -2,14 +2,24 @@ package service
 
 import (
 	"context"
-	"log"
-	"muxi-workbench-team/model"
+	"github.com/spf13/viper"
+	"strconv"
+	"time"
+
 	pb "muxi-workbench-team/proto"
 )
 
-//Create …… 生成邀请码
+// CreateInvitation …… 生成邀请码
 func (ts *TeamService) CreateInvitation(ctx context.Context, req *pb.CreateInvitationRequest, res *pb.CreateInvitationResponse) error {
-	log.Print(req.TeamId)
-	res.Hash = model.CreateInvitation(req.TeamId, req.Expired)
+	res.Hash = CreateAnInvitation(req.TeamId, req.Expired)
 	return nil
+}
+
+// CreateAnInvitation create an invitation
+func CreateAnInvitation(teamID uint32, expired int64) string {
+	t := time.Now().Unix()
+	final := t + expired
+	words := strconv.FormatUint(uint64(teamID), 10) + " " + strconv.FormatInt(final, 10)
+	sercetKey := viper.GetString("aes.sercet_key")
+	return AesEncrypt(words, sercetKey)
 }

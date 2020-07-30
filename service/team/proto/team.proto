@@ -104,7 +104,7 @@ message ParseInvitationResponse {
 message CreateTeamRequest {
     string team_name = 1;
     uint32 creator_id = 2;
-    uint32 role = 4;
+    uint32 role = 3;
 }
 
 message DropTeamRequest {

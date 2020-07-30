@@ -2,15 +2,26 @@ package service
 
 import (
 	"context"
-	errno "muxi-workbench-team/errno"
-	"muxi-workbench-team/model"
+
+	"muxi-workbench-team/errno"
 	pb "muxi-workbench-team/proto"
 	e "muxi-workbench/pkg/err"
 )
 
-//list all members of a group …… 组别内成员列表
+type MemberModel struct {
+	UserID    uint32
+	TeamID    uint32
+	GroupID   uint32
+	GroupName string
+	Role      uint32
+	Email     string
+	Avatar    string
+	Name      string
+}
+
+// GetMemberList …… 组别内成员列表
 func (ts *TeamService) GetMemberList(ctx context.Context, req *pb.MemberListRequest, res *pb.MemberListResponse) error {
-	list, count, err := model.GetMemberInfo(req.GroupId, req.Limit, req.Offset, req.Pagination)
+	list, count, err := GetMemberInfo(req.GroupId, req.Limit, req.Offset, req.Pagination)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

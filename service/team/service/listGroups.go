@@ -2,13 +2,14 @@ package service
 
 import (
 	"context"
-	errno "muxi-workbench-team/errno"
+
+	"muxi-workbench-team/errno"
 	"muxi-workbench-team/model"
 	pb "muxi-workbench-team/proto"
 	e "muxi-workbench/pkg/err"
 )
 
-//list … 组别列表
+// GetGroupList … 组别列表
 func (ts *TeamService) GetGroupList(ctx context.Context, req *pb.GroupListRequest, res *pb.GroupListResponse) error {
 	list, count, err := model.ListGroup(req.Offset, req.Limit, req.Pagination)
 	if err != nil {
