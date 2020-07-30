@@ -56,3 +56,9 @@ func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, u
 
 	return commentsList, count, nil
 }
+
+func DeleteComment(id uint32) error {
+	comment := &CommentsModel{}
+	comment.ID = id
+	return m.DB.Self.Delete(&comment).Error
+}
