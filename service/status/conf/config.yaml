@@ -4,7 +4,7 @@ runmode: debug                 # 开发模式, debug, release, test 部署时环
 tracing:
   jager: localhost:6831 # opentracing 
 db:  # DB 配置 部署时环境变量覆盖
-  name: workbench
-  addr: 0.0.0.0:3306
-  username: root
-  password: root
+  name: workbench_test
+  addr: rm-uf6zra36x1613y5r8oo.mysql.rds.aliyuncs.com:3306
+  username: workbench_test
+  password: muxiworkbench
