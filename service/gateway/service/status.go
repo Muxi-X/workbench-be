@@ -13,7 +13,7 @@ import (
 var StatusService micro.Service
 var StatusClient pbs.StatusServiceClient
 
-func StatusInit(StatusService micro.Service, StatusClient pbs.StatusServiceClient) {
+func StatusInit() {
     StatusService = micro.NewService(micro.Name("workbench.cli.status"),
         micro.WrapClient(
             opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),

@@ -13,7 +13,7 @@ import (
 var FeedService micro.Service
 var FeedClient pb.FeedServiceClient
 
-func FeedInit(FeedService micro.Service, FeedClient pb.FeedServiceClient) {
+func FeedInit() {
 	FeedService = micro.NewService(micro.Name("workbench.cli.feed"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),

@@ -24,9 +24,9 @@ var (
 )
 
 func init() {
-	service.FeedInit(service.FeedService, service.FeedClient)
-	service.StatusInit(service.StatusService, service.StatusClient)
-	service.ProjectInit(service.ProjectService, service.ProjectClient)
+	service.FeedInit()
+	service.StatusInit()
+	service.ProjectInit()
 }
 
 func main() {
