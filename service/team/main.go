@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/micro/go-micro"
+	"github.com/opentracing/opentracing-go"
 	"log"
 
 	pb "muxi-workbench-team/proto"
@@ -11,9 +13,7 @@ import (
 	"muxi-workbench/pkg/handler"
 	"muxi-workbench/pkg/tracer"
 
-	"github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
-	"github.com/opentracing/opentracing-go"
 	"github.com/spf13/viper"
 )
 
@@ -35,6 +35,9 @@ func main() {
 	// init db
 	model.DB.Init()
 	defer model.DB.Close()
+
+	// init other serivce
+	s.Init()
 
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),
