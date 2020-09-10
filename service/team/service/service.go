@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"muxi-workbench-team/model"
 	upb "muxi-workbench-user/proto"
 )
@@ -18,7 +17,6 @@ func Init() {
 
 // UpdateUsersGroupIDOrTeamID update user's group_id by user_id
 func UpdateUsersGroupIDOrTeamID(usersID []uint32, value uint32, kind uint32) error {
-	fmt.Println(UserClient)
 	_, err := UserClient.UpdateTeamAndGroupForUsers(context.Background(), &upb.UpdateTeamGroupRequest{Ids: usersID, Value: value, Kind: kind})
 
 	if err != nil {
