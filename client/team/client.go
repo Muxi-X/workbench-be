@@ -38,17 +38,28 @@ func main() {
 
 	client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
 
-	//remove from team
-	req := &pb.RemoveRequest{
-		UserId: 5,
-		TeamId: 3,
-		Role:   7,
+	req := &pb.CreateGroupRequest{
+		GroupName: "444444",
+		UserList:  []uint32{1, 4, 5},
 	}
-	resp, err := client.Remove(context.Background(), req)
+	resp, err := client.CreateGroup(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(resp)
+
+	/*
+		//remove from team
+		req := &pb.RemoveRequest{
+			UserId: 5,
+			TeamId: 3,
+		}
+		resp, err := client.Remove(context.Background(), req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(resp)
+	*/
 
 	/*
 		//join team
@@ -165,28 +176,28 @@ func main() {
 	*/
 
 	/*
-	    //update members
-		req := &pb.UpdateMembersRequest{
-			GroupId:              37,
-			Role:                 7,
-			UserList:             []uint32{1,4,5},
-		}
-		resp, err := client.UpdateMembersForGroup(context.Background(), req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(resp)
+		    //update members
+			req := &pb.UpdateMembersRequest{
+				GroupId:              37,
+				Role:                 7,
+				UserList:             []uint32{1,4,5},
+			}
+			resp, err := client.UpdateMembersForGroup(context.Background(), req)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(resp)
 
-		//test updategroupinfo
-		req := &pb.UpdateGroupInfoRequest{
-			GroupId:              28,
-			NewName:              "产",
-			Role:                 7,
-		}
-		resp, err := client.UpdateGroupInfo(context.Background(), req)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(resp)
+			//test updategroupinfo
+			req := &pb.UpdateGroupInfoRequest{
+				GroupId:              28,
+				NewName:              "产",
+				Role:                 7,
+			}
+			resp, err := client.UpdateGroupInfo(context.Background(), req)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(resp)
 	*/
 }

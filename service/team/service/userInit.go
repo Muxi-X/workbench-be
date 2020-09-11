@@ -14,7 +14,7 @@ var UserService micro.Service
 var UserClient pb.UserServiceClient
 
 // UserInit init user service
-func UserInit(UserService micro.Service, UserClient pb.UserServiceClient) {
+func UserInit() {
 	UserService = micro.NewService(micro.Name("workbench.cli.user"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),

@@ -12,7 +12,7 @@ type TeamService struct {
 
 // Init other service
 func Init() {
-	UserInit(UserService, UserClient)
+	UserInit()
 }
 
 // UpdateUsersGroupIDOrTeamID update user's group_id by user_id
