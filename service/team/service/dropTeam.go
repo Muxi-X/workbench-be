@@ -11,11 +11,6 @@ import (
 
 // DropTeam … 删除团队
 func (ts *TeamService) DropTeam(ctx context.Context, req *pb.DropTeamRequest, res *pb.Response) error {
-	// 判断权限
-	if req.Role != model.SUPERADMIN {
-		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")
-	}
-
 	// 获取usersid
 	usersID, err := GetUsersIdByTeamId(req.TeamId)
 	if err != nil {

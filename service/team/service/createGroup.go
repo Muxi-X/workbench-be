@@ -12,11 +12,6 @@ import (
 
 // CreateGroup … 建立组别
 func (ts *TeamService) CreateGroup(ctx context.Context, req *pb.CreateGroupRequest, res *pb.Response) error {
-	// 判断权限
-	if req.Role != model.SUPERADMIN && req.Role != model.ADMIN {
-		return e.ServerErr(errno.ErrPermissionDenied, "权限不够")
-	}
-
 	// 构建组别信息,新建组别
 	t := time.Now()
 	group := &model.GroupModel{

@@ -28,19 +28,16 @@ service TeamService {
 
 message CreateGroupRequest {
     string group_name = 1;
-    uint32 role = 2;
-    repeated uint32 user_list = 3;
+    repeated uint32 user_list = 2;
 }
 
 message DeleteGroupRequest {
     uint32 group_id = 1;
-    uint32 role = 2;
 }
 
 message UpdateGroupInfoRequest {
     uint32 group_id = 1;
     string new_name = 2;
-    uint32 role = 3;
 }
 
 message GroupListRequest {
@@ -68,20 +65,17 @@ message MemberListResponse {
 
 message UpdateMembersRequest {
     uint32 group_id = 1;
-    uint32 role = 2;
-    repeated uint32 user_list = 3;
+    repeated uint32 user_list = 2;
 }
 
 message JoinRequest {
     uint32 user_id = 1;
     uint32 team_id = 2;
-    uint32 role = 3;
 }
 
 message RemoveRequest {
     uint32 user_id = 1;
     uint32 team_id = 2;
-    uint32 role = 3;
 }
 
 message CreateInvitationRequest {
@@ -104,18 +98,15 @@ message ParseInvitationResponse {
 message CreateTeamRequest {
     string team_name = 1;
     uint32 creator_id = 2;
-    uint32 role = 3;
 }
 
 message DropTeamRequest {
     uint32 team_id = 1;
-    uint32 role = 2;
 }
 
 message UpdateTeamInfoRequest{
     uint32 team_id = 1;
     string new_name = 2;
-    uint32 role = 3;
 }
 
 message ApplicationListRequest {
@@ -139,9 +130,8 @@ message Member {
     uint32 team_id = 2;
     uint32 group_id = 4;
     string group_name = 5;
-    uint32 role = 6;
-    string email = 7;
-    string avatar = 8;
+    string email = 6;
+    string avatar = 7;
 }
 
 message ApplyUserItem {
