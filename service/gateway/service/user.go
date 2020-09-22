@@ -2,7 +2,7 @@ package service
 
 import (
 	//tracer "muxi-workbench-status-client/tracer"
-	pbs "muxi-workbench-status/proto"
+	pbu "muxi-workbench-user/proto"
 	handler "muxi-workbench/pkg/handler"
 
 	micro "github.com/micro/go-micro"
@@ -10,17 +10,17 @@ import (
 	"github.com/opentracing/opentracing-go"
 )
 
-var StatusService micro.Service
-var StatusClient pbs.StatusServiceClient
+var UserService micro.Service
+var UserClient pbu.UserServiceClient
 
-func StatusInit() {
-	StatusService = micro.NewService(micro.Name("workbench.cli.status"),
+func UserInit() {
+	UserService = micro.NewService(micro.Name("workbench.cli.user"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
 		),
 		micro.WrapCall(handler.ClientErrorHandlerWrapper()))
-	StatusService.Init()
+	UserService.Init()
 
-	StatusClient = pbs.NewStatusServiceClient("workbench.service.status", StatusService.Client())
+	UserClient = pbu.NewUserServiceClient("workbench.service.user", UserService.Client())
 
 }

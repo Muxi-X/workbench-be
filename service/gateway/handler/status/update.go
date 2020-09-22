@@ -9,6 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
@@ -17,6 +18,7 @@ import (
 )
 
 // 需要调用 feed push 和 status update
+// 需要从 token 获取 userid
 func Update(c *gin.Context) {
 	log.Info("Status update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -38,12 +40,22 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	// 获取 userid
+	raw, ifexists := c.Get("context")
+	if !ifexists {
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+	}
+	ctx, ok := raw.(*token.Context)
+	if !ok {
+		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+	}
+
 	// 构造 updateReq 并发送请求
 	updateReq := &pbs.UpdateRequest{
 		Id:      uint32(sid),
 		Title:   req.Title,
 		Content: req.Content,
-		UserId:  req.UserId,
+		UserId:  uint32(ctx.ID),
 	}
 
 	_, err2 := service.StatusClient.Update(context.Background(), updateReq)
@@ -55,7 +67,7 @@ func Update(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "编辑",
-		UserId: req.UserId,
+		UserId: uint32(ctx.ID),
 		Source: &pbf.Source{
 			Kind:        6,
 			Id:          uint32(sid), // 暂时从前端获取

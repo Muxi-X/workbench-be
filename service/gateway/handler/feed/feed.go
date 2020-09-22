@@ -1,8 +1,7 @@
 package feed
 
 type listRequest struct {
-	Role   uint32 `json:"role"`
-	Userid uint32 `json:"userid"`
+	Role uint32 `json:"role"`
 }
 
 type user struct {

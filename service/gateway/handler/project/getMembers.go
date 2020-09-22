@@ -16,6 +16,7 @@ import (
 )
 
 // 只用调用一次 get member
+// 不用从 token 获取 userid
 func GetMembers(c *gin.Context) {
 	log.Info("Project get member function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

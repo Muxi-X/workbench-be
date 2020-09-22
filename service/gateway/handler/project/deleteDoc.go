@@ -9,6 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -17,6 +18,7 @@ import (
 )
 
 // 调用一次 deletedoc 和一次 feed push
+// 需要从 token 获取 userid
 func DeleteDoc(c *gin.Context) {
 	log.Info("Doc delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -38,6 +40,16 @@ func DeleteDoc(c *gin.Context) {
 		return
 	}
 
+	// 获取 userid
+	raw, ifexists := c.Get("context")
+	if !ifexists {
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+	}
+	ctx, ok := raw.(*token.Context)
+	if !ok {
+		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+	}
+
 	_, err2 := service.ProjectClient.DeleteDoc(context.Background(), &pbp.GetRequest{
 		Id: uint32(did),
 	})
@@ -49,7 +61,7 @@ func DeleteDoc(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "删除",
-		UserId: req.UserId,
+		UserId: uint32(ctx.ID),
 		Source: &pbf.Source{
 			Kind:        3,
 			Id:          uint32(did), // 暂时从前端获取

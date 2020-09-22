@@ -27,6 +27,7 @@ func init() {
 	service.FeedInit()
 	service.StatusInit()
 	service.ProjectInit()
+	service.UserInit()
 }
 
 func main() {

@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// 不需要从 token 获取 userid
 func GetDocTree(c *gin.Context) {
 	log.Info("Project doctree get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

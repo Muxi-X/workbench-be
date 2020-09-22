@@ -1,4 +1,4 @@
-package status
+package user
 
 import (
 	"context"
@@ -8,20 +8,22 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+	pb "muxi-workbench-user/proto"
+	// "muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
-	pbs "muxi-workbench-status/proto"
 
 	"github.com/gin-gonic/gin"
 )
 
-// 只用调用一次 list  lastid limit page 要从 query param 获取
-// 不需要获取 userid
+// 暂时不知道 router
+// List 通过 group 和 team 获取 userlist
+// 通过 param 获取 limit offset lastid
 func List(c *gin.Context) {
-	log.Info("Status list function call",
+	log.Info("User getInfo function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 gid 和 limt lastid
+	// 获取 offset/page 和 limt lastid
 	var limit int
 	var lastid int
 	var page int
@@ -46,32 +48,41 @@ func List(c *gin.Context) {
 		return
 	}
 
-	// 构造 list 请求
-	listReq := &pbs.ListRequest{
-		Lastid: uint32(lastid),
-		Offset: uint32(page),
-		Limit:  uint32(limit),
-		Group:  0,
-		Uid:    0,
+	// 从前端获取 group 和 team
+	var req listRequest
+	if err := c.Bind(&req); err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		return
 	}
 
-	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
+	// 构造请求给 list
+	listReq := &pb.ListRequest{
+		LastId: uint32(lastid),
+		Offset: uint32(page),
+		Limit:  uint32(limit),
+		Team:   req.Team,
+		Group:  req.Group,
+	}
+
+	// 发送请求
+	listResp, err2 := service.UserClient.List(context.Background(), listReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error())
 		return
 	}
 
 	// 构造返回 response
 	var resp listResponse
 	for i := 0; i < len(listResp.List); i++ {
-		resp.Status = append(resp.Status, status{
-			Id:       listResp.List[i].Id,
-			Title:    listResp.List[i].Title,
-			Content:  listResp.List[i].Content,
-			UserId:   listResp.List[i].UserId,
-			Time:     listResp.List[i].Time,
-			Avatar:   listResp.List[i].Avatar,
-			Username: listResp.List[i].UserName,
+		resp.List = append(resp.List, user{
+			Id:     listResp.List[i].Id,
+			Nick:   listResp.List[i].Nick,
+			Name:   listResp.List[i].Name,
+			Avatar: listResp.List[i].Avatar,
+			Email:  listResp.List[i].Email,
+			Role:   listResp.List[i].Role,
+			Team:   listResp.List[i].Team,
+			Group:  listResp.List[i].Group,
 		})
 	}
 	resp.Count = listResp.Count

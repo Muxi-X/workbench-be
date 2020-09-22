@@ -2,7 +2,6 @@ package token
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -48,7 +47,7 @@ func Parse(tokenString string, secret string) (*Context, error) {
 		// Read the token if it's valid.
 	} else if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		ctx.ID = uint64(claims["id"].(float64))
-		ctx.Username = claims["username"].(string)
+		//	ctx.Username = claims["username"].(string)
 		return ctx, nil
 
 		// Other errors.
@@ -69,10 +68,8 @@ func ParseRequest(c *gin.Context) (*Context, error) {
 		return &Context{}, ErrMissingHeader
 	}
 
-	var t string
-	// Parse the header to get the token part.
-	fmt.Sscanf(header, "Bearer %s", &t)
-	return Parse(t, secret)
+	// 判断 token 是否 valid
+	return Parse(header, secret)
 }
 
 // Sign signs the context with the specified secret.

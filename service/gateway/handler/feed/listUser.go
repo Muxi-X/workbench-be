@@ -9,6 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 
@@ -16,6 +17,8 @@ import (
 )
 
 // Feed 的 ListUser 接口
+// 需要从 token 获取 userid
+// uid 是筛选的 id
 func ListUser(c *gin.Context) {
 	log.Info("Feed listUser function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -50,11 +53,21 @@ func ListUser(c *gin.Context) {
 		return
 	}
 
+	// 获取 userid
+	raw, ifexists := c.Get("context")
+	if !ifexists {
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+	}
+	ctx, ok := raw.(*token.Context)
+	if !ok {
+		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+	}
+
 	listReq := &pb.ListRequest{
 		LastId: uint32(lastid),
 		Limit:  uint32(limit),
 		Role:   req.Role,
-		UserId: req.Userid,
+		UserId: uint32(ctx.ID),
 		Filter: &pb.Filter{
 			UserId:  uint32(uid),
 			GroupId: 0,

@@ -8,6 +8,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -16,6 +17,7 @@ import (
 )
 
 // 需要调用 list
+// 需要从 token 获取 userid
 func GetProjectList(c *gin.Context) {
 	log.Info("Project list get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -51,21 +53,24 @@ func GetProjectList(c *gin.Context) {
 		return
 	}
 
-	// 从请求获取 userid
-	var req getProjectListRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		return
-	}
-
 	var pageBool bool
 	if pagination == 1 {
 		pageBool = true
 	}
 
+	// 获取 userid
+	raw, ifexists := c.Get("context")
+	if !ifexists {
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+	}
+	ctx, ok := raw.(*token.Context)
+	if !ok {
+		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+	}
+
 	// 构造请求
 	getProListReq := &pbp.GetProjectListRequest{
-		UserId:     req.UserId,
+		UserId:     uint32(ctx.ID),
 		Lastid:     uint32(lastid),
 		Offset:     uint32(page),
 		Limit:      uint32(limit),

@@ -16,6 +16,7 @@ import (
 )
 
 // 只用调用一次 list  lastid limit 要从 query param 获取 还要获取gid
+// 不需要获取 userid
 func ListGroup(c *gin.Context) {
 	log.Info("Status list group function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
