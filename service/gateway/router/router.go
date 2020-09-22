@@ -7,7 +7,10 @@ import (
 	"muxi-workbench-gateway/handler/project"
 	"muxi-workbench-gateway/handler/sd"
 	"muxi-workbench-gateway/handler/status"
+<<<<<<< HEAD
 	"muxi-workbench-gateway/handler/user"
+=======
+>>>>>>> master
 	"muxi-workbench-gateway/router/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -52,7 +55,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// 下面是我写的路由
 	// feed
 	feedRouter := g.Group("api/v1/feed")
+<<<<<<< HEAD
 	feedRouter.Use(middleware.AuthMiddleware())
+=======
+>>>>>>> master
 	{
 		feedRouter.GET("/list", feed.List)
 		feedRouter.GET("/list/:uid", feed.ListUser)
@@ -61,7 +67,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// status
 	statusRouter := g.Group("api/v1/status")
+<<<<<<< HEAD
 	statusRouter.Use(middleware.AuthMiddleware())
+=======
+>>>>>>> master
 	{
 		statusRouter.GET("/:sid", status.Get)
 		statusRouter.POST("/", status.Create)
@@ -80,8 +89,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	// project
+<<<<<<< HEAD
 	projectRouter := g.Group("api/v1/project")
 	projectRouter.Use(middleware.AuthMiddleware())
+=======
+	projectRouter := g.Group("/project")
+>>>>>>> master
 	{
 		// 创建一个 project  缺少 api
 		// projectRouter.POST("/",project.CreateProject)
@@ -129,7 +142,11 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		*/
 	}
 
+<<<<<<< HEAD
 	folderRouter := g.Group("api/v1/folder")
+=======
+	folderRouter := g.Group("/folder")
+>>>>>>> master
 	{
 		// 获取文件树
 		folderRouter.GET("/filetree/:id", project.GetFileTree)
@@ -159,7 +176,11 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		*/
 	}
 
+<<<<<<< HEAD
 	fileRouter := g.Group("api/v1/file")
+=======
+	fileRouter := g.Group("/file")
+>>>>>>> master
 	{
 		// 没有创建/编辑/删除 file/doc 文件夹的 api
 		fileRouter.POST("/file", project.CreateFile)       //
@@ -181,6 +202,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		*/
 	}
 
+<<<<<<< HEAD
 	// auth 模块
 	authRouter := g.Group("api/v1/auth")
 	{
@@ -198,5 +220,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		userRouter.PUT("/manageteamgroup", user.UpdateTeamAndGroupForUsers)
 	}
 
+=======
+>>>>>>> master
 	return g
 }

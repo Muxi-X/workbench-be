@@ -9,7 +9,10 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
+=======
+>>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
@@ -18,7 +21,10 @@ import (
 )
 
 // 需要调用 status create 和 feed push
+<<<<<<< HEAD
 // userid 从 token 获取
+=======
+>>>>>>> master
 func CreateComment(c *gin.Context) {
 	log.Info("Status createcomment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -40,6 +46,7 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
@@ -52,6 +59,10 @@ func CreateComment(c *gin.Context) {
 
 	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
 		UserId:   uint32(ctx.ID),
+=======
+	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
+		UserId:   req.UserId,
+>>>>>>> master
 		StatusId: uint32(sid),
 		Content:  req.Content,
 	})
@@ -60,6 +71,7 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
 	// 要通过 sid 获取 status 的 title
 	getReq := &pbs.GetRequest{
 		Id: uint32(sid),
@@ -79,6 +91,16 @@ func CreateComment(c *gin.Context) {
 			Kind:        6,
 			Id:          uint32(sid), // 暂时从前端获取
 			Name:        getResp.Status.Title,
+=======
+	// 构造 push 请求
+	pushReq := &pbf.PushRequest{
+		Action: "评论",
+		UserId: req.UserId,
+		Source: &pbf.Source{
+			Kind:        6,
+			Id:          uint32(sid), // 暂时从前端获取
+			Name:        req.Title,
+>>>>>>> master
 			ProjectId:   0,
 			ProjectName: "",
 		},

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	errno "muxi-workbench-user/errno"
 	model "muxi-workbench-user/model"
 	pb "muxi-workbench-user/proto"
@@ -25,6 +26,7 @@ func (s *UserService) GetInfo(ctx context.Context, req *pb.GetInfoRequest, res *
 			Nick:      user.Name,
 			Name:      user.RealName,
 			AvatarUrl: user.Avatar,
+			Email:     user.Email,
 		})
 	}
 

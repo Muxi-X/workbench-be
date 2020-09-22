@@ -9,6 +9,7 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
+// UpdateTeamAndGroupForUsers update user's team or group.
 func (s *UserService) UpdateTeamAndGroupForUsers(ctx context.Context, req *pb.UpdateTeamGroupRequest, res *pb.Response) error {
 	if err := model.UpdateTeamAndGroup(req.Ids, req.Value, req.Kind); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

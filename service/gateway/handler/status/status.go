@@ -3,6 +3,10 @@ package status
 type createRequest struct {
 	Title    string `json:"title"`
 	Content  string `json:"content"`
+<<<<<<< HEAD
+=======
+	UserId   uint32 `json:"userid"`
+>>>>>>> master
 	Statusid uint32 `json:"stautsid"`
 }
 
@@ -30,10 +34,19 @@ type getResponse struct {
 type updateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
+<<<<<<< HEAD
 }
 
 type deleteRequest struct {
 	Title string `json:title"`
+=======
+	UserId  uint32 `json:"userid"`
+}
+
+type deleteRequest struct {
+	UserId uint32 `json:"userid"`
+	Title  string `json:title"`
+>>>>>>> master
 }
 
 type status struct {
@@ -51,6 +64,17 @@ type listResponse struct {
 	Status []status `json:"stauts"`
 }
 
+<<<<<<< HEAD
 type createCommentRequest struct {
 	Content string `json:"content"`
+=======
+type likeRequest struct {
+	UserId uint32 `json:"userid"`
+}
+
+type createCommentRequest struct {
+	Content string `json:"content"`
+	UserId  uint32 `json:"userid"`
+	Title   string `json:"title"`
+>>>>>>> master
 }

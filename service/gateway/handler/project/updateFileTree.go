@@ -9,7 +9,10 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
+=======
+>>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -18,7 +21,10 @@ import (
 )
 
 // 调用一次 updatefiletree 和 feed push
+<<<<<<< HEAD
 // 需要从 token 获取 userid
+=======
+>>>>>>> master
 func UpdateFileTree(c *gin.Context) {
 	log.Info("Project filetree Update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -40,6 +46,7 @@ func UpdateFileTree(c *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
@@ -50,6 +57,8 @@ func UpdateFileTree(c *gin.Context) {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
 	}
 
+=======
+>>>>>>> master
 	// 构造请求
 	_, err2 := service.ProjectClient.UpdateFileTree(context.Background(), &pbp.UpdateTreeRequest{
 		Id:   uint32(pid),
@@ -63,7 +72,11 @@ func UpdateFileTree(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "编辑",
+<<<<<<< HEAD
 		UserId: uint32(ctx.ID),
+=======
+		UserId: req.UserId,
+>>>>>>> master
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          0, // 暂时从前端获取

@@ -2,24 +2,29 @@ package service
 
 import (
 	"context"
+
+	errno "muxi-workbench-user/errno"
+	"muxi-workbench-user/model"
 	pb "muxi-workbench-user/proto"
+	e "muxi-workbench/pkg/err"
 )
 
-// GetProfile ... 获取用户信息
+// GetProfile ... 获取用户个人信息
 func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *pb.UserProfile) error {
+	user, err := model.GetUser(req.Id)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
 
-	// status, err := model.GetStatus(req.Id)
-	// if err != nil {
-	// 	return e.ServerErr(errno.ErrDatabase, err.Error())
-	// }
-
-	// res.Status = &pb.Status{
-	// 	Id:      status.ID,
-	// 	Title:   status.Title,
-	// 	Content: status.Content,
-	// 	UserId:  status.UserID,
-	// 	Time:    status.Time,
-	// }
+	res.Id = user.ID
+	res.Nick = user.Name
+	res.Name = user.RealName
+	res.Avatar = user.Avatar
+	res.Email = user.Email
+	res.Tel = user.Tel
+	res.Role = user.Role
+	res.Team = user.TeamID
+	res.Group = user.GroupID
 
 	return nil
 }

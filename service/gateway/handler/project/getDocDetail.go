@@ -16,7 +16,10 @@ import (
 )
 
 // 只调用一次 getdocdetail
+<<<<<<< HEAD
 // 不需要从 token 获取 userid
+=======
+>>>>>>> master
 func GetDocDetail(c *gin.Context) {
 	log.Info("Doc detail get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

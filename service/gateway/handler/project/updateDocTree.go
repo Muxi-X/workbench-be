@@ -9,7 +9,10 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
+<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
+=======
+>>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -17,7 +20,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+<<<<<<< HEAD
 // 需要从 token 获取 userid
+=======
+>>>>>>> master
 func UpdateDocTree(c *gin.Context) {
 	log.Info("Project doctree update funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -38,6 +44,7 @@ func UpdateDocTree(c *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
@@ -48,6 +55,8 @@ func UpdateDocTree(c *gin.Context) {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
 	}
 
+=======
+>>>>>>> master
 	// 发送请求
 	_, err2 := service.ProjectClient.UpdateDocTree(context.Background(), &pbp.UpdateTreeRequest{
 		Id:   uint32(pid),
@@ -61,7 +70,11 @@ func UpdateDocTree(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "编辑",
+<<<<<<< HEAD
 		UserId: uint32(ctx.ID),
+=======
+		UserId: req.UserId,
+>>>>>>> master
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          0, // 暂时从前端获取

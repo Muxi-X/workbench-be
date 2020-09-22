@@ -16,7 +16,10 @@ import (
 )
 
 // 只用调用一次 getfiletree
+<<<<<<< HEAD
 // 不需要从 token 获取 userid
+=======
+>>>>>>> master
 func GetFileTree(c *gin.Context) {
 	log.Info("Project filetree get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

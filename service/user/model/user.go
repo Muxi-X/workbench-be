@@ -3,6 +3,8 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 type UserModel struct {
@@ -23,26 +25,22 @@ func (u *UserModel) TableName() string {
 
 // Create ... create user
 func (u *UserModel) Create() error {
-	return m.DB.Self.Create(&u).Error
+	return m.DB.Self.Create(u).Error
 }
 
-// // Delete status
-// func DeleteStatus(id uint32) error {
-// 	status := &StatusModel{}
-// 	status.ID = id
-// 	return m.DB.Self.Delete(&status).Error
-// }
-
-// // Update status
-// func (u *StatusModel) Update() error {
-// 	return m.DB.Self.Save(u).Error
-// }
+// Save save user.
+func (u *UserModel) Save() error {
+	return m.DB.Self.Save(u).Error
+}
 
 // GetUser get a single user by id
 func GetUser(id uint32) (*UserModel, error) {
-	s := &UserModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&s)
-	return s, d.Error
+	user := &UserModel{}
+	d := m.DB.Self.Where("id = ?", id).First(user)
+	if d.Error == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	return user, d.Error
 }
 
 // GetUserByIds get user by id array
@@ -52,6 +50,26 @@ func GetUserByIds(ids []uint32) ([]*UserModel, error) {
 		return list, err
 	}
 	return list, nil
+}
+
+// GetUserByEmail get a user by email.
+func GetUserByEmail(email string) (*UserModel, error) {
+	u := &UserModel{}
+	err := m.DB.Self.Where("email = ?", email).First(u).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, nil
+	}
+	return u, err
+}
+
+// GetUserByName get a user by name.
+func GetUserByName(name string) (*UserModel, error) {
+	u := &UserModel{}
+	err := m.DB.Self.Where("name = ?", name).First(u).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, nil
+	}
+	return u, err
 }
 
 // ListUser list users
@@ -75,24 +93,7 @@ func ListUser(offset, limit, lastId uint32, filter *UserModel) ([]*UserModel, er
 	return list, nil
 }
 
-// // Compare with the plain text password. Returns true if it's the same as the encrypted one (in the `User` struct).
-// func (u *UserModel) Compare(pwd string) (err error) {
-// 	err = auth.Compare(u.Password, pwd)
-// 	return
-// }
-
-// // Encrypt the user password.
-// func (u *UserModel) Encrypt() (err error) {
-// 	u.Password, err = auth.Encrypt(u.Password)
-// 	return
-// }
-
-// // Validate the fields.
-// func (u *UserModel) Validate() error {
-// 	validate := validator.New()
-// 	return validate.Struct(u)
-// }
-
+// UpdateTeamAndGroup update user's team_id and group_id.
 func UpdateTeamAndGroup(ids []uint32, value, kind uint32) (err error) {
 	query := m.DB.Self.Table("users").Where("id In (?)", ids)
 	if kind == 1 {

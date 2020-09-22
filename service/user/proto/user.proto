@@ -4,12 +4,12 @@ package user;
 
 service UserService {
   rpc Register(RegisterRequest) returns (Response) {}
-  rpc Login(LoginRequest) returns (Response) {}
+  rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc GetInfo(GetInfoRequest) returns (UserInfoResponse) {}
   rpc GetProfile(GetRequest) returns (UserProfile) {}
   rpc List(ListRequest) returns (ListResponse) {}
 
-  //rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
+  rpc UpdateInfo(UpdateInfoRequest) returns (Response) {}
   rpc UpdateTeamAndGroupForUsers(UpdateTeamGroupRequest) returns (Response) {}
 }
 
@@ -35,11 +35,16 @@ message GetInfoRequest {
 message RegisterRequest {
   string email = 1;
   string name = 2;
+  string password = 3;
 }
 
 message LoginRequest {
-  string email = 1;
-  string auth_token = 2;
+  string oauth_code = 1;
+}
+
+message LoginResponse {
+  string token = 1;
+  string redirect_url = 2;
 }
 
 message UserInfo {
@@ -47,6 +52,7 @@ message UserInfo {
   string nick = 2;
   string name = 3;
   string avatar_url = 4;
+  string email = 5;
 }
 
 message UserInfoResponse {
@@ -57,9 +63,12 @@ message UserProfile {
   uint32 id = 1;
   string nick = 2;
   string name = 3;
-  string avatar_url = 4;
-  string intro = 5;
-  string email = 6;
+  string avatar = 4;
+  string email = 5;
+  string tel = 6;
+  uint32 role = 7;
+  uint32 team = 8;
+  uint32 group = 9;
 }
 
 message GetResponse {
@@ -78,6 +87,8 @@ message ListResponse {
   uint32 count = 1;
   repeated User list = 2;
 }
+
+message Request {}
 
 message Response {}
 
