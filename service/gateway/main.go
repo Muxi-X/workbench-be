@@ -24,9 +24,16 @@ var (
 )
 
 func init() {
+<<<<<<< HEAD
+	service.FeedInit()
+	service.StatusInit()
+	service.ProjectInit()
+	service.UserInit()
+=======
 	service.FeedInit(service.FeedService, service.FeedClient)
 	service.StatusInit(service.StatusService, service.StatusClient)
 	service.ProjectInit(service.ProjectService, service.ProjectClient)
+>>>>>>> master
 }
 
 func main() {

@@ -16,6 +16,10 @@ import (
 )
 
 // 需要调用 get 和 listcomment
+<<<<<<< HEAD
+// 不需要获取 userid
+=======
+>>>>>>> master
 func Get(c *gin.Context) {
 	log.Info("Status get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

@@ -16,6 +16,10 @@ import (
 )
 
 // 只调用一次 project info
+<<<<<<< HEAD
+// 不需要从 token 获取 userid
+=======
+>>>>>>> master
 func GetProjectInfo(c *gin.Context) {
 	log.Info("Project Info get function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -35,7 +39,11 @@ func GetProjectInfo(c *gin.Context) {
 		Id: uint32(pid),
 	})
 	if err2 != nil {
+<<<<<<< HEAD
+		SendError(c, errno.InternalServerError, nil, err2.Error())
+=======
 		SendError(c, errno.InternalServerError, nil, err.Error())
+>>>>>>> master
 		return
 	}
 

@@ -11,11 +11,15 @@ import (
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Parse the json web token.
-		if _, err := token.ParseRequest(c); err != nil {
-			handler.SendResponse(c, errno.ErrTokenInvalid, nil)
+		var ctx *token.Context
+		var err error
+		if ctx, err = token.ParseRequest(c); err != nil {
+			handler.SendResponse(c, errno.ErrTokenInvalid, err.Error())
 			c.Abort()
 			return
 		}
+
+		c.Set("context", ctx)
 
 		c.Next()
 	}

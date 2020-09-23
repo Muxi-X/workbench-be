@@ -16,6 +16,10 @@ import (
 )
 
 // 只用调用一次 list  lastid limit page 要从 query param 获取
+<<<<<<< HEAD
+// 不需要获取 userid
+=======
+>>>>>>> master
 func List(c *gin.Context) {
 	log.Info("Status list function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
