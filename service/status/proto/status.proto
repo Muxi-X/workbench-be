@@ -11,6 +11,7 @@ service StatusService {
   rpc Like(LikeRequest) returns (Response) {}
   rpc CreateComment(CreateCommentRequest) returns (IdResponse) {}
   rpc ListComment(CommentListRequest) returns (CommentListResponse) {}
+  rpc DeleteComment(GetRequest) returns (Response) {}
 }
 
 message GetRequest {
