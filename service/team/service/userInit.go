@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	pb "muxi-workbench-user/proto"
 	"muxi-workbench/pkg/handler"
 
@@ -25,5 +24,4 @@ func UserInit() {
 	UserService.Init()
 
 	UserClient = pb.NewUserServiceClient("workbench.service.user", UserService.Client())
-	fmt.Println(UserClient)
 }

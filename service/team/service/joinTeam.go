@@ -10,7 +10,7 @@ import (
 
 // Join …… 加入团队
 func (ts *TeamService) Join(ctx context.Context, req *pb.JoinRequest, res *pb.Response) error {
-	if err := JoinTeam(req.TeamId, req.UserId); err != nil {
+	if err := JoinTeam(req.TeamId, req.UserList); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 	return nil
@@ -18,12 +18,12 @@ func (ts *TeamService) Join(ctx context.Context, req *pb.JoinRequest, res *pb.Re
 }
 
 // JoinTeam join team
-func JoinTeam(teamID uint32, userID uint32) error {
-	users := []uint32{userID}
-	if err := UpdateUsersGroupIDOrTeamID(users, teamID, model.TEAM); err != nil {
+func JoinTeam(teamID uint32, usersID []uint32) error {
+
+	if err := UpdateUsersGroupIDOrTeamID(usersID, teamID, model.TEAM); err != nil {
 		return err
 	}
-	if err := model.TeamCountOperation(teamID, 1, model.ADD); err != nil {
+	if err := model.TeamCountOperation(teamID, uint32(len(usersID)), model.ADD); err != nil {
 		return err
 	}
 	return nil

@@ -38,15 +38,38 @@ func main() {
 
 	client := pb.NewTeamServiceClient("workbench.service.team", service.Client())
 
-	req := &pb.CreateGroupRequest{
-		GroupName: "444444",
-		UserList:  []uint32{1, 4, 5},
+	req := &pb.ApplicationListRequest{
+		Offset:     2,
+		Limit:      1,
+		Pagination: true,
 	}
-	resp, err := client.CreateGroup(context.Background(), req)
+	resp, err := client.GetApplications(context.Background(), req)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(resp)
+	/*
+		// DeleteGroup
+		req := &pb.DeleteGroupRequest{GroupId: 78}
+		resp, err := client.DeleteGroup(context.Background(), req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(resp)
+	*/
+
+	/*
+		// createGroup
+		req := &pb.CreateGroupRequest{
+			GroupName: "44443",
+			UserList:  []uint32{1, 4, 5},
+		}
+		resp, err := client.CreateGroup(context.Background(), req)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(resp)
+	*/
 
 	/*
 		//remove from team

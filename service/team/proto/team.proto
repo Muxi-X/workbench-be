@@ -69,12 +69,12 @@ message UpdateMembersRequest {
 }
 
 message JoinRequest {
-    uint32 user_id = 1;
+    repeated uint32 user_list = 1;
     uint32 team_id = 2;
 }
 
 message RemoveRequest {
-    uint32 user_id = 1;
+    repeated uint32 user_list = 1;
     uint32 team_id = 2;
 }
 

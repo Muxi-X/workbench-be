@@ -32,7 +32,7 @@ func GetUsersIdByGroupid(groupID uint32) ([]uint32, error) {
 		LastId: 0,
 		Offset: 0,
 		Limit:  0,
-		Team:   model.MUXI,
+		Team:   0,
 		Group:  groupID,
 	})
 	if err != nil {
@@ -77,7 +77,7 @@ func GetMemberInfo(groupID uint32, limit uint32, offset uint32, pagination bool)
 		LastId: 0,
 		Offset: offset,
 		Limit:  limit,
-		Team:   model.MUXI,
+		Team:   0,
 		Group:  groupID,
 	})
 	if err != nil {
