@@ -9,10 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
-=======
->>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
@@ -21,20 +18,19 @@ import (
 )
 
 // 需要调用 feed push 和 status delete
-<<<<<<< HEAD
 // userid 从 token 获取
-=======
->>>>>>> master
 func Delete(c *gin.Context) {
 	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 sid
+	// 获取 cid
 	var sid int
 	var err error
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status delete, get param:sid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -42,6 +38,8 @@ func Delete(c *gin.Context) {
 	var req deleteRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status delete, bind request fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -51,30 +49,31 @@ func Delete(c *gin.Context) {
 	})
 	if err2 != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error())
+		log.Fatal("status delete, get response from status server fatal",
+			zap.String("reason", err2.Error()))
 		return
 	}
 
-<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
 		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		log.Fatal("status delete, get userid raw from context fatal",
+			zap.String("reason", "maybe raw in context not exist"))
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		log.Fatal("stauts delete, take userid from raw fatal",
+			zap.String("reason", "maybe raw type assertion fatal"))
+		return
 	}
 
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "删除",
 		UserId: uint32(ctx.ID),
-=======
-	// 构造 push 请求
-	pushReq := &pbf.PushRequest{
-		Action: "删除",
-		UserId: req.UserId,
->>>>>>> master
 		Source: &pbf.Source{
 			Kind:        6,
 			Id:          uint32(sid), // 暂时从前端获取
@@ -88,6 +87,8 @@ func Delete(c *gin.Context) {
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
 		SendError(c, errno.InternalServerError, nil, err3.Error())
+		log.Fatal("status delete, get response from feed server fatal",
+			zap.String("reason", err3.Error()))
 		return
 	}
 

@@ -13,11 +13,7 @@ import (
 var ProjectService micro.Service
 var ProjectClient pbp.ProjectServiceClient
 
-<<<<<<< HEAD
 func ProjectInit() {
-=======
-func ProjectInit(ProjectService micro.Service, ProjectClient pbp.ProjectServiceClient) {
->>>>>>> master
 	ProjectService = micro.NewService(micro.Name("workbench.cli.project"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),

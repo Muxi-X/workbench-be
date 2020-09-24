@@ -8,10 +8,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
-=======
->>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -20,10 +17,7 @@ import (
 )
 
 // 调用一次 doc create 和 feed push
-<<<<<<< HEAD
 // 需要从 token 获取 userid
-=======
->>>>>>> master
 func CreateDoc(c *gin.Context) {
 	log.Info("Doc create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -35,7 +29,6 @@ func CreateDoc(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
@@ -46,17 +39,11 @@ func CreateDoc(c *gin.Context) {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
 	}
 
-=======
->>>>>>> master
 	createDocReq := &pbp.CreateDocRequest{
 		Title:     req.Title,
 		Content:   req.Content,
 		ProjectId: req.Pid,
-<<<<<<< HEAD
 		UserId:    uint32(ctx.ID),
-=======
-		UserId:    req.UserId,
->>>>>>> master
 	}
 	_, err2 := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
 	if err2 != nil {
@@ -67,11 +54,7 @@ func CreateDoc(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "创建",
-<<<<<<< HEAD
 		UserId: uint32(ctx.ID),
-=======
-		UserId: req.UserId,
->>>>>>> master
 		Source: &pbf.Source{
 			Kind:        3,
 			Id:          0, // 暂时从前端获取

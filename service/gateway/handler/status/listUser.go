@@ -16,10 +16,7 @@ import (
 )
 
 // 只用调用一次 list  lastid limit 要从 query param 获取 要获取uid
-<<<<<<< HEAD
 // 不需要从 token 获取 userid
-=======
->>>>>>> master
 func ListUser(c *gin.Context) {
 	log.Info("Status list user function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -34,18 +31,24 @@ func ListUser(c *gin.Context) {
 	uid, err = strconv.Atoi(c.Param("uid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listUser, get param:uid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listUser, get param:limit fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listUser, get param:lastid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -53,6 +56,8 @@ func ListUser(c *gin.Context) {
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listUser, get param:page fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -68,6 +73,8 @@ func ListUser(c *gin.Context) {
 	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err2.Error())
+		log.Fatal("status listUser, get response from status server fatal",
+			zap.String("reason", err2.Error()))
 	}
 
 	// 构造返回 response

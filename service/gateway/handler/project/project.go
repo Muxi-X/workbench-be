@@ -8,18 +8,10 @@ type getProInfoResponse struct {
 }
 
 type deleteRequest struct {
-<<<<<<< HEAD
-=======
-	UserId      uint32 `json:"userid"`
->>>>>>> master
 	Projectname string `json:"projectname"`
 }
 
 type updateRequest struct {
-<<<<<<< HEAD
-=======
-	UserId      uint32 `json:"userid"`
->>>>>>> master
 	Projectname string `json:projectname"`
 	Intro       string `json:"intro"`
 	Usercount   uint32 `json:"usercount"`
@@ -46,21 +38,10 @@ type getMemberResponse struct {
 
 // UserList 是 uint32
 type updateMemberRequest struct {
-<<<<<<< HEAD
-=======
-	UserId      uint32   `json:"userid"`
->>>>>>> master
 	ProjectName string   `json:"projectname"`
 	Userlist    []string `json:"userlist"`
 }
 
-<<<<<<< HEAD
-=======
-type getProjectListRequest struct {
-	UserId uint32 `json:"userid"`
-}
-
->>>>>>> master
 type getProjectListResponse struct {
 	Projectlist []projectListItem `json:"projectlist"`
 }
@@ -70,10 +51,6 @@ type getFileTreeResponse struct {
 }
 
 type updateFileTreeRequest struct {
-<<<<<<< HEAD
-=======
-	UserId      uint32 `json:"userid"`
->>>>>>> master
 	Projectname string `json:"projectname"`
 	Filetree    string `json:"filetree"`
 }
@@ -83,19 +60,11 @@ type getDocTreeResponse struct {
 }
 
 type updateDocTreeRequest struct {
-<<<<<<< HEAD
-=======
-	UserId      uint32 `json:"userid"`
->>>>>>> master
 	Projectname string `json:"projectname"`
 	Doctree     string `json:"doctree"`
 }
 
 type createFileRequest struct {
-<<<<<<< HEAD
-=======
-	UserId   uint32 `json:"userid"`
->>>>>>> master
 	Pid      uint32 `json:"projectid"`
 	Filename string `json:"filename"`
 	Hashname string `json:"hashname"`
@@ -104,10 +73,6 @@ type createFileRequest struct {
 }
 
 type deleteFileRequest struct {
-<<<<<<< HEAD
-=======
-	UserId   uint32 `json:"userid"`
->>>>>>> master
 	Filename string `json:"filename"`
 }
 
@@ -116,10 +81,6 @@ type createDocRequest struct {
 	Content string `json:"content"`
 	Pid     uint32 `json:"projectid"`
 	Docname string `json:"docname"`
-<<<<<<< HEAD
-=======
-	UserId  uint32 `json:"userid"`
->>>>>>> master
 }
 
 type getDocDetailResponse struct {
@@ -133,20 +94,12 @@ type getDocDetailResponse struct {
 }
 
 type deleteDocRequest struct {
-<<<<<<< HEAD
-=======
-	UserId  uint32 `json:"userid"`
->>>>>>> master
 	Docname string `json:"docname"`
 }
 
 type updateDocRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-<<<<<<< HEAD
-=======
-	UserId  uint32 `json:"userId"`
->>>>>>> master
 }
 
 // 下面是待抽离的 api

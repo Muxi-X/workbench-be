@@ -16,10 +16,7 @@ import (
 )
 
 // 需要调用 get 和 listcomment
-<<<<<<< HEAD
 // 不需要获取 userid
-=======
->>>>>>> master
 func Get(c *gin.Context) {
 	log.Info("Status get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -34,18 +31,24 @@ func Get(c *gin.Context) {
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status get, get param:sid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status get, get param:limit fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status get, get param:lastid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -53,6 +56,8 @@ func Get(c *gin.Context) {
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status get, get param:page fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -64,6 +69,8 @@ func Get(c *gin.Context) {
 	getResp, err2 := service.StatusClient.Get(context.Background(), getReq)
 	if err2 != nil {
 		SendError(c, errno.InternalServerError, nil, err2.Error())
+		log.Fatal("status get, get response from status server(get) fatal",
+			zap.String("reason", err2.Error()))
 		return
 	}
 
@@ -78,6 +85,8 @@ func Get(c *gin.Context) {
 	listComResp, err3 := service.StatusClient.ListComment(context.Background(), listComReq)
 	if err3 != nil {
 		SendError(c, errno.InternalServerError, nil, err3.Error())
+		log.Fatal("status get, get response from status server(listComment func) fatal",
+			zap.String("reason", err3.Error()))
 		return
 	}
 
