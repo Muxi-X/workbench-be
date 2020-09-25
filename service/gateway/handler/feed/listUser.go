@@ -9,10 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
-=======
->>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 
@@ -20,11 +17,8 @@ import (
 )
 
 // Feed 的 ListUser 接口
-<<<<<<< HEAD
 // 需要从 token 获取 userid
 // uid 是筛选的 id
-=======
->>>>>>> master
 func ListUser(c *gin.Context) {
 	log.Info("Feed listUser function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -38,49 +32,56 @@ func ListUser(c *gin.Context) {
 	uid, err = strconv.Atoi(c.Param("uid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("feed listUser, get param:uid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "50"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("feed listUser, get param:limit fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("feed listUser, get param:lastid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	var req listRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("feed listUser, bind request fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
-<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
 		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		log.Fatal("feed listUser, get raw from context fatal",
+			zap.String("reason", "maybe raw in context not exist"))
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		log.Fatal("feed listUser, take userid from raw fatal",
+			zap.String("reason", "maybe raw type assertion fatal"))
+		return
 	}
 
-=======
->>>>>>> master
 	listReq := &pb.ListRequest{
 		LastId: uint32(lastid),
 		Limit:  uint32(limit),
 		Role:   req.Role,
-<<<<<<< HEAD
 		UserId: uint32(ctx.ID),
-=======
-		UserId: req.Userid,
->>>>>>> master
 		Filter: &pb.Filter{
 			UserId:  uint32(uid),
 			GroupId: 0,
@@ -90,6 +91,8 @@ func ListUser(c *gin.Context) {
 	listResp, err2 := service.FeedClient.List(context.Background(), listReq)
 	if err2 != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error())
+		log.Fatal("feed listUser, get response from server fatal",
+			zap.String("reason", err2.Error()))
 		return
 	}
 

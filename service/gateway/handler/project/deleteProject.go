@@ -9,10 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
-=======
->>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -21,10 +18,7 @@ import (
 )
 
 // 需要 delete 和 feed push
-<<<<<<< HEAD
 // 需要从 token 获取 userid
-=======
->>>>>>> master
 func DeleteProject(c *gin.Context) {
 	log.Info("Project delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -46,7 +40,6 @@ func DeleteProject(c *gin.Context) {
 		return
 	}
 
-<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
@@ -57,8 +50,6 @@ func DeleteProject(c *gin.Context) {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
 	}
 
-=======
->>>>>>> master
 	// 发送 delete 请求
 	_, err2 := service.ProjectClient.DeleteProject(context.Background(), &pbp.GetRequest{
 		Id: uint32(pid),
@@ -71,11 +62,7 @@ func DeleteProject(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "删除",
-<<<<<<< HEAD
 		UserId: uint32(ctx.ID),
-=======
-		UserId: req.UserId,
->>>>>>> master
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          0, // 暂时从前端获取

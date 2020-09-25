@@ -24,7 +24,7 @@ require (
 	muxi-workbench-feed v0.0.0-00010101000000-000000000000
 	muxi-workbench-project v0.0.0-00010101000000-000000000000
 	muxi-workbench-status v0.0.0-00010101000000-000000000000
-	muxi-workbench-user v0.0.0-00010101000000-000000000000 // indirect
+	muxi-workbench-user v0.0.0-00010101000000-000000000000
 )
 
 replace muxi-workbench-gateway => ./

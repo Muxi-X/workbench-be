@@ -16,10 +16,7 @@ import (
 )
 
 // 只用调用一次 list  lastid limit page 要从 query param 获取
-<<<<<<< HEAD
 // 不需要获取 userid
-=======
->>>>>>> master
 func List(c *gin.Context) {
 	log.Info("Status list function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -33,12 +30,16 @@ func List(c *gin.Context) {
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status list, get param:limit fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status list, get param:lastid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -46,6 +47,8 @@ func List(c *gin.Context) {
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status list, get param:page fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -61,6 +64,8 @@ func List(c *gin.Context) {
 	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error())
+		log.Fatal("status list, get response from status server fatal",
+			zap.String("reason", err2.Error()))
 		return
 	}
 

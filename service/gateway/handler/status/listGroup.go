@@ -16,12 +16,9 @@ import (
 )
 
 // 只用调用一次 list  lastid limit 要从 query param 获取 还要获取gid
-<<<<<<< HEAD
 // 不需要获取 userid
-=======
->>>>>>> master
 func ListGroup(c *gin.Context) {
-	log.Info("Status list group function call",
+	log.Info("Status listGroup function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 gid 和 limit lastid
@@ -34,18 +31,24 @@ func ListGroup(c *gin.Context) {
 	gid, err = strconv.Atoi(c.Param("gid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listGroup, get param:gid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listGroup, get param:limit fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
 	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listGroup, get param:lastid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -53,6 +56,8 @@ func ListGroup(c *gin.Context) {
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status listGroup, bind request fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -68,6 +73,8 @@ func ListGroup(c *gin.Context) {
 	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error())
+		log.Fatal("status listGroup, get response from status server fatal",
+			zap.String("reason", err2.Error()))
 		return
 	}
 

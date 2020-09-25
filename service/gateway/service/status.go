@@ -13,7 +13,6 @@ import (
 var StatusService micro.Service
 var StatusClient pbs.StatusServiceClient
 
-<<<<<<< HEAD
 func StatusInit() {
 	StatusService = micro.NewService(micro.Name("workbench.cli.status"),
 		micro.WrapClient(
@@ -23,16 +22,5 @@ func StatusInit() {
 	StatusService.Init()
 
 	StatusClient = pbs.NewStatusServiceClient("workbench.service.status", StatusService.Client())
-=======
-func StatusInit(StatusService micro.Service, StatusClient pbs.StatusServiceClient) {
-    StatusService = micro.NewService(micro.Name("workbench.cli.status"),
-        micro.WrapClient(
-            opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
-        ),
-        micro.WrapCall(handler.ClientErrorHandlerWrapper()))
-    StatusService.Init()
-
-    StatusClient = pbs.NewStatusServiceClient("workbench.service.status", StatusService.Client())
->>>>>>> master
 
 }

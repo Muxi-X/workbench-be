@@ -9,10 +9,7 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-<<<<<<< HEAD
 	"muxi-workbench-gateway/pkg/token"
-=======
->>>>>>> master
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
@@ -21,12 +18,9 @@ import (
 )
 
 // 需要调用 status create 和 feed push
-<<<<<<< HEAD
 // userid 从 token 获取
-=======
->>>>>>> master
 func CreateComment(c *gin.Context) {
-	log.Info("Status createcomment function call.",
+	log.Info("Status createComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 sid
@@ -36,6 +30,8 @@ func CreateComment(c *gin.Context) {
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status createComment, get param:sid fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
@@ -43,35 +39,39 @@ func CreateComment(c *gin.Context) {
 	var req createCommentRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		log.Fatal("status createComment, bind request fatal",
+			zap.String("reason", err.Error()))
 		return
 	}
 
-<<<<<<< HEAD
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exist")
+		log.Fatal("status createComment, get raw from context fatal",
+			zap.String("reason", "maybe raw in the context not exist"))
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
 		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		log.Fatal("status createComment, take userid from raw fatal",
+			zap.String("reason", "maybe raw type assertion fatal"))
+		return
 	}
 
 	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
 		UserId:   uint32(ctx.ID),
-=======
-	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
-		UserId:   req.UserId,
->>>>>>> master
 		StatusId: uint32(sid),
 		Content:  req.Content,
 	})
 	if err2 != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error())
+		log.Fatal("status createComment, get response from status server(createComment func) fatal",
+			zap.String("reason", err2.Error()))
 		return
 	}
 
-<<<<<<< HEAD
 	// 要通过 sid 获取 status 的 title
 	getReq := &pbs.GetRequest{
 		Id: uint32(sid),
@@ -80,6 +80,8 @@ func CreateComment(c *gin.Context) {
 	getResp, err4 := service.StatusClient.Get(context.Background(), getReq)
 	if err4 != nil {
 		SendError(c, errno.InternalServerError, nil, err2.Error())
+		log.Fatal("status createComment, get response from status server(get func) fatal",
+			zap.String("reason", err4.Error()))
 		return
 	}
 
@@ -91,16 +93,6 @@ func CreateComment(c *gin.Context) {
 			Kind:        6,
 			Id:          uint32(sid), // 暂时从前端获取
 			Name:        getResp.Status.Title,
-=======
-	// 构造 push 请求
-	pushReq := &pbf.PushRequest{
-		Action: "评论",
-		UserId: req.UserId,
-		Source: &pbf.Source{
-			Kind:        6,
-			Id:          uint32(sid), // 暂时从前端获取
-			Name:        req.Title,
->>>>>>> master
 			ProjectId:   0,
 			ProjectName: "",
 		},
@@ -110,6 +102,8 @@ func CreateComment(c *gin.Context) {
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
 		SendError(c, errno.InternalServerError, nil, err3.Error())
+		log.Fatal("status createComment, get response from feed server fatal",
+			zap.String("reason", err3.Error()))
 		return
 	}
 
