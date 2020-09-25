@@ -6,15 +6,13 @@ go 1.12
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/go-redis/redis v6.15.7+incompatible
-	github.com/golang/protobuf v1.3.3
-	github.com/jinzhu/gorm v1.9.12
+	github.com/go-redis/redis v6.15.8+incompatible
+	github.com/jinzhu/gorm v1.9.15
 	github.com/micro/go-micro v1.18.0
-	github.com/opentracing/opentracing-go v1.1.0
+	github.com/opentracing/opentracing-go v1.2.0
 	github.com/smartystreets/goconvey v1.6.4
-	github.com/spf13/viper v1.6.2
-	github.com/uber/jaeger-client-go v2.22.1+incompatible
-	go.uber.org/zap v1.14.1
-	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5
+	github.com/spf13/viper v1.7.0
+	github.com/uber/jaeger-client-go v2.25.0+incompatible
+	go.uber.org/zap v1.15.0
 	muxi-workbench v0.0.0-00010101000000-000000000000
 )
