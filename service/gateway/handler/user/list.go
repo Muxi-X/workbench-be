@@ -24,21 +24,21 @@ func List(c *gin.Context) {
 	// 获取 limit
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 group 和 team
 	var req listRequest
 	if err := c.BindJSON(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -54,7 +54,7 @@ func List(c *gin.Context) {
 	// 发送请求
 	listResp, err := service.UserClient.List(context.Background(), listReq)
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

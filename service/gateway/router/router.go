@@ -55,8 +55,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	feedRouter.Use(middleware.AuthMiddleware())
 	{
 		feedRouter.GET("/list", feed.List)
-		feedRouter.GET("/list/:uid", feed.ListUser)
-		feedRouter.GET("/list/:uid/:gid", feed.ListGroup)
+		feedRouter.GET("/list/user/:id", feed.ListUser)
+		feedRouter.GET("/list/group/:id", feed.ListGroup)
 	}
 
 	// status
@@ -67,7 +67,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		statusRouter.POST("/", status.Create)
 		statusRouter.PUT("/:sid", status.Update)
 		statusRouter.DELETE("/:sid", status.Delete)
-		statusRouter.GET("/", status.List) // 暂时这样写
+		statusRouter.GET("", status.List) // 暂时这样写
 		statusRouter.GET("/:sid/filter/:uid", status.ListUser)
 
 		// 多了一个筛选 group 的 api
@@ -102,7 +102,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		projectRouter.PUT("/:pid/member", project.UpdateMembers) // 请求参数string有问题
 
 		// 获取 project 的 list ,  swagger 里面没有
-		projectRouter.GET("/", project.GetProjectList)
+		projectRouter.GET("", project.GetProjectList)
 
 		// 有关 project file doc 的评论的 api 全部没有
 
@@ -130,6 +130,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	folderRouter := g.Group("api/v1/folder")
+	folderRouter.Use(middleware.AuthMiddleware())
 	{
 		// 获取文件树
 		folderRouter.GET("/filetree/:id", project.GetFileTree)
@@ -160,6 +161,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	fileRouter := g.Group("api/v1/file")
+	fileRouter.Use(middleware.AuthMiddleware())
 	{
 		// 没有创建/编辑/删除 file/doc 文件夹的 api
 		fileRouter.POST("/file", project.CreateFile)       //

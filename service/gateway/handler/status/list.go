@@ -23,39 +23,33 @@ func List(c *gin.Context) {
 
 	// 获取 gid 和 limt lastid
 	var limit int
-	var lastid int
+	var lastId int
 	var page int
 	var err error
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status list, get param:limit fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status list, get param:lastid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status list, get param:page fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
-		Lastid: uint32(lastid),
-		Offset: uint32(page),
+		Lastid: uint32(lastId),
+		Offset: uint32(page * limit),
 		Limit:  uint32(limit),
 		Group:  0,
 		Uid:    0,
@@ -63,9 +57,7 @@ func List(c *gin.Context) {
 
 	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
-		log.Fatal("status list, get response from status server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

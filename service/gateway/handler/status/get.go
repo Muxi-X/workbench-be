@@ -23,41 +23,33 @@ func Get(c *gin.Context) {
 
 	// 从 Query Param 中获取 lastid 和 limit
 	var limit int
-	var lastid int
+	var lastId int
 	var sid int
 	var page int
 	var err error
 
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status get, get param:sid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status get, get param:limit fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status get, get param:lastid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status get, get param:page fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -68,9 +60,7 @@ func Get(c *gin.Context) {
 
 	getResp, err2 := service.StatusClient.Get(context.Background(), getReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
-		log.Fatal("status get, get response from status server(get) fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
@@ -79,14 +69,12 @@ func Get(c *gin.Context) {
 		StatusId: uint32(sid),
 		Offset:   uint32(page),
 		Limit:    uint32(limit),
-		Lastid:   uint32(lastid),
+		Lastid:   uint32(lastId),
 	}
 
 	listComResp, err3 := service.StatusClient.ListComment(context.Background(), listComReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
-		log.Fatal("status get, get response from status server(listComment func) fatal",
-			zap.String("reason", err3.Error()))
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

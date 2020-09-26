@@ -29,34 +29,26 @@ func Update(c *gin.Context) {
 
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status update, get param:sid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req updateRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status update, bind request fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
-		log.Fatal("status update, get userid raw from context fatal",
-			zap.String("reason", "maybe raw in context not exist"))
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
 		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
-		log.Fatal("status updatem, take userid from raw fatal",
-			zap.String("reason", "maybe raw type assertion fatal"))
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
 		return
 	}
 
@@ -70,9 +62,7 @@ func Update(c *gin.Context) {
 
 	_, err2 := service.StatusClient.Update(context.Background(), updateReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
-		log.Fatal("status update, get response from status server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
@@ -92,9 +82,7 @@ func Update(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
-		log.Fatal("status update, get response from feed server fatal",
-			zap.String("reason", err3.Error()))
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

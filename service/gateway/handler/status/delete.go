@@ -23,23 +23,19 @@ func Delete(c *gin.Context) {
 	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 cid
+	// 获取 sid
 	var sid int
 	var err error
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status delete, get param:sid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req deleteRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status delete, bind request fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -48,25 +44,19 @@ func Delete(c *gin.Context) {
 		Id: uint32(sid),
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
-		log.Fatal("status delete, get response from status server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
-		log.Fatal("status delete, get userid raw from context fatal",
-			zap.String("reason", "maybe raw in context not exist"))
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
 		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
-		log.Fatal("stauts delete, take userid from raw fatal",
-			zap.String("reason", "maybe raw type assertion fatal"))
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
 		return
 	}
 
@@ -86,9 +76,7 @@ func Delete(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
-		log.Fatal("status delete, get response from feed server fatal",
-			zap.String("reason", err3.Error()))
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

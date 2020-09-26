@@ -21,7 +21,7 @@ func Register(c *gin.Context) {
 	// 从前端获取请求
 	var req registerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -36,7 +36,7 @@ func Register(c *gin.Context) {
 	// TO DO: 判断用户已存在，错误
 	_, err := service.UserClient.Register(context.Background(), registerReq)
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

@@ -18,45 +18,45 @@ import (
 // 只用调用一次 get member
 // 不用从 token 获取 userid
 func GetMembers(c *gin.Context) {
-	log.Info("Project get member function call.",
+	log.Info("Project getMembers function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 要从 query param 获取 lastid limit page pagination
 	var pid int
 	var limit int
-	var lastid int
+	var lastId int
 	var page int
 	var pagination int
 	var err error
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("limit", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("limit", "0"))
+	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	pagination, err = strconv.Atoi(c.DefaultQuery("limit", "0"))
+	pagination, err = strconv.Atoi(c.DefaultQuery("pagination", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 pid
 	pid, err = strconv.Atoi(c.Param("pid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -69,15 +69,15 @@ func GetMembers(c *gin.Context) {
 	// 构造请求
 	getMemReq := &pbp.GetMemberListRequest{
 		ProjectId:  uint32(pid),
-		Lastid:     uint32(lastid),
-		Offset:     uint32(page),
+		Lastid:     uint32(lastId),
+		Offset:     uint32(page * limit),
 		Limit:      uint32(limit),
 		Pagination: pageBool,
 	}
 
 	getMemResp, err2 := service.ProjectClient.GetMembers(context.Background(), getMemReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

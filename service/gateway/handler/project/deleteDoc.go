@@ -29,32 +29,32 @@ func DeleteDoc(c *gin.Context) {
 
 	did, err = strconv.Atoi(c.Param("did"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req deleteDocRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
 	}
 
 	_, err2 := service.ProjectClient.DeleteDoc(context.Background(), &pbp.GetRequest{
 		Id: uint32(did),
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -74,7 +74,7 @@ func DeleteDoc(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

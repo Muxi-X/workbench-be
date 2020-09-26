@@ -18,7 +18,7 @@ import (
 // 只调用一次 getdocdetail
 // 不需要从 token 获取 userid
 func GetDocDetail(c *gin.Context) {
-	log.Info("Doc detail get function call.",
+	log.Info("project getDocDetail function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 did
@@ -27,7 +27,7 @@ func GetDocDetail(c *gin.Context) {
 
 	did, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -35,7 +35,7 @@ func GetDocDetail(c *gin.Context) {
 		Id: uint32(did),
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

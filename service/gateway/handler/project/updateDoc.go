@@ -20,7 +20,7 @@ import (
 // 调用 update 和 feed push
 // 需要从 token 获取 userid
 func UpdateDoc(c *gin.Context) {
-	log.Info("Doc update function call.",
+	log.Info("project updateDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 did
@@ -29,25 +29,27 @@ func UpdateDoc(c *gin.Context) {
 
 	did, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req updateDocRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
+		return
 	}
 
 	updateReq := &pbp.UpdateDocRequest{
@@ -58,7 +60,7 @@ func UpdateDoc(c *gin.Context) {
 
 	_, err2 := service.ProjectClient.UpdateDoc(context.Background(), updateReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -78,7 +80,7 @@ func UpdateDoc(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

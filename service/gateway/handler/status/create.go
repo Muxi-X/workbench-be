@@ -24,25 +24,19 @@ func Create(c *gin.Context) {
 	// 获得请求
 	var req createRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status create, bind request fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "context not exists")
-		log.Fatal("status crate, get raw form context fatal",
-			zap.String("reason", "maybe raw in context not exist"))
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "context not exists", GetLine())
 		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "context assign failed")
-		log.Fatal("status create, take userid from raw fatal",
-			zap.String("reason", "maybe raw type assertion fatal"))
+		SendError(c, errno.ErrValidation, nil, "context assign failed", GetLine())
 		return
 	}
 
@@ -57,9 +51,7 @@ func Create(c *gin.Context) {
 	_, err := service.StatusClient.Create(context.Background(), createReq)
 
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
-		log.Fatal("status create, get response from status server fatal",
-			zap.String("reason", err.Error()))
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -79,9 +71,7 @@ func Create(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err2 := service.FeedClient.Push(context.Background(), pushReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
-		log.Fatal("status create, get response from feed server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 

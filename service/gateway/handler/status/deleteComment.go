@@ -1,4 +1,4 @@
-package project
+package status
 
 import (
 	"context"
@@ -12,31 +12,39 @@ import (
 	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
-	pbp "muxi-workbench-project/proto"
+	pbs "muxi-workbench-status/proto"
 
 	"github.com/gin-gonic/gin"
 )
 
-// 调用一次 updatefiletree 和 feed push
-// 需要从 token 获取 userid
-func UpdateFileTree(c *gin.Context) {
-	log.Info("Project filetree Update function call.",
+// 需要调用 feed push 和 status delete
+// userid 从 token 获取
+func DeleteComment(c *gin.Context) {
+	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 pid
-	var pid int
+	// 获取 cid
+	var cid int
 	var err error
-
-	pid, err = strconv.Atoi(c.Param("pid"))
+	cid, err = strconv.Atoi(c.Param("cid"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
-	var req updateFileTreeRequest
+	var req deleteRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
+	// 调用 delete
+	_, err2 := service.StatusClient.DeleteComment(context.Background(), &pbs.GetRequest{
+		Id: uint32(cid),
+	})
+	if err2 != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -52,26 +60,16 @@ func UpdateFileTree(c *gin.Context) {
 		return
 	}
 
-	// 构造请求
-	_, err2 := service.ProjectClient.UpdateFileTree(context.Background(), &pbp.UpdateTreeRequest{
-		Id:   uint32(pid),
-		Tree: req.Filetree,
-	})
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
-		return
-	}
-
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
-		Action: "编辑",
+		Action: "删除",
 		UserId: uint32(ctx.ID),
 		Source: &pbf.Source{
-			Kind:        2,
-			Id:          0, // 暂时从前端获取
-			Name:        "",
-			ProjectId:   uint32(pid),
-			ProjectName: req.Projectname,
+			Kind:        6,
+			Id:          uint32(cid), // 暂时从前端获取
+			Name:        req.Title,
+			ProjectId:   0,
+			ProjectName: "",
 		},
 	}
 

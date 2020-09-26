@@ -18,7 +18,7 @@ import (
 // 只用调用一次 getfiletree
 // 不需要从 token 获取 userid
 func GetFileTree(c *gin.Context) {
-	log.Info("Project filetree get function call.",
+	log.Info("project getFileTree function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
@@ -27,7 +27,7 @@ func GetFileTree(c *gin.Context) {
 
 	pid, err = strconv.Atoi(c.Param("pid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -36,7 +36,7 @@ func GetFileTree(c *gin.Context) {
 		Id: uint32(pid),
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

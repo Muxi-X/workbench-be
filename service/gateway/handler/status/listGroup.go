@@ -23,48 +23,40 @@ func ListGroup(c *gin.Context) {
 
 	// 获取 gid 和 limit lastid
 	var limit int
-	var lastid int
+	var lastId int
 	var gid int
 	var page int
 	var err error
 
 	gid, err = strconv.Atoi(c.Param("gid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status listGroup, get param:gid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status listGroup, get param:limit fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status listGroup, get param:lastid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status listGroup, bind request fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
-		Lastid: uint32(lastid),
-		Offset: uint32(page),
+		Lastid: uint32(lastId),
+		Offset: uint32(page * limit),
 		Limit:  uint32(limit),
 		Group:  uint32(gid),
 		Uid:    0,
@@ -72,9 +64,7 @@ func ListGroup(c *gin.Context) {
 
 	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
-		log.Fatal("status listGroup, get response from status server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

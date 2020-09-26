@@ -21,7 +21,7 @@ func UpdateInfo(c *gin.Context) {
 
 	var req updateInfoRequest
 	if err := c.BindJSON(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -41,7 +41,7 @@ func UpdateInfo(c *gin.Context) {
 	// 发送请求
 	_, err := service.UserClient.UpdateInfo(context.Background(), updateInfoReq)
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

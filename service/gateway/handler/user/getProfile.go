@@ -26,7 +26,7 @@ func GetProfile(c *gin.Context) {
 	getProfileResp, err := service.UserClient.GetProfile(context.Background(), getProfileReq)
 	if err != nil {
 		// TO DO: 判断错误是否是用户不存在
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

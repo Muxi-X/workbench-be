@@ -28,25 +28,19 @@ func Like(c *gin.Context) {
 
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status like, get param:sid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
-		log.Fatal("status like, get userid raw from context fatal",
-			zap.String("reason", "maybe raw in context not exist"))
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
 		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
-		log.Fatal("status like, take userid from raw fatal",
-			zap.String("reason", "maybe raw type assertion"))
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
 		return
 	}
 
@@ -56,9 +50,7 @@ func Like(c *gin.Context) {
 		UserId: uint32(ctx.ID),
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
-		log.Fatal("status like, get response from status server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
