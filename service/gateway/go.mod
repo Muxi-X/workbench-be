@@ -13,10 +13,10 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v2.19.11+incompatible
 	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.6.2
+	github.com/spf13/viper v1.7.0
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
 	github.com/willf/pad v0.0.0-20190207183901-eccfe5d84172
-	go.uber.org/zap v1.14.1
+	go.uber.org/zap v1.15.0
 	golang.org/x/crypto v0.0.0-20200221231518-2aa609cf4a9d
 	gopkg.in/go-playground/validator.v9 v9.30.2 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0

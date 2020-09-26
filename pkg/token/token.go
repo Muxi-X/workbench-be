@@ -14,7 +14,7 @@ var jwtKey string
 // getJwtKey get jwtKey.
 func getJwtKey() string {
 	if jwtKey == "" {
-		jwtKey = viper.GetString("jwt_key")
+		jwtKey = viper.GetString("jwt_secret")
 	}
 	return jwtKey
 }

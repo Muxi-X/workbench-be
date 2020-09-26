@@ -2,18 +2,16 @@ package user
 
 import (
 	"context"
-	//"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	pb "muxi-workbench-user/proto"
-	//"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
+	pb "muxi-workbench-user/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // Login 登录 api
@@ -34,9 +32,9 @@ func Login(c *gin.Context) {
 	}
 
 	// 发送请求
-	loginResp, err2 := service.UserClient.Login(context.Background(), loginReq)
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+	loginResp, err := service.UserClient.Login(context.Background(), loginReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error())
 		return
 	}
 
