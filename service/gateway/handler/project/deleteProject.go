@@ -20,7 +20,7 @@ import (
 // 需要 delete 和 feed push
 // 需要从 token 获取 userid
 func DeleteProject(c *gin.Context) {
-	log.Info("Project delete function call.",
+	log.Info("project deleteProject function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
@@ -29,25 +29,27 @@ func DeleteProject(c *gin.Context) {
 
 	pid, err = strconv.Atoi(c.Param("pid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req deleteRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
+		return
 	}
 
 	// 发送 delete 请求
@@ -55,7 +57,7 @@ func DeleteProject(c *gin.Context) {
 		Id: uint32(pid),
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -75,7 +77,7 @@ func DeleteProject(c *gin.Context) {
 	// 发送 push 请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

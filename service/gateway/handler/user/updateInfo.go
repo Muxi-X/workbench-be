@@ -26,7 +26,7 @@ func UpdateInfo(c *gin.Context) {
 	// 从前端获取 Id (暂时
 	var req updateInfoRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -45,7 +45,7 @@ func UpdateInfo(c *gin.Context) {
 	// 发送请求
 	_, err2 := service.UserClient.UpdateInfo(context.Background(), updateInfoReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 

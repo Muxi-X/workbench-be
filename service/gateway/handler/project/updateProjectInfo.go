@@ -20,7 +20,7 @@ import (
 // 需要调用 update 和 feed push
 // 需要从 token 获取 userid
 func UpdateProjectInfo(c *gin.Context) {
-	log.Info("Project info update function call",
+	log.Info("Project updateProjectInfo function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 pid
@@ -29,25 +29,27 @@ func UpdateProjectInfo(c *gin.Context) {
 
 	pid, err = strconv.Atoi(c.Param("pid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req updateRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
+		return
 	}
 
 	// 构造 update 请求
@@ -61,7 +63,7 @@ func UpdateProjectInfo(c *gin.Context) {
 	// 发送 update 请求
 	_, err2 := service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
@@ -81,7 +83,7 @@ func UpdateProjectInfo(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

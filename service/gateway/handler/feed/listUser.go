@@ -24,61 +24,49 @@ func ListUser(c *gin.Context) {
 		zap.String("X-Request-Id", util.GetReqID(c)))
 	// 从 Query Param 中获得 limit 和 lastid
 	var limit int
-	var lastid int
+	var lastId int
 	var err error
 	var uid int
 
 	// 多一个获取 uid 的步骤
 	uid, err = strconv.Atoi(c.Param("uid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("feed listUser, get param:uid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "50"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("feed listUser, get param:limit fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("feed listUser, get param:lastid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	var req listRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("feed listUser, bind request fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
-		log.Fatal("feed listUser, get raw from context fatal",
-			zap.String("reason", "maybe raw in context not exist"))
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
 		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
-		log.Fatal("feed listUser, take userid from raw fatal",
-			zap.String("reason", "maybe raw type assertion fatal"))
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
 		return
 	}
 
 	listReq := &pb.ListRequest{
-		LastId: uint32(lastid),
+		LastId: uint32(lastId),
 		Limit:  uint32(limit),
 		Role:   req.Role,
 		UserId: uint32(ctx.ID),
@@ -90,9 +78,7 @@ func ListUser(c *gin.Context) {
 
 	listResp, err2 := service.FeedClient.List(context.Background(), listReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
-		log.Fatal("feed listUser, get response from server fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

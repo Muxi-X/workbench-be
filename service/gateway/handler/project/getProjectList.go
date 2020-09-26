@@ -19,37 +19,37 @@ import (
 // 需要调用 list
 // 需要从 token 获取 userid
 func GetProjectList(c *gin.Context) {
-	log.Info("Project list get function call.",
+	log.Info("project getProjectList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 lastid page limit pagination
 	var limit int
-	var lastid int
+	var lastId int
 	var page int
 	var pagination int
 	var err error
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("limit", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("limit", "0"))
+	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	pagination, err = strconv.Atoi(c.DefaultQuery("limit", "0"))
+	pagination, err = strconv.Atoi(c.DefaultQuery("pagination", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -61,25 +61,27 @@ func GetProjectList(c *gin.Context) {
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
+		return
 	}
 
 	// 构造请求
 	getProListReq := &pbp.GetProjectListRequest{
 		UserId:     uint32(ctx.ID),
-		Lastid:     uint32(lastid),
+		Lastid:     uint32(lastId),
 		Offset:     uint32(page),
-		Limit:      uint32(limit),
+		Limit:      uint32(limit * page),
 		Pagination: pageBool,
 	}
 
 	getProListResp, err2 := service.ProjectClient.GetProjectList(context.Background(), getProListReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

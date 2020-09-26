@@ -24,7 +24,7 @@ func Login(c *gin.Context) {
 	// 从前端获取 oauth_code
 	var req loginRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -36,7 +36,7 @@ func Login(c *gin.Context) {
 	// 发送请求
 	loginResp, err2 := service.UserClient.Login(context.Background(), loginReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 

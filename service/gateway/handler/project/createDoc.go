@@ -19,24 +19,26 @@ import (
 // 调用一次 doc create 和 feed push
 // 需要从 token 获取 userid
 func CreateDoc(c *gin.Context) {
-	log.Info("Doc create function call.",
+	log.Info("project createDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获得请求
 	var req createDocRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists")
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
+		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
+		return
 	}
 
 	createDocReq := &pbp.CreateDocRequest{
@@ -47,7 +49,7 @@ func CreateDoc(c *gin.Context) {
 	}
 	_, err2 := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
@@ -67,7 +69,7 @@ func CreateDoc(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

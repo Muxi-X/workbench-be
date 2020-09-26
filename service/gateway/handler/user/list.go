@@ -25,40 +25,40 @@ func List(c *gin.Context) {
 
 	// 获取 offset/page 和 limt lastid
 	var limit int
-	var lastid int
+	var lastId int
 	var page int
 	var err error
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastid, err = strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 从前端获取 group 和 team
 	var req listRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 构造请求给 list
 	listReq := &pb.ListRequest{
-		LastId: uint32(lastid),
-		Offset: uint32(page),
+		LastId: uint32(lastId),
+		Offset: uint32(page * limit),
 		Limit:  uint32(limit),
 		Team:   req.Team,
 		Group:  req.Group,
@@ -67,7 +67,7 @@ func List(c *gin.Context) {
 	// 发送请求
 	listResp, err2 := service.UserClient.List(context.Background(), listReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 

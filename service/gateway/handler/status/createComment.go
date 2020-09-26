@@ -29,34 +29,26 @@ func CreateComment(c *gin.Context) {
 
 	sid, err = strconv.Atoi(c.Param("sid"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status createComment, get param:sid fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
 	var req createCommentRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
-		log.Fatal("status createComment, bind request fatal",
-			zap.String("reason", err.Error()))
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
 	raw, ifexists := c.Get("context")
 	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exist")
-		log.Fatal("status createComment, get raw from context fatal",
-			zap.String("reason", "maybe raw in the context not exist"))
+		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exist", GetLine())
 		return
 	}
 	ctx, ok := raw.(*token.Context)
 	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed")
-		log.Fatal("status createComment, take userid from raw fatal",
-			zap.String("reason", "maybe raw type assertion fatal"))
+		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
 		return
 	}
 
@@ -66,9 +58,7 @@ func CreateComment(c *gin.Context) {
 		Content:  req.Content,
 	})
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error())
-		log.Fatal("status createComment, get response from status server(createComment func) fatal",
-			zap.String("reason", err2.Error()))
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -79,9 +69,7 @@ func CreateComment(c *gin.Context) {
 
 	getResp, err4 := service.StatusClient.Get(context.Background(), getReq)
 	if err4 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
-		log.Fatal("status createComment, get response from status server(get func) fatal",
-			zap.String("reason", err4.Error()))
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
@@ -101,9 +89,7 @@ func CreateComment(c *gin.Context) {
 	// 向 feed 发送请求
 	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
 	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error())
-		log.Fatal("status createComment, get response from feed server fatal",
-			zap.String("reason", err3.Error()))
+		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
 		return
 	}
 

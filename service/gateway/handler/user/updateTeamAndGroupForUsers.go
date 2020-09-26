@@ -26,7 +26,7 @@ func UpdateTeamAndGroupForUsers(c *gin.Context) {
 	// 从前端获取请求
 	var req updateTeamGroupRequest
 	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error())
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -42,7 +42,7 @@ func UpdateTeamAndGroupForUsers(c *gin.Context) {
 	// 发送请求
 	_, err2 := service.UserClient.UpdateTeamAndGroupForUsers(context.Background(), updateTeamGroupReq)
 	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error())
+		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
 		return
 	}
 
