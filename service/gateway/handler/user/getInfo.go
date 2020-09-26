@@ -2,18 +2,16 @@ package user
 
 import (
 	"context"
-	// "strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	pb "muxi-workbench-user/proto"
-	// "muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
+	pb "muxi-workbench-user/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // 暂时不知道 router
@@ -24,33 +22,39 @@ func GetInfo(c *gin.Context) {
 
 	// 从前端获取 Ids
 	var req getInfoRequest
-	if err := c.Bind(&req); err != nil {
+
+	if err := c.ShouldBindJSON(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
+	if len(req.Ids) == 0 {
+		SendResponse(c, nil, &getInfoResponse{})
+		return
+	}
+
 	// 构造请求给 getInfo
-	var getInfoReq *pb.GetInfoRequest
-	for i := 0; i < len(req.Ids); i++ {
-		getInfoReq.Ids = append(getInfoReq.Ids, req.Ids[i])
+	var getInfoReq = &pb.GetInfoRequest{}
+	for _, id := range req.Ids {
+		getInfoReq.Ids = append(getInfoReq.Ids, id)
 	}
 
 	// 发送请求
-	getInfoResp, err2 := service.UserClient.GetInfo(context.Background(), getInfoReq)
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
+	getInfoResp, err := service.UserClient.GetInfo(context.Background(), getInfoReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 构造返回 response
 	var resp getInfoResponse
-	for i := 0; i < len(getInfoResp.List); i++ {
+	for _, item := range getInfoResp.List {
 		resp.List = append(resp.List, userInfo{
-			Id:        getInfoResp.List[i].Id,
-			Nick:      getInfoResp.List[i].Nick,
-			Name:      getInfoResp.List[i].Name,
-			AvatarURL: getInfoResp.List[i].AvatarUrl,
-			Email:     getInfoResp.List[i].Email,
+			Id:        item.Id,
+			Nick:      item.Nick,
+			Name:      item.Name,
+			AvatarURL: item.AvatarUrl,
+			Email:     item.Email,
 		})
 	}
 

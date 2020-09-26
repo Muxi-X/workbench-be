@@ -10,13 +10,13 @@ type loginResponse struct {
 }
 
 type registerRequest struct {
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type getInfoRequest struct {
-	Ids []uint32 `json:"ids"`
+	Ids []uint32 `json:"ids" binding:"required"`
 }
 
 type userInfo struct {
@@ -28,7 +28,7 @@ type userInfo struct {
 }
 
 type getInfoResponse struct {
-	List []userInfo `json:"userinfo"`
+	List []userInfo `json:"list"`
 }
 
 type getProfileRequest struct {
@@ -69,8 +69,7 @@ type listResponse struct {
 }
 
 type updateInfoRequest struct {
-	Id   uint32   `json:"id"`
-	Info userInfo `json:"user_info"`
+	userInfo
 }
 
 type updateTeamGroupRequest struct {

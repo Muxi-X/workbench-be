@@ -96,6 +96,7 @@ func main() {
 		model.PubSubClient.Init(m.RdbChan)
 		defer model.PubSubClient.Close()
 
+		logger.Info("Subscribe service start...")
 		s.SubServiceRun()
 	}
 }

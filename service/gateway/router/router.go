@@ -195,10 +195,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	userRouter.Use(middleware.AuthMiddleware())
 	{
 		userRouter.GET("/infos", user.GetInfo)
-		userRouter.GET("/profiles", user.GetProfile)
+		userRouter.GET("/profile", user.GetProfile)
 		userRouter.GET("/list", user.List)
-		userRouter.PUT("/info", user.UpdateInfo)
-		userRouter.PUT("/manageteamgroup", user.UpdateTeamAndGroupForUsers)
+		userRouter.PUT("", user.UpdateInfo)
 	}
 
 	return g

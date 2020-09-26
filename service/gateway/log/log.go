@@ -3,10 +3,11 @@
 package log
 
 import (
+	"os"
+
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"os"
 )
 
 var (
@@ -56,7 +57,7 @@ func init() {
 	// 开启文件及行号
 	development := zap.Development()
 	// 设置初始化字段
-	filed := zap.Fields(zap.String("serviceName", "serviceName"))
+	filed := zap.Fields(zap.String("serviceName", "gateway"))
 	// 构造日志
 	logger = zap.New(core, caller, development, filed)
 }

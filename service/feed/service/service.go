@@ -38,5 +38,5 @@ func GetInfoFromUserService(id uint32) (string, string, error) {
 		return "", "", err
 	}
 
-	return rsp.Name, rsp.AvatarUrl, nil
+	return rsp.Name, rsp.Avatar, nil
 }

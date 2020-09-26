@@ -16,6 +16,10 @@ func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *p
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	if user == nil {
+		return e.ServerErr(errno.ErrUserExisted, "")
+	}
+
 	res.Id = user.ID
 	res.Nick = user.Name
 	res.Name = user.RealName

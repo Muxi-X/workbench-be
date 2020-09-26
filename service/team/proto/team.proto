@@ -16,6 +16,9 @@ service TeamService {
     rpc Remove(RemoveRequest) returns (Response) {}
     rpc CreateInvitation(CreateInvitationRequest) returns (CreateInvitationResponse) {}
     rpc ParseInvitation(ParseInvitationRequest) returns (ParseInvitationResponse) {}
+    rpc CreateTeam(CreateTeamRequest) returns (Response) {}
+    rpc DropTeam(DropTeamRequest) returns (Response) {}
+    rpc UpdateTeamInfo(UpdateTeamInfoRequest) returns (Response) {}
 
     // 申请
     rpc GetApplications(ApplicationListRequest) returns (ApplicationListResponse) {}
@@ -25,19 +28,16 @@ service TeamService {
 
 message CreateGroupRequest {
     string group_name = 1;
-    uint32 role = 2;
-    repeated uint32 user_list = 3;
+    repeated uint32 user_list = 2;
 }
 
 message DeleteGroupRequest {
     uint32 group_id = 1;
-    uint32 role = 2;
 }
 
 message UpdateGroupInfoRequest {
     uint32 group_id = 1;
     string new_name = 2;
-    uint32 role = 3;
 }
 
 message GroupListRequest {
@@ -65,20 +65,17 @@ message MemberListResponse {
 
 message UpdateMembersRequest {
     uint32 group_id = 1;
-    uint32 role = 2;
-    repeated uint32 user_list = 3;
+    repeated uint32 user_list = 2;
 }
 
 message JoinRequest {
-    uint32 user_id = 1;
+    repeated uint32 user_list = 1;
     uint32 team_id = 2;
-    uint32 role = 3;
 }
 
 message RemoveRequest {
-    uint32 user_id = 1;
+    repeated uint32 user_list = 1;
     uint32 team_id = 2;
-    uint32 role = 3;
 }
 
 message CreateInvitationRequest {
@@ -87,8 +84,7 @@ message CreateInvitationRequest {
 }
 
 message CreateInvitationResponse {
-    string url = 1;
-    string hash = 2;
+    string hash = 1;
 }
 
 message ParseInvitationRequest {
@@ -97,6 +93,20 @@ message ParseInvitationRequest {
 
 message ParseInvitationResponse {
     uint32 team_id = 1;
+}
+
+message CreateTeamRequest {
+    string team_name = 1;
+    uint32 creator_id = 2;
+}
+
+message DropTeamRequest {
+    uint32 team_id = 1;
+}
+
+message UpdateTeamInfoRequest{
+    uint32 team_id = 1;
+    string new_name = 2;
 }
 
 message ApplicationListRequest {
@@ -120,9 +130,8 @@ message Member {
     uint32 team_id = 2;
     uint32 group_id = 4;
     string group_name = 5;
-    uint32 role = 6;
-    string email = 7;
-    string avatar = 8;
+    string email = 6;
+    string avatar = 7;
 }
 
 message ApplyUserItem {
