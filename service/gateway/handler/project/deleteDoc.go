@@ -9,7 +9,6 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -27,7 +26,7 @@ func DeleteDoc(c *gin.Context) {
 	var did int
 	var err error
 
-	did, err = strconv.Atoi(c.Param("did"))
+	did, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -41,19 +40,12 @@ func DeleteDoc(c *gin.Context) {
 	}
 
 	// 获取 userid
-	raw, ifexists := c.Get("context")
-	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
-	}
-	ctx, ok := raw.(*token.Context)
-	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
-	}
+	id := c.MustGet("userID").(uint32)
 
-	_, err2 := service.ProjectClient.DeleteDoc(context.Background(), &pbp.GetRequest{
+	_, err = service.ProjectClient.DeleteDoc(context.Background(), &pbp.GetRequest{
 		Id: uint32(did),
 	})
-	if err2 != nil {
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
@@ -61,7 +53,7 @@ func DeleteDoc(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "删除",
-		UserId: uint32(ctx.ID),
+		UserId: id,
 		Source: &pbf.Source{
 			Kind:        3,
 			Id:          uint32(did), // 暂时从前端获取
@@ -72,9 +64,9 @@ func DeleteDoc(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
-	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

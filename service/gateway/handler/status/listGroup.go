@@ -28,7 +28,7 @@ func ListGroup(c *gin.Context) {
 	var page int
 	var err error
 
-	gid, err = strconv.Atoi(c.Param("gid"))
+	gid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

@@ -31,10 +31,10 @@ func GetDocDetail(c *gin.Context) {
 		return
 	}
 
-	getDocDetailResp, err2 := service.ProjectClient.GetDocDetail(context.Background(), &pbp.GetRequest{
+	getDocDetailResp, err := service.ProjectClient.GetDocDetail(context.Background(), &pbp.GetRequest{
 		Id: uint32(did),
 	})
-	if err2 != nil {
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}

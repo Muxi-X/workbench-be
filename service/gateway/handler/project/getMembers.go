@@ -54,7 +54,7 @@ func GetMembers(c *gin.Context) {
 	}
 
 	// 获取 pid
-	pid, err = strconv.Atoi(c.Param("pid"))
+	pid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -75,8 +75,8 @@ func GetMembers(c *gin.Context) {
 		Pagination: pageBool,
 	}
 
-	getMemResp, err2 := service.ProjectClient.GetMembers(context.Background(), getMemReq)
-	if err2 != nil {
+	getMemResp, err := service.ProjectClient.GetMembers(context.Background(), getMemReq)
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}

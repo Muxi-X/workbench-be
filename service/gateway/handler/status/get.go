@@ -28,7 +28,7 @@ func Get(c *gin.Context) {
 	var page int
 	var err error
 
-	sid, err = strconv.Atoi(c.Param("sid"))
+	sid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -67,7 +67,7 @@ func Get(c *gin.Context) {
 	// 构造 listcomment 请求并发送
 	listComReq := &pbs.CommentListRequest{
 		StatusId: uint32(sid),
-		Offset:   uint32(page),
+		Offset:   uint32(page * limit),
 		Limit:    uint32(limit),
 		Lastid:   uint32(lastId),
 	}

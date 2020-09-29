@@ -63,17 +63,17 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	statusRouter := g.Group("api/v1/status")
 	statusRouter.Use(middleware.AuthMiddleware())
 	{
-		statusRouter.GET("/:sid", status.Get)
-		statusRouter.POST("/", status.Create)
-		statusRouter.PUT("/:sid", status.Update)
-		statusRouter.DELETE("/:sid", status.Delete)
+		statusRouter.GET("/object/:id", status.Get)
+		statusRouter.POST("", status.Create)
+		statusRouter.PUT("/object/:id", status.Update)
+		statusRouter.DELETE("/object/:id", status.Delete)
 		statusRouter.GET("", status.List) // 暂时这样写
-		statusRouter.GET("/:sid/filter/:uid", status.ListUser)
+		statusRouter.GET("/user/:uid", status.ListUser)
 
 		// 多了一个筛选 group 的 api
-		statusRouter.GET("/:sid/filter/:uid/:gid", status.ListGroup)
-		statusRouter.PUT("/:sid/like", status.Like)
-		statusRouter.POST("/:sid/comments", status.CreateComment)
+		statusRouter.GET("/group/:gid", status.ListGroup)
+		statusRouter.PUT("/like/:id", status.Like)
+		statusRouter.POST("/comment/:id", status.CreateComment)
 
 		// 少了一个删除评论 api
 		// statusRouter.DELETE("/:sid/comment", status.DeleteComment)
@@ -87,19 +87,19 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// projectRouter.POST("/",project.CreateProject)
 
 		// 获取一个 project 的信息，简介，之类的
-		projectRouter.GET("/:pid", project.GetProjectInfo)
+		projectRouter.GET("/:id", project.GetProjectInfo)
 
 		// 删除一个 project
-		projectRouter.DELETE("/:pid", project.DeleteProject)
+		projectRouter.DELETE("/:id", project.DeleteProject)
 
 		// 修改 project 的信息，简介之类的
-		projectRouter.PUT("/:pid", project.UpdateProjectInfo)
+		projectRouter.PUT("/:id", project.UpdateProjectInfo)
 
 		// 获取一个 project 的成员
-		projectRouter.GET("/:pid/member", project.GetMembers)
+		projectRouter.GET("/:id/member", project.GetMembers)
 
 		// 编辑一个 project 的成员
-		projectRouter.PUT("/:pid/member", project.UpdateMembers) // 请求参数string有问题
+		projectRouter.PUT("/:id/member", project.UpdateMembers) // 请求参数string有问题
 
 		// 获取 project 的 list ,  swagger 里面没有
 		projectRouter.GET("", project.GetProjectList)

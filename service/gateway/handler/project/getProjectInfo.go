@@ -25,18 +25,18 @@ func GetProjectInfo(c *gin.Context) {
 	var err error
 
 	// 获取 Pid
-	pid, err = strconv.Atoi(c.Param("pid"))
+	pid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 发送请求
-	getProInfoResp, err2 := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
+	getProInfoResp, err := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
 		Id: uint32(pid),
 	})
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

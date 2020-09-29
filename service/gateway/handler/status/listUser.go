@@ -28,7 +28,7 @@ func ListUser(c *gin.Context) {
 	var page int
 	var err error
 
-	uid, err = strconv.Atoi(c.Param("uid"))
+	uid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

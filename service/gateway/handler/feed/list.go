@@ -9,7 +9,6 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 
@@ -46,30 +45,21 @@ func List(c *gin.Context) {
 	}
 
 	// 获取 userid
-	raw, ifexists := c.Get("context")
-	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
-		return
-	}
-	ctx, ok := raw.(*token.Context)
-	if !ok {
-		SendError(c, errno.ErrValidation, nil, "context type assertion fail", GetLine())
-		return
-	}
+	id := c.MustGet("userID").(uint32)
 
 	listReq := &pb.ListRequest{
 		LastId: uint32(lastId),
 		Limit:  uint32(limit),
 		Role:   req.Role,
-		UserId: uint32(ctx.ID),
+		UserId: id,
 		Filter: &pb.Filter{
 			UserId:  0,
 			GroupId: 0,
 		},
 	}
 
-	listResp, err2 := service.FeedClient.List(context.Background(), listReq)
-	if err2 != nil {
+	listResp, err := service.FeedClient.List(context.Background(), listReq)
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
