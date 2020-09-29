@@ -9,7 +9,6 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -41,25 +40,16 @@ func UpdateDoc(c *gin.Context) {
 	}
 
 	// 获取 userid
-	raw, ifexists := c.Get("context")
-	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
-		return
-	}
-	ctx, ok := raw.(*token.Context)
-	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
-		return
-	}
+	id := c.MustGet("userID").(uint32)
 
 	updateReq := &pbp.UpdateDocRequest{
-		Id:      uint32(did),
+		Id:      id,
 		Title:   req.Title,
 		Content: req.Content,
 	}
 
-	_, err2 := service.ProjectClient.UpdateDoc(context.Background(), updateReq)
-	if err2 != nil {
+	_, err = service.ProjectClient.UpdateDoc(context.Background(), updateReq)
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
@@ -67,7 +57,7 @@ func UpdateDoc(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "编辑",
-		UserId: uint32(ctx.ID),
+		UserId: id,
 		Source: &pbf.Source{
 			Kind:        3,
 			Id:          uint32(did), // 暂时从前端获取
@@ -78,9 +68,9 @@ func UpdateDoc(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
-	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

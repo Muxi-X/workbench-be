@@ -9,7 +9,6 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
@@ -27,7 +26,7 @@ func CreateComment(c *gin.Context) {
 	var sid int
 	var err error
 
-	sid, err = strconv.Atoi(c.Param("sid"))
+	sid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -41,19 +40,10 @@ func CreateComment(c *gin.Context) {
 	}
 
 	// 获取 userid
-	raw, ifexists := c.Get("context")
-	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exist", GetLine())
-		return
-	}
-	ctx, ok := raw.(*token.Context)
-	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
-		return
-	}
+	id := c.MustGet("userID").(uint32)
 
 	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
-		UserId:   uint32(ctx.ID),
+		UserId:   id,
 		StatusId: uint32(sid),
 		Content:  req.Content,
 	})
@@ -76,7 +66,7 @@ func CreateComment(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "评论",
-		UserId: uint32(ctx.ID),
+		UserId: id,
 		Source: &pbf.Source{
 			Kind:        6,
 			Id:          uint32(sid), // 暂时从前端获取

@@ -26,7 +26,7 @@ func Like(c *gin.Context) {
 	var sid int
 	var err error
 
-	sid, err = strconv.Atoi(c.Param("sid"))
+	sid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

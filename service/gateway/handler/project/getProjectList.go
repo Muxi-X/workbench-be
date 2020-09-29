@@ -8,7 +8,6 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
@@ -59,28 +58,19 @@ func GetProjectList(c *gin.Context) {
 	}
 
 	// 获取 userid
-	raw, ifexists := c.Get("context")
-	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "Context not exists", GetLine())
-		return
-	}
-	ctx, ok := raw.(*token.Context)
-	if !ok {
-		SendError(c, errno.ErrValidation, nil, "Context assign failed", GetLine())
-		return
-	}
+	id := c.MustGet("userID").(uint32)
 
 	// 构造请求
 	getProListReq := &pbp.GetProjectListRequest{
-		UserId:     uint32(ctx.ID),
+		UserId:     id,
 		Lastid:     uint32(lastId),
 		Offset:     uint32(page),
 		Limit:      uint32(limit * page),
 		Pagination: pageBool,
 	}
 
-	getProListResp, err2 := service.ProjectClient.GetProjectList(context.Background(), getProListReq)
-	if err2 != nil {
+	getProListResp, err := service.ProjectClient.GetProjectList(context.Background(), getProListReq)
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}

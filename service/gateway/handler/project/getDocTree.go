@@ -24,17 +24,17 @@ func GetDocTree(c *gin.Context) {
 	var pid int
 	var err error
 
-	pid, err = strconv.Atoi(c.Param("pid"))
+	pid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 发送请求
-	getDocTreeResp, err2 := service.ProjectClient.GetDocTree(context.Background(), &pbp.GetRequest{
+	getDocTreeResp, err := service.ProjectClient.GetDocTree(context.Background(), &pbp.GetRequest{
 		Id: uint32(pid),
 	})
-	if err2 != nil {
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}

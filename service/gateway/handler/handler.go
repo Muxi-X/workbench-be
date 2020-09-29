@@ -63,7 +63,7 @@ func SendError(c *gin.Context, err error, data interface{}, cause string, source
 func GetLine() string {
 	_, file, line, ok := runtime.Caller(1)
 	if !ok {
-		return "GetLine function fail"
+		return "muxi-workbench-geteway/handler/handler.go:66"
 	}
-	return file + "" + strconv.Itoa(line)
+	return file + ":" + strconv.Itoa(line)
 }

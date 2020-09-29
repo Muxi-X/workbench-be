@@ -8,7 +8,6 @@ import (
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
-	"muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
@@ -29,22 +28,13 @@ func Create(c *gin.Context) {
 	}
 
 	// 获取 userid
-	raw, ifexists := c.Get("context")
-	if !ifexists {
-		SendBadRequest(c, errno.ErrTokenInvalid, nil, "context not exists", GetLine())
-		return
-	}
-	ctx, ok := raw.(*token.Context)
-	if !ok {
-		SendError(c, errno.ErrValidation, nil, "context assign failed", GetLine())
-		return
-	}
+	id := c.MustGet("userID").(uint32)
 
 	// 构造 create 请求
 	createReq := &pbs.CreateRequest{
 		Title:   req.Title,
 		Content: req.Content,
-		UserId:  uint32(ctx.ID),
+		UserId:  id,
 	}
 
 	// 向创建进度服务发送请求
@@ -58,7 +48,7 @@ func Create(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "创建",
-		UserId: uint32(ctx.ID),
+		UserId: id,
 		Source: &pbf.Source{
 			Kind:        6,
 			Id:          req.Statusid, // 暂时从前端获取
