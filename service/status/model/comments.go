@@ -1,6 +1,8 @@
 package model
 
 import (
+	"strconv"
+
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 )
@@ -57,8 +59,8 @@ func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, u
 	return commentsList, count, nil
 }
 
-func DeleteComment(id uint32) error {
+func DeleteComment(id, uid uint32) error {
 	comment := &CommentsModel{}
 	comment.ID = id
-	return m.DB.Self.Delete(&comment).Error
+	return m.DB.Self.Where("creator =?", strconv.Itoa(int(uid))).Delete(&comment).Error
 }

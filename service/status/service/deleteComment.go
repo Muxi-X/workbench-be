@@ -10,7 +10,7 @@ import (
 
 // DeleteComment ... 删除评论
 func (s *StatusService) DeleteComment(ctx context.Context, req *pb.GetRequest, res *pb.Response) error {
-	err := model.DeleteComment(req.Id)
+	err := model.DeleteComment(req.Id, req.Uid)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
