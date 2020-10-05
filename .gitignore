@@ -1,3 +1,5 @@
+**/logs
 main
 muxi-workbench
 .idea
+*.log
