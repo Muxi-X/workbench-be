@@ -3,3 +3,4 @@ main
 muxi-workbench
 .idea
 *.log
+*.tmp

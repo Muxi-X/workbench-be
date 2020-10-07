@@ -2,9 +2,14 @@ kind: pipeline
 type: docker
 name: workbench-be
 
+clone:
+  depth: 1
+
 steps:
-  - name: build image
+  - name: build user image
     image: plugins/docker # 构建docker镜像专用镜像
+    when:
+      tag: release-user*
     volumes:
       - name: dockersock # 挂载下面定义的Volumn
         path: /var/run/docker.sock # 与宿主机用同一docker
@@ -14,10 +19,10 @@ steps:
       password:
         from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
       repo: registry-vpc.cn-shenzhen.aliyuncs.com/muxi_site/workbench_user  #要推送docker地址
-      registry: registry-vpc.cn-shenzhen.aliyuncs.com # 使用的docker hub地址
-      tags: ${DRONE_BUILD_NUMBER} # docker的tag值, 默认每次加1
+      registry: registry.cn-shenzhen.aliyuncs.com # 使用的docker hub地址
+      tags: ${DRONE_TAG} # docker的tag值, 默认每次加1
       build_args:
-        - status_name=user
+        - service_name=user
 volumes:
 - name: dockersock
   host:
