@@ -6,8 +6,8 @@ clone:
   depth: 1
 
 steps:
-  - name: build user image
-    image: plugins/docker # 构建docker镜像专用镜像
+  - name: build user service image # 构建 user 服务镜像
+    image: plugins/docker 
     when:
       ref:
       - refs/tags/release-user-*
@@ -21,9 +21,99 @@ steps:
         from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
       repo: registry-vpc.cn-hangzhou.aliyuncs.com/muxi_site/workbench_user  #要推送docker地址
       registry: registry-vpc.cn-hangzhou.aliyuncs.com # 使用的docker hub地址
-      tags: ${DRONE_TAG} # docker的tag值, 默认每次加1
+      tags: ${DRONE_TAG} 
       build_args:
         - service_name=user
+  - name: build gateway service image # 构建 gateway 服务镜像
+    image: plugins/docker 
+    when:
+      ref:
+      - refs/tags/release-gateway-*
+    volumes:
+      - name: dockersock # 挂载下面定义的Volumn
+        path: /var/run/docker.sock # 与宿主机用同一docker
+    settings: # plugins/docker用到的相关配置
+      username:
+        from_secret: docker_user # alicloud指定的docker hub的用户名(前面配置)
+      password:
+        from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
+      repo: registry-vpc.cn-hangzhou.aliyuncs.com/muxi_site/workbench_gateway  #要推送docker地址
+      registry: registry-vpc.cn-hangzhou.aliyuncs.com # 使用的docker hub地址
+      tags: ${DRONE_TAG} 
+      build_args:
+        - service_name=gateway
+  - name: build status service image # 构建 status 服务镜像
+    image: plugins/docker 
+    when:
+      ref:
+      - refs/tags/release-status-*
+    volumes:
+      - name: dockersock # 挂载下面定义的Volumn
+        path: /var/run/docker.sock # 与宿主机用同一docker
+    settings: # plugins/docker用到的相关配置
+      username:
+        from_secret: docker_user # alicloud指定的docker hub的用户名(前面配置)
+      password:
+        from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
+      repo: registry-vpc.cn-hangzhou.aliyuncs.com/muxi_site/workbench_status  #要推送docker地址
+      registry: registry-vpc.cn-hangzhou.aliyuncs.com # 使用的docker hub地址
+      tags: ${DRONE_TAG} 
+      build_args:
+        - service_name=status
+- name: build feed service image # 构建 feed 服务镜像
+  image: plugins/docker 
+  when:
+    ref:
+    - refs/tags/release-feed-*
+  volumes:
+    - name: dockersock # 挂载下面定义的Volumn
+      path: /var/run/docker.sock # 与宿主机用同一docker
+  settings: # plugins/docker用到的相关配置
+    username:
+      from_secret: docker_user # alicloud指定的docker hub的用户名(前面配置)
+    password:
+      from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
+    repo: registry-vpc.cn-hangzhou.aliyuncs.com/muxi_site/workbench_feed  #要推送docker地址
+    registry: registry-vpc.cn-hangzhou.aliyuncs.com # 使用的docker hub地址
+    tags: ${DRONE_TAG} 
+    build_args:
+      - service_name=feed
+- name: build project service image # 构建 project 服务镜像
+  image: plugins/docker 
+  when:
+    ref:
+    - refs/tags/release-project-*
+  volumes:
+    - name: dockersock # 挂载下面定义的Volumn
+      path: /var/run/docker.sock # 与宿主机用同一docker
+  settings: # plugins/docker用到的相关配置
+    username:
+      from_secret: docker_user # alicloud指定的docker hub的用户名(前面配置)
+    password:
+      from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
+    repo: registry-vpc.cn-hangzhou.aliyuncs.com/muxi_site/workbench_project  #要推送docker地址
+    registry: registry-vpc.cn-hangzhou.aliyuncs.com # 使用的docker hub地址
+    tags: ${DRONE_TAG} 
+    build_args:
+      - service_name=project
+- name: build team service image # 构建 member 服务镜像
+  image: plugins/docker
+  when:
+    ref:
+    - refs/tags/release-team-*
+  volumes:
+    - name: dockersock # 挂载下面定义的Volumn
+      path: /var/run/docker.sock # 与宿主机用同一docker
+  settings: # plugins/docker用到的相关配置
+    username:
+      from_secret: docker_user # alicloud指定的docker hub的用户名(前面配置)
+    password:
+      from_secret: docker_password # alicloud指定的docker hub的密码(前面配置)
+    repo: registry-vpc.cn-hangzhou.aliyuncs.com/muxi_site/workbench_team  #要推送docker地址
+    registry: registry-vpc.cn-hangzhou.aliyuncs.com # 使用的docker hub地址
+    tags: ${DRONE_TAG} 
+    build_args:
+      - service_name=team
 volumes:
 - name: dockersock
   host:

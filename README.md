@@ -13,3 +13,18 @@ Built with [go-micro](https://github.com/micro/go-micro), [gin](https://github.c
 + [Team](https://github.com/Muxi-X/workbench-be/tree/master/service/team)
 + [Project](https://github.com/Muxi-X/workbench-be/tree/master/service/project)
 + [Feed](https://github.com/Muxi-X/workbench-be/tree/master/service/feed)
+
+
+### Trigger Build
+
+```
+// add muxi origin
+git remote add http://gitea.muxixyz.com/root/workbench_be.git
+// commit code(git commit ... git add ...) and 
+// sync code to muxi repo
+git push muxi master 
+// create tag
+git tag release-${service_name}-${version}
+git push --tags muxi
+// open ci.muxixyz.com to check build progress
+```
