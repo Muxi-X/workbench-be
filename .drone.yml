@@ -2,6 +2,10 @@ kind: pipeline
 type: docker
 name: workbench-be
 
+trigger:
+  ref:
+  - refs/tags/release-*
+
 clone:
   depth: 1
 
