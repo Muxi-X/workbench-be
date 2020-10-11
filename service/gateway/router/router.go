@@ -49,7 +49,23 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		svcd.GET("/ram", sd.RAMCheck)
 	}
 
-	// 下面是我写的路由
+	// auth 模块
+	authRouter := g.Group("api/v1/auth")
+	{
+		authRouter.POST("/login", user.Login)
+		authRouter.POST("/signup", user.Register)
+	}
+
+	// user 模块
+	userRouter := g.Group("api/v1/user")
+	userRouter.Use(middleware.AuthMiddleware())
+	{
+		userRouter.GET("/infos", user.GetInfo)
+		userRouter.GET("/profile", user.GetProfile)
+		userRouter.GET("/list", user.List)
+		userRouter.PUT("", user.UpdateInfo)
+	}
+
 	// feed
 	feedRouter := g.Group("api/v1/feed")
 	feedRouter.Use(middleware.AuthMiddleware())
@@ -181,23 +197,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		   fileRouter.GET("/doc", handler.GetDocInfoList)
 		   fileRouter.GET("/list", handler.GetDocFolderInfoList)
 		*/
-	}
-
-	// auth 模块
-	authRouter := g.Group("api/v1/auth")
-	{
-		authRouter.POST("/login", user.Login)
-		authRouter.POST("/signup", user.Register)
-	}
-
-	// user 模块
-	userRouter := g.Group("api/v1/user")
-	userRouter.Use(middleware.AuthMiddleware())
-	{
-		userRouter.GET("/infos", user.GetInfo)
-		userRouter.GET("/profile", user.GetProfile)
-		userRouter.GET("/list", user.List)
-		userRouter.PUT("", user.UpdateInfo)
 	}
 
 	return g

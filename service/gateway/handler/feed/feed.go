@@ -1,16 +1,17 @@
 package feed
 
-type listRequest struct {
+// TO DO：不需要，role 从 Authorization 获取 或 从 user-service 获取
+type ListRequest struct {
 	Role uint32 `json:"role"`
 }
 
-type user struct {
+type User struct {
 	Name      string `json:"name"`
 	Id        uint32 `json:"id"`
-	AvatarUrl string `json:avatar_url":`
+	AvatarUrl string `json:"avatar_url"`
 }
 
-type source struct {
+type Source struct {
 	Kind        uint32 `json:"kind"`
 	Id          uint32 `json:"id"`
 	Name        string `json:"name"`
@@ -18,17 +19,17 @@ type source struct {
 	ProjectName string `json:"projectname"`
 }
 
-type feedItem struct {
-	Id          uint32 `json:"id"`
-	Action      string `json:"action"`
-	ShowDivider bool   `json:"show_divider"`
-	Date        string `json:"date"`
-	Time        string `json:time"`
-	User        user   `json:"user"`
-	Source      source `json:"source"`
+type FeedItem struct {
+	Id          uint32  `json:"id"`
+	Action      string  `json:"action"`
+	ShowDivider bool    `json:"show_divider"` // 分割线
+	Date        string  `json:"date"`
+	Time        string  `json:"time"`
+	User        *User   `json:"user"`
+	Source      *Source `json:"source"`
 }
 
-type listResponse struct {
-	Count    uint32     `json:"count"`
-	FeedItem []feedItem `json":feeditem"`
+type ListResponse struct {
+	Count uint32      `json:"count"`
+	List  []*FeedItem `json:"list"`
 }

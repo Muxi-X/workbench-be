@@ -22,7 +22,6 @@ func GetInfo(c *gin.Context) {
 
 	// 从前端获取 Ids
 	var req getInfoRequest
-
 	if err := c.ShouldBindJSON(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	pb "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -13,39 +12,36 @@ import (
 	"muxi-workbench-gateway/util"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // Feed 的 ListGroup 接口
-// 不需要从 token 获取 userid
 func ListGroup(c *gin.Context) {
 	log.Info("Feed listGroup function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
-	// 从 Query Param 中获得 limit 和 lastid
-	var limit int
-	var lastId int
-	var err error
-	var gid int
 
-	// 多一个获取 gid 的步骤
-	gid, err = strconv.Atoi(c.Param("id"))
+	// 获取 groupId
+	groupId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	limit, err = strconv.Atoi(c.DefaultQuery("limit", "50"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "50"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
+	lastId, err := strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	var req listRequest
+	// 获取 role
+	// TO DO: 从 Authorization 获取或从 user-service 获取
+	var req ListRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -61,7 +57,7 @@ func ListGroup(c *gin.Context) {
 		UserId: id,
 		Filter: &pb.Filter{
 			UserId:  0,
-			GroupId: uint32(gid),
+			GroupId: uint32(groupId),
 		},
 	}
 
@@ -71,30 +67,31 @@ func ListGroup(c *gin.Context) {
 		return
 	}
 
-	// 构造返回 response
-	var resp listResponse
-	for i := 0; i < len(resp.FeedItem); i++ {
-		resp.FeedItem = append(resp.FeedItem, feedItem{
-			Id:          listResp.List[i].Id,
-			Action:      listResp.List[i].Action,
-			ShowDivider: listResp.List[i].ShowDivider,
-			Date:        listResp.List[i].Date,
-			Time:        listResp.List[i].Time,
-			User: user{
-				Name:      listResp.List[i].User.Name,
-				Id:        listResp.List[i].User.Id,
-				AvatarUrl: listResp.List[i].User.AvatarUrl,
+	var list []*FeedItem
+	for _, item := range listResp.List {
+		list = append(list, &FeedItem{
+			Id:          item.Id,
+			Action:      item.Action,
+			ShowDivider: item.ShowDivider,
+			Date:        item.Date,
+			Time:        item.Time,
+			User: &User{
+				Name:      item.User.Name,
+				Id:        item.User.Id,
+				AvatarUrl: item.User.AvatarUrl,
 			},
-			Source: source{
-				Kind:        listResp.List[i].Source.Kind,
-				Id:          listResp.List[i].Source.Id,
-				Name:        listResp.List[i].Source.Name,
-				ProjectId:   listResp.List[i].Source.ProjectId,
-				ProjectName: listResp.List[i].Source.ProjectName,
+			Source: &Source{
+				Kind:        item.Source.Kind,
+				Id:          item.Source.Id,
+				Name:        item.Source.Name,
+				ProjectId:   item.Source.ProjectId,
+				ProjectName: item.Source.ProjectName,
 			},
 		})
 	}
-	resp.Count = listResp.Count
 
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, ListResponse{
+		Count: listResp.Count,
+		List:  list,
+	})
 }
