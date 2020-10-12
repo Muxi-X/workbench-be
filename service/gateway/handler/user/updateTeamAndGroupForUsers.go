@@ -4,11 +4,13 @@ import (
 	"context"
 	// "strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
 	pb "muxi-workbench-user/proto"
+
+	"go.uber.org/zap"
+
 	// "muxi-workbench-gateway/pkg/token"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
@@ -16,9 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 暂时不知道 router
-// UpdateTeamAndGroupForUsers
-// 通过 teamid 或 groupid 给 users 数组分组/团队
+// UpdateTeamAndGroupForUsers ... 通过 teamid 或 groupid 给 users 数组分组/团队
 func UpdateTeamAndGroupForUsers(c *gin.Context) {
 	log.Info("User getInfo function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -40,9 +40,9 @@ func UpdateTeamAndGroupForUsers(c *gin.Context) {
 	}
 
 	// 发送请求
-	_, err2 := service.UserClient.UpdateTeamAndGroupForUsers(context.Background(), updateTeamGroupReq)
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
+	_, err := service.UserClient.UpdateTeamAndGroupForUsers(context.Background(), updateTeamGroupReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

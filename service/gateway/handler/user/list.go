@@ -15,7 +15,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// 暂时不知道 router
 // List 通过 group 和 team 获取 userlist
 // 通过 param 获取 page last_id
 func List(c *gin.Context) {
