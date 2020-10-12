@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -12,18 +11,18 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
-// 只用调用一次 list  lastid limit page 要从 query param 获取
-// 不需要获取 userid
+// List ... 获取进度列表
 func List(c *gin.Context) {
 	log.Info("Status list function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 gid 和 limt lastid
 	var limit int
-	var lastId int
+	var lastID int
 	var page int
 	var err error
 
@@ -33,13 +32,12 @@ func List(c *gin.Context) {
 		return
 	}
 
-	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
+	lastID, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 获取 page
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
@@ -48,20 +46,19 @@ func List(c *gin.Context) {
 
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
-		Lastid: uint32(lastId),
+		Lastid: uint32(lastID),
 		Offset: uint32(page * limit),
 		Limit:  uint32(limit),
-		Group:  0,
-		Uid:    0,
+		Group:  0, // 这里传 URL 里面获取的 group 参数，DefaultQuery("group", "0")
+		Uid:    0, // 这里传 URL 里面获取的 group 参数，DefaultQuery("uid", "0")
 	}
 
-	listResp, err2 := service.StatusClient.List(context.Background(), listReq)
-	if err2 != nil {
+	listResp, err := service.StatusClient.List(context.Background(), listReq)
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造返回 response
 	var resp listResponse
 	for i := 0; i < len(listResp.List); i++ {
 		resp.Status = append(resp.Status, status{

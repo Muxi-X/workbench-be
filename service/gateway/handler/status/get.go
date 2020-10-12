@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -12,11 +11,12 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
-// 需要调用 get 和 listcomment
-// 不需要获取 userid
+// Get ... 获取动态详情
 func Get(c *gin.Context) {
 	log.Info("Status get function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -101,6 +101,5 @@ func Get(c *gin.Context) {
 		})
 	}
 
-	// 返回 response
 	SendResponse(c, nil, resp)
 }

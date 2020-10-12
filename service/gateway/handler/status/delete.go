@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -13,11 +12,12 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
-// 需要调用 feed push 和 status delete
-// userid 从 token 获取
+// Delete ... 删除进度
 func Delete(c *gin.Context) {
 	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -39,10 +39,10 @@ func Delete(c *gin.Context) {
 	}
 
 	// 调用 delete
-	_, err2 := service.StatusClient.Delete(context.Background(), &pbs.GetRequest{
+	_, err = service.StatusClient.Delete(context.Background(), &pbs.GetRequest{
 		Id: uint32(sid),
 	})
-	if err2 != nil {
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
@@ -56,7 +56,7 @@ func Delete(c *gin.Context) {
 		UserId: id,
 		Source: &pbf.Source{
 			Kind:        6,
-			Id:          uint32(sid), // 暂时从前端获取
+			Id:          uint32(sid),
 			Name:        req.Title,
 			ProjectId:   0,
 			ProjectName: "",
@@ -64,9 +64,9 @@ func Delete(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
-	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

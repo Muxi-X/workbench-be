@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -13,11 +12,12 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
-// 需要调用 status like
-// userid 从 token 获取
+// Like ... 给 Status 点赞
 func Like(c *gin.Context) {
 	log.Info("Status like function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -45,12 +45,12 @@ func Like(c *gin.Context) {
 	}
 
 	// 调用 like 请求
-	_, err2 := service.StatusClient.Like(context.Background(), &pbs.LikeRequest{
+	_, err = service.StatusClient.Like(context.Background(), &pbs.LikeRequest{
 		Id:     uint32(sid),
 		UserId: uint32(ctx.ID),
 	})
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

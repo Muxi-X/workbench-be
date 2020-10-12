@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -13,11 +12,12 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
-// 需要调用 status create 和 feed push
-// userid 从 token 获取
+// CreateComment ... 评论 Status
 func CreateComment(c *gin.Context) {
 	log.Info("Status createComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -32,34 +32,34 @@ func CreateComment(c *gin.Context) {
 		return
 	}
 
-	// 获取请求
+	// 获取请求体
 	var req createCommentRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 获取 userid
+	// 获取 userId
 	id := c.MustGet("userID").(uint32)
 
-	_, err2 := service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
+	_, err = service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
 		UserId:   id,
 		StatusId: uint32(sid),
 		Content:  req.Content,
 	})
-	if err2 != nil {
+	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 要通过 sid 获取 status 的 title
+	// 通过 sid 获取 status 的 title
 	getReq := &pbs.GetRequest{
 		Id: uint32(sid),
 	}
 
-	getResp, err4 := service.StatusClient.Get(context.Background(), getReq)
-	if err4 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
+	getResp, err := service.StatusClient.Get(context.Background(), getReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -69,7 +69,7 @@ func CreateComment(c *gin.Context) {
 		UserId: id,
 		Source: &pbf.Source{
 			Kind:        6,
-			Id:          uint32(sid), // 暂时从前端获取
+			Id:          uint32(sid),
 			Name:        getResp.Status.Title,
 			ProjectId:   0,
 			ProjectName: "",
@@ -77,9 +77,9 @@ func CreateComment(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err3 := service.FeedClient.Push(context.Background(), pushReq)
-	if err3 != nil {
-		SendError(c, errno.InternalServerError, nil, err3.Error(), GetLine())
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

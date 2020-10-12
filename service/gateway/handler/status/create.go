@@ -3,7 +3,6 @@ package status
 import (
 	"context"
 
-	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -12,10 +11,12 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
-// userid 从 token 获取
+// Create ... 创建进度
 func Create(c *gin.Context) {
 	log.Info("Status create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -59,9 +60,9 @@ func Create(c *gin.Context) {
 	}
 
 	// 向 feed 发送请求
-	_, err2 := service.FeedClient.Push(context.Background(), pushReq)
-	if err2 != nil {
-		SendError(c, errno.InternalServerError, nil, err2.Error(), GetLine())
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

@@ -65,20 +65,18 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	statusRouter := g.Group("api/v1/status")
 	statusRouter.Use(middleware.AuthMiddleware())
 	{
-		statusRouter.GET("/object/:id", status.Get)
+		statusRouter.GET("/detail/:id", status.Get)
 		statusRouter.POST("", status.Create)
-		statusRouter.PUT("/object/:id", status.Update)
-		statusRouter.DELETE("/object/:id", status.Delete)
-		statusRouter.GET("", status.List) // 暂时这样写
-		statusRouter.GET("/user/:uid", status.ListUser)
+		statusRouter.PUT("/detail/:id", status.Update)
+		statusRouter.DELETE("/detail/:id", status.Delete)
+		statusRouter.GET("", status.List)
+		// statusRouter.GET("/user/:uid", status.ListUser)
 
 		// 多了一个筛选 group 的 api
 		statusRouter.GET("/group/:gid", status.ListGroup)
 		statusRouter.PUT("/like/:id", status.Like)
 		statusRouter.POST("/comment/:id", status.CreateComment)
-
-		// 少了一个删除评论 api
-		// statusRouter.DELETE("/:sid/comment", status.DeleteComment)
+		statusRouter.DELETE("/:sid/comment", status.DeleteComment)
 	}
 
 	// project
