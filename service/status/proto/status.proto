@@ -16,6 +16,7 @@ service StatusService {
 
 message GetRequest {
   uint32 id = 1;
+  uint32 uid = 2;
 }
 
 message IdResponse {

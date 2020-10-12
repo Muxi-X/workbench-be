@@ -10,7 +10,7 @@ import (
 
 // Delete ... 删除动态
 func (s *StatusService) Delete(ctx context.Context, req *pb.GetRequest, res *pb.Response) error {
-	err := model.DeleteStatus(req.Id)
+	err := model.DeleteStatus(req.Id, req.Uid)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

@@ -1,6 +1,8 @@
 package model
 
 import (
+	"strconv"
+
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 )
@@ -38,10 +40,10 @@ func (u *StatusModel) Create() error {
 }
 
 // Delete status
-func DeleteStatus(id uint32) error {
+func DeleteStatus(id, uid uint32) error {
 	status := &StatusModel{}
 	status.ID = id
-	return m.DB.Self.Delete(&status).Error
+	return m.DB.Self.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error
 }
 
 // Update status
