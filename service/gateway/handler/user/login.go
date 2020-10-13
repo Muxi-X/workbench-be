@@ -20,7 +20,7 @@ func Login(c *gin.Context) {
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 从前端获取 oauth_code
-	var req loginRequest
+	var req LoginRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -39,7 +39,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	resp := loginResponse{
+	resp := LoginResponse{
 		Token:       loginResp.Token,
 		RedirectURL: loginResp.RedirectUrl,
 	}

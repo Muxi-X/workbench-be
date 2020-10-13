@@ -19,7 +19,7 @@ func UpdateInfo(c *gin.Context) {
 	log.Info("User getInfo function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	var req updateInfoRequest
+	var req UpdateInfoRequest
 	if err := c.BindJSON(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

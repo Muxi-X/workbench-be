@@ -47,7 +47,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	userRouter.Use(middleware.AuthMiddleware())
 	{
 		userRouter.GET("/infos", user.GetInfo)
-		userRouter.GET("/profile", user.GetProfile)
+		userRouter.GET("/profile/:id", user.GetProfile)
 		userRouter.GET("/list", user.List)
 		userRouter.PUT("", user.UpdateInfo)
 	}
@@ -76,7 +76,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		statusRouter.GET("/group/:gid", status.ListGroup)
 		statusRouter.PUT("/like/:id", status.Like)
 		statusRouter.POST("/comment/:id", status.CreateComment)
-		statusRouter.DELETE("/:sid/comment", status.DeleteComment)
+		statusRouter.DELETE("/comment/:id", status.DeleteComment)
 	}
 
 	// project

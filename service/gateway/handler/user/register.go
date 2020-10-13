@@ -19,7 +19,7 @@ func Register(c *gin.Context) {
 	log.Info("User register function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 从前端获取请求
-	var req registerRequest
+	var req RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

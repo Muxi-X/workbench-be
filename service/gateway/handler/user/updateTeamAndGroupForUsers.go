@@ -24,7 +24,7 @@ func UpdateTeamAndGroupForUsers(c *gin.Context) {
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 从前端获取请求
-	var req updateTeamGroupRequest
+	var req UpdateTeamGroupRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

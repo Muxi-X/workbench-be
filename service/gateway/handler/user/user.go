@@ -1,25 +1,25 @@
 package user
 
-type loginRequest struct {
+type LoginRequest struct {
 	OauthCode string `json:"oauth_code"`
 }
 
-type loginResponse struct {
+type LoginResponse struct {
 	Token       string `json:"token"`
 	RedirectURL string `json:"redirect_url"`
 }
 
-type registerRequest struct {
+type RegisterRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Name     string `json:"name" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-type getInfoRequest struct {
+type GetInfoRequest struct {
 	Ids []uint32 `json:"ids" binding:"required"`
 }
 
-type userInfo struct {
+type UserInfo struct {
 	Id        uint32 `json:"id"`
 	Nick      string `json:"nick"`
 	Name      string `json:"name"`
@@ -27,15 +27,15 @@ type userInfo struct {
 	Email     string `json:"email"`
 }
 
-type getInfoResponse struct {
-	List []userInfo `json:"list"`
+type GetInfoResponse struct {
+	List []UserInfo `json:"list"`
 }
 
-type getProfileRequest struct {
+type GetProfileRequest struct {
 	Id uint32 `json:"id"`
 }
 
-type userProfile struct {
+type UserProfile struct {
 	Id     uint32 `josn:"id"`
 	Nick   string `json:"nick"`
 	Name   string `json:"name"`
@@ -47,12 +47,12 @@ type userProfile struct {
 	Group  uint32 `json:"group"`
 }
 
-type listRequest struct {
+type ListRequest struct {
 	Team  uint32 `json:"team"`
 	Group uint32 `json:"group"`
 }
 
-type user struct {
+type User struct {
 	Id     uint32 `json:"id"`
 	Nick   string `json:"nick"`
 	Name   string `json:"name"`
@@ -63,16 +63,16 @@ type user struct {
 	Group  uint32 `json:"group"`
 }
 
-type listResponse struct {
+type ListResponse struct {
 	Count uint32 `json:"count"`
-	List  []user `json:"list"`
+	List  []User `json:"list"`
 }
 
-type updateInfoRequest struct {
-	userInfo
+type UpdateInfoRequest struct {
+	UserInfo
 }
 
-type updateTeamGroupRequest struct {
+type UpdateTeamGroupRequest struct {
 	Ids   []uint32 `json:"ids"`
 	Value uint32   `json:"value"`
 	Kind  uint32   `json:"kind"`
