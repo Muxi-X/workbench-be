@@ -14,7 +14,16 @@ import (
 	"go.uber.org/zap"
 )
 
-// Login 登录 api
+// Login 登录接口
+// @Summary login api
+// @Description login the workbenh
+// @Tags auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param object body LoginRequest false "login_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} LoginResponse
+// @Router /auth/login [post]
 func Login(c *gin.Context) {
 	log.Info("User login function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

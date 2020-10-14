@@ -14,7 +14,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// 暂时不知道 router
 // GetInfo 通过 userid 数组获取对应的 userInfoList
 func GetInfo(c *gin.Context) {
 	log.Info("User getInfo function called.",

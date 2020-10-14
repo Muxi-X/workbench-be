@@ -14,7 +14,16 @@ import (
 	"go.uber.org/zap"
 )
 
-// Register 注册 api
+// register 注册接口
+// @Summary register api
+// @Description register user
+// @Tags auth
+// @Accept  application/json
+// @Produce  application/json
+// @Param object body RegisterRequest false "register_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Router /auth/signup [post]
 func Register(c *gin.Context) {
 	log.Info("User register function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 

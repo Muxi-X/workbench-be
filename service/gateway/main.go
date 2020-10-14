@@ -17,6 +17,10 @@ import (
 	"github.com/spf13/viper"
 
 	"go.uber.org/zap"
+
+	"github.com/swaggo/files"       // swagger embed files
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	_ "muxi-workbench-gateway/docs"
 )
 
 var (
@@ -30,6 +34,16 @@ func init() {
 	service.UserInit()
 }
 
+// @title muxi-workbench-gateway
+// @version 1.0
+// @description The gateway of muxi-workbench
+// @termsOfService http://swagger.io/terms/
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /api/v1
 func main() {
 	pflag.Parse()
 
@@ -50,6 +64,9 @@ func main() {
 
 	// Create the Gin engine.
 	g := gin.New()
+
+	// swagger
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Routes.
 	router.Load(

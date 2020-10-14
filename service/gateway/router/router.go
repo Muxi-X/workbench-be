@@ -46,7 +46,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	userRouter := g.Group("api/v1/user")
 	userRouter.Use(middleware.AuthMiddleware())
 	{
-		userRouter.GET("/infos", user.GetInfo)
+		// userRouter.GET("/infos", user.GetInfo)
 		userRouter.GET("/profile/:id", user.GetProfile)
 		userRouter.GET("/list", user.List)
 		userRouter.PUT("", user.UpdateInfo)

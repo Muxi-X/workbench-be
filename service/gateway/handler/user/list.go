@@ -16,7 +16,16 @@ import (
 )
 
 // List 通过 group 和 team 获取 userlist
-// 通过 param 获取 page last_id
+// @Summary get user_list api
+// @Description 通过 group 和 team 获取 userlist
+// @Tags user
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string false "token 用户令牌"
+// @Param object body ListResponse  false "get_user_list_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} ListResponse
+// @Router /user/list [get]
 func List(c *gin.Context) {
 	log.Info("User getInfo function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
