@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -15,12 +16,29 @@ import (
 )
 
 // GetProfile 通过 userid 获取完整 user 信息
+// @Summary get user_profile api
+// @Description 通过 userid 获取完整 user 信息
+// @Tags user
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string false "token 用户令牌"
+// @Param object body GetProfileRequest  false "get_profile_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} UserProfile
+// @Router /user/profile/:id [get]
 func GetProfile(c *gin.Context) {
 	log.Info("User getInfo function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	id := c.MustGet("userID").(uint32)
+	var id int
+	var err error
 
-	getProfileReq := &pb.GetRequest{Id: id}
+	id, err = strconv.Atoi(c.Param("id"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
+	getProfileReq := &pb.GetRequest{Id: uint32(id)}
 
 	// 发送请求
 	getProfileResp, err := service.UserClient.GetProfile(context.Background(), getProfileReq)
@@ -31,7 +49,7 @@ func GetProfile(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	resp := userProfile{
+	resp := UserProfile{
 		Id:     getProfileResp.Id,
 		Nick:   getProfileResp.Nick,
 		Name:   getProfileResp.Name,

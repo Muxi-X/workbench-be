@@ -1,0 +1,242 @@
+basePath: /api/v1
+definitions:
+  handler.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+  user.GetProfileRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  user.ListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/user.User'
+        type: array
+    type: object
+  user.LoginRequest:
+    properties:
+      oauth_code:
+        type: string
+    type: object
+  user.LoginResponse:
+    properties:
+      redirect_url:
+        type: string
+      token:
+        type: string
+    type: object
+  user.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  user.UpdateInfoRequest:
+    properties:
+      avatar_url:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nick:
+        type: string
+    type: object
+  user.User:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      nick:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
+    type: object
+  user.UserProfile:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      nick:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
+      tel:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: The gateway of muxi-workbench
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: muxi-workbench-gateway
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login the workbenh
+      parameters:
+      - description: login_request
+        in: body
+        name: object
+        schema:
+          $ref: '#/definitions/user.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.LoginResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: login api
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: register user
+      parameters:
+      - description: register_request
+        in: body
+        name: object
+        schema:
+          $ref: '#/definitions/user.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: register api
+      tags:
+      - auth
+  /user:
+    put:
+      consumes:
+      - application/json
+      description: 修改用户个人信息
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: update_info_request
+        in: body
+        name: object
+        schema:
+          $ref: '#/definitions/user.UpdateInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update info api
+      tags:
+      - user
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      description: 通过 group 和 team 获取 userlist
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: get_user_list_request
+        in: body
+        name: object
+        schema:
+          $ref: '#/definitions/user.ListResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.ListResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: get user_list api
+      tags:
+      - user
+  /user/profile/:id:
+    get:
+      consumes:
+      - application/json
+      description: 通过 userid 获取完整 user 信息
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        type: string
+      - description: get_profile_request
+        in: body
+        name: object
+        schema:
+          $ref: '#/definitions/user.GetProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserProfile'
+      security:
+      - ApiKeyAuth: []
+      summary: get user_profile api
+      tags:
+      - user
+swagger: "2.0"

@@ -16,7 +16,16 @@ import (
 )
 
 // List 通过 group 和 team 获取 userlist
-// 通过 param 获取 page last_id
+// @Summary get user_list api
+// @Description 通过 group 和 team 获取 userlist
+// @Tags user
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string false "token 用户令牌"
+// @Param object body ListResponse  false "get_user_list_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} ListResponse
+// @Router /user/list [get]
 func List(c *gin.Context) {
 	log.Info("User getInfo function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
@@ -35,15 +44,21 @@ func List(c *gin.Context) {
 	}
 
 	// 获取 group 和 team
-	var req listRequest
+	var req ListRequest
 	if err := c.BindJSON(&req); err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
+	lastId, err := strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 构造请求给 list
 	listReq := &pb.ListRequest{
-		LastId: 0,
+		LastId: uint32(lastId),
 		Offset: uint32(page * limit),
 		Limit:  uint32(limit),
 		Team:   req.Team,
@@ -58,9 +73,9 @@ func List(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	var resp = &listResponse{Count: listResp.Count}
+	var resp = &ListResponse{Count: listResp.Count}
 	for _, item := range listResp.List {
-		resp.List = append(resp.List, user{
+		resp.List = append(resp.List, User{
 			Id:     item.Id,
 			Nick:   item.Nick,
 			Name:   item.Name,

@@ -14,12 +14,22 @@ import (
 	"go.uber.org/zap"
 )
 
-// UpdateInfo ... 修改用户个人信息
+// UpdateInfo 修改用户个人信息
+// @Summary update info api
+// @Description 修改用户个人信息
+// @Tags user
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string false "token 用户令牌"
+// @Param object body UpdateInfoRequest  false "update_info_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Router /user [put]
 func UpdateInfo(c *gin.Context) {
 	log.Info("User getInfo function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	var req updateInfoRequest
+	var req UpdateInfoRequest
 	if err := c.BindJSON(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

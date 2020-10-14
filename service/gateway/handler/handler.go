@@ -14,6 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
+// Response 请求响应
 type Response struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`

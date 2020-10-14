@@ -24,7 +24,6 @@ func (s *UserService) UpdateInfo(ctx context.Context, req *pb.UpdateInfoRequest,
 	user.Name = req.Info.Nick
 	user.RealName = req.Info.Name
 	user.Avatar = req.Info.AvatarUrl
-	user.Email = req.Info.Email
 
 	fmt.Println(user, "---", req.Info)
 

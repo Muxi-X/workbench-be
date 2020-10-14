@@ -14,21 +14,20 @@ import (
 	"go.uber.org/zap"
 )
 
-// 暂时不知道 router
 // GetInfo 通过 userid 数组获取对应的 userInfoList
 func GetInfo(c *gin.Context) {
 	log.Info("User getInfo function called.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 从前端获取 Ids
-	var req getInfoRequest
+	var req GetInfoRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	if len(req.Ids) == 0 {
-		SendResponse(c, nil, &getInfoResponse{})
+		SendResponse(c, nil, &GetInfoResponse{})
 		return
 	}
 
@@ -46,9 +45,9 @@ func GetInfo(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	var resp getInfoResponse
+	var resp GetInfoResponse
 	for _, item := range getInfoResp.List {
-		resp.List = append(resp.List, userInfo{
+		resp.List = append(resp.List, UserInfo{
 			Id:        item.Id,
 			Nick:      item.Nick,
 			Name:      item.Name,
