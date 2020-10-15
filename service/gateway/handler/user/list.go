@@ -15,14 +15,16 @@ import (
 	"go.uber.org/zap"
 )
 
-// List 通过 group 和 team 获取 userlist
+// List ... 获取 userlist
 // @Summary get user_list api
 // @Description 通过 group 和 team 获取 userlist
 // @Tags user
 // @Accept  application/json
 // @Produce  application/json
+// @Param limit query string false "limit"
+// @Param page query string false "page"
 // @Param Authorization header string false "token 用户令牌"
-// @Param object body ListResponse  false "get_user_list_request"
+// @Param object body ListRequest  false "get_user_list_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} ListResponse
 // @Router /user/list [get]
