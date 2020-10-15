@@ -170,6 +170,18 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "token 用户令牌",
                         "name": "Authorization",
                         "in": "header"
@@ -179,7 +191,7 @@ var doc = `{
                         "name": "object",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/user.ListResponse"
+                            "$ref": "#/definitions/user.ListRequest"
                         }
                     }
                 ],
@@ -193,7 +205,7 @@ var doc = `{
                 }
             }
         },
-        "/user/profile/:id": {
+        "/user/profile/{id}": {
             "get": {
                 "security": [
                     {
@@ -212,6 +224,13 @@ var doc = `{
                 ],
                 "summary": "get user_profile api",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "token 用户令牌",
@@ -257,6 +276,17 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.ListRequest": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "type": "integer"
+                },
+                "team": {
                     "type": "integer"
                 }
             }

@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Login 登录接口
+// Login ... 登录
 // @Summary login api
 // @Description login the workbenh
 // @Tags auth
