@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// AuthMiddleware ... 认证中间件
 // limit 为限制的权限等级
 func AuthMiddleware(limit uint32) gin.HandlerFunc {
 	return func(c *gin.Context) {

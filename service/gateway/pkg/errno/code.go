@@ -5,6 +5,8 @@ var (
 	OK                  = &Errno{Code: 0, Message: "OK"}
 	InternalServerError = &Errno{Code: 10001, Message: "Internal server error"}
 	ErrBind             = &Errno{Code: 10002, Message: "Error occurred while binding the request body to the struct."}
+	ErrQuery            = &Errno{Code: 10003, Message: "Error occurred while getting url queries."}
+	ErrPathParam        = &Errno{Code: 10004, Message: "Error occurred while getting path param."}
 
 	ErrValidation = &Errno{Code: 20001, Message: "Validation failed."}
 	ErrDatabase   = &Errno{Code: 20002, Message: "Database error."}
@@ -17,13 +19,13 @@ var (
 	ErrUserNotFound      = &Errno{Code: 20201, Message: "The user was not found."}
 	ErrPasswordIncorrect = &Errno{Code: 20202, Message: "The password was incorrect."}
 
+	// feed errors
+	ErrFeedList = &Errno{Code: 20301, Message: "Error occurred while getting feed list."}
+
 	// status errors
 	// ...
 
 	// project errors
-	// ...
-
-	// feed errors
 	// ...
 
 	// team errors

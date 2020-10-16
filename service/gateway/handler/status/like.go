@@ -17,16 +17,12 @@ import (
 
 // Like ... 给 Status 点赞
 func Like(c *gin.Context) {
-	log.Info("Status like function call",
-		zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("Status like function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取sid
-	var sid int
-	var err error
-
-	sid, err = strconv.Atoi(c.Param("id"))
+	sid, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 

@@ -15,46 +15,39 @@ import (
 	"go.uber.org/zap"
 )
 
-// Feed 的 ListGroup 接口
+// ListGroup list feeds filtered by group id.
+// 0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
 func ListGroup(c *gin.Context) {
-	log.Info("Feed listGroup function called.",
-		zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("Feed listGroup function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 groupId
 	groupId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "50"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	lastId, err := strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 获取 role
-	// TO DO: 从 Authorization 获取或从 user-service 获取
-	var req ListRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
-
-	// 获取 userid
-	id := c.MustGet("userID").(uint32)
+	// 获取 userId 和 role
+	userId := c.MustGet("userID").(uint32)
+	role := c.MustGet("role").(uint32)
 
 	listReq := &pb.ListRequest{
 		LastId: uint32(lastId),
 		Limit:  uint32(limit),
-		Role:   req.Role,
-		UserId: id,
+		Role:   role,
+		UserId: userId,
 		Filter: &pb.Filter{
 			UserId:  0,
 			GroupId: uint32(groupId),
@@ -63,7 +56,7 @@ func ListGroup(c *gin.Context) {
 
 	listResp, err := service.FeedClient.List(context.Background(), listReq)
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+		SendError(c, errno.ErrFeedList, nil, err.Error(), GetLine())
 		return
 	}
 
