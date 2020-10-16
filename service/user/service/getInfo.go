@@ -19,8 +19,7 @@ func (s *UserService) GetInfo(ctx context.Context, req *pb.GetInfoRequest, res *
 
 	userInfos := make([]*pb.UserInfo, 0)
 
-	for index := 0; index < len(list); index++ {
-		user := list[index]
+	for _, user := range list {
 		userInfos = append(userInfos, &pb.UserInfo{
 			Id:        user.ID,
 			Nick:      user.Name,
