@@ -32,7 +32,7 @@ func Delete(c *gin.Context) {
 	}
 
 	// 获取请求
-	var req deleteRequest
+	var req DeleteRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

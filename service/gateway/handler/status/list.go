@@ -21,6 +21,8 @@ func List(c *gin.Context) {
 	log.Info("Status list function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	var uid int
+	var group int
 	var limit int
 	var lastID int
 	var page int
@@ -44,13 +46,26 @@ func List(c *gin.Context) {
 		return
 	}
 
+	// 获取 gid
+	group, err = strconv.Atoi(c.DefaultQuery("group", "0"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
+	// 获取 uid
+	uid, err = strconv.Atoi(c.DefaultQuery("uid", "0"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
 		Lastid: uint32(lastID),
 		Offset: uint32(page * limit),
 		Limit:  uint32(limit),
-		Group:  0, // 这里传 URL 里面获取的 group 参数，DefaultQuery("group", "0")
-		Uid:    0, // 这里传 URL 里面获取的 group 参数，DefaultQuery("uid", "0")
+		Group:  uint32(group), // 这里传 URL 里面获取的 group 参数，DefaultQuery("group", "0")
+		Uid:    uint32(uid),   // 这里传 URL 里面获取的 group 参数，DefaultQuery("uid", "0")
 	}
 
 	listResp, err := service.StatusClient.List(context.Background(), listReq)
@@ -59,9 +74,9 @@ func List(c *gin.Context) {
 		return
 	}
 
-	var resp listResponse
+	var resp ListResponse
 	for i := 0; i < len(listResp.List); i++ {
-		resp.Status = append(resp.Status, status{
+		resp.Status = append(resp.Status, Status{
 			Id:       listResp.List[i].Id,
 			Title:    listResp.List[i].Title,
 			Content:  listResp.List[i].Content,

@@ -33,7 +33,7 @@ func CreateComment(c *gin.Context) {
 	}
 
 	// 获取请求体
-	var req createCommentRequest
+	var req CreateCommentRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

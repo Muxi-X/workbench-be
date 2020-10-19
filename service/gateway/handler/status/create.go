@@ -22,7 +22,7 @@ func Create(c *gin.Context) {
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获得请求
-	var req createRequest
+	var req CreateRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -39,7 +39,7 @@ func Create(c *gin.Context) {
 	}
 
 	// 向创建进度服务发送请求
-	_, err := service.StatusClient.Create(context.Background(), createReq)
+	createResp, err := service.StatusClient.Create(context.Background(), createReq)
 
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -52,7 +52,7 @@ func Create(c *gin.Context) {
 		UserId: id,
 		Source: &pbf.Source{
 			Kind:        6,
-			Id:          req.Statusid, // 暂时从前端获取
+			Id:          createResp.Id,
 			Name:        req.Title,
 			ProjectId:   0,
 			ProjectName: "",

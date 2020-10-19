@@ -33,7 +33,7 @@ func Update(c *gin.Context) {
 	}
 
 	// 获取请求体
-	var req updateRequest
+	var req UpdateRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

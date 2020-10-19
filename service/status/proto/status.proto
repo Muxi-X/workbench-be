@@ -5,7 +5,7 @@ package status;
 service StatusService {
   rpc Get(GetRequest) returns (GetResponse) {}
   rpc List(ListRequest) returns (ListResponse) {}
-  rpc Create(CreateRequest) returns (Response) {}
+  rpc Create(CreateRequest) returns (IdResponse) {}
   rpc Update(UpdateRequest) returns (Response) {}
   rpc Delete(GetRequest) returns (Response) {}
   rpc Like(LikeRequest) returns (Response) {}
