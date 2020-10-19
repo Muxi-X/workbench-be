@@ -18,6 +18,7 @@ type CommentListResponse struct {
 	Count       uint32    `json:"count"`
 	CommentList []Comment `json:"commentlist"`
 }
+
 type GetResponse struct {
 	Sid      uint32 `json:"sid"`
 	Title    string `json:"title"`
@@ -41,7 +42,7 @@ type Status struct {
 	Id       uint32 `json:"id"`
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	UserId   uint32 `json:"userid"`
+	UserId   uint32 `json:"user_id"`
 	Time     string `json:"time"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`

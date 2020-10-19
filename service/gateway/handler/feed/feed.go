@@ -1,10 +1,5 @@
 package feed
 
-// TO DO：不需要，role 从 Authorization 获取 或 从 user-service 获取
-type ListRequest struct {
-	Role uint32 `json:"role"`
-}
-
 type User struct {
 	Name      string `json:"name"`
 	Id        uint32 `json:"id"`
@@ -12,11 +7,11 @@ type User struct {
 }
 
 type Source struct {
-	Kind        uint32 `json:"kind"`
+	Kind        uint32 `json:"kind"` // 类型，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
 	Id          uint32 `json:"id"`
 	Name        string `json:"name"`
-	ProjectId   uint32 `json:"projectid"`
-	ProjectName string `json:"projectname"`
+	ProjectId   uint32 `json:"project_id"`
+	ProjectName string `json:"project_name"`
 }
 
 type FeedItem struct {

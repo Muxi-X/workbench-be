@@ -19,7 +19,6 @@ func SubServiceRun() {
 		if err := json.Unmarshal([]byte(msg.Payload), feed); err != nil {
 			panic(err)
 		}
-		//fmt.Println(feed)
 
 		if err := feed.Create(); err != nil {
 			logger.Error(err.Error())
