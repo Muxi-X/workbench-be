@@ -26,7 +26,7 @@ func GetStatusLikeRecord(userID, statusID uint32) (*UserToStatusModel, error) {
 
 func GetStatusLikeRecordForUser(userID uint32) ([]*UserToStatusModel, error) {
 	statusLikeList := make([]*UserToStatusModel, 0)
-	d := m.DB.Self.Table("user2status").Where("user_id = ?", userID).Scan(&statusLikeList)
+	d := m.DB.Self.Table("user2status").Where("user_id = ?", userID).Scan(&statusLikeList).Order("staus_id desc")
 	return statusLikeList, d.Error
 }
 
