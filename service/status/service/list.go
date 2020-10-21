@@ -17,7 +17,12 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	statusLikeList, err := model.GetStatusLikeRecordForUser(req.UserId)
+	var scope []int
+	for i := 0; i < len(list); i++ {
+		scope = append(scope, int(list[i].ID))
+	}
+
+	statusLikeList, err := model.GetStatusLikeRecordForUser(req.UserId, scope)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
