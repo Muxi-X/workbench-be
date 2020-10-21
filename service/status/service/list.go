@@ -41,9 +41,11 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 				if j+1 < listLen {
 					statusLikeList = append(statusLikeList[:j], statusLikeList[j+1:]...)
 					listLen--
+					j--
 				} else {
 					statusLikeList = statusLikeList[:j]
 					listLen--
+					j--
 				}
 				break
 			}
