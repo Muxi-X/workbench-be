@@ -59,7 +59,7 @@ func GetStatus(id uint32) (*StatusModel, error) {
 }
 
 // ListStatus list all status
-func ListStatus(groupID, offset, limit, lastID uint32, filter *StatusModel) ([]*StatusListItem, uint64, error) {
+func ListStatus(groupID, teamID, offset, limit, lastID uint32, filter *StatusModel) ([]*StatusListItem, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
@@ -70,6 +70,10 @@ func ListStatus(groupID, offset, limit, lastID uint32, filter *StatusModel) ([]*
 
 	if lastID != 0 {
 		query = query.Where("status.id < ?", lastID)
+	}
+
+	if teamID != 0 {
+		query = query.Where("users.team_id = ?", teamID)
 	}
 
 	if groupID != 0 {

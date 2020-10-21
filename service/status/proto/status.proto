@@ -40,6 +40,8 @@ message ListRequest {
   uint32 limit = 3;
   uint32 group = 4;
   uint32 uid = 5;
+  uint32 team = 6;
+  uint32 user_id = 7;
 }
 
 message ListResponse {
@@ -86,6 +88,7 @@ message Status {
   string time = 5;
   string avatar = 6;
   string user_name = 7;
+  uint32 if_like = 8;
 }
 
 

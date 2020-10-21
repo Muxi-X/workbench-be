@@ -46,6 +46,7 @@ type Status struct {
 	Time     string `json:"time"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`
+	IfLike   uint32 `json:"if_like"`
 }
 
 type ListResponse struct {

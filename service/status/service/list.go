@@ -10,10 +10,14 @@ import (
 
 // List ... 动态列表
 func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
-
-	list, count, err := model.ListStatus(req.Group, req.Offset, req.Limit, req.Lastid, &model.StatusModel{
+	list, count, err := model.ListStatus(req.Group, req.Team, req.Offset, req.Limit, req.Lastid, &model.StatusModel{
 		UserID: req.Uid,
 	})
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	statusLikeList, err := model.GetStatusLikeRecordForUser(req.UserId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
@@ -30,6 +34,12 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 			Avatar:   item.Avatar,
 			UserName: item.UserName,
 		})
+		for j := 0; j < len(statusLikeList); j++ {
+			if statusLikeList[j].StatusID == item.ID {
+				resList[index].IfLike = 1
+				break // 删除此时节点
+			}
+		}
 	}
 
 	res.Count = uint32(count)

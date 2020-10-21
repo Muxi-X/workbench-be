@@ -21,6 +21,8 @@ func List(c *gin.Context) {
 	log.Info("Status list function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	var teamID uint32
+	var team int
 	var uid int
 	var group int
 	var limit int
@@ -59,6 +61,21 @@ func List(c *gin.Context) {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
+
+	// 获取是否筛选 team
+	team, err = strconv.Atoi(c.DefaultQuery("team", "0"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
+	if team == 1 {
+		// 还要获取用户 teamid
+		teamID = c.MustGet("TeamID").(uint32)
+	}
+
+	userID := c.MustGet("UserID").(uint32)
+
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
 		Lastid: uint32(lastID),
@@ -66,6 +83,8 @@ func List(c *gin.Context) {
 		Limit:  uint32(limit),
 		Group:  uint32(group), // 这里传 URL 里面获取的 group 参数，DefaultQuery("group", "0")
 		Uid:    uint32(uid),   // 这里传 URL 里面获取的 group 参数，DefaultQuery("uid", "0")
+		Team:   teamID,
+		UserId: userID,
 	}
 
 	listResp, err := service.StatusClient.List(context.Background(), listReq)
@@ -84,6 +103,7 @@ func List(c *gin.Context) {
 			Time:     listResp.List[i].Time,
 			Avatar:   listResp.List[i].Avatar,
 			Username: listResp.List[i].UserName,
+			IfLike:   listResp.List[i].IfLike,
 		})
 	}
 	resp.Count = listResp.Count

@@ -14,6 +14,14 @@ CREATE TABLE `status` (
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
+DROP TABLE IF EXISTS `statuslike`;
+CREATE TABLE `statuslike` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`user_id` int(11) DEFAULT NULL,
+	`status_id` int(11) DEFAULT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
 -- ----------------------------
 -- Table structure for users
 -- ----------------------------
