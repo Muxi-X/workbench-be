@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	m "muxi-workbench/model"
 	"strconv"
 )
@@ -32,7 +33,8 @@ func DeleteStatusLikeRecord(userID, statusID, ID uint32) error {
 }
 
 func GetStatusLikeRecordForUser(userID uint32) ([]*StatusLikeModel, error) {
+	fmt.Println("hello")
 	statusLikeList := make([]*StatusLikeModel, 0)
-	d := m.DB.Self.Table("status").Where("user_id = ?", userID).Find(&statusLikeList)
+	d := m.DB.Self.Table("statuslike").Where("user_id = ?", userID).Scan(&statusLikeList)
 	return statusLikeList, d.Error
 }

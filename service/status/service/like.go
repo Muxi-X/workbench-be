@@ -11,9 +11,15 @@ import (
 // Like ... 点赞动态
 func (s *StatusService) Like(ctx context.Context, req *pb.LikeRequest, res *pb.Response) error {
 
+	var notFound int
+
 	record, err := model.GetStatusLikeRecord(req.UserId, req.Id)
 	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
+		if err.Error() == "record not found" {
+			notFound = 1
+		} else {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
 	}
 
 	status, err := model.GetStatus(req.Id)
@@ -21,7 +27,7 @@ func (s *StatusService) Like(ctx context.Context, req *pb.LikeRequest, res *pb.R
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	if record.ID == 0 {
+	if notFound == 1 {
 		status.Like = status.Like + 1
 		record.UserID = req.UserId
 		record.StatusID = req.Id
