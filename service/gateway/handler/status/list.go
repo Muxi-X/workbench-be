@@ -99,7 +99,6 @@ func List(c *gin.Context) {
 			Id:       listResp.List[i].Id,
 			Title:    listResp.List[i].Title,
 			Content:  listResp.List[i].Content,
-			UserId:   listResp.List[i].UserId,
 			Time:     listResp.List[i].Time,
 			Avatar:   listResp.List[i].Avatar,
 			Username: listResp.List[i].UserName,

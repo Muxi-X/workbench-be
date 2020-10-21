@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Create create new status
+// Create ... create new status
 func Create(c *gin.Context) {
 	log.Info("Status create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
