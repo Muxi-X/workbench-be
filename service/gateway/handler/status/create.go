@@ -37,9 +37,8 @@ func Create(c *gin.Context) {
 		UserId:  userId,
 	}
 
-	// 向创建进度服务发送请求
+	// 向创建进度发起请求
 	createResp, err := service.StatusClient.Create(context.Background(), createReq)
-
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
