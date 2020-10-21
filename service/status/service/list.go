@@ -37,7 +37,7 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 		listLen := len(statusLikeList)
 		for j := 0; j < listLen; j++ {
 			if statusLikeList[j].StatusID == item.ID {
-				resList[index].IfLike = 1
+				resList[index].Liked = 1
 				if j+1 < listLen {
 					statusLikeList = append(statusLikeList[:j], statusLikeList[j+1:]...)
 					listLen--

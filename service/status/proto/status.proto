@@ -88,7 +88,7 @@ message Status {
   string time = 5;
   string avatar = 6;
   string user_name = 7;
-  uint32 if_like = 8;
+  uint32 liked = 8;
 }
 
 

@@ -102,7 +102,7 @@ func List(c *gin.Context) {
 			Time:     listResp.List[i].Time,
 			Avatar:   listResp.List[i].Avatar,
 			Username: listResp.List[i].UserName,
-			IfLike:   listResp.List[i].IfLike,
+			Liked:    listResp.List[i].Liked,
 		})
 	}
 	resp.Count = listResp.Count
