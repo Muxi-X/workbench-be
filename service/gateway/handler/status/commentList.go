@@ -16,7 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CommentList ... 获取动态详情
+// CommentList ... 获取评论
 func CommentList(c *gin.Context) {
 	log.Info("Status commentList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
