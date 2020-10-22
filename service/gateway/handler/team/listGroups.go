@@ -20,13 +20,6 @@ func GetGroupList(c *gin.Context) {
 	log.Info("Group list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取请求
-	var req updateGroupInfo
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
-
 	var limit int
 	var page int
 	var err error

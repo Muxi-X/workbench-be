@@ -14,7 +14,7 @@ require (
 	github.com/micro/go-plugins v1.5.1
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/smartystreets/goconvey v1.6.4
-	github.com/spf13/viper v1.7.0
+	github.com/spf13/viper v1.7.1
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	github.com/ugorji/go v1.1.4 // indirect
 	github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77 // indirect

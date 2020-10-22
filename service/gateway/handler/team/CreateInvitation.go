@@ -15,36 +15,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// CreateGroup 创建组别
-func CreateGroup(c *gin.Context) {
-	log.Info("Group create function call.",
+// CreateInvitation 创建团队邀请码
+func CreateInvitation(c *gin.Context) {
+	log.Info("CreateInvitation function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req createGroupRequest
+	var req createInvitationRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN || req.Role != ADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
+	createInvitationReq := &tpb.CreateInvitationRequest{
+		TeamId:  req.TeamID,
+		Expired: req.Expired,
 	}
 
-	// 构造 createGroup 请求
-	createGroupReq := &tpb.CreateGroupRequest{
-		GroupName: req.GroupName,
-		UserList:  req.UserIDs,
-	}
-
-	// 向 CreateGroup 服务发送请求
-	_, err := service.TeamClient.CreateGroup(context.Background(), createGroupReq)
+	// 向 CreateInvitation 服务发送请求
+	CreateInvitationResp, err := service.TeamClient.CreateInvitation(context.Background(), createInvitationReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	SendResponse(c, errno.OK, nil)
+	var resp createInvitationResponse
+	resp.Hash = CreateInvitationResp.Hash
+
+	SendResponse(c, nil, resp)
 }

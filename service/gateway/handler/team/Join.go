@@ -10,36 +10,31 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+
+	"github.com/gin-gonic/gin"
 )
 
-// UpdateMembersForGroup 更新组别内成员
-func UpdateMembersForGroup(c *gin.Context) {
-	log.Info("Members Update in Group function call.",
+// Join 加入团队
+func Join(c *gin.Context) {
+	log.Info("Join team function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req updateMembersRequest
+	var req joinRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN || req.Role != ADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
-	}
-
-	// 构造 updateMembers 请求
-	updateMembersReq := &tpb.UpdateMembersRequest{
-		GroupId:  req.GroupID,
+	// 构造 join 请求
+	joinReq := &tpb.JoinRequest{
 		UserList: req.UserList,
+		TeamId:   req.TeamID,
 	}
 
-	// 向 UpdateMembersForGroup 服务发送请求
-	_, err := service.TeamClient.UpdateMembersForGroup(context.Background(), updateMembersReq)
+	// 向 Join 服务发送请求
+	_, err := service.TeamClient.Join(context.Background(), joinReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

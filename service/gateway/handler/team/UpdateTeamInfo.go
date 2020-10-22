@@ -10,17 +10,18 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+
+	"github.com/gin-gonic/gin"
 )
 
-// UpdateGroupInfo 更新组别内信息
-func UpdateGroupInfo(c *gin.Context) {
-	log.Info("GroupInfo Update function call.",
+// UpdateTeamInfo 更新团队信息
+func UpdateTeamInfo(c *gin.Context) {
+	log.Info("UpdateTeamInfo function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req updateGroupInfoRequest
+	var req updateTeamInfoRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -32,14 +33,14 @@ func UpdateGroupInfo(c *gin.Context) {
 		return
 	}
 
-	// 构造 updateGroupInfo 请求
-	updateGroupInfoReq := &tpb.UpdateGroupInfoRequest{
-		GroupId: req.GroupID,
-		NewName: req.NewGroupName,
+	// 构造 UpdateTeamInfo 请求
+	updateTeamInfoReq := &tpb.UpdateTeamInfoRequest{
+		TeamId:  req.TeamID,
+		NewName: req.NewName,
 	}
 
-	// 向 UpdateGroupInfo 服务发送请求
-	_, err := service.TeamClient.UpdateGroupInfo(context.Background(), updateGroupInfoReq)
+	// 向 UpdateTeamInfo 服务发送请求
+	_, err := service.TeamClient.UpdateTeamInfo(context.Background(), updateTeamInfoReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

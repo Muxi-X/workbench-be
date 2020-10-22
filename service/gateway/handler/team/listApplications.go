@@ -15,23 +15,23 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetMemberList 获取组别内成员列表
-func GetMemberList(c *gin.Context) {
-	log.Info("Member List function call.",
+// GetApplications 获取申请列表
+func GetApplications(c *gin.Context) {
+	log.Info("Applications list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	var limit int
-	var groupID int
-	var page int
-	var err error
-
-	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
-	if err != nil {
+	// 获取请求
+	var req updateGroupInfoRequest
+	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	groupID, err = strconv.Atoi(c.DefaultQuery("group_id", "0"))
+	var limit int
+	var page int
+	var err error
+
+	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -43,32 +43,26 @@ func GetMemberList(c *gin.Context) {
 		return
 	}
 
-	// 构造 MemberList 请求
-	MemberListReq := &tpb.MemberListRequest{
-		GroupId:    uint32(groupID),
+	// 构造 ApplicationList 请求
+	ApplicationListReq := &tpb.ApplicationListRequest{
 		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
 		Pagination: false,
 	}
 
-	// 向 GetMemberList 服务发送请求
-	listResp, err := service.TeamClient.GetMemberList(context.Background(), MemberListReq)
+	// 向 GetApplications 服务发送请求
+	listResp, err := service.TeamClient.GetApplications(context.Background(), ApplicationListReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造返回 response
-	var resp memberListResponse
+	var resp applicationListResponse
 	for i := 0; i < len(listResp.List); i++ {
-		resp.Members = append(resp.Members, member{
-			ID:        listResp.List[i].Id,
-			Name:      listResp.List[i].Name,
-			TeamID:    listResp.List[i].TeamId,
-			GroupID:   listResp.List[i].GroupId,
-			GroupName: listResp.List[i].GroupName,
-			Email:     listResp.List[i].Email,
-			Avatar:    listResp.List[i].Avatar,
+		resp.ApplyList = append(resp.ApplyList, applyUserItem{
+			ID:    listResp.List[i].Id,
+			Name:  listResp.List[i].Name,
+			Email: listResp.List[i].Email,
 		})
 	}
 	resp.Count = listResp.Count
