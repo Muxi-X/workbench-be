@@ -25,7 +25,7 @@ func CreateComment(c *gin.Context) {
 	// 获取 statusId
 	statusId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 

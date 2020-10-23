@@ -30,26 +30,26 @@ func CommentList(c *gin.Context) {
 
 	sid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -58,7 +58,7 @@ func CommentList(c *gin.Context) {
 		StatusId: uint32(sid),
 		Offset:   uint32(page * limit),
 		Limit:    uint32(limit),
-		Lastid:   uint32(lastId),
+		LastId:   uint32(lastId),
 	}
 
 	listComResp, err := service.StatusClient.ListComment(context.Background(), listComReq)
@@ -72,14 +72,14 @@ func CommentList(c *gin.Context) {
 		Count: listComResp.Count,
 	}
 
-	for i := 0; i < len(listComResp.List); i++ {
+	for _, item := range listComResp.List {
 		resp.CommentList = append(resp.CommentList, Comment{
-			Cid:      listComResp.List[i].Id,
-			Uid:      listComResp.List[i].UserId,
-			Username: listComResp.List[i].UserName,
-			Avatar:   listComResp.List[i].Avatar,
-			Time:     listComResp.List[i].Time,
-			Content:  listComResp.List[i].Content,
+			Cid:      item.Id,
+			Uid:      item.UserId,
+			Username: item.UserName,
+			Avatar:   item.Avatar,
+			Time:     item.Time,
+			Content:  item.Content,
 		})
 	}
 

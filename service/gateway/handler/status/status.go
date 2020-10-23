@@ -43,7 +43,7 @@ type Status struct {
 	Time     string `json:"time"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`
-	Liked    uint32 `json:"liked"`
+	Liked    bool   `json:"liked"`
 }
 
 type ListResponse struct {

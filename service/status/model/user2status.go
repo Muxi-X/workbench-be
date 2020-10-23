@@ -1,8 +1,6 @@
 package model
 
 import (
-	"strconv"
-
 	m "muxi-workbench/model"
 
 	"github.com/jinzhu/gorm"
@@ -68,8 +66,7 @@ func CancelStatusLike(db *gorm.DB, u *UserToStatusModel, m *StatusModel) error {
 	}
 
 	record := &UserToStatusModel{}
-	record.ID = u.ID
-	if err := tx.Where("user_id = ? AND status_id = ?", strconv.Itoa(int(u.StatusID)), strconv.Itoa(int(u.UserID))).Delete(&record).Error; err != nil {
+	if err := tx.Where("user_id = ? AND status_id = ?", int(u.UserID), int(u.StatusID)).Delete(&record).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

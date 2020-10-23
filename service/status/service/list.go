@@ -10,7 +10,7 @@ import (
 
 // List ... 动态列表
 func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
-	list, count, err := model.ListStatus(req.Group, req.Team, req.Offset, req.Limit, req.Lastid, &model.StatusModel{
+	list, count, err := model.ListStatus(req.Group, req.Team, req.Offset, req.Limit, req.LastId, &model.StatusModel{
 		UserID: req.Uid,
 	})
 	if err != nil {
@@ -48,7 +48,7 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 				Time:     item.Time,
 				Avatar:   item.Avatar,
 				UserName: item.UserName,
-				Liked:    uint32(1),
+				Liked:    true,
 			})
 			i++
 			j++
@@ -63,7 +63,7 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 				Time:     item.Time,
 				Avatar:   item.Avatar,
 				UserName: item.UserName,
-				Liked:    uint32(0),
+				Liked:    false,
 			})
 			i++ // 索引 i 往后走，j 等待目标
 			continue
@@ -81,7 +81,7 @@ func (s *StatusService) List(ctx context.Context, req *pb.ListRequest, res *pb.L
 				Time:     item.Time,
 				Avatar:   item.Avatar,
 				UserName: item.UserName,
-				Liked:    uint32(0),
+				Liked:    false,
 			})
 			i++
 		}
