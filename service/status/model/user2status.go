@@ -16,11 +16,10 @@ func (c *UserToStatusModel) TableName() string {
 	return "user2status"
 }
 
-/*func GetStatusLikeRecord(userID, statusID uint32) (*UserToStatusModel, error) {
-	record := &UserToStatusModel{}
-	d := m.DB.Self.Table("user2status").Where("user_id = ? AND status_id = ?", userID, statusID).First(&record)
-	return record, d.Error
-}*/
+func GetStatusLikeRecord(userID, statusID uint32) error {
+	d := m.DB.Self.Table("user2status").Where("user_id = ? AND status_id = ?", userID, statusID).First(&UserToStatusModel{})
+	return d.Error
+}
 
 func GetStatusLikeRecordForUser(userID uint32, scope []int) ([]*UserToStatusModel, error) {
 	statusLikeList := make([]*UserToStatusModel, 0)
