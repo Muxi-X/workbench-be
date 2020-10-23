@@ -16,11 +16,11 @@ func (c *UserToStatusModel) TableName() string {
 	return "user2status"
 }
 
-func GetStatusLikeRecord(userID, statusID uint32) (*UserToStatusModel, error) {
+/*func GetStatusLikeRecord(userID, statusID uint32) (*UserToStatusModel, error) {
 	record := &UserToStatusModel{}
 	d := m.DB.Self.Table("user2status").Where("user_id = ? AND status_id = ?", userID, statusID).First(&record)
 	return record, d.Error
-}
+}*/
 
 func GetStatusLikeRecordForUser(userID uint32, scope []int) ([]*UserToStatusModel, error) {
 	statusLikeList := make([]*UserToStatusModel, 0)
@@ -28,7 +28,7 @@ func GetStatusLikeRecordForUser(userID uint32, scope []int) ([]*UserToStatusMode
 	return statusLikeList, d.Error
 }
 
-func AddStatusLike(db *gorm.DB, u *UserToStatusModel, m *StatusModel) error {
+func AddStatusLike(db *gorm.DB, userId uint32, m *StatusModel) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -39,6 +39,10 @@ func AddStatusLike(db *gorm.DB, u *UserToStatusModel, m *StatusModel) error {
 	if err := tx.Error; err != nil {
 		return err
 	}
+
+	u := &UserToStatusModel{}
+	u.UserID = userId
+	u.StatusID = m.ID
 
 	if err := tx.Create(u).Error; err != nil {
 		tx.Rollback()
@@ -53,7 +57,7 @@ func AddStatusLike(db *gorm.DB, u *UserToStatusModel, m *StatusModel) error {
 	return tx.Commit().Error
 }
 
-func CancelStatusLike(db *gorm.DB, u *UserToStatusModel, m *StatusModel) error {
+func CancelStatusLike(db *gorm.DB, userId int, m *StatusModel) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -66,7 +70,7 @@ func CancelStatusLike(db *gorm.DB, u *UserToStatusModel, m *StatusModel) error {
 	}
 
 	record := &UserToStatusModel{}
-	if err := tx.Where("user_id = ? AND status_id = ?", int(u.UserID), int(u.StatusID)).Delete(&record).Error; err != nil {
+	if err := tx.Where("user_id = ? AND status_id = ?", userId, int(m.ID)).Delete(&record).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

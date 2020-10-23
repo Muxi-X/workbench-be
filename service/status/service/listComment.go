@@ -11,7 +11,7 @@ import (
 // ListComment ... 评论列表
 func (s *StatusService) ListComment(ctx context.Context, req *pb.CommentListRequest, res *pb.CommentListResponse) error {
 
-	list, count, err := model.ListComments(req.StatusId, req.Offset, req.Limit, req.Lastid)
+	list, count, err := model.ListComments(req.StatusId, req.Offset, req.Limit, req.LastId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

@@ -78,6 +78,7 @@ message UpdateRequest {
 message LikeRequest {
   uint32 id = 1;
   uint32 user_id = 2;
+  bool   liked = 3;
 }
 
 message Status {

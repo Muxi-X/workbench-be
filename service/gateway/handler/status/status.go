@@ -1,5 +1,9 @@
 package status
 
+type LikeRequest struct {
+	Liked bool `json:"liked"`
+}
+
 type CreateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
