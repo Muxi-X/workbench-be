@@ -37,7 +37,7 @@ func GetApplications(c *gin.Context) {
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
+	page, err = strconv.Atoi(c.Query("page"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
