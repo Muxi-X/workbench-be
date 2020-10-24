@@ -3,7 +3,7 @@ package status
 type createRequest struct {
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	Statusid uint32 `json:"stautsid"`
+	StatusId uint32 `json:"stauts_id"`
 }
 
 type comment struct {
@@ -16,15 +16,15 @@ type comment struct {
 }
 
 type getResponse struct {
-	Sid         uint32    `json:"sid"`
+	Sid         uint32    `json:"sid"` // status id
 	Title       string    `json:"title"`
 	Content     string    `json:"content"`
-	UserId      uint32    `json:userid"`
+	UserId      uint32    `json:"user_id"`
 	Time        string    `json:"time"`
 	Avatar      string    `json:"avatar"`
 	Username    string    `json:"username"`
 	Count       uint32    `json:"count"`
-	Commentlist []comment `json:"commentlist"`
+	CommentList []comment `json:"comment_list"`
 }
 
 type updateRequest struct {
@@ -33,14 +33,14 @@ type updateRequest struct {
 }
 
 type deleteRequest struct {
-	Title string `json:title"`
+	Title string `json:"title"`
 }
 
 type status struct {
 	Id       uint32 `json:"id"`
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	UserId   uint32 `json:"userid"`
+	UserId   uint32 `json:"user_id"`
 	Time     string `json:"time"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`

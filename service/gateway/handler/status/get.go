@@ -11,9 +11,8 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // Get ... 获取动态详情
@@ -91,7 +90,7 @@ func Get(c *gin.Context) {
 	}
 
 	for i := 0; i < len(listComResp.List); i++ {
-		resp.Commentlist = append(resp.Commentlist, comment{
+		resp.CommentList = append(resp.CommentList, comment{
 			Cid:      listComResp.List[i].Id,
 			Uid:      listComResp.List[i].UserId,
 			Username: listComResp.List[i].UserName,

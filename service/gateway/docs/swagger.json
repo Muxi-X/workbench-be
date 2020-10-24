@@ -155,6 +155,19 @@
                 "parameters": [
                     {
                         "type": "string",
+
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "token 用户令牌",
                         "name": "Authorization",
                         "in": "header"
@@ -164,7 +177,7 @@
                         "name": "object",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/user.ListResponse"
+                            "$ref": "#/definitions/user.ListRequest"
                         }
                     }
                 ],
@@ -178,7 +191,7 @@
                 }
             }
         },
-        "/user/profile/:id": {
+        "/user/profile/{id}": {
             "get": {
                 "security": [
                     {
@@ -198,6 +211,14 @@
                 "summary": "get user_profile api",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+
                         "type": "string",
                         "description": "token 用户令牌",
                         "name": "Authorization",
@@ -246,6 +267,18 @@
                 }
             }
         },
+        "user.ListRequest": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "type": "integer"
+                },
+                "team": {
+                    "type": "integer"
+                }
+            }
+        },
+
         "user.ListResponse": {
             "type": "object",
             "properties": {

@@ -15,14 +15,12 @@ import (
 	"go.uber.org/zap"
 )
 
-// Feed 的 ListUser 接口
-// uid 是筛选的 id
+// ListUser list feeds filtered by user id.
 func ListUser(c *gin.Context) {
-	log.Info("Feed listUser function called.",
-		zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("Feed listUser function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取筛选的 userId
-	uid, err := strconv.Atoi(c.Param("id"))
+	filteredUserId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -40,31 +38,24 @@ func ListUser(c *gin.Context) {
 		return
 	}
 
-	// 获取 role
-	// TO DO: 从 Authorization 获取或从 user-service 获取
-	var req ListRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
-
-	// 获取请求方的 userId
+	// 获取请求方的 userId 和 role
 	userId := c.MustGet("userID").(uint32)
+	role := c.MustGet("role").(uint32)
 
 	listReq := &pb.ListRequest{
 		LastId: uint32(lastId),
 		Limit:  uint32(limit),
-		Role:   req.Role,
+		Role:   role,
 		UserId: userId,
 		Filter: &pb.Filter{
-			UserId:  uint32(uid),
+			UserId:  uint32(filteredUserId),
 			GroupId: 0,
 		},
 	}
 
 	listResp, err := service.FeedClient.List(context.Background(), listReq)
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+		SendError(c, errno.ErrFeedList, nil, err.Error(), GetLine())
 		return
 	}
 

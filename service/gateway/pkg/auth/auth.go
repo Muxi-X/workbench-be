@@ -1,14 +1,46 @@
 package auth
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"errors"
 
-// Encrypt encrypts the plain text with bcrypt.
-func Encrypt(source string) (string, error) {
-	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(source), bcrypt.DefaultCost)
-	return string(hashedBytes), err
+	"muxi-workbench/pkg/token"
+
+	"github.com/gin-gonic/gin"
+)
+
+var (
+	// ErrMissingHeader means the `Authorization` header was empty.
+	ErrMissingHeader = errors.New("The length of the `Authorization` header is zero.")
+)
+
+// Context is the context of the JSON web token.
+type Context struct {
+	ID     uint32
+	Role   uint32
+	TeamID uint32
 }
 
-// Compare compares the encrypted text with the plain text if it's the same.
-func Compare(hashedPassword, password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+// Parse parses the token, and returns the context if the token is valid.
+func Parse(tokenString string) (*Context, error) {
+	t, err := token.ResolveToken(tokenString)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Context{
+		ID:     t.ID,
+		Role:   t.Role,
+		TeamID: t.TeamID,
+	}, nil
+}
+
+// ParseRequest gets the token from the header and
+// pass it to the Parse function to parses the token.
+func ParseRequest(c *gin.Context) (*Context, error) {
+	header := c.Request.Header.Get("Authorization")
+	if len(header) == 0 {
+		return nil, ErrMissingHeader
+	}
+
+	return Parse(header)
 }

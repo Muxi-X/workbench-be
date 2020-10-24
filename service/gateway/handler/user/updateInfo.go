@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// UpdateInfo 修改用户个人信息
+// UpdateInfo ... 修改用户个人信息
 // @Summary update info api
 // @Description 修改用户个人信息
 // @Tags user

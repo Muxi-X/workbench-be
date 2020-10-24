@@ -13,3 +13,5 @@ auth_server:  # auth 内网
   host: localhost:8083
   client_id: 4b194ad8-7d97-4dca-b078-6c3c65b31c75
   client_secret: 8c066b19-e507-4887-88f3-7e7edd99bfd8
+token:
+  expired: 30 # 过期时间（天）

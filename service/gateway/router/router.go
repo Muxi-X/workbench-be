@@ -9,6 +9,7 @@ import (
 	"muxi-workbench-gateway/handler/status"
 	"muxi-workbench-gateway/handler/user"
 	"muxi-workbench-gateway/router/middleware"
+	"muxi-workbench/pkg/constvar"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,14 +27,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
 
-	// The health check handlers
-	svcd := g.Group("/sd")
-	{
-		svcd.GET("/health", sd.HealthCheck)
-		svcd.GET("/disk", sd.DiskCheck)
-		svcd.GET("/cpu", sd.CPUCheck)
-		svcd.GET("/ram", sd.RAMCheck)
-	}
+	// 权限要求，普通用户/管理员/超管
+	normalRequired := middleware.AuthMiddleware(constvar.AuthLevelNormal)
+	// adminRequired := middleware.AuthMiddleware(constvar.AuthLevelAdmin)
+	// superAdminRequired := middleware.AuthMiddleware(constvar.AuthLevelSuperAdmin)
 
 	// auth 模块
 	authRouter := g.Group("api/v1/auth")
@@ -44,7 +41,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// user 模块
 	userRouter := g.Group("api/v1/user")
-	userRouter.Use(middleware.AuthMiddleware())
+	userRouter.Use(normalRequired)
 	{
 		// userRouter.GET("/infos", user.GetInfo)
 		userRouter.GET("/profile/:id", user.GetProfile)
@@ -54,7 +51,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// feed
 	feedRouter := g.Group("api/v1/feed")
-	feedRouter.Use(middleware.AuthMiddleware())
+	feedRouter.Use(normalRequired)
 	{
 		feedRouter.GET("/list", feed.List)
 		feedRouter.GET("/list/user/:id", feed.ListUser)
@@ -63,7 +60,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// status
 	statusRouter := g.Group("api/v1/status")
-	statusRouter.Use(middleware.AuthMiddleware())
+	statusRouter.Use(normalRequired)
 	{
 		statusRouter.GET("/detail/:id", status.Get)
 		statusRouter.POST("", status.Create)
@@ -81,7 +78,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// project
 	projectRouter := g.Group("api/v1/project")
-	projectRouter.Use(middleware.AuthMiddleware())
+	projectRouter.Use(normalRequired)
 	{
 		// 创建一个 project  缺少 api
 		// projectRouter.POST("/",project.CreateProject)
@@ -130,7 +127,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	folderRouter := g.Group("api/v1/folder")
-	folderRouter.Use(middleware.AuthMiddleware())
+	folderRouter.Use(normalRequired)
 	{
 		// 获取文件树
 		folderRouter.GET("/filetree/:id", project.GetFileTree)
@@ -161,7 +158,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	fileRouter := g.Group("api/v1/file")
-	fileRouter.Use(middleware.AuthMiddleware())
+	fileRouter.Use(normalRequired)
 	{
 		// 没有创建/编辑/删除 file/doc 文件夹的 api
 		fileRouter.POST("/file", project.CreateFile)       //
@@ -181,6 +178,15 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		   fileRouter.GET("/doc", handler.GetDocInfoList)
 		   fileRouter.GET("/list", handler.GetDocFolderInfoList)
 		*/
+	}
+
+	// The health check handlers
+	svcd := g.Group("/sd")
+	{
+		svcd.GET("/health", sd.HealthCheck)
+		svcd.GET("/disk", sd.DiskCheck)
+		svcd.GET("/cpu", sd.CPUCheck)
+		svcd.GET("/ram", sd.RAMCheck)
 	}
 
 	return g

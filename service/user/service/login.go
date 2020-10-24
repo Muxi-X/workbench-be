@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
-	"time"
 
 	"muxi-workbench-user/errno"
 	"muxi-workbench-user/model"
 	"muxi-workbench-user/pkg/auth"
 	pb "muxi-workbench-user/proto"
+	"muxi-workbench-user/util"
 	e "muxi-workbench/pkg/err"
 	"muxi-workbench/pkg/token"
 )
@@ -48,9 +48,11 @@ func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest, res *pb.L
 	}
 
 	// 生成 auth token
-	token, err := token.GenerateToken(token.TokenPayload{
+	token, err := token.GenerateToken(&token.TokenPayload{
 		ID:      user.ID,
-		Expired: time.Hour * 24 * 30,
+		Role:    user.Role,
+		TeamID:  user.TeamID,
+		Expired: util.GetExpiredTime(),
 	})
 	if err != nil {
 		return e.ServerErr(errno.ErrAuthToken, err.Error())

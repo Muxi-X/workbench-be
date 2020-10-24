@@ -14,6 +14,13 @@ definitions:
       id:
         type: integer
     type: object
+  user.ListRequest:
+    properties:
+      group:
+        type: integer
+      team:
+        type: integer
+    type: object
   user.ListResponse:
     properties:
       count:
@@ -191,6 +198,14 @@ paths:
       - application/json
       description: 通过 group 和 team 获取 userlist
       parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: string
       - description: token 用户令牌
         in: header
         name: Authorization
@@ -199,7 +214,7 @@ paths:
         in: body
         name: object
         schema:
-          $ref: '#/definitions/user.ListResponse'
+          $ref: '#/definitions/user.ListRequest'
       produces:
       - application/json
       responses:
@@ -212,12 +227,17 @@ paths:
       summary: get user_list api
       tags:
       - user
-  /user/profile/:id:
+  /user/profile/{id}:
     get:
       consumes:
       - application/json
       description: 通过 userid 获取完整 user 信息
       parameters:
+      - description: user_id
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: token 用户令牌
         in: header
         name: Authorization

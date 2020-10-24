@@ -11,12 +11,11 @@ import (
 	"muxi-workbench-gateway/util"
 	pbs "muxi-workbench-status/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// Create ... 创建进度
+// Create create new status
 func Create(c *gin.Context) {
 	log.Info("Status create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -28,19 +27,19 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	// 获取 userid
-	id := c.MustGet("userID").(uint32)
+	// 获取 userId
+	userId := c.MustGet("userID").(uint32)
 
 	// 构造 create 请求
 	createReq := &pbs.CreateRequest{
 		Title:   req.Title,
 		Content: req.Content,
-		UserId:  id,
+		UserId:  userId,
 	}
 
 	// 向创建进度服务发送请求
+	// TO DO: 需要获取创建的 status id
 	_, err := service.StatusClient.Create(context.Background(), createReq)
-
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -49,10 +48,10 @@ func Create(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "创建",
-		UserId: id,
+		UserId: userId,
 		Source: &pbf.Source{
 			Kind:        6,
-			Id:          req.Statusid, // 暂时从前端获取
+			Id:          req.StatusId, // 暂时从前端获取
 			Name:        req.Title,
 			ProjectId:   0,
 			ProjectName: "",
