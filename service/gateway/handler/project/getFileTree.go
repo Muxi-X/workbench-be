@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -13,19 +12,15 @@ import (
 	pbp "muxi-workbench-project/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// 只用调用一次 getfiletree
-// 不需要从 token 获取 userid
+// GetFileTree ... 获取文件树
 func GetFileTree(c *gin.Context) {
-	log.Info("project getFileTree function call.",
-		zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("project getFileTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 pid
-	var pid int
-	var err error
-
-	pid, err = strconv.Atoi(c.Param("id"))
+	// 获取 projectID
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -33,17 +28,14 @@ func GetFileTree(c *gin.Context) {
 
 	// 发送请求
 	getFileTreeResp, err := service.ProjectClient.GetFileTree(context.Background(), &pbp.GetRequest{
-		Id: uint32(pid),
+		Id: uint32(projectID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造返回
-	resp := getFileTreeResponse{
-		Filetree: getFileTreeResp.Tree,
-	}
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, &GetFileTreeResponse{
+		FileTree: getFileTreeResp.Tree,
+	})
 }

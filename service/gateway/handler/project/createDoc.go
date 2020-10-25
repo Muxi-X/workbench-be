@@ -3,7 +3,6 @@ package project
 import (
 	"context"
 
-	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -13,29 +12,29 @@ import (
 	pbp "muxi-workbench-project/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// 调用一次 doc create 和 feed push
-// 需要从 token 获取 userid
+// CreateDoc creates a new doc
 func CreateDoc(c *gin.Context) {
 	log.Info("project createDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获得请求
-	var req createDocRequest
+	var req CreateDocRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
-	id := c.MustGet("userID").(uint32)
+	userID := c.MustGet("userID").(uint32)
 
 	createDocReq := &pbp.CreateDocRequest{
 		Title:     req.Title,
 		Content:   req.Content,
-		ProjectId: req.Pid,
-		UserId:    id,
+		ProjectId: req.ProjectID,
+		UserId:    userID,
 	}
 	_, err := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
 	if err != nil {
@@ -43,15 +42,17 @@ func CreateDoc(c *gin.Context) {
 		return
 	}
 
+	/* --- 新增 feed --- */
+
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "创建",
-		UserId: id,
+		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        3,
 			Id:          0, // 暂时从前端获取
-			Name:        req.Docname,
-			ProjectId:   req.Pid,
+			Name:        req.DocName,
+			ProjectId:   req.ProjectID,
 			ProjectName: "",
 		},
 	}

@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -13,19 +12,15 @@ import (
 	pbp "muxi-workbench-project/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// 只调用一次 project info
-// 不需要从 token 获取 userid
+// GetProjectInfo gets a project's information by its id
 func GetProjectInfo(c *gin.Context) {
-	log.Info("project getProjectInfo function call",
-		zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("project getProjectInfo function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	var pid int
-	var err error
-
-	// 获取 Pid
-	pid, err = strconv.Atoi(c.Param("id"))
+	// 获取 projectID
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -33,7 +28,7 @@ func GetProjectInfo(c *gin.Context) {
 
 	// 发送请求
 	getProInfoResp, err := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
-		Id: uint32(pid),
+		Id: uint32(projectID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -41,11 +36,11 @@ func GetProjectInfo(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	resp := getProInfoResponse{
-		Projectid:   getProInfoResp.Id,
-		Projectname: getProInfoResp.Name,
+	resp := GetProjectInfoResponse{
+		ProjectID:   getProInfoResp.Id,
+		ProjectName: getProInfoResp.Name,
 		Intro:       getProInfoResp.Intro,
-		Usercount:   getProInfoResp.UserCount,
+		UserCount:   getProInfoResp.UserCount,
 	}
 
 	// 返回结果

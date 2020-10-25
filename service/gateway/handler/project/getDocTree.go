@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -13,18 +12,15 @@ import (
 	pbp "muxi-workbench-project/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// 不需要从 token 获取 userid
+// GetDocTree ... 获取文档树
 func GetDocTree(c *gin.Context) {
-	log.Info("project getDoctTree function call.",
-		zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("project getDoctTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 pid
-	var pid int
-	var err error
-
-	pid, err = strconv.Atoi(c.Param("id"))
+	// 获取 projectID
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -32,7 +28,7 @@ func GetDocTree(c *gin.Context) {
 
 	// 发送请求
 	getDocTreeResp, err := service.ProjectClient.GetDocTree(context.Background(), &pbp.GetRequest{
-		Id: uint32(pid),
+		Id: uint32(projectID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -40,9 +36,7 @@ func GetDocTree(c *gin.Context) {
 	}
 
 	// 返回结果
-	resp := getDocTreeResponse{
-		Doctree: getDocTreeResp.Tree,
-	}
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, &GetDocTreeResponse{
+		DocTree: getDocTreeResp.Tree,
+	})
 }
