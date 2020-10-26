@@ -22,19 +22,19 @@ func ListUser(c *gin.Context) {
 	// 获取筛选的 userId
 	filteredUserId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "50"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	lastId, err := strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 

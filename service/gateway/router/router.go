@@ -67,13 +67,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		statusRouter.PUT("/detail/:id", status.Update)
 		statusRouter.DELETE("/detail/:id", status.Delete)
 		statusRouter.GET("", status.List)
-		// statusRouter.GET("/user/:uid", status.ListUser)
-
-		// 多了一个筛选 group 的 api
-		statusRouter.GET("/group/:gid", status.ListGroup)
 		statusRouter.PUT("/like/:id", status.Like)
 		statusRouter.POST("/comment/:id", status.CreateComment)
 		statusRouter.DELETE("/comment/:id", status.DeleteComment)
+		statusRouter.GET("/detail/:id/comments", status.CommentList)
 	}
 
 	// project

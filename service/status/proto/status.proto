@@ -5,7 +5,7 @@ package status;
 service StatusService {
   rpc Get(GetRequest) returns (GetResponse) {}
   rpc List(ListRequest) returns (ListResponse) {}
-  rpc Create(CreateRequest) returns (Response) {}
+  rpc Create(CreateRequest) returns (IdResponse) {}
   rpc Update(UpdateRequest) returns (Response) {}
   rpc Delete(GetRequest) returns (Response) {}
   rpc Like(LikeRequest) returns (Response) {}
@@ -28,18 +28,20 @@ message GetResponse {
 }
 
 message CommentListRequest {
-  uint32 lastid = 1;
+  uint32 last_id = 1;
   uint32 offset = 2;
   uint32 limit = 3;
   uint32 status_id = 5;
 }
 
 message ListRequest {
-  uint32 lastid = 1;
+  uint32 last_id = 1;
   uint32 offset = 2;
   uint32 limit = 3;
   uint32 group = 4;
   uint32 uid = 5;
+  uint32 team = 6;
+  uint32 user_id = 7;
 }
 
 message ListResponse {
@@ -76,6 +78,7 @@ message UpdateRequest {
 message LikeRequest {
   uint32 id = 1;
   uint32 user_id = 2;
+  bool   liked = 3;
 }
 
 message Status {
@@ -86,6 +89,7 @@ message Status {
   string time = 5;
   string avatar = 6;
   string user_name = 7;
+  bool   liked = 8;
 }
 
 

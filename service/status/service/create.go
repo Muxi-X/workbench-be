@@ -10,7 +10,7 @@ import (
 )
 
 // Create ... 创建动态
-func (s *StatusService) Create(ctx context.Context, req *pb.CreateRequest, res *pb.Response) error {
+func (s *StatusService) Create(ctx context.Context, req *pb.CreateRequest, res *pb.IdResponse) error {
 	t := time.Now()
 
 	status := model.StatusModel{
@@ -23,6 +23,8 @@ func (s *StatusService) Create(ctx context.Context, req *pb.CreateRequest, res *
 	if err := status.Create(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+
+	res.Id = status.ID
 
 	return nil
 }
