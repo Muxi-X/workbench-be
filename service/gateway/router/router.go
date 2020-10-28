@@ -7,6 +7,7 @@ import (
 	"muxi-workbench-gateway/handler/project"
 	"muxi-workbench-gateway/handler/sd"
 	"muxi-workbench-gateway/handler/status"
+	"muxi-workbench-gateway/handler/team"
 	"muxi-workbench-gateway/handler/user"
 	"muxi-workbench-gateway/router/middleware"
 	"muxi-workbench/pkg/constvar"
@@ -29,8 +30,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// 权限要求，普通用户/管理员/超管
 	normalRequired := middleware.AuthMiddleware(constvar.AuthLevelNormal)
-	// adminRequired := middleware.AuthMiddleware(constvar.AuthLevelAdmin)
-	// superAdminRequired := middleware.AuthMiddleware(constvar.AuthLevelSuperAdmin)
+	adminRequired := middleware.AuthMiddleware(constvar.AuthLevelAdmin)
+	superAdminRequired := middleware.AuthMiddleware(constvar.AuthLevelSuperAdmin)
 
 	// auth 模块
 	authRouter := g.Group("api/v1/auth")
@@ -178,6 +179,52 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		   fileRouter.GET("/doc", handler.GetDocInfoList)
 		   fileRouter.GET("/list", handler.GetDocFolderInfoList)
 		*/
+	}
+
+	// team service in normal role
+	teamRouterInNormal := g.Group("api/v1/team")
+	teamRouterInNormal.Use(normalRequired)
+	{
+		// team
+		teamRouterInNormal.GET("/invitation", team.CreateInvitation)
+		teamRouterInNormal.GET("/invitation/:hash", team.ParseInvitation)
+
+		// group
+		teamRouterInNormal.GET("/list/group", team.GetGroupList)
+		teamRouterInNormal.GET("/list/members/:id", team.GetMemberList)
+
+		// application
+		teamRouterInNormal.POST("/apply", team.CreateApplication)
+	}
+
+	// team service in admin role
+	teamRouterInAdmin := g.Group("api/v1/team")
+	teamRouterInAdmin.Use(adminRequired)
+	{
+		// team
+		teamRouterInAdmin.POST("/members", team.Join)
+		teamRouterInAdmin.DELETE("/members", team.Remove)
+
+		// group
+		teamRouterInAdmin.PUT("/group/members", team.UpdateMembersForGroup)
+
+		// application
+		teamRouterInAdmin.GET("/list/applications", team.GetApplications)
+		teamRouterInAdmin.DELETE("/apply/:id", team.DeleteApplication)
+	}
+
+	// team service in superadmin role
+	teamRouterInSuperAdmin := g.Group("api/v1/team")
+	teamRouterInSuperAdmin.Use(superAdminRequired)
+	{
+		// group
+		teamRouterInSuperAdmin.POST("/group", team.CreateGroup)
+		teamRouterInSuperAdmin.DELETE("/group/:id", team.DeleteGroup)
+		teamRouterInSuperAdmin.PUT("/group", team.UpdateGroupInfo)
+
+		// team
+		teamRouterInSuperAdmin.POST("", team.CreateTeam)
+		teamRouterInSuperAdmin.PUT("", team.UpdateTeamInfo)
 	}
 
 	// The health check handlers

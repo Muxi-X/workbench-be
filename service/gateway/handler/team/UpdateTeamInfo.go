@@ -27,12 +27,6 @@ func UpdateTeamInfo(c *gin.Context) {
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN || req.Role != ADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
-	}
-
 	// 构造 UpdateTeamInfo 请求
 	updateTeamInfoReq := &tpb.UpdateTeamInfoRequest{
 		TeamId:  req.TeamID,

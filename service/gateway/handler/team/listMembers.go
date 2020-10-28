@@ -24,6 +24,13 @@ func GetMemberList(c *gin.Context) {
 	var groupID int
 	var page int
 	var err error
+	pagination := true
+
+	groupID, err = strconv.Atoi(c.Param("id"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
@@ -31,16 +38,13 @@ func GetMemberList(c *gin.Context) {
 		return
 	}
 
-	groupID, err = strconv.Atoi(c.DefaultQuery("group_id", "0"))
+	page, err = strconv.Atoi(c.Query("page"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
-
-	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
+	if page == -1 {
+		pagination = false
 	}
 
 	// 构造 MemberList 请求
@@ -48,7 +52,7 @@ func GetMemberList(c *gin.Context) {
 		GroupId:    uint32(groupID),
 		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
-		Pagination: false,
+		Pagination: pagination,
 	}
 
 	// 向 GetMemberList 服务发送请求

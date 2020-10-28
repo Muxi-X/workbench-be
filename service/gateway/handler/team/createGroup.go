@@ -27,16 +27,10 @@ func CreateGroup(c *gin.Context) {
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN || req.Role != ADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
-	}
-
 	// 构造 createGroup 请求
 	createGroupReq := &tpb.CreateGroupRequest{
 		GroupName: req.GroupName,
-		UserList:  req.UserIDs,
+		UserList:  req.UserList,
 	}
 
 	// 向 CreateGroup 服务发送请求

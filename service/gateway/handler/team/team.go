@@ -1,19 +1,11 @@
 package team
 
-// 权限分级
-const (
-	NOBODY     = 0
-	MEMBER     = 1
-	ADMIN      = 3
-	SUPERADMIN = 7
-)
-
 type member struct {
 	ID        uint32 `json:"id"`
 	Name      string `json:"name"`
-	TeamID    uint32 `json:"teamid"`
-	GroupID   uint32 `json:"groupid"`
-	GroupName string `json:"groupname"`
+	TeamID    uint32 `json:"team_id"`
+	GroupID   uint32 `json:"group_id"`
+	GroupName string `json:"group_name"`
 	Email     string `json:"email"`
 	Avatar    string `json:"avatar"`
 }
@@ -21,7 +13,7 @@ type member struct {
 type group struct {
 	ID        uint32 `json:"id"`
 	Name      string `json:"name"`
-	UserCount uint32 `json:"usercount"`
+	UserCount uint32 `json:"user_count"`
 }
 
 type applyUserItem struct {
@@ -31,66 +23,51 @@ type applyUserItem struct {
 }
 
 type updateGroupInfoRequest struct {
-	Role         uint32 `json:"role"`
-	NewGroupName string `json:"newgroupname"`
-	GroupID      uint32 `json:"groupid"`
+	NewGroupName string `json:"new_group_name"`
+	GroupID      uint32 `json:"group_id"`
 }
 
 type createGroupRequest struct {
-	Role      uint32   `json:"role"`
-	GroupName string   `json:"groupname"`
-	UserIDs   []uint32 `json:"userids"`
-}
-
-type deleteGroupRequest struct {
-	Role    uint32 `json:"role"`
-	GroupID uint32 `json:"groupid"`
+	GroupName string   `json:"group_name"`
+	UserList  []uint32 `json:"user_list"`
 }
 
 type updateMembersRequest struct {
-	GroupID  uint32   `json:"groupid"`
-	UserList []uint32 `json:"userlist"`
-	Role     uint32   `json:"role"`
+	GroupID  uint32   `json:"group_id"`
+	UserList []uint32 `json:"user_list"`
 }
 
 type joinRequest struct {
-	UserList []uint32 `json:"userlist"`
-	TeamID   uint32   `json:"teamid"`
+	UserList []uint32 `json:"user_list"`
+	TeamID   uint32   `json:"team_id"`
 }
 
 type removeRequest struct {
-	UserList []uint32 `json:"userlist"`
-	TeamID   uint32   `json:"teamid"`
+	UserList []uint32 `json:"user_list"`
+	TeamID   uint32   `json:"team_id"`
 }
 
 type createInvitationRequest struct {
-	TeamID  uint32 `json:"teamid"`
+	TeamID  uint32 `json:"team_id"`
 	Expired int64  `json:"expired"`
 }
 
-type parseInvitationRequest struct {
-	Hash string `json:"hash"`
-}
-
 type createTeamRequest struct {
-	TeamName  string `json:"teamname"`
-	CreatorID uint32 `json:"creatorid"`
-	Role      uint32 `json:"role"`
+	TeamName  string `json:"team_name"`
+	CreatorID uint32 `json:"creator_id"`
 }
 
 type updateTeamInfoRequest struct {
-	TeamID  uint32 `json:"teamid"`
-	NewName string `json:"newname"`
-	Role    uint32 `json:"role"`
+	TeamID  uint32 `json:"team_id"`
+	NewName string `json:"new_name"`
 }
 
 type applicationRequest struct {
-	UserID uint32 `json:"userid"`
+	UserID uint32 `json:"user_id"`
 }
 
 type dropTeamRequest struct {
-	TeamID uint32 `json:"teamid"`
-	Role   uint32 `json:"role"`
+	TeamID uint32 `json:"team_id"`
 }
 
 type groupListResponse struct {
@@ -108,10 +85,10 @@ type createInvitationResponse struct {
 }
 
 type parseInvitationResponse struct {
-	TeamID uint32 `json:"teamid"`
+	TeamID uint32 `json:"team_id"`
 }
 
 type applicationListResponse struct {
-	ApplyList []applyUserItem `json:"applys"`
+	ApplyList []applyUserItem `json:"apply_list"`
 	Count     uint32          `json:"count"`
 }

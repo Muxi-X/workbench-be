@@ -27,12 +27,6 @@ func CreateTeam(c *gin.Context) {
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN || req.Role != ADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
-	}
-
 	// 构造 createTeam 请求
 	createTeamReq := &tpb.CreateTeamRequest{
 		TeamName:  req.TeamName,

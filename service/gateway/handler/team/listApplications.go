@@ -30,6 +30,7 @@ func GetApplications(c *gin.Context) {
 	var limit int
 	var page int
 	var err error
+	pagination := true
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
@@ -42,12 +43,15 @@ func GetApplications(c *gin.Context) {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
+	if page == -1 {
+		pagination = false
+	}
 
 	// 构造 ApplicationList 请求
 	ApplicationListReq := &tpb.ApplicationListRequest{
 		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
-		Pagination: false,
+		Pagination: pagination,
 	}
 
 	// 向 GetApplications 服务发送请求

@@ -26,12 +26,6 @@ func UpdateGroupInfo(c *gin.Context) {
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN || req.Role != ADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
-	}
-
 	// 构造 updateGroupInfo 请求
 	updateGroupInfoReq := &tpb.UpdateGroupInfoRequest{
 		GroupId: req.GroupID,

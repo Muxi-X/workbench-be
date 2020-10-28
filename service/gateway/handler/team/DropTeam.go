@@ -27,12 +27,6 @@ func DropTeam(c *gin.Context) {
 		return
 	}
 
-	// 判断权限
-	if req.Role != SUPERADMIN {
-		SendBadRequest(c, errno.ErrBind, nil, "权限不足", GetLine())
-		return
-	}
-
 	// 构造 DropTeam 请求
 	dropTeamReq := &tpb.DropTeamRequest{
 		TeamId: req.TeamID,
