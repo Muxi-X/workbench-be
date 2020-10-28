@@ -25,6 +25,8 @@ import (
 // @Param id path int true "status_id"
 // @Security ApiKeyAuth
 // @Success 200 {object} GetResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /status/detail/{id} [get]
 func Get(c *gin.Context) {
 	log.Info("Status get function call.",

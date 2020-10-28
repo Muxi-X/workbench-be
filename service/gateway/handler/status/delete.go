@@ -27,6 +27,8 @@ import (
 // @Param object body DeleteRequest  true "delete_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /status/detail/{id} [delete]
 func Delete(c *gin.Context) {
 	log.Info("Status delete function call",

@@ -26,6 +26,8 @@ import (
 // @Param object body GetProfileRequest  true "get_profile_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} UserProfile
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /user/profile/{id} [get]
 func GetProfile(c *gin.Context) {
 	log.Info("User getInfo function called.", zap.String("X-Request-Id", util.GetReqID(c)))

@@ -24,6 +24,8 @@ import (
 // @Param object body UpdateInfoRequest  true "update_info_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /user [put]
 func UpdateInfo(c *gin.Context) {
 	log.Info("User getInfo function called.",

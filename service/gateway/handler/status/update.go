@@ -28,6 +28,8 @@ import (
 // @Param object body UpdateRequest true "update_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /status/detail/{id} [put]
 func Update(c *gin.Context) {
 	log.Info("Status update function call.",

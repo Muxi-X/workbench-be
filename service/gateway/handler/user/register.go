@@ -23,6 +23,8 @@ import (
 // @Param object body RegisterRequest true "register_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /auth/signup [post]
 func Register(c *gin.Context) {
 	log.Info("User register function called.", zap.String("X-Request-Id", util.GetReqID(c)))

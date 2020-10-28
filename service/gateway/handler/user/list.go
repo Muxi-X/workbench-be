@@ -27,6 +27,8 @@ import (
 // @Param object body ListRequest true "get_user_list_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} ListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /user/list [get]
 func List(c *gin.Context) {
 	log.Info("User getInfo function called.", zap.String("X-Request-Id", util.GetReqID(c)))

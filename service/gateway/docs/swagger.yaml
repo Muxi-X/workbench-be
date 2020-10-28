@@ -230,6 +230,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: login api
@@ -252,6 +260,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.Response'
       security:
@@ -306,6 +322,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/status.ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: list status api
@@ -332,6 +356,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.Response'
       security:
@@ -368,6 +400,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: delete comment api
@@ -399,6 +439,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.Response'
       security:
@@ -435,6 +483,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: delete status api
@@ -462,6 +518,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/status.GetResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: get status api
@@ -493,6 +557,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.Response'
       security:
@@ -535,6 +607,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/status.CommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: get comments list api
@@ -569,6 +649,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: like status api
@@ -596,6 +684,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.Response'
       security:
@@ -635,6 +731,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: get user_list api
@@ -669,6 +773,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.UserProfile'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: get user_profile api

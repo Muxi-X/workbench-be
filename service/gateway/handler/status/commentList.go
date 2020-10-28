@@ -29,6 +29,8 @@ import (
 // @Param page query int false "page"
 // @Security ApiKeyAuth
 // @Success 200 {object} CommentListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /status/detail/{id}/comments [get]
 func CommentList(c *gin.Context) {
 	log.Info("Status commentList function call.",

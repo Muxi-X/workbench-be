@@ -26,6 +26,8 @@ import (
 // @Param object body LikeRequest true "like_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /status/like/{id} [put]
 func Like(c *gin.Context) {
 	log.Info("Status like function call", zap.String("X-Request-Id", util.GetReqID(c)))

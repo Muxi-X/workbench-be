@@ -32,6 +32,8 @@ import (
 // @Param team query int false "team"
 // @Security ApiKeyAuth
 // @Success 200 {object} ListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /status [get]
 func List(c *gin.Context) {
 	log.Info("Status list function call",

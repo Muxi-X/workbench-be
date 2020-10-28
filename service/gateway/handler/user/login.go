@@ -23,6 +23,8 @@ import (
 // @Param object body LoginRequest true "login_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} LoginResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /auth/login [post]
 func Login(c *gin.Context) {
 	log.Info("User login function called.",
