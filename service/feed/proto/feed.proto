@@ -35,10 +35,10 @@ message ListResponse {
 
 message FeedItem {
     uint32 id = 1;
-    string action = 2;
-    bool show_divider = 3;
-    string date = 4;
-    string time = 5;
+    string action = 2; // action：创建、编辑、删除、评论、加入
+    bool show_divider = 3; // 分隔线
+    string date = 4; // 日期
+    string time = 5; // 时间
     User user = 6;
     Source source = 7;
 }

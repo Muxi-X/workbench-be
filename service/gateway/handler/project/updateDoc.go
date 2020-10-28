@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -14,36 +13,33 @@ import (
 	pbp "muxi-workbench-project/proto"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// 调用 update 和 feed push
-// 需要从 token 获取 userid
+// UpdateDoc updates a doc' info
 func UpdateDoc(c *gin.Context) {
 	log.Info("project updateDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 did
-	var did int
-	var err error
-
-	did, err = strconv.Atoi(c.Param("id"))
+	// 获取 docID
+	docID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
-	var req updateDocRequest
+	var req UpdateDocRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 userid
-	id := c.MustGet("userID").(uint32)
+	userID := c.MustGet("userID").(uint32)
 
 	updateReq := &pbp.UpdateDocRequest{
-		Id:      id,
+		Id:      userID,
 		Title:   req.Title,
 		Content: req.Content,
 	}
@@ -54,13 +50,15 @@ func UpdateDoc(c *gin.Context) {
 		return
 	}
 
+	/* --- 新增 feed --- */
+
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "编辑",
-		UserId: id,
+		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        3,
-			Id:          uint32(did), // 暂时从前端获取
+			Id:          uint32(docID),
 			Name:        req.Title,
 			ProjectId:   0,
 			ProjectName: "",
