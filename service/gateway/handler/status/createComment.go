@@ -18,6 +18,17 @@ import (
 )
 
 // CreateComment ... 评论 Status
+// @Summary create comment api
+// @Description 创建评论
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "status_id"
+// @Param object body CreateCommentRequest true "create_comment_request"
+// @Param Authorization header string true "token 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Router /status/comment/{id} [post]
 func CreateComment(c *gin.Context) {
 	log.Info("Status createComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

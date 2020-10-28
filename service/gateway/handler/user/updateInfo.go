@@ -20,8 +20,8 @@ import (
 // @Tags user
 // @Accept  application/json
 // @Produce  application/json
-// @Param Authorization header string false "token 用户令牌"
-// @Param object body UpdateInfoRequest  false "update_info_request"
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body UpdateInfoRequest  true "update_info_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Router /user [put]

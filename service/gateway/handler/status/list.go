@@ -17,6 +17,22 @@ import (
 )
 
 // List ... 获取进度列表
+// @Summary list status api
+// @Description 拉取进度列表
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "status_id"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Param page query int false "page"
+// @Param group query int false "group"
+// @Param uid query int false "uid"
+// @Param team query int false "team"
+// @Security ApiKeyAuth
+// @Success 200 {object} ListResponse
+// @Router /status [get]
 func List(c *gin.Context) {
 	log.Info("Status list function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))

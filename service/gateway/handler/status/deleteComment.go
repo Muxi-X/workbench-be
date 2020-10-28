@@ -18,6 +18,17 @@ import (
 )
 
 // DeleteComment ... 删除进度的评论
+// @Summary delete comment api
+// @Description 通过 status_id 和 status_title 删除 status_comment
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "comment_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteRequest  true "delete_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Router /status/comment/{id} [delete]
 func DeleteComment(c *gin.Context) {
 	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -52,7 +63,7 @@ func DeleteComment(c *gin.Context) {
 
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
-		Action: "删除",
+		Action: "取消评论",
 		UserId: id,
 		Source: &pbf.Source{
 			Kind:        6,

@@ -1,9 +1,11 @@
 package status
 
+// LikeRequest 点赞进度请求
 type LikeRequest struct {
 	Liked bool `json:"liked"`
 }
 
+// CreateRequest 创建进度请求
 type CreateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
@@ -18,11 +20,13 @@ type Comment struct {
 	Content  string `json:"content"`
 }
 
+// CommentListResponse 评论列表响应
 type CommentListResponse struct {
 	Count       uint32    `json:"count"`
 	CommentList []Comment `json:"commentlist"`
 }
 
+// GetResponse 获得进度实体响应
 type GetResponse struct {
 	Sid     uint32 `json:"sid"`
 	Title   string `json:"title"`
@@ -31,11 +35,13 @@ type GetResponse struct {
 	Time    string `json:"time"`
 }
 
+// UpdateRequest 编辑进度请求
 type UpdateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
 
+// DeleteRequest 删除进度请求
 type DeleteRequest struct {
 	Title string `json:title"`
 }
@@ -50,11 +56,13 @@ type Status struct {
 	Liked    bool   `json:"liked"`
 }
 
+// ListResponse 获取进度列表响应
 type ListResponse struct {
 	Count  uint32   `json:"count"`
 	Status []Status `json:"stauts"`
 }
 
+// CreateCommentRequest 创建评论请求
 type CreateCommentRequest struct {
 	Content string `json:"content"`
 }

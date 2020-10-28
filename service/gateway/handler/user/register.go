@@ -20,7 +20,7 @@ import (
 // @Tags auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param object body RegisterRequest false "register_request"
+// @Param object body RegisterRequest true "register_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Router /auth/signup [post]
