@@ -9,6 +9,98 @@ definitions:
       message:
         type: string
     type: object
+  status.Comment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
+  status.CommentListResponse:
+    properties:
+      commentlist:
+        items:
+          $ref: '#/definitions/status.Comment'
+        type: array
+      count:
+        type: integer
+    type: object
+  status.CreateCommentRequest:
+    properties:
+      content:
+        type: string
+    type: object
+  status.CreateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  status.DeleteRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  status.GetResponse:
+    properties:
+      content:
+        type: string
+      sid:
+        type: integer
+      time:
+        type: string
+      title:
+        type: string
+      userId:
+        type: integer
+    type: object
+  status.LikeRequest:
+    properties:
+      liked:
+        type: boolean
+    type: object
+  status.ListResponse:
+    properties:
+      count:
+        type: integer
+      stauts:
+        items:
+          $ref: '#/definitions/status.Status'
+        type: array
+    type: object
+  status.Status:
+    properties:
+      avatar:
+        type: string
+      content:
+        type: string
+      id:
+        type: integer
+      liked:
+        type: boolean
+      time:
+        type: string
+      title:
+        type: string
+      username:
+        type: string
+    type: object
+  status.UpdateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
   user.GetProfileRequest:
     properties:
       id:
@@ -123,11 +215,12 @@ paths:
     post:
       consumes:
       - application/json
-      description: login the workbenh
+      description: login the workbench
       parameters:
       - description: login_request
         in: body
         name: object
+        required: true
         schema:
           $ref: '#/definitions/user.LoginRequest'
       produces:
@@ -137,6 +230,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: login api
@@ -151,6 +252,7 @@ paths:
       - description: register_request
         in: body
         name: object
+        required: true
         schema:
           $ref: '#/definitions/user.RegisterRequest'
       produces:
@@ -160,11 +262,406 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: register api
       tags:
       - auth
+  /status:
+    get:
+      consumes:
+      - application/json
+      description: 拉取进度列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: group
+        in: query
+        name: group
+        type: integer
+      - description: uid
+        in: query
+        name: uid
+        type: integer
+      - description: team
+        in: query
+        name: team
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/status.ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: list status api
+      tags:
+      - status
+    post:
+      consumes:
+      - application/json
+      description: 创建 status
+      parameters:
+      - description: create_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/status.CreateRequest'
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: create status api
+      tags:
+      - status
+  /status/comment/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 通过 status_id 和 status_title 删除 status_comment
+      parameters:
+      - description: comment_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/status.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete comment api
+      tags:
+      - status
+    post:
+      consumes:
+      - application/json
+      description: 创建评论
+      parameters:
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: create_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/status.CreateCommentRequest'
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: create comment api
+      tags:
+      - status
+  /status/detail/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 通过 status_id 和 title 删除 status
+      parameters:
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/status.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete status api
+      tags:
+      - status
+    get:
+      consumes:
+      - application/json
+      description: 获取进度实体
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/status.GetResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get status api
+      tags:
+      - status
+    put:
+      consumes:
+      - application/json
+      description: 编辑进度
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/status.UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update status api
+      tags:
+      - status
+  /status/detail/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: 通过 status_id 获取 comment_list
+      parameters:
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/status.CommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get comments list api
+      tags:
+      - status
+  /status/like/{id}:
+    put:
+      consumes:
+      - application/json
+      description: 给进度点赞
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: like_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/status.LikeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: like status api
+      tags:
+      - status
   /user:
     put:
       consumes:
@@ -174,10 +671,12 @@ paths:
       - description: token 用户令牌
         in: header
         name: Authorization
+        required: true
         type: string
       - description: update_info_request
         in: body
         name: object
+        required: true
         schema:
           $ref: '#/definitions/user.UpdateInfoRequest'
       produces:
@@ -185,6 +684,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/handler.Response'
       security:
@@ -201,18 +708,20 @@ paths:
       - description: limit
         in: query
         name: limit
-        type: string
+        type: integer
       - description: page
         in: query
         name: page
-        type: string
+        type: integer
       - description: token 用户令牌
         in: header
         name: Authorization
+        required: true
         type: string
       - description: get_user_list_request
         in: body
         name: object
+        required: true
         schema:
           $ref: '#/definitions/user.ListRequest'
       produces:
@@ -222,6 +731,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: get user_list api
@@ -231,7 +748,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 通过 userid 获取完整 user 信息
+      description: 通过 userId 获取完整 user 信息
       parameters:
       - description: user_id
         in: path
@@ -241,10 +758,12 @@ paths:
       - description: token 用户令牌
         in: header
         name: Authorization
+        required: true
         type: string
       - description: get_profile_request
         in: body
         name: object
+        required: true
         schema:
           $ref: '#/definitions/user.GetProfileRequest'
       produces:
@@ -254,6 +773,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/user.UserProfile'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
       security:
       - ApiKeyAuth: []
       summary: get user_profile api

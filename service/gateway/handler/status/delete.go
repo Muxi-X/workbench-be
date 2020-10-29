@@ -17,6 +17,19 @@ import (
 )
 
 // Delete ... 删除进度
+// @Summary delete status api
+// @Description 通过 status_id 和 title 删除 status
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "status_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteRequest  true "delete_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /status/detail/{id} [delete]
 func Delete(c *gin.Context) {
 	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))

@@ -16,13 +16,15 @@ import (
 
 // Login ... 登录
 // @Summary login api
-// @Description login the workbenh
+// @Description login the workbench
 // @Tags auth
 // @Accept  application/json
 // @Produce  application/json
-// @Param object body LoginRequest false "login_request"
+// @Param object body LoginRequest true "login_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} LoginResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /auth/login [post]
 func Login(c *gin.Context) {
 	log.Info("User login function called.",
