@@ -21,12 +21,14 @@ import (
 // @Tags user
 // @Accept  application/json
 // @Produce  application/json
-// @Param limit query string false "limit"
-// @Param page query string false "page"
-// @Param Authorization header string false "token 用户令牌"
-// @Param object body ListRequest  false "get_user_list_request"
+// @Param limit query int false "limit"
+// @Param page query int false "page"
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body ListRequest true "get_user_list_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} ListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
 // @Router /user/list [get]
 func List(c *gin.Context) {
 	log.Info("User getInfo function called.", zap.String("X-Request-Id", util.GetReqID(c)))

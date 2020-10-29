@@ -16,6 +16,18 @@ import (
 )
 
 // Create create new status
+// @Summary create status api
+// @Description 创建 status
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param object body CreateRequest true "create_request"
+// @Param Authorization header string true "token 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /status [post]
 func Create(c *gin.Context) {
 	log.Info("Status create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

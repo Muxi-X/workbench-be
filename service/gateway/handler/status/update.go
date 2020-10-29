@@ -18,6 +18,19 @@ import (
 )
 
 // Update ... 编辑进度
+// @Summary update status api
+// @Description 编辑进度
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "status_id"
+// @Param object body UpdateRequest true "update_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /status/detail/{id} [put]
 func Update(c *gin.Context) {
 	log.Info("Status update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

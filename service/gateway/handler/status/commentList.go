@@ -17,11 +17,26 @@ import (
 )
 
 // CommentList ... 获取评论
+// @Summary get comments list api
+// @Description 通过 status_id 获取 comment_list
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "status_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Param page query int false "page"
+// @Security ApiKeyAuth
+// @Success 200 {object} CommentListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /status/detail/{id}/comments [get]
 func CommentList(c *gin.Context) {
 	log.Info("Status commentList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 从 Query Param 中获取 lastid 和 limit
+	// 从 Query Param 中获取 lastId 和 limit
 	var limit int
 	var lastId int
 	var sid int

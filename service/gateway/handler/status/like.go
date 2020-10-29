@@ -16,6 +16,19 @@ import (
 )
 
 // Like ... 给 Status 点赞
+// @Summary like status api
+// @Description 给进度点赞
+// @Tags status
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "status_id"
+// @Param object body LikeRequest true "like_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /status/like/{id} [put]
 func Like(c *gin.Context) {
 	log.Info("Status like function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
