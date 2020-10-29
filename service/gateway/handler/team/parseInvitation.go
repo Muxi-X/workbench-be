@@ -2,6 +2,7 @@ package team
 
 import (
 	"context"
+
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -9,20 +10,19 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// ParseInvitation 解析团队邀请码
+// ParseInvitation ... 解析团队邀请码
 func ParseInvitation(c *gin.Context) {
-	log.Info("CreateInvitation function call.",
+	log.Info("Invitation parse function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 在路径中获取参数 hash
 	hash := c.Param("hash")
 	if hash == "" {
-		SendError(c, errno.ErrBind, nil, "路径中没有读取到hash", GetLine())
+		SendError(c, errno.ErrQuery, nil, "路径中没有读取到hash", GetLine())
 		return
 	}
 
@@ -35,7 +35,7 @@ func ParseInvitation(c *gin.Context) {
 		return
 	}
 
-	var resp parseInvitationResponse
+	var resp ParseInvitationResponse
 	resp.TeamID = parseInvitationResp.TeamId
 
 	SendResponse(c, nil, resp)

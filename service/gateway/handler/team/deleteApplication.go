@@ -15,22 +15,24 @@ import (
 	"go.uber.org/zap"
 )
 
-// DeleteGroup ... 删除团队
-func DeleteGroup(c *gin.Context) {
-	log.Info("Group delete function call.",
+// DeleteApplication ... 删除申请
+func DeleteApplication(c *gin.Context) {
+	log.Info("Application delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	groupID, err := strconv.Atoi(c.Param("id"))
+	UserID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造 deleteGroup 请求
-	deleteGroupReq := &tpb.DeleteGroupRequest{GroupId: uint32(groupID)}
+	// 构造 DeleteApplication 请求
+	DeleteApplicationReq := &tpb.ApplicationRequest{
+		UserId: uint32(UserID),
+	}
 
-	// 向 DeleteGroup 服务发送请求
-	_, err = service.TeamClient.DeleteGroup(context.Background(), deleteGroupReq)
+	// 向 DeleteApplication 服务发送请求
+	_, err = service.TeamClient.DeleteApplication(context.Background(), DeleteApplicationReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

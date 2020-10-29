@@ -10,18 +10,17 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// Join 加入团队
+// Join ... 加入团队
 func Join(c *gin.Context) {
 	log.Info("Join team function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req joinRequest
+	var req JoinRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

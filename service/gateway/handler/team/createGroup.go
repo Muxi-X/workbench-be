@@ -10,18 +10,17 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// CreateGroup 创建组别
+// CreateGroup ... 创建组别
 func CreateGroup(c *gin.Context) {
 	log.Info("Group create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req createGroupRequest
+	var req CreateGroupRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

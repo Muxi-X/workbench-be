@@ -14,13 +14,13 @@ import (
 	"go.uber.org/zap"
 )
 
-// UpdateGroupInfo 更新组别内信息
+// UpdateGroupInfo ... 更新组别内信息
 func UpdateGroupInfo(c *gin.Context) {
-	log.Info("GroupInfo Update function call.",
+	log.Info("GroupInfo update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req updateGroupInfoRequest
+	var req UpdateGroupInfoRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

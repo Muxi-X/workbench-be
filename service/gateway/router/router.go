@@ -138,50 +138,30 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		fileRouter.PUT("/doc/:id", project.UpdateDoc)
 	}
 
-	// team service in normal role
-	teamRouterInNormal := g.Group("api/v1/team")
-	teamRouterInNormal.Use(normalRequired)
+	teamRouter := g.Group("api/v1/team")
 	{
 		// team
-		teamRouterInNormal.GET("/invitation", team.CreateInvitation)
-		teamRouterInNormal.GET("/invitation/:hash", team.ParseInvitation)
+		teamRouter.POST("/member", adminRequired, team.Join)
+		teamRouter.DELETE("/member", adminRequired, team.Remove)
+		teamRouter.POST("", superAdminRequired, team.CreateTeam)
+		teamRouter.PUT("", superAdminRequired, team.UpdateTeamInfo)
+
+		// invitation
+		teamRouter.GET("/invitation", normalRequired, team.CreateInvitation)
+		teamRouter.GET("/invitation/:hash", normalRequired, team.ParseInvitation)
 
 		// group
-		teamRouterInNormal.GET("/list/group", team.GetGroupList)
-		teamRouterInNormal.GET("/list/members/:id", team.GetMemberList)
+		teamRouter.GET("/group/list", normalRequired, team.GetGroupList)
+		teamRouter.GET("/group/list/:id", normalRequired, team.GetMemberList)
+		teamRouter.PUT("/group/members", adminRequired, team.UpdateMembersForGroup)
+		teamRouter.POST("/group", superAdminRequired, team.CreateGroup)
+		teamRouter.DELETE("/group/:id", superAdminRequired, team.DeleteGroup)
+		teamRouter.PUT("/group", superAdminRequired, team.UpdateGroupInfo)
 
 		// application
-		teamRouterInNormal.POST("/apply", team.CreateApplication)
-	}
-
-	// team service in admin role
-	teamRouterInAdmin := g.Group("api/v1/team")
-	teamRouterInAdmin.Use(adminRequired)
-	{
-		// team
-		teamRouterInAdmin.POST("/members", team.Join)
-		teamRouterInAdmin.DELETE("/members", team.Remove)
-
-		// group
-		teamRouterInAdmin.PUT("/group/members", team.UpdateMembersForGroup)
-
-		// application
-		teamRouterInAdmin.GET("/list/applications", team.GetApplications)
-		teamRouterInAdmin.DELETE("/apply/:id", team.DeleteApplication)
-	}
-
-	// team service in superadmin role
-	teamRouterInSuperAdmin := g.Group("api/v1/team")
-	teamRouterInSuperAdmin.Use(superAdminRequired)
-	{
-		// group
-		teamRouterInSuperAdmin.POST("/group", team.CreateGroup)
-		teamRouterInSuperAdmin.DELETE("/group/:id", team.DeleteGroup)
-		teamRouterInSuperAdmin.PUT("/group", team.UpdateGroupInfo)
-
-		// team
-		teamRouterInSuperAdmin.POST("", team.CreateTeam)
-		teamRouterInSuperAdmin.PUT("", team.UpdateTeamInfo)
+		teamRouter.POST("/application", normalRequired, team.CreateApplication)
+		teamRouter.GET("/application/list", adminRequired, team.GetApplications)
+		teamRouter.DELETE("/application/:id", adminRequired, team.DeleteApplication)
 	}
 
 	// The health check handlers

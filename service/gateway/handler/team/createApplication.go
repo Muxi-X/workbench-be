@@ -10,30 +10,29 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// DropTeam 删除团队
-func DropTeam(c *gin.Context) {
-	log.Info("Group create function call.",
+// CreateApplication ... 创建申请
+func CreateApplication(c *gin.Context) {
+	log.Info("Application create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req dropTeamRequest
+	var req ApplicationRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造 DropTeam 请求
-	dropTeamReq := &tpb.DropTeamRequest{
-		TeamId: req.TeamID,
+	// 构造 CreateApplication 请求
+	CreateApplicationReq := &tpb.ApplicationRequest{
+		UserId: req.UserID,
 	}
 
-	// 向 DropTeam 服务发送请求
-	_, err := service.TeamClient.DropTeam(context.Background(), dropTeamReq)
+	// 向 CreateApplication 服务发送请求
+	_, err := service.TeamClient.CreateApplication(context.Background(), CreateApplicationReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

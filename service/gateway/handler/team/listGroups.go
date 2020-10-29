@@ -15,9 +15,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetGroupList 列举组别
+// GetGroupList ... 列举组别
 func GetGroupList(c *gin.Context) {
-	log.Info("Group list function call.",
+	log.Info("Groups list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	var limit int
@@ -27,13 +27,13 @@ func GetGroupList(c *gin.Context) {
 
 	limit, err = strconv.Atoi(c.Query("limit"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 	if page == -1 {
@@ -55,12 +55,13 @@ func GetGroupList(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	var resp groupListResponse
-	for i := 0; i < len(listResp.List); i++ {
-		resp.Groups = append(resp.Groups, group{
-			ID:        listResp.List[i].Id,
-			Name:      listResp.List[i].Name,
-			UserCount: listResp.List[i].UserCount,
+	var resp GroupListResponse
+	for i, _ := range listResp.List {
+		item := listResp.List[i]
+		resp.Groups = append(resp.Groups, Group{
+			ID:        item.Id,
+			Name:      item.Name,
+			UserCount: item.UserCount,
 		})
 	}
 	resp.Count = listResp.Count

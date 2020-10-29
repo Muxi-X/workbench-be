@@ -1,6 +1,6 @@
 package team
 
-type member struct {
+type Member struct {
 	ID        uint32 `json:"id"`
 	Name      string `json:"name"`
 	TeamID    uint32 `json:"team_id"`
@@ -10,85 +10,85 @@ type member struct {
 	Avatar    string `json:"avatar"`
 }
 
-type group struct {
+type Group struct {
 	ID        uint32 `json:"id"`
 	Name      string `json:"name"`
 	UserCount uint32 `json:"user_count"`
 }
 
-type applyUserItem struct {
+type ApplyUserItem struct {
 	ID    uint32 `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
 
-type updateGroupInfoRequest struct {
+type UpdateGroupInfoRequest struct {
 	NewGroupName string `json:"new_group_name"`
 	GroupID      uint32 `json:"group_id"`
 }
 
-type createGroupRequest struct {
+type CreateGroupRequest struct {
 	GroupName string   `json:"group_name"`
 	UserList  []uint32 `json:"user_list"`
 }
 
-type updateMembersRequest struct {
+type UpdateMembersRequest struct {
 	GroupID  uint32   `json:"group_id"`
 	UserList []uint32 `json:"user_list"`
 }
 
-type joinRequest struct {
+type JoinRequest struct {
 	UserList []uint32 `json:"user_list"`
 	TeamID   uint32   `json:"team_id"`
 }
 
-type removeRequest struct {
+type RemoveRequest struct {
 	UserList []uint32 `json:"user_list"`
 	TeamID   uint32   `json:"team_id"`
 }
 
-type createInvitationRequest struct {
+type CreateInvitationRequest struct {
 	TeamID  uint32 `json:"team_id"`
 	Expired int64  `json:"expired"`
 }
 
-type createTeamRequest struct {
+type CreateTeamRequest struct {
 	TeamName  string `json:"team_name"`
 	CreatorID uint32 `json:"creator_id"`
 }
 
-type updateTeamInfoRequest struct {
+type UpdateTeamInfoRequest struct {
 	TeamID  uint32 `json:"team_id"`
 	NewName string `json:"new_name"`
 }
 
-type applicationRequest struct {
+type ApplicationRequest struct {
 	UserID uint32 `json:"user_id"`
 }
 
-type dropTeamRequest struct {
+type DropTeamRequest struct {
 	TeamID uint32 `json:"team_id"`
 }
 
-type groupListResponse struct {
+type GroupListResponse struct {
 	Count  uint32  `json:"count"`
-	Groups []group `json:"groups"`
+	Groups []Group `json:"groups"`
 }
 
-type memberListResponse struct {
+type MemberListResponse struct {
 	Count   uint32   `json:"count"`
-	Members []member `json:"members"`
+	Members []Member `json:"members"`
 }
 
-type createInvitationResponse struct {
+type CreateInvitationResponse struct {
 	Hash string `json:"hash"`
 }
 
-type parseInvitationResponse struct {
+type ParseInvitationResponse struct {
 	TeamID uint32 `json:"team_id"`
 }
 
-type applicationListResponse struct {
-	ApplyList []applyUserItem `json:"apply_list"`
+type ApplicationListResponse struct {
+	ApplyList []ApplyUserItem `json:"apply_list"`
 	Count     uint32          `json:"count"`
 }

@@ -2,6 +2,7 @@ package team
 
 import (
 	"context"
+	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -10,26 +11,31 @@ import (
 	"muxi-workbench-gateway/util"
 	tpb "muxi-workbench-team/proto"
 
-	"go.uber.org/zap"
-
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// CreateInvitation 创建团队邀请码
+// CreateInvitation ... 创建团队邀请码
 func CreateInvitation(c *gin.Context) {
-	log.Info("CreateInvitation function call.",
+	log.Info("Invitation create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req createInvitationRequest
+	var req CreateInvitationRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
+	expired, err := strconv.Atoi(c.DefaultQuery("expired", "3600"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+		return
+	}
+
 	createInvitationReq := &tpb.CreateInvitationRequest{
 		TeamId:  req.TeamID,
-		Expired: req.Expired,
+		Expired: int64(expired),
 	}
 
 	// 向 CreateInvitation 服务发送请求
@@ -39,7 +45,7 @@ func CreateInvitation(c *gin.Context) {
 		return
 	}
 
-	var resp createInvitationResponse
+	var resp CreateInvitationResponse
 	resp.Hash = CreateInvitationResp.Hash
 
 	SendResponse(c, nil, resp)

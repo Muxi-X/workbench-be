@@ -15,13 +15,13 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetApplications 获取申请列表
+// GetApplications ... 获取申请列表
 func GetApplications(c *gin.Context) {
 	log.Info("Applications list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取请求
-	var req updateGroupInfoRequest
+	var req UpdateGroupInfoRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -34,13 +34,13 @@ func GetApplications(c *gin.Context) {
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	page, err = strconv.Atoi(c.Query("page"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 	if page == -1 {
@@ -61,12 +61,13 @@ func GetApplications(c *gin.Context) {
 		return
 	}
 
-	var resp applicationListResponse
-	for i := 0; i < len(listResp.List); i++ {
-		resp.ApplyList = append(resp.ApplyList, applyUserItem{
-			ID:    listResp.List[i].Id,
-			Name:  listResp.List[i].Name,
-			Email: listResp.List[i].Email,
+	var resp ApplicationListResponse
+	for i, _ := range listResp.List {
+		item := listResp.List[i]
+		resp.ApplyList = append(resp.ApplyList, ApplyUserItem{
+			ID:    item.Id,
+			Name:  item.Name,
+			Email: item.Email,
 		})
 	}
 	resp.Count = listResp.Count

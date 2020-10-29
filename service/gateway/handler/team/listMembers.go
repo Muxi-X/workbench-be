@@ -15,9 +15,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetMemberList 获取组别内成员列表
+// GetMemberList ... 获取组别内成员列表
 func GetMemberList(c *gin.Context) {
-	log.Info("Member List function call.",
+	log.Info("Members List function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	var limit int
@@ -28,19 +28,19 @@ func GetMemberList(c *gin.Context) {
 
 	groupID, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	page, err = strconv.Atoi(c.Query("page"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 	if page == -1 {
@@ -63,16 +63,17 @@ func GetMemberList(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	var resp memberListResponse
-	for i := 0; i < len(listResp.List); i++ {
-		resp.Members = append(resp.Members, member{
-			ID:        listResp.List[i].Id,
-			Name:      listResp.List[i].Name,
-			TeamID:    listResp.List[i].TeamId,
-			GroupID:   listResp.List[i].GroupId,
-			GroupName: listResp.List[i].GroupName,
-			Email:     listResp.List[i].Email,
-			Avatar:    listResp.List[i].Avatar,
+	var resp MemberListResponse
+	for i, _ := range listResp.List {
+		item := listResp.List[i]
+		resp.Members = append(resp.Members, Member{
+			ID:        item.Id,
+			Name:      item.Name,
+			TeamID:    item.TeamId,
+			GroupID:   item.GroupId,
+			GroupName: item.GroupName,
+			Email:     item.Email,
+			Avatar:    item.Avatar,
 		})
 	}
 	resp.Count = listResp.Count
