@@ -26,12 +26,12 @@ func Delete(c *gin.Context) {
 	var err error
 	sid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
-	var req deleteRequest
+	var req DeleteRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

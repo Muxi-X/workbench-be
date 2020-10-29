@@ -1,12 +1,15 @@
 package status
 
-type createRequest struct {
-	Title    string `json:"title"`
-	Content  string `json:"content"`
-	StatusId uint32 `json:"stauts_id"`
+type LikeRequest struct {
+	Liked bool `json:"liked"`
 }
 
-type comment struct {
+type CreateRequest struct {
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+type Comment struct {
 	Cid      uint32 `json:"cid"`
 	Uid      uint32 `json:"uid"`
 	Username string `json:"username"`
@@ -15,42 +18,43 @@ type comment struct {
 	Content  string `json:"content"`
 }
 
-type getResponse struct {
-	Sid         uint32    `json:"sid"` // status id
-	Title       string    `json:"title"`
-	Content     string    `json:"content"`
-	UserId      uint32    `json:"user_id"`
-	Time        string    `json:"time"`
-	Avatar      string    `json:"avatar"`
-	Username    string    `json:"username"`
+type CommentListResponse struct {
 	Count       uint32    `json:"count"`
-	CommentList []comment `json:"comment_list"`
+	CommentList []Comment `json:"commentlist"`
 }
 
-type updateRequest struct {
+type GetResponse struct {
+	Sid     uint32 `json:"sid"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	UserId  uint32 `json:userid"`
+	Time    string `json:"time"`
+}
+
+type UpdateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
 
-type deleteRequest struct {
-	Title string `json:"title"`
+type DeleteRequest struct {
+	Title string `json:title"`
 }
 
-type status struct {
+type Status struct {
 	Id       uint32 `json:"id"`
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	UserId   uint32 `json:"user_id"`
 	Time     string `json:"time"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`
+	Liked    bool   `json:"liked"`
 }
 
-type listResponse struct {
+type ListResponse struct {
 	Count  uint32   `json:"count"`
-	Status []status `json:"stauts"`
+	Status []Status `json:"stauts"`
 }
 
-type createCommentRequest struct {
+type CreateCommentRequest struct {
 	Content string `json:"content"`
 }

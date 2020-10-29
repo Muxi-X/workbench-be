@@ -26,6 +26,13 @@ func Like(c *gin.Context) {
 		return
 	}
 
+	// 获取当前点赞状态
+	var req LikeRequest
+	if err = c.Bind(&req); err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
 	// 获取 userID
 	userID := c.MustGet("userID").(uint32)
 
@@ -33,6 +40,7 @@ func Like(c *gin.Context) {
 	_, err = service.StatusClient.Like(context.Background(), &pbs.LikeRequest{
 		Id:     uint32(sid),
 		UserId: userID,
+		Liked:  req.Liked,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

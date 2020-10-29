@@ -28,12 +28,12 @@ func Update(c *gin.Context) {
 
 	sid, err = strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求体
-	var req updateRequest
+	var req UpdateRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

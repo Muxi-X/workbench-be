@@ -34,14 +34,14 @@ func List(c *gin.Context) {
 	// 获取 limit
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
 	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
@@ -54,7 +54,7 @@ func List(c *gin.Context) {
 
 	lastId, err := strconv.Atoi(c.DefaultQuery("lastid", "0"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 

@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	"go.uber.org/zap"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -13,42 +12,42 @@ import (
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
 
+	"go.uber.org/zap"
+
 	"github.com/gin-gonic/gin"
 )
 
+// UpdateMembers updates the members in the project
 // 调用一次 update 和一次 feed push
-// 需要从 token 获取 userid
 func UpdateMembers(c *gin.Context) {
 	log.Info("Project member update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 pid
-	var pid int
-	var err error
-
-	pid, err = strconv.Atoi(c.Param("id"))
+	// 获取 projectID
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取请求
-	var req updateMemberRequest
+	var req UpdateMemberRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 获取 userid
-	id := c.MustGet("userID").(uint32)
+	// 获取 userID
+	userID := c.MustGet("userID").(uint32)
 
 	// 构造请求
 	// 这里 list 应该是 uint32 表示 uid
 	updateMemReq := &pbp.UpdateMemberRequest{
-		Id: uint32(pid),
+		Id: uint32(projectID),
 	}
-	for i := 0; i < len(req.Userlist); i++ {
-		updateMemReq.List = append(updateMemReq.List, req.Userlist[i])
+
+	for i := 0; i < len(req.UserList); i++ {
+		updateMemReq.List = append(updateMemReq.List, req.UserList[i])
 	}
 
 	// 发送请求
@@ -58,15 +57,17 @@ func UpdateMembers(c *gin.Context) {
 		return
 	}
 
+	/* --- 新增 feed 动态 --- */
+
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "编辑",
-		UserId: id,
+		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        2,
-			Id:          0, // 暂时从前端获取
-			Name:        "",
-			ProjectId:   uint32(pid),
+			Id:          uint32(projectID),
+			Name:        req.ProjectName,
+			ProjectId:   uint32(projectID),
 			ProjectName: req.ProjectName,
 		},
 	}

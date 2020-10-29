@@ -68,52 +68,24 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		statusRouter.PUT("/detail/:id", status.Update)
 		statusRouter.DELETE("/detail/:id", status.Delete)
 		statusRouter.GET("", status.List)
-		// statusRouter.GET("/user/:uid", status.ListUser)
-
-		// 多了一个筛选 group 的 api
-		statusRouter.GET("/group/:gid", status.ListGroup)
 		statusRouter.PUT("/like/:id", status.Like)
 		statusRouter.POST("/comment/:id", status.CreateComment)
 		statusRouter.DELETE("/comment/:id", status.DeleteComment)
+		statusRouter.GET("/detail/:id/comments", status.CommentList)
 	}
 
 	// project
 	projectRouter := g.Group("api/v1/project")
-	projectRouter.Use(normalRequired)
 	{
-		// 创建一个 project  缺少 api
-		// projectRouter.POST("/",project.CreateProject)
-
-		// 获取一个 project 的信息，简介，之类的
-		projectRouter.GET("/:id", project.GetProjectInfo)
-
-		// 删除一个 project
-		projectRouter.DELETE("/:id", project.DeleteProject)
-
-		// 修改 project 的信息，简介之类的
-		projectRouter.PUT("/:id", project.UpdateProjectInfo)
-
-		// 获取一个 project 的成员
-		projectRouter.GET("/:id/member", project.GetMembers)
-
-		// 编辑一个 project 的成员
-		projectRouter.PUT("/:id/member", project.UpdateMembers) // 请求参数string有问题
-
-		// 获取 project 的 list ,  swagger 里面没有
-		projectRouter.GET("", project.GetProjectList)
+		projectRouter.POST("", adminRequired, project.CreateProject)
+		projectRouter.GET("", normalRequired, project.GetProjectList)           // 获取 project 的 list
+		projectRouter.GET("/:id", normalRequired, project.GetProjectInfo)       // 获取一个 project 的信息
+		projectRouter.DELETE("/:id", superAdminRequired, project.DeleteProject) // 删除一个 project
+		projectRouter.PUT("/:id", adminRequired, project.UpdateProjectInfo)     // 修改 project 的信息
+		projectRouter.GET("/:id/member", normalRequired, project.GetMembers)    // 获取一个 project 的成员
+		projectRouter.PUT("/:id/member", adminRequired, project.UpdateMembers)  // 编辑一个 project 的成员
 
 		// 有关 project file doc 的评论的 api 全部没有
-
-		// 好像是获取一个 user 的全部 project 的 id , 可能是用于别的 api 里面
-		// projectRouter.GET("/:pid/profile/:id", project.GetProjectIdsForUser) // uid
-
-		// 待修改
-		/*
-		   projectRouter.GET("/:pid/re")
-		   projectRouter.PUT("/:pid/re")
-		   projectRouter.DELETE("/:pid/re")
-		*/
-
 		// comment
 		/*
 		   projectRouter.POST("/:pid/doc/:id/comments") // fid
@@ -128,19 +100,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	}
 
 	folderRouter := g.Group("api/v1/folder")
-	folderRouter.Use(normalRequired)
+	// folderRouter.Use(normalRequired)
 	{
-		// 获取文件树
-		folderRouter.GET("/filetree/:id", project.GetFileTree)
-
-		// 获取文档树
-		folderRouter.GET("/doctree/:id", project.GetDocTree)
-
-		// 编辑文件树
-		folderRouter.PUT("/filetree/:id", project.UpdateFileTree)
-
-		// 编辑文档树
-		folderRouter.PUT("/doctree/:id", project.UpdateDocTree)
+		folderRouter.GET("/filetree/:id", project.GetFileTree)    // 获取文件树
+		folderRouter.GET("/doctree/:id", project.GetDocTree)      // 获取文档树
+		folderRouter.PUT("/filetree/:id", project.UpdateFileTree) // 编辑文件树
+		folderRouter.PUT("/doctree/:id", project.UpdateDocTree)   // 编辑文档树
 
 		// 待修改
 		/*
@@ -158,27 +123,19 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		*/
 	}
 
+	// 文件&文档
 	fileRouter := g.Group("api/v1/file")
 	fileRouter.Use(normalRequired)
 	{
-		// 没有创建/编辑/删除 file/doc 文件夹的 api
-		fileRouter.POST("/file", project.CreateFile)       //
-		fileRouter.DELETE("/file/:id", project.DeleteFile) //
-		// fileRouter.PUT("/file/:id", project.UpdateFile)    //没有
-		fileRouter.POST("/doc", project.CreateDoc)       //
-		fileRouter.GET("/doc/:id", project.GetDocDetail) //
-		fileRouter.DELETE("/doc/:id", project.DeleteDoc) //
-		fileRouter.PUT("/doc/:id", project.UpdateDoc)    //
-
-		// 待修改
-		/*
-		   fileRouter.POST("/doc", handler.CreateDoc)
-		   fileRouter.PUT("/doc/:id", handler.UpdateDoc)
-		   fileRouter.DELETE("/doc/:id", handler.DeleteDoc)
-		   fileRouter.GET("/doc/:id", handler.GetDocDetail)
-		   fileRouter.GET("/doc", handler.GetDocInfoList)
-		   fileRouter.GET("/list", handler.GetDocFolderInfoList)
-		*/
+		// 文件
+		fileRouter.POST("file", project.CreateFile)
+		fileRouter.DELETE("/file/:id", project.DeleteFile)
+		fileRouter.PUT("/file/:id", project.UpdateFile)
+		// 文档
+		fileRouter.POST("/doc", project.CreateDoc)
+		fileRouter.GET("/doc/:id", project.GetDocDetail)
+		fileRouter.DELETE("/doc/:id", project.DeleteDoc)
+		fileRouter.PUT("/doc/:id", project.UpdateDoc)
 	}
 
 	// team service in normal role

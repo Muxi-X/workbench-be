@@ -1,103 +1,103 @@
 package project
 
-type getProInfoResponse struct {
-	Projectid   uint32 `json:"projectid"`
-	Projectname string `json:"projectname"`
+type GetProjectInfoResponse struct {
+	ProjectID   uint32 `json:"project_id"`
+	ProjectName string `json:"project_name"`
 	Intro       string `json:"intro"`
-	Usercount   uint32 `json:"usercount"`
+	UserCount   uint32 `json:"user_count"`
 }
 
-type deleteRequest struct {
-	Projectname string `json:"projectname"`
+type DeleteRequest struct {
+	ProjectName string `json:"project_name"`
 }
 
-type updateRequest struct {
-	Projectname string `json:projectname"`
+type UpdateRequest struct {
+	ProjectName string `json:"project_name"`
 	Intro       string `json:"intro"`
-	Usercount   uint32 `json:"usercount"`
+	UserCount   uint32 `json:"user_count"`
 }
 
-type projectListItem struct {
-	Id   uint32 `json:"uid"`
-	Name string `json:"username"`
-	Logo string `json:logo"`
+type ProjectListItem struct {
+	Id   uint32 `json:"id"`
+	Name string `json:"name"`
+	Logo string `json:"logo"`
 }
 
-type memberListItem struct {
+type MemberListItem struct {
 	Id        uint32 `json:"id"`
 	Name      string `json:"name"`
 	Avatar    string `json:"avatar"`
-	GroupName string `json:"groupname"`
+	GroupName string `json:"group_name"`
 	Role      uint32 `json:"role"`
 }
 
-type getMemberResponse struct {
-	Count      uint32           `json:"count"`
-	Memberlist []memberListItem `json:"memberlist"`
+type GetMemberResponse struct {
+	Count uint32            `json:"count"`
+	List  []*MemberListItem `json:"list"`
 }
 
-// UserList 是 uint32
-type updateMemberRequest struct {
-	ProjectName string   `json:"projectname"`
-	Userlist    []string `json:"userlist"`
+type UpdateMemberRequest struct {
+	ProjectName string   `json:"project_name"`
+	UserList    []string `json:"user_list"` // users' ids
 }
 
-type getProjectListResponse struct {
-	Projectlist []projectListItem `json:"projectlist"`
+type GetProjectListResponse struct {
+	Count uint32             `json:"count"`
+	List  []*ProjectListItem `json:"list"`
 }
 
-type getFileTreeResponse struct {
-	Filetree string `json:"filetree"`
+type GetFileTreeResponse struct {
+	FileTree string `json:"file_tree"`
 }
 
-type updateFileTreeRequest struct {
-	Projectname string `json:"projectname"`
-	Filetree    string `json:"filetree"`
+type UpdateFileTreeRequest struct {
+	ProjectName string `json:"project_name"`
+	FileTree    string `json:"file_tree"`
 }
 
-type getDocTreeResponse struct {
-	Doctree string `json:"doctree"`
+type GetDocTreeResponse struct {
+	DocTree string `json:"doc_tree"`
 }
 
-type updateDocTreeRequest struct {
-	Projectname string `json:"projectname"`
-	Doctree     string `json:"doctree"`
+type UpdateDocTreeRequest struct {
+	ProjectName string `json:"project_name"`
+	DocTree     string `json:"doc_tree"`
 }
 
-type createFileRequest struct {
-	Pid      uint32 `json:"projectid"`
-	Filename string `json:"filename"`
-	Hashname string `json:"hashname"`
-	Url      string `json:"url"`
-	Fid      uint32 `json:"fid"`
+type CreateFileRequest struct {
+	ProjectID uint32 `json:"project_id"`
+	FileID    uint32 `json:"file_id"`
+	FileName  string `json:"file_name"`
+	HashName  string `json:"hash_name"`
+	Url       string `json:"url"`
 }
 
-type deleteFileRequest struct {
-	Filename string `json:"filename"`
+type DeleteFileRequest struct {
+	FileName string `json:"file_name"`
 }
 
-type createDocRequest struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	Pid     uint32 `json:"projectid"`
-	Docname string `json:"docname"`
+type CreateDocRequest struct {
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	ProjectID uint32 `json:"project_id"`
+	DocName   string `json:"doc_name"`
 }
 
-type getDocDetailResponse struct {
-	Id           uint32 `json:"docid"`
+type GetDocDetailResponse struct {
+	Id           uint32 `json:"doc_id"`
 	Title        string `json:"title"`
 	Content      string `json:"content"`
 	Creator      string `json:"creator"`
-	Createtime   string `json:"createtime"`
-	Lasteditor   string `json:"lasteditor"`
-	Lastedittime string `json:"lastedittime"`
+	CreateTime   string `json:"create_time"`
+	LastEditor   string `json:"last_editor"`
+	LastEditTime string `json:"last_edit_time"`
 }
 
-type deleteDocRequest struct {
-	Docname string `json:"docname"`
+type DeleteDocRequest struct {
+	DocName string `json:"doc_name"`
 }
 
-type updateDocRequest struct {
+type UpdateDocRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
