@@ -2,6 +2,7 @@ package team
 
 import (
 	"context"
+	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -26,14 +27,20 @@ func UpdateGroupInfo(c *gin.Context) {
 		return
 	}
 
+	groupID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+		return
+	}
+
 	// 构造 updateGroupInfo 请求
 	updateGroupInfoReq := &tpb.UpdateGroupInfoRequest{
-		GroupId: req.GroupID,
+		GroupId: uint32(groupID),
 		NewName: req.NewGroupName,
 	}
 
 	// 向 UpdateGroupInfo 服务发送请求
-	_, err := service.TeamClient.UpdateGroupInfo(context.Background(), updateGroupInfoReq)
+	_, err = service.TeamClient.UpdateGroupInfo(context.Background(), updateGroupInfoReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

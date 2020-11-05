@@ -62,8 +62,7 @@ func GetApplications(c *gin.Context) {
 	}
 
 	var resp ApplicationListResponse
-	for i, _ := range listResp.List {
-		item := listResp.List[i]
+	for _, item := range listResp.List {
 		resp.ApplyList = append(resp.ApplyList, ApplyUserItem{
 			ID:    item.Id,
 			Name:  item.Name,

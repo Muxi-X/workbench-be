@@ -24,7 +24,6 @@ type ApplyUserItem struct {
 
 type UpdateGroupInfoRequest struct {
 	NewGroupName string `json:"new_group_name"`
-	GroupID      uint32 `json:"group_id"`
 }
 
 type CreateGroupRequest struct {
@@ -68,6 +67,10 @@ type ApplicationRequest struct {
 
 type DropTeamRequest struct {
 	TeamID uint32 `json:"team_id"`
+}
+
+type DeleteApplicationRequest struct {
+	ApplicationList []uint32 `json:"application_list"`
 }
 
 type GroupListResponse struct {

@@ -64,8 +64,8 @@ func GetMemberList(c *gin.Context) {
 
 	// 构造返回 response
 	var resp MemberListResponse
-	for i, _ := range listResp.List {
-		item := listResp.List[i]
+	for _, item := range listResp.List {
+
 		resp.Members = append(resp.Members, Member{
 			ID:        item.Id,
 			Name:      item.Name,

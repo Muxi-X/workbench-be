@@ -45,8 +45,7 @@ func CreateInvitation(c *gin.Context) {
 		return
 	}
 
-	var resp CreateInvitationResponse
-	resp.Hash = CreateInvitationResp.Hash
+	var resp = CreateInvitationResponse{Hash: CreateInvitationResp.Hash}
 
 	SendResponse(c, nil, resp)
 }

@@ -56,8 +56,7 @@ func GetGroupList(c *gin.Context) {
 
 	// 构造返回 response
 	var resp GroupListResponse
-	for i, _ := range listResp.List {
-		item := listResp.List[i]
+	for _, item := range listResp.List {
 		resp.Groups = append(resp.Groups, Group{
 			ID:        item.Id,
 			Name:      item.Name,

@@ -156,7 +156,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		teamRouter.PUT("/group/members", adminRequired, team.UpdateMembersForGroup)
 		teamRouter.POST("/group", superAdminRequired, team.CreateGroup)
 		teamRouter.DELETE("/group/:id", superAdminRequired, team.DeleteGroup)
-		teamRouter.PUT("/group", superAdminRequired, team.UpdateGroupInfo)
+		teamRouter.PUT("/group/:id", superAdminRequired, team.UpdateGroupInfo)
 
 		// application
 		teamRouter.POST("/application", normalRequired, team.CreateApplication)

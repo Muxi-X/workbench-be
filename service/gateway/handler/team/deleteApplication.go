@@ -2,7 +2,6 @@ package team
 
 import (
 	"context"
-	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -20,19 +19,20 @@ func DeleteApplication(c *gin.Context) {
 	log.Info("Application delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	UserID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+	// 构造请求
+	var req DeleteApplicationRequest
+	if err := c.Bind(&req); err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 构造 DeleteApplication 请求
-	DeleteApplicationReq := &tpb.ApplicationRequest{
-		UserId: uint32(UserID),
+	DeleteApplicationReq := &tpb.DeleteApplicationRequest{
+		ApplyList: req.ApplicationList,
 	}
 
 	// 向 DeleteApplication 服务发送请求
-	_, err = service.TeamClient.DeleteApplication(context.Background(), DeleteApplicationReq)
+	_, err := service.TeamClient.DeleteApplication(context.Background(), DeleteApplicationReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
