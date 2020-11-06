@@ -15,6 +15,18 @@ import (
 )
 
 // DeleteApplication ... 删除申请
+// @Summary delete applications api
+// @Description 批量删除 applications
+// @Tags application
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteApplicationRequest true "delete_application_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/application [delete]
 func DeleteApplication(c *gin.Context) {
 	log.Info("Application delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

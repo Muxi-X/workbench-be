@@ -15,20 +15,26 @@ import (
 )
 
 // CreateApplication ... 创建申请
+// @Summary create application api
+// @Description 创建 application
+// @Tags application
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/application [post]
 func CreateApplication(c *gin.Context) {
 	log.Info("Application create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取请求
-	var req ApplicationRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
+	// 获取 userid
+	userID := c.MustGet("userID").(uint32)
 
 	// 构造 CreateApplication 请求
 	CreateApplicationReq := &tpb.ApplicationRequest{
-		UserId: req.UserID,
+		UserId: userID,
 	}
 
 	// 向 CreateApplication 服务发送请求

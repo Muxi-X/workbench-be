@@ -15,6 +15,18 @@ import (
 )
 
 // Remove ... 移除成员
+// @Summary remove api
+// @Description 移除成员
+// @Tags team
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body RemoveRequest true "remove_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/member [delete]
 func Remove(c *gin.Context) {
 	log.Info("Remove team function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

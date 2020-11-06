@@ -38,7 +38,6 @@ type UpdateMembersRequest struct {
 
 type JoinRequest struct {
 	UserList []uint32 `json:"user_list"`
-	TeamID   uint32   `json:"team_id"`
 }
 
 type RemoveRequest struct {
@@ -46,23 +45,12 @@ type RemoveRequest struct {
 	TeamID   uint32   `json:"team_id"`
 }
 
-type CreateInvitationRequest struct {
-	TeamID  uint32 `json:"team_id"`
-	Expired int64  `json:"expired"`
-}
-
 type CreateTeamRequest struct {
-	TeamName  string `json:"team_name"`
-	CreatorID uint32 `json:"creator_id"`
+	TeamName string `json:"team_name"`
 }
 
 type UpdateTeamInfoRequest struct {
-	TeamID  uint32 `json:"team_id"`
 	NewName string `json:"new_name"`
-}
-
-type ApplicationRequest struct {
-	UserID uint32 `json:"user_id"`
 }
 
 type DropTeamRequest struct {

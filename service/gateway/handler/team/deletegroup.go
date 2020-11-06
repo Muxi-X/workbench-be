@@ -16,6 +16,18 @@ import (
 )
 
 // DeleteGroup ... 删除团队
+// @Summary delete group api
+// @Description 删除 group
+// @Tags group
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "group_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/group/{id} [delete]
 func DeleteGroup(c *gin.Context) {
 	log.Info("Group delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

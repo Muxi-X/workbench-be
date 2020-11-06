@@ -15,6 +15,18 @@ import (
 )
 
 // CreateGroup ... 创建组别
+// @Summary create group api
+// @Description 创建 group
+// @Tags group
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateGroupRequest true "create_group_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/group [post]
 func CreateGroup(c *gin.Context) {
 	log.Info("Group create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

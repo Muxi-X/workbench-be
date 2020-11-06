@@ -16,6 +16,19 @@ import (
 )
 
 // GetGroupList ... 列举组别
+// @Summary list group api
+// @Description 拉取 group 列表
+// @Tags group
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param page query int false "page"
+// @Security ApiKeyAuth
+// @Success 200 {object} GroupListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/group/list [get]
 func GetGroupList(c *gin.Context) {
 	log.Info("Groups list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -36,7 +49,7 @@ func GetGroupList(c *gin.Context) {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page == -1 {
+	if page <= 0 {
 		pagination = false
 	}
 

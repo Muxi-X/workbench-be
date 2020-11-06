@@ -15,6 +15,18 @@ import (
 )
 
 // DropTeam ... 删除团队
+// @Summary drop team api
+// @Description 删除 team
+// @Tags team
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DropTeamRequest true "drop_team_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team [delete]
 func DropTeam(c *gin.Context) {
 	log.Info("Team drop function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

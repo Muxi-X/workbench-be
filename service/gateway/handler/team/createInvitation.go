@@ -16,16 +16,24 @@ import (
 )
 
 // CreateInvitation ... 创建团队邀请码
+// @Summary create invitation api
+// @Description 创建 invitation
+// @Tags invitation
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param expired query int false "expired"
+// @Security ApiKeyAuth
+// @Success 200 {object} CreateInvitationResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/invitation [get]
 func CreateInvitation(c *gin.Context) {
 	log.Info("Invitation create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取请求
-	var req CreateInvitationRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
+	// 获取 teamID
+	teamID := c.MustGet("teamID").(uint32)
 
 	expired, err := strconv.Atoi(c.DefaultQuery("expired", "3600"))
 	if err != nil {
@@ -34,7 +42,7 @@ func CreateInvitation(c *gin.Context) {
 	}
 
 	createInvitationReq := &tpb.CreateInvitationRequest{
-		TeamId:  req.TeamID,
+		TeamId:  teamID,
 		Expired: int64(expired),
 	}
 

@@ -16,6 +16,20 @@ import (
 )
 
 // GetMemberList ... 获取组别内成员列表
+// @Summary list members api
+// @Description 根据 groupID 拉取 members 列表
+// @Tags group
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "group_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param page query int false "page"
+// @Security ApiKeyAuth
+// @Success 200 {object} MemberListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/group/members/list/{id} [get]
 func GetMemberList(c *gin.Context) {
 	log.Info("Members List function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -43,7 +57,7 @@ func GetMemberList(c *gin.Context) {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page == -1 {
+	if page <= 0 {
 		pagination = false
 	}
 
@@ -65,7 +79,6 @@ func GetMemberList(c *gin.Context) {
 	// 构造返回 response
 	var resp MemberListResponse
 	for _, item := range listResp.List {
-
 		resp.Members = append(resp.Members, Member{
 			ID:        item.Id,
 			Name:      item.Name,

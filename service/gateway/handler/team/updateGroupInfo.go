@@ -16,6 +16,19 @@ import (
 )
 
 // UpdateGroupInfo ... 更新组别内信息
+// @Summary update group info api
+// @Description 更新组别信息
+// @Tags group
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "group_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body UpdateGroupInfoRequest true "update_group_info_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/group/{id} [put]
 func UpdateGroupInfo(c *gin.Context) {
 	log.Info("GroupInfo update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

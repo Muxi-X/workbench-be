@@ -15,6 +15,18 @@ import (
 )
 
 // CreateTeam ... 创建新团队
+// @Summary create team api
+// @Description 创建 team
+// @Tags team
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateTeamRequest true "create_team_request"
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team [post]
 func CreateTeam(c *gin.Context) {
 	log.Info("Team create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -26,10 +38,13 @@ func CreateTeam(c *gin.Context) {
 		return
 	}
 
+	// 获取 creatorID
+	creatorID := c.MustGet("userID").(uint32)
+
 	// 构造 createTeam 请求
 	createTeamReq := &tpb.CreateTeamRequest{
 		TeamName:  req.TeamName,
-		CreatorId: req.CreatorID,
+		CreatorId: creatorID,
 	}
 
 	// 向 CreateTeam 服务发送请求

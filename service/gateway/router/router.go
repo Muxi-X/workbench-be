@@ -152,7 +152,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 		// group
 		teamRouter.GET("/group/list", normalRequired, team.GetGroupList)
-		teamRouter.GET("/group/list/:id", normalRequired, team.GetMemberList)
+		teamRouter.GET("/group/members/list/:id", normalRequired, team.GetMemberList)
 		teamRouter.PUT("/group/members", adminRequired, team.UpdateMembersForGroup)
 		teamRouter.POST("/group", superAdminRequired, team.CreateGroup)
 		teamRouter.DELETE("/group/:id", superAdminRequired, team.DeleteGroup)
@@ -161,7 +161,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// application
 		teamRouter.POST("/application", normalRequired, team.CreateApplication)
 		teamRouter.GET("/application/list", adminRequired, team.GetApplications)
-		teamRouter.DELETE("/application/:id", adminRequired, team.DeleteApplication)
+		teamRouter.DELETE("/application", adminRequired, team.DeleteApplication)
 	}
 
 	// The health check handlers

@@ -15,6 +15,18 @@ import (
 )
 
 // ParseInvitation ... 解析团队邀请码
+// @Summary parse invitation api
+// @Description 解析 invitation
+// @Tags invitation
+// @Accept  application/json
+// @Produce  application/json
+// @Param hash path string true "hash"
+// @Param Authorization header string true "token 用户令牌"
+// @Security ApiKeyAuth
+// @Success 200 {object} ParseInvitationResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/invitation/{hash} [get]
 func ParseInvitation(c *gin.Context) {
 	log.Info("Invitation parse function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

@@ -16,16 +16,22 @@ import (
 )
 
 // GetApplications ... 获取申请列表
+// @Summary list application api
+// @Description 拉取 application 列表
+// @Tags application
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param page query int false "page"
+// @Security ApiKeyAuth
+// @Success 200 {object} ApplicationListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /team/application/list [get]
 func GetApplications(c *gin.Context) {
 	log.Info("Applications list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
-
-	// 获取请求
-	var req UpdateGroupInfoRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
 
 	var limit int
 	var page int
@@ -43,7 +49,7 @@ func GetApplications(c *gin.Context) {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page == -1 {
+	if page <= 0 {
 		pagination = false
 	}
 
