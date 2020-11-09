@@ -1015,8 +1015,17 @@ var doc = `{
         "status.GetResponse": {
             "type": "object",
             "properties": {
+                "comment_count": {
+                    "type": "integer"
+                },
                 "content": {
                     "type": "string"
+                },
+                "like_count": {
+                    "type": "integer"
+                },
+                "liked": {
+                    "type": "boolean"
                 },
                 "sid": {
                     "type": "integer"
@@ -1025,6 +1034,9 @@ var doc = `{
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                },
+                "user_name": {
                     "type": "string"
                 },
                 "userid": {

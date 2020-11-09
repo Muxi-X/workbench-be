@@ -28,11 +28,15 @@ type CommentListResponse struct {
 
 // GetResponse 获得进度实体响应
 type GetResponse struct {
-	Sid     uint32 `json:"sid"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-	UserId  uint32 `json:"userid"`
-	Time    string `json:"time"`
+	Sid          uint32 `json:"sid"`
+	Title        string `json:"title"`
+	Content      string `json:"content"`
+	UserId       uint32 `json:"userid"`
+	Time         string `json:"time"`
+	LikeCount    uint32 `json:"like_count"`
+	CommentCount uint32 `json:"comment_count"`
+	Liked        bool   `json:"liked"`
+	UserName     string `json:"user_name"`
 }
 
 // UpdateRequest 编辑进度请求

@@ -59,13 +59,21 @@ definitions:
     type: object
   status.GetResponse:
     properties:
+      comment_count:
+        type: integer
       content:
         type: string
+      like_count:
+        type: integer
+      liked:
+        type: boolean
       sid:
         type: integer
       time:
         type: string
       title:
+        type: string
+      user_name:
         type: string
       userid:
         type: integer
