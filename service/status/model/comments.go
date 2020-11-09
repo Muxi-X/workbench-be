@@ -93,6 +93,7 @@ func CreateStatusComment(db *gorm.DB, u *CommentsModel, m *StatusModel) error {
 	return tx.Commit().Error
 }
 
+// DeleteStatusComment ... 删除 comment 和修改 status 的评论总数
 func DeleteStatusComment(db *gorm.DB, id uint32, uid uint32, m *StatusModel) error {
 	tx := db.Begin()
 	defer func() {
