@@ -11,7 +11,7 @@ service StatusService {
   rpc Like(LikeRequest) returns (Response) {}
   rpc CreateComment(CreateCommentRequest) returns (IdResponse) {}
   rpc ListComment(CommentListRequest) returns (CommentListResponse) {}
-  rpc DeleteComment(GetRequest) returns (Response) {}
+  rpc DeleteComment(DeleteCommentRequest) returns (Response) {}
 }
 
 message GetRequest {
@@ -68,6 +68,12 @@ message CreateCommentRequest {
   uint32 status_id = 3;
 }
 
+message DeleteCommentRequest{
+  uint32 user_id = 1;
+  uint32 comment_id = 2;
+  uint32 status_id = 3;  
+}
+
 message UpdateRequest {
   uint32 id = 1;
   string title = 2;
@@ -90,6 +96,8 @@ message Status {
   string avatar = 6;
   string user_name = 7;
   bool   liked = 8;
+  uint32 comment = 9;
+  uint32 like = 10;
 }
 
 

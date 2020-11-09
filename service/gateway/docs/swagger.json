@@ -11,7 +11,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "work.text.muxi-tech.xyz",
     "basePath": "/api/v1",
     "paths": {
         "/auth/login": {
@@ -361,12 +361,12 @@
                         "required": true
                     },
                     {
-                        "description": "delete_request",
+                        "description": "delete_comment_request",
                         "name": "object",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.DeleteRequest"
+                            "$ref": "#/definitions/status.DeleteCommentRequest"
                         }
                     }
                 ],
@@ -978,6 +978,17 @@
                 }
             }
         },
+        "status.DeleteCommentRequest": {
+            "type": "object",
+            "properties": {
+                "status_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "status.DeleteRequest": {
             "type": "object",
             "properties": {
@@ -1001,7 +1012,7 @@
                 "title": {
                     "type": "string"
                 },
-                "userId": {
+                "userid": {
                     "type": "integer"
                 }
             }
@@ -1034,10 +1045,16 @@
                 "avatar": {
                     "type": "string"
                 },
+                "comment_count": {
+                    "type": "integer"
+                },
                 "content": {
                     "type": "string"
                 },
                 "id": {
+                    "type": "integer"
+                },
+                "like_count": {
                     "type": "integer"
                 },
                 "liked": {

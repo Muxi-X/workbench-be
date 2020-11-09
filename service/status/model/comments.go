@@ -5,6 +5,8 @@ import (
 
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 type CommentsModel struct {
@@ -63,4 +65,55 @@ func DeleteComment(id, uid uint32) error {
 	comment := &CommentsModel{}
 	comment.ID = id
 	return m.DB.Self.Where("creator =?", strconv.Itoa(int(uid))).Delete(&comment).Error
+}
+
+// CreateStatusComment ... 创建 comment 和修改 status 的评论总数
+func CreateStatusComment(db *gorm.DB, u *CommentsModel, m *StatusModel) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	if err := tx.Create(u).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Save(m).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
+}
+
+func DeleteStatusComment(db *gorm.DB, id uint32, uid uint32, m *StatusModel) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	if err := DeleteComment(id, uid); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Save(m).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }

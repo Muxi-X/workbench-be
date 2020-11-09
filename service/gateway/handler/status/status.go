@@ -31,7 +31,7 @@ type GetResponse struct {
 	Sid     uint32 `json:"sid"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
-	UserId  uint32 `json:userid"`
+	UserId  uint32 `json:"userid"`
 	Time    string `json:"time"`
 }
 
@@ -43,17 +43,19 @@ type UpdateRequest struct {
 
 // DeleteRequest 删除进度请求
 type DeleteRequest struct {
-	Title string `json:title"`
+	Title string `json:"title"`
 }
 
 type Status struct {
-	Id       uint32 `json:"id"`
-	Title    string `json:"title"`
-	Content  string `json:"content"`
-	Time     string `json:"time"`
-	Avatar   string `json:"avatar"`
-	Username string `json:"username"`
-	Liked    bool   `json:"liked"`
+	Id           uint32 `json:"id"`
+	Title        string `json:"title"`
+	Content      string `json:"content"`
+	Time         string `json:"time"`
+	CommentCount uint32 `json:"comment_count"`
+	LikeCount    uint32 `json:"like_count"`
+	Avatar       string `json:"avatar"`
+	Username     string `json:"username"`
+	Liked        bool   `json:"liked"`
 }
 
 // ListResponse 获取进度列表响应
@@ -65,4 +67,10 @@ type ListResponse struct {
 // CreateCommentRequest 创建评论请求
 type CreateCommentRequest struct {
 	Content string `json:"content"`
+}
+
+// DeleteCommentRequest 删除评论请求
+type DeleteCommentRequest struct {
+	Title    string `json:"title"`
+	StatusId uint32 `json:"status_id"`
 }
