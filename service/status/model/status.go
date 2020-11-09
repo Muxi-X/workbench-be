@@ -5,6 +5,8 @@ import (
 
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 type StatusModel struct {
@@ -30,6 +32,17 @@ type StatusListItem struct {
 	GroupID  uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
 }
 
+type StatusGetItem struct {
+	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Content  string `json:"content" gorm:"column:content;" binding:"required"`
+	Title    string `json:"title" gorm:"column:title;" binding:"required"`
+	Time     string `json:"time" gorm:"column:time;" binding:"required"`
+	Like     uint32 `json:"like" gorm:"column:like;" binding:"required"`
+	Comment  uint32 `json:"comment" gorm:"column:comment;" binding:"required"`
+	UserID   uint32 `json:"userId" gorm:"column:user_id;" binding:"required"`
+	UserName string `json:"username" gorm:"column:name;" binding:"required"`
+}
+
 func (c *StatusModel) TableName() string {
 	return "status"
 }
@@ -40,10 +53,39 @@ func (u *StatusModel) Create() error {
 }
 
 // Delete status
-func DeleteStatus(id, uid uint32) error {
+func DeleteStatus(db *gorm.DB, id, uid uint32) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	// 删除 status
 	status := &StatusModel{}
 	status.ID = id
-	return m.DB.Self.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error
+	if err := m.DB.Self.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 删除 comment
+	if err := m.DB.Self.Where("statu_id=?", strconv.Itoa(int(id))).Delete(&CommentsModel{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 删除 user2status
+	if err := m.DB.Self.Where("status_id=?", strconv.Itoa(int(id))).Delete(&UserToStatusModel{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
 
 // Update status
@@ -55,6 +97,14 @@ func (u *StatusModel) Update() error {
 func GetStatus(id uint32) (*StatusModel, error) {
 	s := &StatusModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&s)
+
+	return s, d.Error
+}
+
+func GetStatusItem(id uint32) (*StatusGetItem, error) {
+	s := &StatusGetItem{}
+	d := m.DB.Self.Table("status").Select("status.*, users.name").Joins("left join users on users.id = status.user_id").Where("status.id = ?", id).First(&s)
+
 	return s, d.Error
 }
 

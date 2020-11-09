@@ -376,12 +376,12 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "delete_request",
+                        "description": "delete_comment_request",
                         "name": "object",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.DeleteRequest"
+                            "$ref": "#/definitions/status.DeleteCommentRequest"
                         }
                     }
                 ],
@@ -993,6 +993,17 @@ var doc = `{
                 }
             }
         },
+        "status.DeleteCommentRequest": {
+            "type": "object",
+            "properties": {
+                "status_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "status.DeleteRequest": {
             "type": "object",
             "properties": {
@@ -1004,8 +1015,17 @@ var doc = `{
         "status.GetResponse": {
             "type": "object",
             "properties": {
+                "comment_count": {
+                    "type": "integer"
+                },
                 "content": {
                     "type": "string"
+                },
+                "like_count": {
+                    "type": "integer"
+                },
+                "liked": {
+                    "type": "boolean"
                 },
                 "sid": {
                     "type": "integer"
@@ -1016,7 +1036,10 @@ var doc = `{
                 "title": {
                     "type": "string"
                 },
-                "userId": {
+                "user_name": {
+                    "type": "string"
+                },
+                "userid": {
                     "type": "integer"
                 }
             }
@@ -1049,10 +1072,16 @@ var doc = `{
                 "avatar": {
                     "type": "string"
                 },
+                "comment_count": {
+                    "type": "integer"
+                },
                 "content": {
                     "type": "string"
                 },
                 "id": {
+                    "type": "integer"
+                },
+                "like_count": {
                     "type": "integer"
                 },
                 "liked": {
@@ -1247,7 +1276,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "localhost:8080",
+	Host:        "work.text.muxi-tech.xyz",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
 	Title:       "muxi-workbench-gateway",

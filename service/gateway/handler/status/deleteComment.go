@@ -25,7 +25,7 @@ import (
 // @Produce  application/json
 // @Param id path int true "comment_id"
 // @Param Authorization header string true "token 用户令牌"
-// @Param object body DeleteRequest  true "delete_request"
+// @Param object body DeleteCommentRequest  true "delete_comment_request"
 // @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
@@ -45,23 +45,25 @@ func DeleteComment(c *gin.Context) {
 	}
 
 	// 获取请求体
-	var req DeleteRequest
+	var req DeleteCommentRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
+	// 获取 userid
+	id := c.MustGet("userID").(uint32)
+
 	// 调用 Status 服务删除评论
-	_, err = service.StatusClient.DeleteComment(context.Background(), &pbs.GetRequest{
-		Id: uint32(cid),
+	_, err = service.StatusClient.DeleteComment(context.Background(), &pbs.DeleteCommentRequest{
+		UserId:    id,
+		CommentId: uint32(cid),
+		StatusId:  req.StatusId,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
-
-	// 获取 userid
-	id := c.MustGet("userID").(uint32)
 
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{

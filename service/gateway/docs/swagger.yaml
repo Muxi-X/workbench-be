@@ -45,6 +45,13 @@ definitions:
       title:
         type: string
     type: object
+  status.DeleteCommentRequest:
+    properties:
+      status_id:
+        type: integer
+      title:
+        type: string
+    type: object
   status.DeleteRequest:
     properties:
       title:
@@ -52,15 +59,23 @@ definitions:
     type: object
   status.GetResponse:
     properties:
+      comment_count:
+        type: integer
       content:
         type: string
+      like_count:
+        type: integer
+      liked:
+        type: boolean
       sid:
         type: integer
       time:
         type: string
       title:
         type: string
-      userId:
+      user_name:
+        type: string
+      userid:
         type: integer
     type: object
   status.LikeRequest:
@@ -81,9 +96,13 @@ definitions:
     properties:
       avatar:
         type: string
+      comment_count:
+        type: integer
       content:
         type: string
       id:
+        type: integer
+      like_count:
         type: integer
       liked:
         type: boolean
@@ -200,7 +219,7 @@ definitions:
       tel:
         type: string
     type: object
-host: localhost:8080
+host: work.text.muxi-tech.xyz
 info:
   contact: {}
   description: The gateway of muxi-workbench
@@ -387,12 +406,12 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: delete_request
+      - description: delete_comment_request
         in: body
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.DeleteRequest'
+          $ref: '#/definitions/status.DeleteCommentRequest'
       produces:
       - application/json
       responses:
