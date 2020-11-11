@@ -23,7 +23,6 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param id path int true "status_id"
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Param page query int false "page"
@@ -89,10 +88,10 @@ func List(c *gin.Context) {
 
 	if team == 1 {
 		// 还要获取用户 teamid
-		teamID = c.MustGet("TeamID").(uint32)
+		teamID = c.MustGet("teamID").(uint32)
 	}
 
-	userID := c.MustGet("UserID").(uint32)
+	userID := c.MustGet("userID").(uint32)
 
 	// 构造 list 请求
 	listReq := &pbs.ListRequest{
