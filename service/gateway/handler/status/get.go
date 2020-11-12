@@ -54,15 +54,11 @@ func Get(c *gin.Context) {
 
 	// 构造返回 response
 	resp := GetResponse{
-		Sid:          uint32(sid),
-		Title:        getResp.Status.Title,
-		Content:      getResp.Status.Content,
-		UserId:       getResp.Status.UserId,
-		Time:         getResp.Status.Time,
-		LikeCount:    getResp.Status.Like,
-		CommentCount: getResp.Status.Comment,
-		Liked:        getResp.Status.Liked,
-		UserName:     getResp.Status.UserName,
+		Sid:     uint32(sid),
+		Title:   getResp.Status.Title,
+		Content: getResp.Status.Content,
+		UserId:  getResp.Status.UserId,
+		Time:    getResp.Status.Time,
 	}
 
 	SendResponse(c, nil, resp)

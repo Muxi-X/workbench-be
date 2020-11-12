@@ -159,13 +159,6 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "status_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "limit",
                         "name": "limit",
                         "in": "query"
@@ -1015,17 +1008,8 @@ var doc = `{
         "status.GetResponse": {
             "type": "object",
             "properties": {
-                "comment_count": {
-                    "type": "integer"
-                },
                 "content": {
                     "type": "string"
-                },
-                "like_count": {
-                    "type": "integer"
-                },
-                "liked": {
-                    "type": "boolean"
                 },
                 "sid": {
                     "type": "integer"
@@ -1034,9 +1018,6 @@ var doc = `{
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
-                },
-                "user_name": {
                     "type": "string"
                 },
                 "userid": {
