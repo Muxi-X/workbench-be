@@ -32,17 +32,6 @@ type StatusListItem struct {
 	GroupID  uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
 }
 
-type StatusGetItem struct {
-	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Content  string `json:"content" gorm:"column:content;" binding:"required"`
-	Title    string `json:"title" gorm:"column:title;" binding:"required"`
-	Time     string `json:"time" gorm:"column:time;" binding:"required"`
-	Like     uint32 `json:"like" gorm:"column:like;" binding:"required"`
-	Comment  uint32 `json:"comment" gorm:"column:comment;" binding:"required"`
-	UserID   uint32 `json:"userId" gorm:"column:user_id;" binding:"required"`
-	UserName string `json:"username" gorm:"column:name;" binding:"required"`
-}
-
 func (c *StatusModel) TableName() string {
 	return "status"
 }
@@ -97,13 +86,6 @@ func (u *StatusModel) Update() error {
 func GetStatus(id uint32) (*StatusModel, error) {
 	s := &StatusModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&s)
-
-	return s, d.Error
-}
-
-func GetStatusItem(id uint32) (*StatusGetItem, error) {
-	s := &StatusGetItem{}
-	d := m.DB.Self.Table("status").Select("status.*, users.name").Joins("left join users on users.id = status.user_id").Where("status.id = ?", id).First(&s)
 
 	return s, d.Error
 }
