@@ -23,7 +23,7 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
-// @Param page query int false "page"
+// @Param page query int false "page 从 1 开始计数， 传入非整数或不传值则不分页"
 // @Security ApiKeyAuth
 // @Success 200 {object} GroupListResponse
 // @Failure 401 {object} handler.Response
@@ -55,7 +55,7 @@ func GetGroupList(c *gin.Context) {
 
 	// 构造 GroupList 请求
 	GroupListReq := &tpb.GroupListRequest{
-		Offset:     uint32(page * limit),
+		Offset:     uint32(limit * (page - 1)),
 		Limit:      uint32(limit),
 		Pagination: pagination,
 	}

@@ -24,7 +24,7 @@ import (
 // @Param id path int true "group_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
-// @Param page query int false "page"
+// @Param page query int false "page 从 1 开始计数， 传入非整数或不传值则不分页"
 // @Security ApiKeyAuth
 // @Success 200 {object} MemberListResponse
 // @Failure 401 {object} handler.Response
@@ -52,7 +52,7 @@ func GetMemberList(c *gin.Context) {
 		return
 	}
 
-	page, err = strconv.Atoi(c.Query("page"))
+	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
@@ -64,7 +64,7 @@ func GetMemberList(c *gin.Context) {
 	// 构造 MemberList 请求
 	MemberListReq := &tpb.MemberListRequest{
 		GroupId:    uint32(groupID),
-		Offset:     uint32(limit * page),
+		Offset:     uint32(limit * (page - 1)),
 		Limit:      uint32(limit),
 		Pagination: pagination,
 	}

@@ -42,7 +42,6 @@ type JoinRequest struct {
 
 type RemoveRequest struct {
 	UserList []uint32 `json:"user_list"`
-	TeamID   uint32   `json:"team_id"`
 }
 
 type CreateTeamRequest struct {

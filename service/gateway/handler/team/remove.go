@@ -31,6 +31,9 @@ func Remove(c *gin.Context) {
 	log.Info("Remove team function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	// 获取 teamID
+	teamID := c.MustGet("teamID").(uint32)
+
 	// 获取请求
 	var req RemoveRequest
 	if err := c.Bind(&req); err != nil {
@@ -40,7 +43,7 @@ func Remove(c *gin.Context) {
 
 	removeReq := &tpb.RemoveRequest{
 		UserList: req.UserList,
-		TeamId:   req.TeamID,
+		TeamId:   teamID,
 	}
 
 	// 向 Remove 服务发送请求

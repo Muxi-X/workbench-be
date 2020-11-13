@@ -151,8 +151,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		teamRouter.GET("/invitation/:hash", normalRequired, team.ParseInvitation)
 
 		// group
-		teamRouter.GET("/group/list", normalRequired, team.GetGroupList)
-		teamRouter.GET("/group/members/list/:id", normalRequired, team.GetMemberList)
+		teamRouter.GET("/group", normalRequired, team.GetGroupList)
+		teamRouter.GET("/group/members/:id", normalRequired, team.GetMemberList)
 		teamRouter.PUT("/group/members", adminRequired, team.UpdateMembersForGroup)
 		teamRouter.POST("/group", superAdminRequired, team.CreateGroup)
 		teamRouter.DELETE("/group/:id", superAdminRequired, team.DeleteGroup)
@@ -160,7 +160,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 		// application
 		teamRouter.POST("/application", normalRequired, team.CreateApplication)
-		teamRouter.GET("/application/list", adminRequired, team.GetApplications)
+		teamRouter.GET("/application", adminRequired, team.GetApplications)
 		teamRouter.DELETE("/application", adminRequired, team.DeleteApplication)
 	}
 

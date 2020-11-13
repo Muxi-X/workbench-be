@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// DeleteGroup ... 删除团队
+// DeleteGroup ... 删除组别
 // @Summary delete group api
 // @Description 删除 group
 // @Tags group

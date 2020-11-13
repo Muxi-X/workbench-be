@@ -2,8 +2,10 @@ package model
 
 import (
 	"errors"
-	"github.com/jinzhu/gorm"
+
 	m "muxi-workbench/model"
+
+	"github.com/jinzhu/gorm"
 )
 
 type TeamModel struct {
