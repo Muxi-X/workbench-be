@@ -2,19 +2,27 @@ package service
 
 import (
 	"context"
-	"muxi-workbench-status/model"
-	pb "muxi-workbench-status/proto"
 	"time"
 
 	errno "muxi-workbench-status/errno"
+	"muxi-workbench-status/model"
+	pb "muxi-workbench-status/proto"
+	m "muxi-workbench/model"
 	e "muxi-workbench/pkg/err"
 )
 
 // CreateComment ... 创建进度的评论
 func (s *StatusService) CreateComment(ctx context.Context, req *pb.CreateCommentRequest, res *pb.IdResponse) error {
+	status, err := model.GetStatus(req.StatusId)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	status.Comment = status.Comment + 1
+
 	t := time.Now()
 
-	comment := model.CommentsModel{
+	comment := &model.CommentsModel{
 		Creator:  req.UserId,
 		Kind:     0,
 		Content:  req.Content,
@@ -22,7 +30,8 @@ func (s *StatusService) CreateComment(ctx context.Context, req *pb.CreateComment
 		StatusID: req.StatusId,
 	}
 
-	if err := comment.Create(); err != nil {
+	// 事务
+	if err := model.CreateStatusComment(m.DB.Self, comment, status); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

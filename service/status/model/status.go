@@ -5,6 +5,8 @@ import (
 
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 type StatusModel struct {
@@ -40,10 +42,39 @@ func (u *StatusModel) Create() error {
 }
 
 // Delete status
-func DeleteStatus(id, uid uint32) error {
+func DeleteStatus(db *gorm.DB, id, uid uint32) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	// 删除 status
 	status := &StatusModel{}
 	status.ID = id
-	return m.DB.Self.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error
+	if err := m.DB.Self.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 删除 comment
+	if err := m.DB.Self.Where("statu_id=?", strconv.Itoa(int(id))).Delete(&CommentsModel{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 删除 user2status
+	if err := m.DB.Self.Where("status_id=?", strconv.Itoa(int(id))).Delete(&UserToStatusModel{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
 
 // Update status
@@ -55,6 +86,7 @@ func (u *StatusModel) Update() error {
 func GetStatus(id uint32) (*StatusModel, error) {
 	s := &StatusModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&s)
+
 	return s, d.Error
 }
 

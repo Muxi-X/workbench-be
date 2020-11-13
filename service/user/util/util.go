@@ -8,6 +8,6 @@ import (
 
 // GetExpiredTime get token expired time from env or config file.
 func GetExpiredTime() time.Duration {
-	day := viper.GetInt("token_expired")
+	day := viper.GetInt("token.expired")
 	return time.Hour * 24 * time.Duration(day)
 }
