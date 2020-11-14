@@ -36,7 +36,10 @@ func (a *ApplyModel) Check() error {
 	if d.Error == gorm.ErrRecordNotFound {
 		return nil
 	}
-	return errors.New("该用户已申请！请勿重复提交！")
+	if d.Error == nil {
+		return errors.New("该用户已申请！请勿重复提交！")
+	}
+	return d.Error
 }
 
 // DeleteApply delete applications by id
