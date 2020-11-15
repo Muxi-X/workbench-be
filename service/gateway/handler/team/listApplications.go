@@ -23,7 +23,7 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
-// @Param page query int false "page 从 1 开始计数， 传入非整数或不传值则不分页"
+// @Param page query int false "page 从 0 开始计数， 如果传入非负数或者不传值则不分页"
 // @Security ApiKeyAuth
 // @Success 200 {object} ApplicationListResponse
 // @Failure 401 {object} handler.Response
@@ -44,12 +44,12 @@ func GetApplications(c *gin.Context) {
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
+	page, err = strconv.Atoi(c.DefaultQuery("page", "-1"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page <= 0 {
+	if page < 0 {
 		pagination = false
 	}
 

@@ -24,7 +24,7 @@ import (
 // @Param id path int true "group_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
-// @Param page query int false "page 从 1 开始计数， 传入非整数或不传值则不分页"
+// @Param page query int false "page 从 0 开始计数， 如果传入非负数或者不传值则不分页"
 // @Security ApiKeyAuth
 // @Success 200 {object} MemberListResponse
 // @Failure 401 {object} handler.Response
@@ -52,25 +52,25 @@ func GetMemberList(c *gin.Context) {
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
+	page, err = strconv.Atoi(c.DefaultQuery("page", "-1"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page <= 0 {
+	if page < 0 {
 		pagination = false
 	}
 
-	// 构造 MemberList 请求
-	MemberListReq := &tpb.MemberListRequest{
+	// 构造 memberList 请求
+	memberListReq := &tpb.MemberListRequest{
 		GroupId:    uint32(groupID),
-		Offset:     uint32(limit * (page - 1)),
+		Offset:     uint32(limit * (page)),
 		Limit:      uint32(limit),
 		Pagination: pagination,
 	}
 
 	// 向 GetMemberList 服务发送请求
-	listResp, err := service.TeamClient.GetMemberList(context.Background(), MemberListReq)
+	listResp, err := service.TeamClient.GetMemberList(context.Background(), memberListReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
