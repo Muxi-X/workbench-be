@@ -54,9 +54,14 @@ func main() {
 	// init db
 	model.DB.Init()
 	defer model.DB.Close()
-
+	// init redis
 	model.RedisDB.Init()
 	defer model.RedisDB.Close()
+
+	// 黑名单过期数据定时清理
+	go service.TidyBlacklist()
+	// 同步黑名单数据
+	service.SynchronizeBlacklistToRedis()
 
 	// Set gin mode.
 	gin.SetMode(viper.GetString("runmode"))
@@ -73,9 +78,6 @@ func main() {
 		middleware.Logging(),
 		middleware.RequestId(),
 	)
-
-	// 黑名单过期数据定时清理
-	go service.TidyBlacklist()
 
 	// Ping the server to make sure the router is working.
 	go func() {

@@ -35,3 +35,10 @@ func HasExistedInBlacklist(token string) (bool, error) {
 	err := m.DB.Self.Table("blacklist").Where("token = ?", token).Count(&count).Error
 	return count != 0, err
 }
+
+// GetAllBlacklist gets all blacklist records
+func GetAllBlacklist() ([]*BlacklistModel, error) {
+	var list []*BlacklistModel
+	d := m.DB.Self.Find(&list)
+	return list, d.Error
+}
