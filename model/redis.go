@@ -52,7 +52,7 @@ func OpenRedisClient() *redis.Client {
 	})
 
 	if _, err := r.Ping().Result(); err != nil {
-		log.Fatal("Open redis failed", zap.String("reason", err.Error()))
+		log.Error("Open redis failed", zap.String("reason", err.Error()))
 	}
 	return r
 }
