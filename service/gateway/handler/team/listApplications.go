@@ -55,7 +55,7 @@ func GetApplications(c *gin.Context) {
 
 	// 构造 ApplicationList 请求
 	ApplicationListReq := &tpb.ApplicationListRequest{
-		Offset:     uint32(limit * (page - 1)),
+		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
 		Pagination: pagination,
 	}

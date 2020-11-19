@@ -55,7 +55,7 @@ func GetGroupList(c *gin.Context) {
 
 	// 构造 GroupList 请求
 	GroupListReq := &tpb.GroupListRequest{
-		Offset:     uint32(limit * (page - 1)),
+		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
 		Pagination: pagination,
 	}
