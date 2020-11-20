@@ -11,16 +11,12 @@ import (
 	"muxi-workbench-gateway/router"
 	"muxi-workbench-gateway/router/middleware"
 	"muxi-workbench-gateway/service"
+	"muxi-workbench/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-
 	"go.uber.org/zap"
-
-	"github.com/swaggo/files"       // swagger embed files
-	"github.com/swaggo/gin-swagger" // gin-swagger middleware
-	_ "muxi-workbench-gateway/docs"
 )
 
 var (
@@ -56,17 +52,22 @@ func main() {
 	defer log.SyncLogger()
 
 	// init db
-	// model.DB.Init()
-	// defer model.DB.Close()
+	model.DB.Init()
+	defer model.DB.Close()
+	// init redis
+	model.RedisDB.Init()
+	defer model.RedisDB.Close()
+
+	// 黑名单过期数据定时清理
+	go service.TidyBlacklist()
+	// 同步黑名单数据
+	service.SynchronizeBlacklistToRedis()
 
 	// Set gin mode.
 	gin.SetMode(viper.GetString("runmode"))
 
 	// Create the Gin engine.
 	g := gin.New()
-
-	// swagger
-	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Routes.
 	router.Load(

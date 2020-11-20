@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	_ "muxi-workbench-gateway/docs"
 	"muxi-workbench-gateway/handler/feed"
 	"muxi-workbench-gateway/handler/project"
 	"muxi-workbench-gateway/handler/sd"
@@ -13,6 +14,8 @@ import (
 	"muxi-workbench/pkg/constvar"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 // Load loads the middlewares, routes, handlers.
@@ -27,6 +30,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
+
+	// swagger API doc
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 权限要求，普通用户/管理员/超管
 	normalRequired := middleware.AuthMiddleware(constvar.AuthLevelNormal)
