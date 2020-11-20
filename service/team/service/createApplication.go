@@ -14,6 +14,11 @@ func (ts *TeamService) CreateApplication(ctx context.Context, req *pb.Applicatio
 	apply := &model.ApplyModel{
 		UserID: req.UserId,
 	}
+
+	if err := apply.Check(); err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
 	if err := apply.Create(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

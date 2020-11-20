@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 type GroupModel struct {

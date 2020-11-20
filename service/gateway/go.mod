@@ -1,6 +1,6 @@
 module muxi-workbench-gateway
 
-go 1.13
+go 1.14
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
@@ -28,6 +28,7 @@ require (
 	muxi-workbench-feed v0.0.0-00010101000000-000000000000
 	muxi-workbench-project v0.0.0-00010101000000-000000000000
 	muxi-workbench-status v0.0.0-00010101000000-000000000000
+	muxi-workbench-team v0.0.0-00010101000000-000000000000
 	muxi-workbench-user v0.0.0-00010101000000-000000000000
 )
 
@@ -42,3 +43,5 @@ replace muxi-workbench-project => ../project
 replace muxi-workbench => ../../
 
 replace muxi-workbench-user => ../user
+
+replace muxi-workbench-team => ../team
