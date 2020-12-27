@@ -34,15 +34,34 @@ func (u *CommentsModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
+// GetComment ... 获取评论
+func GetComment(id uint32) (*CommentsModel, error) {
+	s := &CommentsModel{}
+	d := m.DB.Self.Where("id = ?", id).First(&s)
+	return s, d.Error
+}
+
+// 更新评论
+func (u *CommentsModel) Update() error {
+	return m.DB.Self.Save(u).Error
+}
+
+// DeleteComment ... 删除评论
+func DeleteComment(id uint32) error {
+	comment := &CommentsModel{}
+	comment.ID = id
+	return m.DB.Self.Delete(&comment).Error
+}
+
 // ListComments list all comments
-func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, uint64, error) {
+func ListComments(idField string, id, offset, limit, lastID uint32) ([]*CommentListItem, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
 
 	commentsList := make([]*CommentListItem, 0)
 
-	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments.statu_id = ?", statusID).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id desc")
+	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments."+idField+" = ?", id).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id desc")
 
 	if lastID != 0 {
 		query = query.Where("comments.id < ?", lastID)

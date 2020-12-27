@@ -9,8 +9,8 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// GetDocComments ... 获取文档评论列表
-func (s *Service) GetDocComments(ctx context.Context, req *pb.GetCommentListRequest, res *pb.GetCommentListResponse) error {
+// GetFileComments ... 获取文件评论列表
+func (s *Service) GetFileComments(ctx context.Context, req *pb.GetCommentListRequest, res *pb.GetCommentListResponse) error {
 
 	list, _, err := model.ListComments("docId", req.Id, req.Offset, req.Limit, req.Lastid)
 	if err != nil {

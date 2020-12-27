@@ -32,16 +32,24 @@ service ProjectService {
   rpc GetDocDetail(GetRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
-  rpc CreateDocComment(CreateDocRequest) returns (Response) {}
-  rpc UpdateDocComment(CreateDocRequest) returns (Response) {}
-  rpc DeleteDocComment(CreateDocRequest) returns (Response) {}
-  rpc GetDocComments(CreateDocRequest) returns (Response) {}
+
+  // 评论相关（进度，文档和文件的评论在一个表里，但未来肯定要拆，所以接口先分开）
+  rpc CreateDocComment(CreateCommentRequest) returns (Response) {}
+  rpc UpdateDocComment(UpdateCommentRequest) returns (Response) {}
+  rpc DeleteDocComment(GetRequest) returns (Response) {}
+  rpc GetDocComments(GetCommentListRequest) returns (GetCommentListResponse) {}
+
+  rpc CreateFileComment(CreateCommentRequest) returns (Response) {}
+  rpc UpdateFileComment(UpdateCommentRequest) returns (Response) {}
+  rpc DeleteFileComment(GetRequest) returns (Response) {}
+  rpc GetFileComments(GetCommentListRequest) returns (GetCommentListResponse) {}
 }
 
 message CreateProjectRequest {
-  string name = 1;
-  string desc = 2;
-  repeated uint32 member_ids = 3;
+  uint32 team_id = 1;
+  string name = 2;
+  string desc = 3;
+  repeated uint32 member_ids = 4;
 }
 
 message ProjectIdsResponse {
@@ -232,4 +240,36 @@ message DocInfo {
 message DocFolderDetail {
   uint32 id = 1;
   string name = 2;
+}
+
+message CreateCommentRequest {
+  uint32 target_id = 1;
+  uint32 user_id = 2;
+  string content = 3;
+}
+
+message UpdateCommentRequest {
+  uint32 id = 1;
+  string content = 2;
+}
+
+message GetCommentListRequest {
+  uint32 id = 1;
+  uint32 lastid = 2;
+  uint32 offset = 3;
+  uint32 limit = 4;
+  bool pagination = 5;
+}
+
+message GetCommentListResponse {
+  repeated Comment list = 1;
+}
+
+message Comment {
+  uint32 id = 1;
+  string content = 2;
+  string create_time = 3;
+  uint32 user_id = 4;
+  string user_name = 5;
+  string avatar = 6;
 }

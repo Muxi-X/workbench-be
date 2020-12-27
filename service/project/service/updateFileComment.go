@@ -8,8 +8,8 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// UpdateDocComment ... 更新文档评论
-func (s *Service) UpdateDocComment(ctx context.Context, req *pb.UpdateCommentRequest, res *pb.Response) error {
+// UpdateFileComment ... 更新文件评论
+func (s *Service) UpdateFileComment(ctx context.Context, req *pb.UpdateCommentRequest, res *pb.Response) error {
 
 	item, err := model.GetComment(req.Id)
 	if err != nil {

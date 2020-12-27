@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-// CreateDocComment ... 创建文档评论
-func (s *Service) CreateDocComment(ctx context.Context, req *pb.CreateCommentRequest, res *pb.Response) error {
+// CreateFileComment ... 创建文件评论
+func (s *Service) CreateFileComment(ctx context.Context, req *pb.CreateCommentRequest, res *pb.Response) error {
 
 	t := time.Now()
 
