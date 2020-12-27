@@ -4,6 +4,7 @@ package project;
 
 service ProjectService {
   // 项目相关
+  rpc CreateProject(CreateProjectRequest) returns (GetRequest) {}
   rpc GetProjectList(GetProjectListRequest) returns (ProjectListResponse) {}
   rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
   rpc UpdateProjectInfo(ProjectInfo) returns (Response) {}
@@ -31,6 +32,16 @@ service ProjectService {
   rpc GetDocDetail(GetRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
+  rpc CreateDocComment(CreateDocRequest) returns (Response) {}
+  rpc UpdateDocComment(CreateDocRequest) returns (Response) {}
+  rpc DeleteDocComment(CreateDocRequest) returns (Response) {}
+  rpc GetDocComments(CreateDocRequest) returns (Response) {}
+}
+
+message CreateProjectRequest {
+  string name = 1;
+  string desc = 2;
+  repeated uint32 member_ids = 3;
 }
 
 message ProjectIdsResponse {
