@@ -45,8 +45,12 @@ func (u *FileModel) Create() error {
 // DeleteFile ... 删除文件
 func DeleteFile(id uint32) error {
 	doc := &FileModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
+	d := m.DB.Self.Where("id = ?", id).First(&doc)
+	if d.Error != nil {
+		return d.Error
+	}
+	doc.Re = true
+	return m.DB.Self.Update(doc).Error
 }
 
 // Update ... 更新文件

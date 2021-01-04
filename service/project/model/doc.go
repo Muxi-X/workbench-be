@@ -44,9 +44,13 @@ func (u *DocModel) Create() error {
 
 // DeleteDoc ... 删除文档
 func DeleteDoc(id uint32) error {
-	doc := &DocModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
+	s := &DocModel{}
+	d := m.DB.Self.Where("id = ?", id).First(&s)
+	if d.Error != nil {
+		return d.Error
+	}
+	s.Re = true
+	return m.DB.Self.Save(s).Error
 }
 
 // Update doc
