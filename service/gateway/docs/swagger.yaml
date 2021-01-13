@@ -1,5 +1,143 @@
 basePath: /api/v1
 definitions:
+  CommentListResponse:
+    properties:
+      commentlist:
+        items:
+          $ref: '#/definitions/status.Comment'
+        type: array
+      count:
+        type: integer
+    type: object
+  CreateCommentRequest:
+    properties:
+      content:
+        type: string
+    type: object
+  CreateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  DeleteCommentRequest:
+    properties:
+      status_id:
+        type: integer
+      title:
+        type: string
+    type: object
+  DeleteRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  GetProfileRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  GetResponse:
+    properties:
+      content:
+        type: string
+      sid:
+        type: integer
+      time:
+        type: string
+      title:
+        type: string
+      userid:
+        type: integer
+    type: object
+  LikeRequest:
+    properties:
+      liked:
+        type: boolean
+    type: object
+  ListRequest:
+    properties:
+      group:
+        type: integer
+      team:
+        type: integer
+    type: object
+  ListResponse:
+    properties:
+      count:
+        type: integer
+      stauts:
+        items:
+          $ref: '#/definitions/status.Status'
+        type: array
+    type: object
+  LoginRequest:
+    properties:
+      oauth_code:
+        type: string
+    type: object
+  LoginResponse:
+    properties:
+      redirect_url:
+        type: string
+      token:
+        type: string
+    type: object
+  RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  UpdateInfoRequest:
+    properties:
+      avatar_url:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      nick:
+        type: string
+    type: object
+  UpdateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  UserProfile:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      nick:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
+      tel:
+        type: string
+    type: object
   handler.Response:
     properties:
       code:
@@ -24,66 +162,6 @@ definitions:
       username:
         type: string
     type: object
-  status.CommentListResponse:
-    properties:
-      commentlist:
-        items:
-          $ref: '#/definitions/status.Comment'
-        type: array
-      count:
-        type: integer
-    type: object
-  status.CreateCommentRequest:
-    properties:
-      content:
-        type: string
-    type: object
-  status.CreateRequest:
-    properties:
-      content:
-        type: string
-      title:
-        type: string
-    type: object
-  status.DeleteCommentRequest:
-    properties:
-      status_id:
-        type: integer
-      title:
-        type: string
-    type: object
-  status.DeleteRequest:
-    properties:
-      title:
-        type: string
-    type: object
-  status.GetResponse:
-    properties:
-      content:
-        type: string
-      sid:
-        type: integer
-      time:
-        type: string
-      title:
-        type: string
-      userid:
-        type: integer
-    type: object
-  status.LikeRequest:
-    properties:
-      liked:
-        type: boolean
-    type: object
-  status.ListResponse:
-    properties:
-      count:
-        type: integer
-      stauts:
-        items:
-          $ref: '#/definitions/status.Status'
-        type: array
-    type: object
   status.Status:
     properties:
       avatar:
@@ -103,112 +181,6 @@ definitions:
       title:
         type: string
       username:
-        type: string
-    type: object
-  status.UpdateRequest:
-    properties:
-      content:
-        type: string
-      title:
-        type: string
-    type: object
-  user.GetProfileRequest:
-    properties:
-      id:
-        type: integer
-    type: object
-  user.ListRequest:
-    properties:
-      group:
-        type: integer
-      team:
-        type: integer
-    type: object
-  user.ListResponse:
-    properties:
-      count:
-        type: integer
-      list:
-        items:
-          $ref: '#/definitions/user.User'
-        type: array
-    type: object
-  user.LoginRequest:
-    properties:
-      oauth_code:
-        type: string
-    type: object
-  user.LoginResponse:
-    properties:
-      redirect_url:
-        type: string
-      token:
-        type: string
-    type: object
-  user.RegisterRequest:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        type: string
-    required:
-    - email
-    - name
-    - password
-    type: object
-  user.UpdateInfoRequest:
-    properties:
-      avatar_url:
-        type: string
-      email:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      nick:
-        type: string
-    type: object
-  user.User:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      group:
-        type: integer
-      id:
-        type: integer
-      name:
-        type: string
-      nick:
-        type: string
-      role:
-        type: integer
-      team:
-        type: integer
-    type: object
-  user.UserProfile:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      group:
-        type: integer
-      id:
-        type: integer
-      name:
-        type: string
-      nick:
-        type: string
-      role:
-        type: integer
-      team:
-        type: integer
-      tel:
         type: string
     type: object
 host: work.text.muxi-tech.xyz
@@ -233,14 +205,14 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/user.LoginRequest'
+          $ref: '#/definitions/LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.LoginResponse'
+            $ref: '#/definitions/LoginResponse'
         "401":
           description: Unauthorized
           schema:
@@ -265,7 +237,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/user.RegisterRequest'
+          $ref: '#/definitions/RegisterRequest'
       produces:
       - application/json
       responses:
@@ -327,7 +299,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/status.ListResponse'
+            $ref: '#/definitions/ListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -351,7 +323,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.CreateRequest'
+          $ref: '#/definitions/CreateRequest'
       - description: token 用户令牌
         in: header
         name: Authorization
@@ -398,7 +370,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.DeleteCommentRequest'
+          $ref: '#/definitions/DeleteCommentRequest'
       produces:
       - application/json
       responses:
@@ -434,7 +406,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.CreateCommentRequest'
+          $ref: '#/definitions/CreateCommentRequest'
       - description: token 用户令牌
         in: header
         name: Authorization
@@ -481,7 +453,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.DeleteRequest'
+          $ref: '#/definitions/DeleteRequest'
       produces:
       - application/json
       responses:
@@ -523,7 +495,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/status.GetResponse'
+            $ref: '#/definitions/GetResponse'
         "401":
           description: Unauthorized
           schema:
@@ -557,7 +529,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.UpdateRequest'
+          $ref: '#/definitions/UpdateRequest'
       produces:
       - application/json
       responses:
@@ -612,7 +584,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/status.CommentListResponse'
+            $ref: '#/definitions/CommentListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -647,7 +619,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/status.LikeRequest'
+          $ref: '#/definitions/LikeRequest'
       produces:
       - application/json
       responses:
@@ -684,7 +656,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/user.UpdateInfoRequest'
+          $ref: '#/definitions/UpdateInfoRequest'
       produces:
       - application/json
       responses:
@@ -729,14 +701,14 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/user.ListRequest'
+          $ref: '#/definitions/ListRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.ListResponse'
+            $ref: '#/definitions/ListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -771,14 +743,14 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/user.GetProfileRequest'
+          $ref: '#/definitions/GetProfileRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserProfile'
+            $ref: '#/definitions/UserProfile'
         "401":
           description: Unauthorized
           schema:

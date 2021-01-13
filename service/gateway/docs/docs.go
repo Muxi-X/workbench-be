@@ -54,7 +54,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.LoginRequest"
+                            "$ref": "#/definitions/LoginRequest"
                         }
                     }
                 ],
@@ -62,7 +62,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.LoginResponse"
+                            "$ref": "#/definitions/LoginResponse"
                         }
                     },
                     "401": {
@@ -105,7 +105,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.RegisterRequest"
+                            "$ref": "#/definitions/RegisterRequest"
                         }
                     }
                 ],
@@ -198,7 +198,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/status.ListResponse"
+                            "$ref": "#/definitions/ListResponse"
                         }
                     },
                     "401": {
@@ -239,7 +239,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.CreateRequest"
+                            "$ref": "#/definitions/CreateRequest"
                         }
                     },
                     {
@@ -304,7 +304,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.CreateCommentRequest"
+                            "$ref": "#/definitions/CreateCommentRequest"
                         }
                     },
                     {
@@ -374,7 +374,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.DeleteCommentRequest"
+                            "$ref": "#/definitions/DeleteCommentRequest"
                         }
                     }
                 ],
@@ -438,7 +438,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/status.GetResponse"
+                            "$ref": "#/definitions/GetResponse"
                         }
                     },
                     "401": {
@@ -493,7 +493,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.UpdateRequest"
+                            "$ref": "#/definitions/UpdateRequest"
                         }
                     }
                 ],
@@ -556,7 +556,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.DeleteRequest"
+                            "$ref": "#/definitions/DeleteRequest"
                         }
                     }
                 ],
@@ -638,7 +638,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/status.CommentListResponse"
+                            "$ref": "#/definitions/CommentListResponse"
                         }
                     },
                     "401": {
@@ -695,7 +695,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/status.LikeRequest"
+                            "$ref": "#/definitions/LikeRequest"
                         }
                     }
                 ],
@@ -753,7 +753,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UpdateInfoRequest"
+                            "$ref": "#/definitions/UpdateInfoRequest"
                         }
                     }
                 ],
@@ -823,7 +823,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.ListRequest"
+                            "$ref": "#/definitions/ListRequest"
                         }
                     }
                 ],
@@ -831,7 +831,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.ListResponse"
+                            "$ref": "#/definitions/ListResponse"
                         }
                     },
                     "401": {
@@ -888,7 +888,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.GetProfileRequest"
+                            "$ref": "#/definitions/GetProfileRequest"
                         }
                     }
                 ],
@@ -896,7 +896,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserProfile"
+                            "$ref": "#/definitions/UserProfile"
                         }
                     },
                     "401": {
@@ -916,6 +916,220 @@ var doc = `{
         }
     },
     "definitions": {
+        "CommentListResponse": {
+            "type": "object",
+            "properties": {
+                "commentlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/status.Comment"
+                    }
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "CreateCommentRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeleteCommentRequest": {
+            "type": "object",
+            "properties": {
+                "status_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "DeleteRequest": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "GetProfileRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "GetResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "sid": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "userid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "LikeRequest": {
+            "type": "object",
+            "properties": {
+                "liked": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ListRequest": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "type": "integer"
+                },
+                "team": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "stauts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/status.Status"
+                    }
+                }
+            }
+        },
+        "LoginRequest": {
+            "type": "object",
+            "properties": {
+                "oauth_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginResponse": {
+            "type": "object",
+            "properties": {
+                "redirect_url": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateInfoRequest": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nick": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserProfile": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nick": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "team": {
+                    "type": "integer"
+                },
+                "tel": {
+                    "type": "string"
+                }
+            }
+        },
         "handler.Response": {
             "type": "object",
             "properties": {
@@ -953,100 +1167,6 @@ var doc = `{
                 }
             }
         },
-        "status.CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "commentlist": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/status.Comment"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "status.CreateCommentRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                }
-            }
-        },
-        "status.CreateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "status.DeleteCommentRequest": {
-            "type": "object",
-            "properties": {
-                "status_id": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "status.DeleteRequest": {
-            "type": "object",
-            "properties": {
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "status.GetResponse": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "sid": {
-                    "type": "integer"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "userid": {
-                    "type": "integer"
-                }
-            }
-        },
-        "status.LikeRequest": {
-            "type": "object",
-            "properties": {
-                "liked": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "status.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "stauts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/status.Status"
-                    }
-                }
-            }
-        },
         "status.Status": {
             "type": "object",
             "properties": {
@@ -1075,169 +1195,6 @@ var doc = `{
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "status.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.GetProfileRequest": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "user.ListRequest": {
-            "type": "object",
-            "properties": {
-                "group": {
-                    "type": "integer"
-                },
-                "team": {
-                    "type": "integer"
-                }
-            }
-        },
-        "user.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/user.User"
-                    }
-                }
-            }
-        },
-        "user.LoginRequest": {
-            "type": "object",
-            "properties": {
-                "oauth_code": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "redirect_url": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.RegisterRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "name",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.UpdateInfoRequest": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nick": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.User": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "group": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nick": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
-                },
-                "team": {
-                    "type": "integer"
-                }
-            }
-        },
-        "user.UserProfile": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "group": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "nick": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
-                },
-                "team": {
-                    "type": "integer"
-                },
-                "tel": {
                     "type": "string"
                 }
             }
