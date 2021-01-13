@@ -1,10 +1,43 @@
 basePath: /api/v1
 definitions:
+  ApplicationListResponse:
+    properties:
+      apply_list:
+        items:
+          $ref: '#/definitions/ApplyUserItem'
+        type: array
+      count:
+        type: integer
+    type: object
+  ApplyUserItem:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  Comment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
   CommentListResponse:
     properties:
       commentlist:
         items:
-          $ref: '#/definitions/status.Comment'
+          $ref: '#/definitions/Comment'
         type: array
       count:
         type: integer
@@ -14,12 +47,38 @@ definitions:
       content:
         type: string
     type: object
+  CreateGroupRequest:
+    properties:
+      group_name:
+        type: string
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  CreateInvitationResponse:
+    properties:
+      hash:
+        type: string
+    type: object
   CreateRequest:
     properties:
       content:
         type: string
       title:
         type: string
+    type: object
+  CreateTeamRequest:
+    properties:
+      team_name:
+        type: string
+    type: object
+  DeleteApplicationRequest:
+    properties:
+      application_list:
+        items:
+          type: integer
+        type: array
     type: object
   DeleteCommentRequest:
     properties:
@@ -32,6 +91,11 @@ definitions:
     properties:
       title:
         type: string
+    type: object
+  DropTeamRequest:
+    properties:
+      team_id:
+        type: integer
     type: object
   GetProfileRequest:
     properties:
@@ -51,6 +115,31 @@ definitions:
       userid:
         type: integer
     type: object
+  Group:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      user_count:
+        type: integer
+    type: object
+  GroupListResponse:
+    properties:
+      count:
+        type: integer
+      groups:
+        items:
+          $ref: '#/definitions/Group'
+        type: array
+    type: object
+  JoinRequest:
+    properties:
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
   LikeRequest:
     properties:
       liked:
@@ -69,7 +158,7 @@ definitions:
         type: integer
       stauts:
         items:
-          $ref: '#/definitions/status.Status'
+          $ref: '#/definitions/Status'
         type: array
     type: object
   LoginRequest:
@@ -84,6 +173,37 @@ definitions:
       token:
         type: string
     type: object
+  Member:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group_id:
+        type: integer
+      group_name:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      team_id:
+        type: integer
+    type: object
+  MemberListResponse:
+    properties:
+      count:
+        type: integer
+      members:
+        items:
+          $ref: '#/definitions/Member'
+        type: array
+    type: object
+  ParseInvitationResponse:
+    properties:
+      team_id:
+        type: integer
+    type: object
   RegisterRequest:
     properties:
       email:
@@ -96,6 +216,48 @@ definitions:
     - email
     - name
     - password
+    type: object
+  RemoveRequest:
+    properties:
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+  Status:
+    properties:
+      avatar:
+        type: string
+      comment_count:
+        type: integer
+      content:
+        type: string
+      id:
+        type: integer
+      like_count:
+        type: integer
+      liked:
+        type: boolean
+      time:
+        type: string
+      title:
+        type: string
+      username:
+        type: string
+    type: object
+  UpdateGroupInfoRequest:
+    properties:
+      new_group_name:
+        type: string
     type: object
   UpdateInfoRequest:
     properties:
@@ -110,11 +272,25 @@ definitions:
       nick:
         type: string
     type: object
+  UpdateMembersRequest:
+    properties:
+      group_id:
+        type: integer
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
   UpdateRequest:
     properties:
       content:
         type: string
       title:
+        type: string
+    type: object
+  UpdateTeamInfoRequest:
+    properties:
+      new_name:
         type: string
     type: object
   UserProfile:
@@ -136,51 +312,6 @@ definitions:
       team:
         type: integer
       tel:
-        type: string
-    type: object
-  handler.Response:
-    properties:
-      code:
-        type: integer
-      data:
-        type: object
-      message:
-        type: string
-    type: object
-  status.Comment:
-    properties:
-      avatar:
-        type: string
-      cid:
-        type: integer
-      content:
-        type: string
-      time:
-        type: string
-      uid:
-        type: integer
-      username:
-        type: string
-    type: object
-  status.Status:
-    properties:
-      avatar:
-        type: string
-      comment_count:
-        type: integer
-      content:
-        type: string
-      id:
-        type: integer
-      like_count:
-        type: integer
-      liked:
-        type: boolean
-      time:
-        type: string
-      title:
-        type: string
-      username:
         type: string
     type: object
 host: work.test.muxi-tech.xyz
@@ -216,11 +347,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: login api
@@ -244,15 +375,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: register api
@@ -303,11 +434,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: list status api
@@ -335,15 +466,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: create status api
@@ -377,15 +508,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: delete comment api
@@ -418,15 +549,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: create comment api
@@ -460,15 +591,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: delete status api
@@ -499,11 +630,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: get status api
@@ -536,15 +667,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: update status api
@@ -588,11 +719,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: get comments list api
@@ -626,20 +757,609 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: like status api
       tags:
       - status
+  /team:
+    delete:
+      consumes:
+      - application/json
+      description: 删除 team
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: drop_team_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DropTeamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: drop team api
+      tags:
+      - team
+    post:
+      consumes:
+      - application/json
+      description: 创建 team
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_team_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTeamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: create team api
+      tags:
+      - team
+    put:
+      consumes:
+      - application/json
+      description: 更新团队信息
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_team_info_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTeamInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update team info api
+      tags:
+      - team
+  /team/application:
+    delete:
+      consumes:
+      - application/json
+      description: 批量删除 applications
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_application_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteApplicationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete applications api
+      tags:
+      - application
+    post:
+      consumes:
+      - application/json
+      description: 创建 application
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: create application api
+      tags:
+      - application
+  /team/application/list:
+    get:
+      consumes:
+      - application/json
+      description: 拉取 application 列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: list application api
+      tags:
+      - application
+  /team/group:
+    post:
+      consumes:
+      - application/json
+      description: 创建 group
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_group_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: create group api
+      tags:
+      - group
+  /team/group/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除 group
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: delete group api
+      tags:
+      - group
+    put:
+      consumes:
+      - application/json
+      description: 更新组别信息
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_group_info_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGroupInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update group info api
+      tags:
+      - group
+  /team/group/list:
+    get:
+      consumes:
+      - application/json
+      description: 拉取 group 列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GroupListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: list group api
+      tags:
+      - group
+  /team/group/members:
+    put:
+      consumes:
+      - application/json
+      description: 更新组别成员
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_members_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMembersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: update members of group api
+      tags:
+      - group
+  /team/group/members/list/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据 groupID 拉取 members 列表
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MemberListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: list members api
+      tags:
+      - group
+  /team/invitation:
+    get:
+      consumes:
+      - application/json
+      description: 创建 invitation
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' expired 以秒为单位， 默认为 3600 秒'
+        in: query
+        name: expired
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateInvitationResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: create invitation api
+      tags:
+      - invitation
+  /team/invitation/{hash}:
+    get:
+      consumes:
+      - application/json
+      description: 解析 invitation
+      parameters:
+      - description: hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ParseInvitationResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: parse invitation api
+      tags:
+      - invitation
+  /team/member:
+    delete:
+      consumes:
+      - application/json
+      description: 移除成员
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: remove_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/RemoveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: remove api
+      tags:
+      - team
+    post:
+      consumes:
+      - application/json
+      description: 加入 team
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: join_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/JoinRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: join team api
+      tags:
+      - team
   /user:
     put:
       consumes:
@@ -663,15 +1383,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: update info api
@@ -712,11 +1432,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: get user_list api
@@ -754,11 +1474,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handler.Response'
+            $ref: '#/definitions/Response'
       security:
       - ApiKeyAuth: []
       summary: get user_profile api
