@@ -17,6 +17,11 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+
+	_ "muxi-workbench-gateway/docs"
+
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 var (
@@ -38,7 +43,7 @@ func init() {
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host work.text.muxi-tech.xyz
+// @host work.test.muxi-tech.xyz
 // @BasePath /api/v1
 func main() {
 	pflag.Parse()

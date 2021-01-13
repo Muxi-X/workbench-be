@@ -1257,7 +1257,7 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "work.text.muxi-tech.xyz",
+	Host:        "work.test.muxi-tech.xyz",
 	BasePath:    "/api/v1",
 	Schemes:     []string{},
 	Title:       "muxi-workbench-gateway",

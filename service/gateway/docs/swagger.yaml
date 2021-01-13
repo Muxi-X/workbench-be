@@ -211,7 +211,7 @@ definitions:
       tel:
         type: string
     type: object
-host: work.text.muxi-tech.xyz
+host: work.test.muxi-tech.xyz
 info:
   contact: {}
   description: The gateway of muxi-workbench
