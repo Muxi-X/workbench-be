@@ -36,7 +36,7 @@ func CreateDoc(c *gin.Context) {
 		ProjectId: req.ProjectID,
 		UserId:    userID,
 	}
-	_, err := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
+	resp, err := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -50,10 +50,10 @@ func CreateDoc(c *gin.Context) {
 		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        3,
-			Id:          0, // 暂时从前端获取
+			Id:          resp.Id,
 			Name:        req.DocName,
 			ProjectId:   req.ProjectID,
-			ProjectName: "",
+			ProjectName: resp.Name,
 		},
 	}
 

@@ -9,7 +9,7 @@ import (
 )
 
 // UpdateProjectInfo ... 更新项目信息
-func (s *Service) UpdateProjectInfo(ctx context.Context, req *pb.ProjectInfo, res *pb.Response) error {
+func (s *Service) UpdateProjectInfo(ctx context.Context, req *pb.UpdateProjectInfoRequest, res *pb.ProjectNameAndIDResponse) error {
 
 	item, err := model.GetProject(req.Id)
 	if err != nil {
@@ -22,6 +22,8 @@ func (s *Service) UpdateProjectInfo(ctx context.Context, req *pb.ProjectInfo, re
 	if err := item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+
+	res.Name = item.Name
 
 	return nil
 }

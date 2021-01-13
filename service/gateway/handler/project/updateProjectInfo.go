@@ -17,7 +17,6 @@ import (
 )
 
 // UpdateProjectInfo updates a project's info
-// 需要调用 update project 和 feed push 接口
 func UpdateProjectInfo(c *gin.Context) {
 	log.Info("Project updateProjectInfo function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
@@ -39,15 +38,14 @@ func UpdateProjectInfo(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	// 构造 update 请求
-	updateReq := &pbp.ProjectInfo{
-		Id:        uint32(projectID),
-		Name:      req.ProjectName,
-		Intro:     req.Intro,
-		UserCount: req.UserCount,
+	updateReq := &pbp.UpdateProjectInfoRequest{
+		Id:    uint32(projectID),
+		Name:  req.ProjectName,
+		Intro: req.Intro,
 	}
 
 	// 发送 update 请求
-	_, err = service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
+	resp, err := service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -62,9 +60,9 @@ func UpdateProjectInfo(c *gin.Context) {
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          uint32(projectID),
-			Name:        req.ProjectName,
+			Name:        resp.Name,
 			ProjectId:   uint32(projectID),
-			ProjectName: req.ProjectName,
+			ProjectName: resp.Name,
 		},
 	}
 

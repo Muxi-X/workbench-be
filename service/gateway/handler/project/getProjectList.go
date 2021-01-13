@@ -40,27 +40,19 @@ func GetProjectList(c *gin.Context) {
 		return
 	}
 
-	pagination, err := strconv.Atoi(c.DefaultQuery("pagination", "0"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
-		return
-	}
-
-	var pageBool bool
-	if pagination == 1 {
-		pageBool = true
-	}
-
 	// 获取 userID
 	userID := c.MustGet("userID").(uint32)
 
 	// 构造请求
 	getProListReq := &pbp.GetProjectListRequest{
-		UserId:     userID,
-		Lastid:     uint32(lastId),
-		Offset:     uint32(limit * page),
-		Limit:      uint32(limit),
-		Pagination: pageBool,
+		UserId: userID,
+		Lastid: uint32(lastId),
+		Offset: uint32(limit * page),
+		Limit:  uint32(limit),
+	}
+
+	if page != 0 {
+		getProListReq.Pagination = true
 	}
 
 	getProListResp, err := service.ProjectClient.GetProjectList(context.Background(), getProListReq)

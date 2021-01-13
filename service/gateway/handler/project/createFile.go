@@ -39,7 +39,7 @@ func CreateFile(c *gin.Context) {
 		Url:       req.Url,
 		UserId:    userID,
 	}
-	_, err := service.ProjectClient.CreateFile(context.Background(), createFileReq)
+	resp, err := service.ProjectClient.CreateFile(context.Background(), createFileReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -53,10 +53,10 @@ func CreateFile(c *gin.Context) {
 		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        4,
-			Id:          req.FileID, // 暂时从前端获取
+			Id:          resp.Id, // 应该从接口获取
 			Name:        req.FileName,
-			ProjectId:   0,
-			ProjectName: "",
+			ProjectId:   req.ProjectID,
+			ProjectName: resp.Name, // 从接口获取
 		},
 	}
 

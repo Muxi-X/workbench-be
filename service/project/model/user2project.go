@@ -3,6 +3,8 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"github.com/jinzhu/gorm"
 )
 
 // UserToProjectModel ... 用户和项目的中间表
@@ -20,6 +22,11 @@ func (u *UserToProjectModel) TableName() string {
 // UserCount ... 项目用户数
 type UserCount struct {
 	Count uint32 `json:"count" gorm:"column:count(DISTINCT user_id);" binding:"required"`
+}
+
+// UserID ... 项目用户 id 列表
+type UserID struct {
+	ID uint32 `json:"userId" gorm:"column:user_id;" binding:"required"`
 }
 
 // GetProjectUserCount ... 获取项目人数
@@ -43,6 +50,50 @@ func GetUserToProjectByUser(id uint32) ([]*UserToProjectModel, error) {
 	list := make([]*UserToProjectModel, 0)
 	d := m.DB.Self.Table("user2projects").Where("user_id = ?", id).Find(&list)
 	return list, d.Error
+}
+
+// GetUserListByProject ... 获取一个项目的 id 列表
+func GetUserListByProject(id uint32) ([]*UserID, error) {
+	list := make([]*UserID, 0)
+	d := m.DB.Self.Table("user2projects").Where("project_id=?", id).Select("user_id").Order("user_id asc").Scan(&list)
+	return list, d.Error
+}
+
+// UpdateMembers modify member list, add and delete by id list
+func UpdateMembers(db *gorm.DB, projectID uint32, addList, delList []uint32) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := tx.Error; err != nil {
+		return err
+	}
+
+	// 插入新的数据
+	u := make([]*UserToProjectModel, 0)
+	for i := 0; i < len(addList); i++ {
+		u = append(u, &UserToProjectModel{
+			ProjectID: projectID,
+			UserID:    addList[i],
+		})
+	}
+
+	if err := tx.Create(u).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// 删除没有的数据
+	m := &UserToProjectModel{}
+	if err := tx.Where("project_id=? AND user_id in", projectID, delList).Delete(m).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
 
 // GetProjectMemberList ... 项目成员列表

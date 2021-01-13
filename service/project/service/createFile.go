@@ -10,7 +10,7 @@ import (
 )
 
 // CreateFile ... 创建文件
-func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res *pb.Response) error {
+func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res *pb.ProjectNameAndIDResponse) error {
 
 	t := time.Now()
 
@@ -28,6 +28,15 @@ func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res
 	if err := file.Create(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+
+	// get name
+	name, err := model.GetProjectName(req.ProjectId)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	res.Id = file.ID
+	res.Name = name
 
 	return nil
 }

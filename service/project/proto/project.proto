@@ -6,31 +6,36 @@ service ProjectService {
   // 项目相关
   rpc GetProjectList(GetProjectListRequest) returns (ProjectListResponse) {}
   rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
-  rpc UpdateProjectInfo(ProjectInfo) returns (Response) {}
-  rpc DeleteProject(GetRequest) returns (Response) {}
+  rpc UpdateProjectInfo(UpdateProjectInfoRequest) returns (ProjectNameAndIDResponse) {}
+  rpc DeleteProject(GetRequest) returns (ProjectNameAndIDResponse) {}
   rpc GetFileTree(GetRequest) returns (Tree) {}
   rpc GetDocTree(GetRequest) returns (Tree) {}
   rpc UpdateFileTree(UpdateTreeRequest) returns (Response) {}
   rpc UpdateDocTree(UpdateTreeRequest) returns (Response) {}
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
-  rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
+  rpc UpdateMembers(UpdateMemberRequest) returns (ProjectNameAndIDResponse) {}
   // rpc GetTrashbin(GetRequest) returns (Response) {}
   rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
 
   // 文件相关
-  rpc CreateFile(CreateFileRequest) returns (Response) {}
+  rpc CreateFile(CreateFileRequest) returns (ProjectNameAndIDResponse) {}
   rpc DeleteFile(GetRequest) returns (Response) {}
   rpc GetFileDetail(GetRequest) returns (FileDetail) {}
   rpc GetFileInfoList(GetInfoByIdsRequest) returns (GetFileInfoListResponse) {}
   rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
 
   // 文档相关
-  rpc CreateDoc(CreateDocRequest) returns (Response) {}
-  rpc UpdateDoc(UpdateDocRequest ) returns (Response) {}
-  rpc DeleteDoc(GetRequest) returns (Response) {}
+  rpc CreateDoc(CreateDocRequest) returns (ProjectNameAndIDResponse) {}
+  rpc UpdateDoc(UpdateDocRequest ) returns (ProjectNameAndIDResponse) {}
+  rpc DeleteDoc(GetRequest) returns (ProjectNameAndIDResponse) {}
   rpc GetDocDetail(GetRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
+}
+
+message ProjectNameAndIDResponse {
+  uint32 id = 1;
+  string name = 2;
 }
 
 message ProjectIdsResponse {
@@ -124,7 +129,7 @@ message MembersListItem {
 
 message UpdateMemberRequest {
   uint32 id = 1;
-  repeated string list = 2;
+  repeated uint32 list = 2;
 }
 
 message ProjectInfo {
@@ -132,6 +137,12 @@ message ProjectInfo {
   string name = 2;
   string intro = 3;
   uint32 user_count = 4;
+}
+
+message UpdateProjectInfoRequest {
+  uint32 id = 1;
+  string name = 2;
+  string intro = 3;
 }
 
 message UpdateTreeRequest {

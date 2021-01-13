@@ -1,3 +1,7 @@
+CREATE DATABASE WORKBENCH_SHOW;
+
+use WORKBENCH_SHOW;
+
 -- ----------------------------
 -- Table structure for status
 -- ----------------------------
@@ -12,17 +16,6 @@ CREATE TABLE `status` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-
-DROP TABLE IF EXISTS `user2status`;
-CREATE TABLE `user2status` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`user_id` int(11) DEFAULT NULL,
-	`status_id` int(11) DEFAULT NULL,
-	PRIMARY KEY (`id`),
-	KEY `user_id` (`user_id`),
-	KEY `status_id` (`status_id`),
-	UNIQUE KEY `user_status` (`user_id`,`status_id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------

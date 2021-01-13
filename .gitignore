@@ -4,3 +4,5 @@ muxi-workbench
 .idea
 *.log
 *.tmp
+*.mod
+*.sum

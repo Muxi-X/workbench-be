@@ -4,7 +4,6 @@ import (
 	"context"
 	"strconv"
 
-	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -34,9 +33,6 @@ func UpdateDocTree(c *gin.Context) {
 		return
 	}
 
-	// 获取 userID
-	userID := c.MustGet("userID").(uint32)
-
 	// 发送请求
 	_, err = service.ProjectClient.UpdateDocTree(context.Background(), &pbp.UpdateTreeRequest{
 		Id:   uint32(projectID),
@@ -44,26 +40,6 @@ func UpdateDocTree(c *gin.Context) {
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
-		return
-	}
-
-	// 构造 push 请求
-	pushReq := &pbf.PushRequest{
-		Action: "编辑",
-		UserId: userID,
-		Source: &pbf.Source{
-			Kind:        2,
-			Id:          0, // 暂时从前端获取
-			Name:        "",
-			ProjectId:   uint32(projectID),
-			ProjectName: req.ProjectName,
-		},
-	}
-
-	// 向 feed 发送请求
-	_, err = service.FeedClient.Push(context.Background(), pushReq)
-	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 

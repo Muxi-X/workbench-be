@@ -39,12 +39,6 @@ func GetMembers(c *gin.Context) {
 		return
 	}
 
-	pagination, err := strconv.Atoi(c.DefaultQuery("pagination", "0"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
-		return
-	}
-
 	// 获取 projectID
 	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -52,18 +46,16 @@ func GetMembers(c *gin.Context) {
 		return
 	}
 
-	var pageBool bool
-	if pagination == 1 {
-		pageBool = true
-	}
-
 	// 构造请求
 	getMembersRequest := &pbp.GetMemberListRequest{
-		ProjectId:  uint32(projectID),
-		Lastid:     uint32(lastId),
-		Offset:     uint32(page * limit),
-		Limit:      uint32(limit),
-		Pagination: pageBool,
+		ProjectId: uint32(projectID),
+		Lastid:    uint32(lastId),
+		Offset:    uint32(page * limit),
+		Limit:     uint32(limit),
+	}
+
+	if page != 0 {
+		getMembersRequest.Pagination = true
 	}
 
 	getMembersResponse, err := service.ProjectClient.GetMembers(context.Background(), getMembersRequest)

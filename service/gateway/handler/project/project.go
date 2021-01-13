@@ -7,14 +7,9 @@ type GetProjectInfoResponse struct {
 	UserCount   uint32 `json:"user_count"`
 }
 
-type DeleteRequest struct {
-	ProjectName string `json:"project_name"`
-}
-
 type UpdateRequest struct {
 	ProjectName string `json:"project_name"`
 	Intro       string `json:"intro"`
-	UserCount   uint32 `json:"user_count"`
 }
 
 type ProjectListItem struct {
@@ -37,8 +32,7 @@ type GetMemberResponse struct {
 }
 
 type UpdateMemberRequest struct {
-	ProjectName string   `json:"project_name"`
-	UserList    []string `json:"user_list"` // users' ids
+	UserList []uint32 `json:"user_list"` // users' ids
 }
 
 type GetProjectListResponse struct {

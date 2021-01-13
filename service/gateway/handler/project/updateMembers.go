@@ -18,7 +18,6 @@ import (
 )
 
 // UpdateMembers updates the members in the project
-// 调用一次 update 和一次 feed push
 func UpdateMembers(c *gin.Context) {
 	log.Info("Project member update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -51,7 +50,7 @@ func UpdateMembers(c *gin.Context) {
 	}
 
 	// 发送请求
-	_, err = service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
+	resp, err := service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -61,14 +60,14 @@ func UpdateMembers(c *gin.Context) {
 
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
-		Action: "编辑",
+		Action: "加入",
 		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          uint32(projectID),
-			Name:        req.ProjectName,
+			Name:        resp.Name,
 			ProjectId:   uint32(projectID),
-			ProjectName: req.ProjectName,
+			ProjectName: resp.Name,
 		},
 	}
 

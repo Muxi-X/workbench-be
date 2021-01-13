@@ -39,12 +39,12 @@ func UpdateDoc(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	updateReq := &pbp.UpdateDocRequest{
-		Id:      userID,
+		Id:      uint32(docID),
 		Title:   req.Title,
 		Content: req.Content,
 	}
 
-	_, err = service.ProjectClient.UpdateDoc(context.Background(), updateReq)
+	resp, err := service.ProjectClient.UpdateDoc(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -60,8 +60,8 @@ func UpdateDoc(c *gin.Context) {
 			Kind:        3,
 			Id:          uint32(docID),
 			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
+			ProjectId:   resp.Id,
+			ProjectName: resp.Name,
 		},
 	}
 
