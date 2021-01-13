@@ -18,7 +18,7 @@ type Comment struct {
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
 	Content  string `json:"content"`
-}
+} //@name Comment
 
 // CommentListResponse 评论列表响应
 type CommentListResponse struct {
@@ -56,7 +56,7 @@ type Status struct {
 	Avatar       string `json:"avatar"`
 	Username     string `json:"username"`
 	Liked        bool   `json:"liked"`
-}
+} //@name Status
 
 // ListResponse 获取进度列表响应
 type ListResponse struct {
