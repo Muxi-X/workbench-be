@@ -27,6 +27,7 @@ func AuthMiddleware(limit uint32) gin.HandlerFunc {
 		c.Set("userID", ctx.ID)
 		c.Set("role", ctx.Role)
 		c.Set("teamID", ctx.TeamID)
+		c.Set("expiresAt", ctx.ExpiresAt)
 
 		c.Next()
 	}

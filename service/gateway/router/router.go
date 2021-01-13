@@ -3,15 +3,19 @@ package router
 import (
 	"net/http"
 
+	_ "muxi-workbench-gateway/docs"
 	"muxi-workbench-gateway/handler/feed"
 	"muxi-workbench-gateway/handler/project"
 	"muxi-workbench-gateway/handler/sd"
 	"muxi-workbench-gateway/handler/status"
+	"muxi-workbench-gateway/handler/team"
 	"muxi-workbench-gateway/handler/user"
 	"muxi-workbench-gateway/router/middleware"
 	"muxi-workbench/pkg/constvar"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 // Load loads the middlewares, routes, handlers.
@@ -26,6 +30,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "The incorrect API route.")
 	})
+
+	// swagger API doc
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 权限要求，普通用户/管理员/超管
 	normalRequired := middleware.AuthMiddleware(constvar.AuthLevelNormal)
@@ -135,6 +142,32 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		fileRouter.GET("/doc/:id", project.GetDocDetail)
 		fileRouter.DELETE("/doc/:id", project.DeleteDoc)
 		fileRouter.PUT("/doc/:id", project.UpdateDoc)
+	}
+
+	teamRouter := g.Group("api/v1/team")
+	{
+		// team
+		teamRouter.POST("/member", adminRequired, team.Join)
+		teamRouter.DELETE("/member", adminRequired, team.Remove)
+		teamRouter.POST("", superAdminRequired, team.CreateTeam)
+		teamRouter.PUT("", superAdminRequired, team.UpdateTeamInfo)
+
+		// invitation
+		teamRouter.GET("/invitation", normalRequired, team.CreateInvitation)
+		teamRouter.GET("/invitation/:hash", normalRequired, team.ParseInvitation)
+
+		// group
+		teamRouter.GET("/group", normalRequired, team.GetGroupList)
+		teamRouter.GET("/group/members/:id", normalRequired, team.GetMemberList)
+		teamRouter.PUT("/group/members", adminRequired, team.UpdateMembersForGroup)
+		teamRouter.POST("/group", superAdminRequired, team.CreateGroup)
+		teamRouter.DELETE("/group/:id", superAdminRequired, team.DeleteGroup)
+		teamRouter.PUT("/group/:id", superAdminRequired, team.UpdateGroupInfo)
+
+		// application
+		teamRouter.POST("/application", normalRequired, team.CreateApplication)
+		teamRouter.GET("/application", adminRequired, team.GetApplications)
+		teamRouter.DELETE("/application", adminRequired, team.DeleteApplication)
 	}
 
 	// The health check handlers

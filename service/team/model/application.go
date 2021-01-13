@@ -1,6 +1,9 @@
 package model
 
 import (
+	"errors"
+	"github.com/jinzhu/gorm"
+
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 )
@@ -25,9 +28,24 @@ func (a *ApplyModel) Create() error {
 	return m.DB.Self.Create(&a).Error
 }
 
-// DeleteApply delete an apply by id
-func DeleteApply(userID uint32) error {
-	return m.DB.Self.Where("user_id = ?", userID).Delete(&ApplyModel{}).Error
+// Check whether there is a which has the specific id
+func (a *ApplyModel) Check() error {
+	var tmpApply ApplyModel
+
+	d := m.DB.Self.Where("user_id = ?", a.UserID).First(&tmpApply)
+	if d.Error == gorm.ErrRecordNotFound {
+		return nil
+	}
+	if d.Error == nil {
+		return errors.New("该用户已申请！请勿重复提交！")
+	}
+	return d.Error
+}
+
+// DeleteApply delete applications by id
+func DeleteApply(applyList []uint32) error {
+	return m.DB.Self.Where("id in (?)", applyList).Delete(&ApplyModel{}).Error
+
 }
 
 // ListApplys list all applys

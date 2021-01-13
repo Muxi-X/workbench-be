@@ -1,25 +1,23 @@
-## 木犀团队 Go Web 工程模板
+## Gateway
 
-![](https://travis-ci.org/muxih4ck/Go-Web-Application-Template.svg?branch=master)
+工作台 Gateway 服务
 
-### 简介
+### Blacklist
 
-Go HTTP 服务工程模板。参考自掘金小册[基于 Go 语言构建企业级的 RESTful API 服务](https://juejin.im/book/5b0778756fb9a07aa632301e)
+由于 token 中包含用户所在团队和权限 role 的信息，所以需要设置一个黑名单让 token 无效。
 
-主要依赖：gin + gorm + viper + go.uber.org/zap
+token 无效的情况：
+1. 移出团队
+2. 更改用户权限（role）
 
-### Build and run
+#### Usage
 
-```
-mkdir $GOPATH/src/github.com/muxih4ck && cd $GOPATH/src/github.com/muxih4ck
-git clone https://muxi-workbench-gateway.git
-cd Go-Web-Application-Template
-make
-./main
-```
+package in `"muxi-workbench-gateway/model"`
 
-### Testing
+将 token 放入黑名单
 
-```
-make test
+```go
+// @token: token
+// @expiresAt: 过期时间（10位的时间戳）
+func AddToBlacklist(token string, expiresAt int64) error
 ```

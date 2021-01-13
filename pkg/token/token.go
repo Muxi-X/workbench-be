@@ -32,14 +32,15 @@ type TokenPayload struct {
 	ID      uint32        `json:"id"`
 	Role    uint32        `json:"role"`
 	TeamID  uint32        `json:"team_id"`
-	Expired time.Duration `json:"expired"` // 有效时间
+	Expired time.Duration `json:"expired"` // 有效时间（nanosecond）
 }
 
 // TokenResolve means returned payload when resolves token.
 type TokenResolve struct {
-	ID     uint32 `json:"id"`
-	Role   uint32 `json:"role"`
-	TeamID uint32 `json:"team_id"`
+	ID        uint32 `json:"id"`
+	Role      uint32 `json:"role"`
+	TeamID    uint32 `json:"team_id"`
+	ExpiresAt int64  `json:"expires_at"` // 过期时间（时间戳，10位）
 }
 
 // GenerateToken generates token.
@@ -76,9 +77,10 @@ func ResolveToken(tokenStr string) (*TokenResolve, error) {
 	}
 
 	t := &TokenResolve{
-		ID:     claims.ID,
-		Role:   claims.Role,
-		TeamID: claims.TeamID,
+		ID:        claims.ID,
+		Role:      claims.Role,
+		TeamID:    claims.TeamID,
+		ExpiresAt: claims.ExpiresAt,
 	}
 	return t, nil
 }

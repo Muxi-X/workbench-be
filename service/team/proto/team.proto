@@ -23,7 +23,7 @@ service TeamService {
     // 申请
     rpc GetApplications(ApplicationListRequest) returns (ApplicationListResponse) {}
     rpc CreateApplication(ApplicationRequest) returns (Response) {}
-    rpc DeleteApplication(ApplicationRequest) returns (Response) {}
+    rpc DeleteApplication(DeleteApplicationRequest) returns (Response) {}
 }
 
 message CreateGroupRequest {
@@ -122,6 +122,10 @@ message ApplicationListResponse {
 
 message ApplicationRequest {
     uint32 user_id = 1;
+}
+
+message DeleteApplicationRequest {
+    repeated uint32 apply_list = 1;
 }
 
 message Member {
