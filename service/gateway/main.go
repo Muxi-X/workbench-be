@@ -38,6 +38,15 @@ func init() {
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
+// @tag.name status
+// @tag.description 进度相关 API
+
+// @tag.name auth
+// @tag.description 认证相关 API
+
+// @tag.name team
+// @tag.description 团队相关 API
+
 // @host work.test.muxi-tech.xyz
 // @BasePath /api/v1
 func main() {
