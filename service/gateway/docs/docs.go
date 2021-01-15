@@ -2323,7 +2323,21 @@ var doc = `{
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "description": "动态服务",
+            "name": "status"
+        },
+        {
+            "description": "用户服务",
+            "name": "auth"
+        },
+        {
+            "description": "团队服务",
+            "name": "team"
+        }
+    ]
 }`
 
 type swaggerInfo struct {

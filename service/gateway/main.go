@@ -39,13 +39,13 @@ func init() {
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @tag.name status
-// @tag.description 进度相关 API
+// @tag.description 动态服务
 
 // @tag.name auth
-// @tag.description 认证相关 API
+// @tag.description 用户服务
 
 // @tag.name team
-// @tag.description 团队相关 API
+// @tag.description 团队服务
 
 // @host work.test.muxi-tech.xyz
 // @BasePath /api/v1
