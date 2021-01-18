@@ -34,7 +34,7 @@ func DeleteProject(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	// 发送 delete 请求
-	resp, err := service.ProjectClient.DeleteProject(context.Background(), &pbp.GetRequest{
+	_, err = service.ProjectClient.DeleteProject(context.Background(), &pbp.GetRequest{
 		Id: uint32(projectID),
 	})
 	if err != nil {
@@ -51,9 +51,9 @@ func DeleteProject(c *gin.Context) {
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          uint32(projectID),
-			Name:        resp.Name,
+			Name:        "",
 			ProjectId:   uint32(projectID),
-			ProjectName: resp.Name,
+			ProjectName: "",
 		},
 	}
 

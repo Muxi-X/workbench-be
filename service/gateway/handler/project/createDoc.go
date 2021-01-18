@@ -53,7 +53,7 @@ func CreateDoc(c *gin.Context) {
 			Id:          resp.Id,
 			Name:        req.DocName,
 			ProjectId:   req.ProjectID,
-			ProjectName: resp.Name,
+			ProjectName: "",
 		},
 	}
 

@@ -10,7 +10,7 @@ import (
 )
 
 // CreateDoc ... 创建文档
-func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *pb.ProjectNameAndIDResponse) error {
+func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *pb.ProjectIDResponse) error {
 	t := time.Now()
 
 	doc := model.DocModel{
@@ -28,13 +28,7 @@ func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	name, err := model.GetProjectName(req.ProjectId)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
-
 	res.Id = doc.ID
-	res.Name = name
 
 	return nil
 }

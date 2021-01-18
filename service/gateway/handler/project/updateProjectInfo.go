@@ -45,7 +45,7 @@ func UpdateProjectInfo(c *gin.Context) {
 	}
 
 	// 发送 update 请求
-	resp, err := service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
+	_, err = service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -60,9 +60,9 @@ func UpdateProjectInfo(c *gin.Context) {
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          uint32(projectID),
-			Name:        resp.Name,
+			Name:        "",
 			ProjectId:   uint32(projectID),
-			ProjectName: resp.Name,
+			ProjectName: "",
 		},
 	}
 

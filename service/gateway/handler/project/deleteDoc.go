@@ -57,7 +57,7 @@ func DeleteDoc(c *gin.Context) {
 			Id:          uint32(docID),
 			Name:        req.DocName,
 			ProjectId:   resp.Id,
-			ProjectName: resp.Name,
+			ProjectName: "",
 		},
 	}
 
