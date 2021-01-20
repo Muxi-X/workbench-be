@@ -176,7 +176,13 @@ func updateDataToDocFolder(fileTree []model.FileTreeNode) {
 
 // Start ... 开始迁移
 func Start() {
-	for i := 2; i <= 23; i++ {
+	// 获取最大 id 数
+	maxId, err := model.GetProjectMaxId()
+	if err != nil {
+		panic(err)
+	}
+
+	for i := 0; i <= maxId; i++ {
 		doc, file, err := getData(uint32(i))
 		if err != nil {
 			continue

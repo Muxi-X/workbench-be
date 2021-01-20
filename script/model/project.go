@@ -28,6 +28,10 @@ type FileTreeNode struct {
 	Children      []FileTreeNode `json:"child"`
 }
 
+type ProjectId struct {
+	Id int `json:"id" gorm:"column:id;" binding:"required"`
+}
+
 func (u *ProjectModel) TableName() string {
 	return "projects"
 }
@@ -44,11 +48,11 @@ func GetProjectTree(id uint32) (*ProjectTree, error) {
 	return s, d.Error
 }
 
-/*
-type ChildrenTree struct {
-	Ids  []string `json:"Ids"`
-	Type string   `json:"type"` // 0->file 1->fileTree 2->doc 3->docTree
-}*/
+func GetProjectMaxId() (int, error) {
+	s := &ProjectId{}
+	d := DB.Self.Table("projects").Select("id").Last(&s)
+	return s.Id, d.Error
+}
 
 func (u *ProjectModel) Update() error {
 	return DB.Self.Save(u).Error
