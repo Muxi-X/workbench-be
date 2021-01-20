@@ -1,6 +1,6 @@
 local_name: PROJECT_SCRIPT
 db:
-  name: 
-  addr:
+  name: workbench_test
+  addr: 127.0.0.1:3306
   username: 
   password: 

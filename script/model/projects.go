@@ -44,10 +44,11 @@ func GetProjectTree(id uint32) (*ProjectTree, error) {
 	return s, d.Error
 }
 
+/*
 type ChildrenTree struct {
 	Ids  []string `json:"Ids"`
 	Type string   `json:"type"` // 0->file 1->fileTree 2->doc 3->docTree
-}
+}*/
 
 func (u *ProjectModel) Update() error {
 	return DB.Self.Save(u).Error

@@ -14,8 +14,8 @@ import (
 func getData(id uint32) (*model.FileTreeNode, *model.FileTreeNode, error) {
 	s, err := model.GetProjectTree(id)
 	if err != nil {
-		log.Error("getProjectTree fatal",
-			zap.String("cause:", err.Error()))
+		log.Info("no record with this id",
+			zap.String("id:", strconv.Itoa(int(id))))
 		return nil, nil, err
 	}
 
@@ -28,30 +28,28 @@ func getData(id uint32) (*model.FileTreeNode, *model.FileTreeNode, error) {
 	return doc, file, nil
 }
 
-func writeString(s1 string, s2 string) string {
+func writeString(s1 string, s2 string, itemType string) string {
 	var result string
 	if s1 == "" {
-		result = fmt.Sprintf("%s", s2)
+		result = fmt.Sprintf("%s-%s", s2, itemType)
 	} else {
-		result = fmt.Sprintf("%s,%s", s1, s2)
+		result = fmt.Sprintf("%s,%s-%s", s1, s2, itemType)
 	}
 	return result
 }
 
+// writeItem ... 写入格式 file->0 , folder->1
 func writeItem(tree *model.FileTreeNode) (string, []model.FileTreeNode) {
-	var file string
-	var fileFolder string // 返回给下个函数
-	fileFolderItem := make([]model.FileTreeNode, 0)
+	var fileChildren string
+	fileFolderItem := make([]model.FileTreeNode, 0) // 返回给下个函数 , fileChildren 中的文件夹部分
 	for _, v := range tree.Children {
 		if v.Folder {
-			fileFolder = writeString(fileFolder, v.Id)
+			fileChildren = writeString(fileChildren, v.Id, "1")
 			fileFolderItem = append(fileFolderItem, v)
 		} else {
-			file = writeString(file, v.Id)
+			fileChildren = writeString(fileChildren, v.Id, "0")
 		}
 	}
-
-	fileChildren := fmt.Sprintf("%s;%s", fileFolder, file)
 
 	return fileChildren, fileFolderItem
 }
@@ -80,7 +78,8 @@ func updateDataToProject(doc, file *model.FileTreeNode, id uint32) ([]model.File
 	// 写入 docChildren
 	docChildren, docFolderItem := writeItem(doc)
 
-	fmt.Println(fileChildren, docChildren)
+	log.Info("have got children",
+		zap.String("children:", fileChildren+docChildren))
 
 	s.FileChildren = fileChildren
 	s.DocChildren = docChildren
@@ -97,17 +96,15 @@ func updateDataToProject(doc, file *model.FileTreeNode, id uint32) ([]model.File
 }
 
 func writeFolderItem(tree []model.FileTreeNode) string {
-	var item string
-	var itemFolder string
+	var children string
 	for _, v := range tree {
 		if v.Folder {
-			itemFolder = writeString(itemFolder, v.Id)
+			children = writeString(children, v.Id, "1")
 		} else {
-			item = writeString(item, v.Id)
+			children = writeString(children, v.Id, "0")
 		}
 	}
 
-	children := fmt.Sprintf("%s;%s", itemFolder, item)
 	return children
 }
 
@@ -116,7 +113,7 @@ func insertDatabaseForFile(tree []model.FileTreeNode, id string) {
 	idInt, _ := strconv.Atoi(id)
 	s, err := model.GetFolderForFileModel(uint32(idInt))
 	if err != nil {
-		//error
+		fmt.Println(err)
 	}
 
 	children := writeFolderItem(tree)
@@ -131,7 +128,7 @@ func insertDatabaseForFile(tree []model.FileTreeNode, id string) {
 
 // 写入信息到 fileFolder
 func updateDataToFileFolder(fileTree []model.FileTreeNode) {
-	for fileTree != nil {
+	for len(fileTree) != 0 {
 		v := fileTree[0]
 		if v.Children != nil {
 			insertDatabaseForFile(v.Children, v.Id) // 插入结果，将item全部插入
@@ -164,7 +161,7 @@ func insertDatabaseForDoc(tree []model.FileTreeNode, id string) {
 
 // 写入信息到 docFolder
 func updateDataToDocFolder(fileTree []model.FileTreeNode) {
-	for fileTree != nil {
+	for len(fileTree) != 0 {
 		v := fileTree[0]
 		if v.Children != nil {
 			insertDatabaseForDoc(v.Children, v.Id) // 插入结果，将item全部插入
@@ -179,17 +176,21 @@ func updateDataToDocFolder(fileTree []model.FileTreeNode) {
 
 // Start ... 开始迁移
 func Start() {
-	doc, file, err := getData(uint32(3))
-	if err != nil {
-		panic(err)
-	}
+	for i := 2; i <= 23; i++ {
+		doc, file, err := getData(uint32(i))
+		if err != nil {
+			continue
+		}
 
-	fileTree, docTree, err := updateDataToProject(doc, file, uint32(3))
-	if err != nil {
-		panic(err)
-	}
+		fileTree, docTree, err := updateDataToProject(doc, file, uint32(i))
+		if err != nil {
+			log.Error("update record error",
+				zap.String("cause:", err.Error()))
+			panic(err)
+		}
 
-	// fmt.Println(docTree)
-	updateDataToFileFolder(fileTree)
-	updateDataToDocFolder(docTree)
+		// fmt.Println(docTree)
+		updateDataToFileFolder(fileTree)
+		updateDataToDocFolder(docTree)
+	}
 }
