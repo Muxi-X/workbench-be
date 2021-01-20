@@ -7,15 +7,14 @@ import (
 
 // ProjectModel project table's structure
 type ProjectModel struct {
-	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name     string `json:"name" gorm:"column:name;" binding:"required"`
-	Intro    string `json:"intro" gorm:"column:intro;" binding:"required"`
-	Time     string `json:"time" gorm:"column:time;" binding:"required"`
-	Count    uint32 `json:"count" gorm:"column:count;" binding:"required"`
-	TeamID   uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
-	FileTree string `json:"fileTree" gorm:"column:fileTree;" binding:"required"`
-	DocTree  string `json:"docTree" gorm:"column:docTree;" binding:"required"`
-	Children string `json:"children" gorm:"column:children;" binding:"required"`
+	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name         string `json:"name" gorm:"column:name;" binding:"required"`
+	Intro        string `json:"intro" gorm:"column:intro;" binding:"required"`
+	Time         string `json:"time" gorm:"column:time;" binding:"required"`
+	Count        uint32 `json:"count" gorm:"column:count;" binding:"required"`
+	TeamID       uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
+	FileChildren string `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
+	DocChildren  string `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
 }
 
 // ProjectListItem ProjectList service item

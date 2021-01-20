@@ -61,7 +61,7 @@ func UpdateDoc(c *gin.Context) {
 			Id:          uint32(docID),
 			Name:        req.Title,
 			ProjectId:   resp.Id,
-			ProjectName: resp.Name,
+			ProjectName: "",
 		},
 	}
 

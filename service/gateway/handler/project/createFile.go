@@ -56,7 +56,7 @@ func CreateFile(c *gin.Context) {
 			Id:          resp.Id, // 应该从接口获取
 			Name:        req.FileName,
 			ProjectId:   req.ProjectID,
-			ProjectName: resp.Name, // 从接口获取
+			ProjectName: "",
 		},
 	}
 

@@ -50,7 +50,7 @@ func UpdateMembers(c *gin.Context) {
 	}
 
 	// 发送请求
-	resp, err := service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
+	_, err = service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -65,9 +65,9 @@ func UpdateMembers(c *gin.Context) {
 		Source: &pbf.Source{
 			Kind:        2,
 			Id:          uint32(projectID),
-			Name:        resp.Name,
+			Name:        "",
 			ProjectId:   uint32(projectID),
-			ProjectName: resp.Name,
+			ProjectName: "",
 		},
 	}
 

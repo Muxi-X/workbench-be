@@ -9,7 +9,7 @@ import (
 )
 
 // UpdateDoc ... 更新文档
-func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *pb.ProjectNameAndIDResponse) error {
+func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *pb.ProjectIDResponse) error {
 
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
@@ -23,13 +23,7 @@ func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	name, err := model.GetProjectName(item.ProjectID)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
-
 	res.Id = item.ProjectID
-	res.Name = name
 
 	return nil
 }
