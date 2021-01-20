@@ -38,7 +38,7 @@ func init() {
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host work.text.muxi-tech.xyz
+// @host work.test.muxi-tech.xyz
 // @BasePath /api/v1
 func main() {
 	pflag.Parse()
