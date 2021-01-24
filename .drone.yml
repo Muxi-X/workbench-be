@@ -118,7 +118,7 @@ steps:
       tags: ${DRONE_TAG} 
       build_args:
         - service_name=team
-- name: send remind
+  - name: send remind
     image: golang
     when:
       status:
