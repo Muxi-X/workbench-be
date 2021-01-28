@@ -33,22 +33,16 @@ func init() {
 // @title muxi-workbench-gateway
 // @version 1.0
 // @description The gateway of muxi-workbench
-// @termsOfService http://swagger.io/terms/
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host work.test.muxi-tech.xyz
+// @BasePath /api/v1
 
 // @tag.name status
 // @tag.description 动态服务
-
-// @tag.name auth
+// @tag.name user
 // @tag.description 用户服务
-
 // @tag.name team
 // @tag.description 团队服务
 
-// @host work.test.muxi-tech.xyz
-// @BasePath /api/v1
 func main() {
 	pflag.Parse()
 

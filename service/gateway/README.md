@@ -12,7 +12,7 @@ token 无效的情况：
 
 #### Usage
 
-package in `"muxi-workbench-gateway/model"`
+Functions are in package `muxi-workbench-gateway/service`
 
 将 token 放入黑名单
 

@@ -13,6 +13,8 @@ import (
 	"muxi-workbench/pkg/handler"
 	"muxi-workbench/pkg/tracer"
 
+	_ "github.com/micro/go-plugins/registry/kubernetes"
+
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
