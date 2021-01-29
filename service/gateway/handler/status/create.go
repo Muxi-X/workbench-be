@@ -3,7 +3,7 @@ package status
 import (
 	"context"
 
-	pbf "muxi-workbench-feed/proto"
+	// pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -50,31 +50,33 @@ func Create(c *gin.Context) {
 	}
 
 	// 向创建进度发起请求
-	createResp, err := service.StatusClient.Create(context.Background(), createReq)
+	_, err := service.StatusClient.Create(context.Background(), createReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造 push 请求
-	pushReq := &pbf.PushRequest{
-		Action: "创建",
-		UserId: userId,
-		Source: &pbf.Source{
-			Kind:        6,
-			Id:          createResp.Id,
-			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
-		},
-	}
+	/*
+		// 构造 push 请求
+		pushReq := &pbf.PushRequest{
+			Action: "创建",
+			UserId: userId,
+			Source: &pbf.Source{
+				Kind:        6,
+				Id:          createResp.Id,
+				Name:        req.Title,
+				ProjectId:   0,
+				ProjectName: "",
+			},
+		}
 
-	// 向 feed 发送请求
-	_, err = service.FeedClient.Push(context.Background(), pushReq)
-	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
-		return
-	}
+		// 向 feed 发送请求
+		_, err = service.FeedClient.Push(context.Background(), pushReq)
+		if err != nil {
+			SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+			return
+		}
+	*/
 
 	SendResponse(c, errno.OK, nil)
 }
