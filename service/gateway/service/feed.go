@@ -19,8 +19,7 @@ func FeedInit() {
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
 		),
-		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
-	)
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()))
 
 	FeedService.Init()
 
