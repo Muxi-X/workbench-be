@@ -118,9 +118,9 @@ func ListStatus(groupID, teamID, offset, limit, lastID uint32, filter *StatusMod
 
 	var count uint64
 
-	if err := query.Scan(&statusList).Count(&count).Error; err != nil {
+	if err := query.Scan(&statusList).Error; err != nil {
 		return statusList, count, err
 	}
 
-	return statusList, count, nil
+	return statusList, uint64(limit), nil
 }
