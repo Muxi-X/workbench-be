@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	pbf "muxi-workbench-feed/proto"
+	// pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -68,31 +68,33 @@ func CreateComment(c *gin.Context) {
 	}
 
 	// TO DO: 需要获取创建的 comment id
-	getResp, err := service.StatusClient.Get(context.Background(), getReq)
+	_, err = service.StatusClient.Get(context.Background(), getReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造 push 请求
-	pushReq := &pbf.PushRequest{
-		Action: "评论",
-		UserId: userId,
-		Source: &pbf.Source{
-			Kind:        6,
-			Id:          uint32(statusId), // 暂时从前端获取
-			Name:        getResp.Status.Title,
-			ProjectId:   0,
-			ProjectName: "",
-		},
-	}
+	/*
+		// 构造 push 请求
+		pushReq := &pbf.PushRequest{
+			Action: "评论",
+			UserId: userId,
+			Source: &pbf.Source{
+				Kind:        6,
+				Id:          uint32(statusId), // 暂时从前端获取
+				Name:        getResp.Status.Title,
+				ProjectId:   0,
+				ProjectName: "",
+			},
+		}
 
-	// 向 feed 发送请求
-	_, err = service.FeedClient.Push(context.Background(), pushReq)
-	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
-		return
-	}
+		// 向 feed 发送请求
+		_, err = service.FeedClient.Push(context.Background(), pushReq)
+		if err != nil {
+			SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+			return
+		}
+	*/
 
 	SendResponse(c, errno.OK, nil)
 }

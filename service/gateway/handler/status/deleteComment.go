@@ -4,7 +4,7 @@ import (
 	"context"
 	"strconv"
 
-	pbf "muxi-workbench-feed/proto"
+	// pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
@@ -65,6 +65,7 @@ func DeleteComment(c *gin.Context) {
 		return
 	}
 
+	/*
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "取消评论",
@@ -84,6 +85,7 @@ func DeleteComment(c *gin.Context) {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
+	*/
 
 	SendResponse(c, errno.OK, nil)
 }
