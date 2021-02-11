@@ -1,7 +1,10 @@
 package model
 
 import (
+	"fmt"
 	m "muxi-workbench/model"
+
+	"github.com/jinzhu/gorm"
 )
 
 // DocDetail ... 文档详情
@@ -19,17 +22,18 @@ type DocInfo struct {
 
 // DocModel ... 文档物理模型
 type DocModel struct {
-	ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name       string `json:"name" gorm:"column:filename;" binding:"required"`
-	Content    string `json:"content" gorm:"column:content;" binding:"required"`
-	Re         bool   `json:"re" gorm:"column:re;" binding:"required"`
-	Top        bool   `json:"top" gorm:"column:top;" binding:"required"`
-	CreateTime string `json:"createTime" gorm:"column:create_time;" binding:"required"`
-	DeleteTime string `json:"deleteTime" gorm:"column:delete_time;" binding:"required"`
-	TeamID     uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
-	CreatorID  uint32 `json:"creatorId" gorm:"column:creator_id;" binding:"required"`
-	EditorID   uint32 `json:"editorId" gorm:"column:editor_id;" binding:"required"`
-	ProjectID  uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
+	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name         string `json:"name" gorm:"column:filename;" binding:"required"`
+	Content      string `json:"content" gorm:"column:content;" binding:"required"`
+	Re           bool   `json:"re" gorm:"column:re;" binding:"required"`
+	Top          bool   `json:"top" gorm:"column:top;" binding:"required"`
+	CreateTime   string `json:"createTime" gorm:"column:create_time;" binding:"required"`
+	DeleteTime   string `json:"deleteTime" gorm:"column:delete_time;" binding:"required"`
+	TeamID       uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
+	CreatorID    uint32 `json:"creatorId" gorm:"column:creator_id;" binding:"required"`
+	EditorID     uint32 `json:"editorId" gorm:"column:editor_id;" binding:"required"`
+	ProjectID    uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
+	LastEditTime string `json:"lastEditTime" gorm:"column:last_edit_time;" binding:"required"`
 }
 
 // TableName ... 物理表名
@@ -84,4 +88,45 @@ func GetDocDetail(id uint32) (*DocDetail, error) {
 	// multiple left join
 	d := m.DB.Self.Table("docs").Where("docs.id = ?", id).Select("docs.*, c.name as creator, e.name as editor").Joins("left join users c on c.id = docs.creator_id").Joins("left join users e on e.id = docs.editor_id").First(&s)
 	return s, d.Error
+}
+
+func CreateDoc(db *gorm.DB, doc *DocModel, fatherId uint32, fatherType bool) (uint32, error) {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := doc.Create(); err != nil {
+		tx.Rollback()
+		return uint32(0), err
+	}
+
+	if fatherType {
+		// 查询结果，解析 children 再更新
+		item, err := GetProject(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+		item.DocChildren = fmt.Sprintf("%s,%d-%d", item.DocChildren, doc.ID, 0)
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+	} else {
+		item, err := GetFolderForDocModel(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+		item.Children = fmt.Sprintf("%s,%d-%d", item.Children, doc.ID, 0)
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+	}
+
+	return doc.ID, tx.Commit().Error
 }

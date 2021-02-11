@@ -30,6 +30,7 @@ func CreateFile(c *gin.Context) {
 
 	// 获取 userid
 	userID := c.MustGet("userID").(uint32)
+	teamID := c.MustGet("teamID").(uint32)
 
 	// 构造请求
 	createFileReq := &pbp.CreateFileRequest{
@@ -38,6 +39,7 @@ func CreateFile(c *gin.Context) {
 		HashName:  req.HashName,
 		Url:       req.Url,
 		UserId:    userID,
+		TeamId:    teamID,
 	}
 	resp, err := service.ProjectClient.CreateFile(context.Background(), createFileReq)
 	if err != nil {

@@ -39,9 +39,10 @@ func UpdateDoc(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	updateReq := &pbp.UpdateDocRequest{
-		Id:      uint32(docID),
-		Title:   req.Title,
-		Content: req.Content,
+		Id:       uint32(docID),
+		Title:    req.Title,
+		Content:  req.Content,
+		EditorId: userID,
 	}
 
 	resp, err := service.ProjectClient.UpdateDoc(context.Background(), updateReq)

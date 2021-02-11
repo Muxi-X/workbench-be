@@ -11,6 +11,7 @@ import (
 // GetFileFolderInfoList ... 获取文件文件夹信息列表
 func (s *Service) GetFileFolderInfoList(ctx context.Context, req *pb.GetInfoByIdsRequest, res *pb.GetFileFolderListResponse) error {
 
+	// ok
 	list, err := model.GetFolderForFileInfoByIds(req.List)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

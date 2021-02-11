@@ -8,17 +8,17 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// UpdateDocTree ... 更新项目的文档树
+// UpdateDocTree ... 更新任意文档夹的文档树
 func (s *Service) UpdateDocTree(ctx context.Context, req *pb.UpdateTreeRequest, res *pb.Response) error {
 
-	project, err := model.GetProject(req.Id)
+	item, err := model.GetFolderForDocModel(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	project.DocTree = req.Tree
+	item.Children = req.Tree
 
-	if err := project.Update(); err != nil {
+	if err := item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

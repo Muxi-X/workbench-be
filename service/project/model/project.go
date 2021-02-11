@@ -3,18 +3,21 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	"gorm.io/gorm"
 )
 
 // ProjectModel project table's structure
 type ProjectModel struct {
-	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name         string `json:"name" gorm:"column:name;" binding:"required"`
-	Intro        string `json:"intro" gorm:"column:intro;" binding:"required"`
-	Time         string `json:"time" gorm:"column:time;" binding:"required"`
-	Count        uint32 `json:"count" gorm:"column:count;" binding:"required"`
-	TeamID       uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
-	FileChildren string `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
-	DocChildren  string `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
+	ID           uint32         `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name         string         `json:"name" gorm:"column:name;" binding:"required"`
+	Intro        string         `json:"intro" gorm:"column:intro;" binding:"required"`
+	Time         string         `json:"time" gorm:"column:time;" binding:"required"`
+	Count        uint32         `json:"count" gorm:"column:count;" binding:"required"`
+	TeamID       uint32         `json:"teamId" gorm:"column:team_id;" binding:"required"`
+	FileChildren string         `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
+	DocChildren  string         `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
+	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;" binding:"required"`
 }
 
 // ProjectListItem ProjectList service item
@@ -28,10 +31,9 @@ type ProjectName struct {
 	Name string `json:"name" gorm:"column:name;" binding:"required"`
 }
 
-// ChildrenItem ... 数据库提取出来的 children 经过序列化形成结构体切片，此为结构体
-type ChildrenItem struct {
-	ID   uint32 `json:"id"`
-	Type int    `json:"type"` // 类型标志 0->project 1->文档夹 2->文件夹 3->文档 4->文件
+type ProjectChildren struct {
+	DocChildren  string `json:"doc_children" gorm:"column:doc_children;" binding:"required"`
+	FileChildren string `json:"file_children" gorm:"column:file_children;" binding:"required"`
 }
 
 // TableName return table name
@@ -95,4 +97,10 @@ func ListProject(userID, offset, limit, lastID uint32, pagination bool) ([]*Proj
 	}
 
 	return projectList, count, nil
+}
+
+func GetProjectChildrenById(id uint32) (*ProjectChildren, error) {
+	s := &ProjectChildren{}
+	d := m.DB.Self.Table("projects").Select("doc_children", "file_children").Where("id = ?", id).Find(&s)
+	return s, d.Error
 }

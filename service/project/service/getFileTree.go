@@ -8,15 +8,15 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// GetFileTree ... 获取项目的文件树
+// GetFileTree ... 获取任意文件夹目录下的文件树
 func (s *Service) GetFileTree(ctx context.Context, req *pb.GetRequest, res *pb.Tree) error {
 
-	project, err := model.GetProject(req.Id)
+	item, err := model.GetFileChildrenById(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	res.Tree = project.FileTree
+	res.Tree = item.Children
 
 	return nil
 }

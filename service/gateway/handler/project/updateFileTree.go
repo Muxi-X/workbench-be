@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	. "muxi-workbench-gateway/handler"
@@ -21,7 +22,7 @@ func UpdateFileTree(c *gin.Context) {
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID, err := strconv.Atoi(c.Param("id"))
+	fileID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
@@ -34,10 +35,26 @@ func UpdateFileTree(c *gin.Context) {
 		return
 	}
 
+	// 处理请求
+	var item string
+	var children string
+	for _, v := range req.FileTree {
+		if v.Type {
+			item = fmt.Sprintf("%s-%d", v.Id, 1)
+		} else {
+			item = fmt.Sprintf("%s-%d", v.Id, 0)
+		}
+		if children == "" {
+			children = item
+			continue
+		}
+		children = fmt.Sprintf("%s,%s", children, item)
+	}
+
 	// 构造请求
 	_, err = service.ProjectClient.UpdateFileTree(context.Background(), &pbp.UpdateTreeRequest{
-		Id:   uint32(projectID),
-		Tree: req.FileTree,
+		Id:   uint32(fileID),
+		Tree: children,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

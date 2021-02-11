@@ -22,7 +22,7 @@ func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetRequest, res *pb.
 	res.Creator = doc.Creator
 	res.LastEditor = doc.Editor
 	res.CreateTime = doc.CreateTime
-	res.LastEditTime = "" // TODO LastEditTime 数据缺失
+	res.LastEditTime = doc.LastEditTime // TODO LastEditTime 数据缺失
 
 	return nil
 }

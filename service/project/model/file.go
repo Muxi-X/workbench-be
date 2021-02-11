@@ -1,6 +1,11 @@
 package model
 
-import m "muxi-workbench/model"
+import (
+	"fmt"
+	m "muxi-workbench/model"
+
+	"github.com/jinzhu/gorm"
+)
 
 // FileDetail ... 文件详情
 type FileDetail struct {
@@ -65,5 +70,52 @@ func GetFileInfoByIds(ids []uint32) ([]*FileInfo, error) {
 func GetFileDetail(id uint32) (*FileDetail, error) {
 	s := &FileDetail{}
 	d := m.DB.Self.Table("files").Where("files.id = ?", id).Select("files.*, users.name as creator").Joins("left join users on users.id = files.creator_id").First(&s)
+	return s, d.Error
+}
+
+func CreateFile(db *gorm.DB, file *FileModel, fatherId uint32, fatherType bool) (uint32, error) {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := file.Create(); err != nil {
+		tx.Rollback()
+		return uint32(0), err
+	}
+
+	if fatherType {
+		// 查询结果，解析 children 再更新
+		item, err := GetProject(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+		item.FileChildren = fmt.Sprintf("%s,%d-%d", item.FileChildren, file.ID, 0)
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+	} else {
+		item, err := GetFolderForFileModel(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+		item.Children = fmt.Sprintf("%s,%d-%d", item.Children, file.ID, 0)
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return uint32(0), err
+		}
+	}
+
+	return file.ID, tx.Commit().Error
+}
+
+func GetFile(id uint32) (*FileModel, error) {
+	s := &FileModel{}
+	d := m.DB.Self.Where("id = ?", id).First(&s)
 	return s, d.Error
 }

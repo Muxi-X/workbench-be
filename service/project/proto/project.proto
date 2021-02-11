@@ -4,25 +4,32 @@ package project;
 
 service ProjectService {
   // 项目相关
+  rpc CreateProject(CreateProjectRequest) returns (ProjectIDResponse) {}
   rpc GetProjectList(GetProjectListRequest) returns (ProjectListResponse) {}
   rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
   rpc UpdateProjectInfo(UpdateProjectInfoRequest) returns (Response) {}
   rpc DeleteProject(GetRequest) returns (Response) {}
   rpc GetFileTree(GetRequest) returns (Tree) {}
   rpc GetDocTree(GetRequest) returns (Tree) {}
+  rpc UpdateProjectTree(UpdateProjectTreeRequest) returns (Response) {}
   rpc UpdateFileTree(UpdateTreeRequest) returns (Response) {}
   rpc UpdateDocTree(UpdateTreeRequest) returns (Response) {}
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
   rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
-  // rpc GetTrashbin(GetRequest) returns (Response) {}
   rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
+  rpc GetProjectTree(GetRequest) returns (ProjectTree){}
+
+  // 回收站
+  rpc GetTrashbin(GetTrashbinRequest) returns (GetTrashbinResponse) {}
+  rpc UpdateTrashbin(EditTrashbinRequest) returns (Response) {}
+  rpc DeleteTrashbin(EditTrashbinRequest) returns (Response) {}
 
   // 文件相关
   rpc CreateFile(CreateFileRequest) returns (ProjectIDResponse) {}
+  rpc UpdateFile(UpdateFileRequest) returns (ProjectIDResponse) {}
   rpc DeleteFile(GetRequest) returns (Response) {}
   rpc GetFileDetail(GetRequest) returns (FileDetail) {}
   rpc GetFileInfoList(GetInfoByIdsRequest) returns (GetFileInfoListResponse) {}
-  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
 
   // 文档相关
   rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
@@ -30,7 +37,104 @@ service ProjectService {
   rpc DeleteDoc(GetRequest) returns (ProjectIDResponse) {}
   rpc GetDocDetail(GetRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
+  // 文档的评论
+  rpc CreateDocComment(CreateDocCommentRequest) returns (Response) {}
+  rpc ListDocComment(ListDocCommentRequest) returns (CommentListResponse) {}
+  rpc UpdateDocComment(UpdateDocCommentRequest) returns (Response) {}
+  rpc DeleteDocComment(DeleteDocCommentRequest) returns (Response) {}
+
+  // 文档夹 crud
+  rpc CreateDocFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
+  rpc UpdateDocFolder(UpdateFolderRequest) returns (Response) {}
+  rpc DeleteDocFolder(GetRequest) returns (Response) {}
+
+  // 文件夹 crud
+  rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
+  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
+  rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
+  rpc DeleteFileFolder(GetRequest) returns (Response) {}
+}
+
+message GetTrashbinRequest {
+  string type = 1; 
+}
+
+message Trashbin {
+  uint32 id = 1;
+  string type = 2; // 0-projct 1-doc 2-file 3-doc folder 4-file folder
+  string name = 3;
+}
+
+message GetTrashbinResponse {
+  repeated Trashbin list = 1;
+}
+
+message EditTrashbinRequest {
+  uint32 id = 1;
+  string type = 2;
+}
+
+message UpdateFileRequest {
+  uint32 id = 1;
+  string name = 2;
+  string url = 3;
+}
+
+message CreateProjectRequest {
+  string name = 1;
+  string intro = 2;
+  uint32 team_id = 3;
+}
+
+message UpdateFolderRequest {
+  uint32 folder_id = 1;
+  string name = 2; // 只提供改名字，移动通过 update tree 实现
+}
+
+message CreateFolderRequest {
+  uint32 father_id = 1;
+  bool father_type = 2; // 1->project 0->doc folder
+  string name = 3;
+  uint32 project_id = 4;
+  uint32 creator_id = 5;
+}
+
+message DeleteDocCommentRequest {
+  uint32 comment_id = 1;
+  uint32 user_id = 2;
+}
+
+message Comment {
+  uint32 id = 1;
+  string content = 2;
+  uint32 user_id = 4;
+  string time = 5;
+  string avatar = 6;
+  string user_name = 7;
+}
+
+message CommentListResponse {
+  uint32 count = 1;
+  repeated Comment list = 2;
+}
+
+message ListDocCommentRequest {
+  uint32 last_id = 1;
+  uint32 offset = 2;
+  uint32 limit = 3;
+  uint32 doc_id = 4;
+}
+
+message CreateDocCommentRequest {
+  uint32 doc_id = 1;
+  uint32 user_id = 2;
+  string content = 3;
+}
+
+message UpdateDocCommentRequest {
+  uint32 id = 1;
+  string content = 2;
 }
 
 message ProjectIDResponse {
@@ -149,8 +253,19 @@ message UpdateTreeRequest {
   string tree = 2;
 }
 
+message UpdateProjectTreeRequest{
+  uint32 id = 1;
+  string tree = 2;
+  bool type = 3; // 0->doc 1->file
+}
+
 message Tree {
   string tree = 1;
+}
+
+message ProjectTree {
+  string doc_tree = 1;
+  string file_tree = 2;
 }
 
 message CreateFileRequest {
@@ -159,6 +274,9 @@ message CreateFileRequest {
   string hashName = 3; // 上传到对象存储时生成的唯一 hash 文件名
   string url = 4;
   uint32 user_id = 5;
+  uint32 team_id = 6;
+  uint32 father_id = 7;
+  bool father_type = 8;
 }
 
 message CreateDocRequest {
@@ -166,12 +284,16 @@ message CreateDocRequest {
   string content = 2;
   uint32 project_id = 3;
   uint32 user_id = 4;
+  uint32 team_id = 5;
+  uint32 father_id = 6;
+  bool father_type =7;
 }
 
 message UpdateDocRequest {
   uint32 id = 1;
   string title = 2;
   string content = 3;
+  uint32 editor_id = 4;
 }
 
 message GetInfoByIdsRequest {

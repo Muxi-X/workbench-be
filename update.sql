@@ -24,3 +24,9 @@ ALTER TABLE `foldersformds` ADD `children` TEXT DEFAULT NULL;
 
 -- add index for user2projects index
 ALTER TABLE `user2projects` ADD UNIQUE INDEX(`user_id`,`project_id`);
+
+-- add last_edit_time for doc
+ALTER TABLE `docs` ADD `last_edit_time` varchar(30) DEFAULT NULL;
+
+-- add project soft delete
+ALTER TABLE `projects` ADD `deleted_at` timestamp DEFAULT NULL;

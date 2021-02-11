@@ -50,7 +50,6 @@ func DeleteFile(c *gin.Context) {
 	/* --- 新增 feed --- */
 
 	// 构造 push 请求
-	// 待确认，file 的传法
 	pushReq := &pbf.PushRequest{
 		Action: "删除",
 		UserId: userID,
@@ -58,7 +57,7 @@ func DeleteFile(c *gin.Context) {
 			Kind:        4,
 			Id:          uint32(fileID), // 暂时从前端获取
 			Name:        req.FileName,
-			ProjectId:   0,
+			ProjectId:   req.ProjectId,
 			ProjectName: "",
 		},
 	}

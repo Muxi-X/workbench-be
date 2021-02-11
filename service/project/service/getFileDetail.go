@@ -11,6 +11,7 @@ import (
 // GetFileDetail ... 获取文件详情
 func (s *Service) GetFileDetail(ctx context.Context, req *pb.GetRequest, res *pb.FileDetail) error {
 
+	// ok
 	file, err := model.GetFileDetail(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

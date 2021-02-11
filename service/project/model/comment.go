@@ -34,15 +34,28 @@ func (u *CommentsModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
+// Update comment
+func (u *CommentsModel) Update() error {
+	return m.DB.Self.Save(u).Error
+}
+
+// delete comment
+func DeleteComment(id, uid uint32) error {
+	s := &CommentsModel{}
+	s.ID = id
+	d := m.DB.Self.Where("creator = ?", uid).Delete(s)
+	return d.Error
+}
+
 // ListComments list all comments
-func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, uint64, error) {
+func ListDocComments(docID, offset, limit, lastID uint32) ([]*CommentListItem, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
 
 	commentsList := make([]*CommentListItem, 0)
 
-	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments.statu_id = ?", statusID).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id desc")
+	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments.doc_id = ?", docID).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id desc")
 
 	if lastID != 0 {
 		query = query.Where("comments.id < ?", lastID)
@@ -55,4 +68,10 @@ func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, u
 	}
 
 	return commentsList, count, nil
+}
+
+func GetCommentModelById(id uint32) (*CommentsModel, error) {
+	s := &CommentsModel{}
+	d := m.DB.Self.Where("id = ?", id).First(s)
+	return s, d.Error
 }
