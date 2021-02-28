@@ -3,12 +3,8 @@
     "info": {
         "description": "The gateway of muxi-workbench",
         "title": "muxi-workbench-gateway",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "license": {},
         "version": "1.0"
     },
     "host": "work.test.muxi-tech.xyz",
@@ -1986,6 +1982,12 @@
                 "content": {
                     "type": "string"
                 },
+                "like_count": {
+                    "type": "integer"
+                },
+                "liked": {
+                    "type": "boolean"
+                },
                 "sid": {
                     "type": "integer"
                 },
@@ -2316,7 +2318,7 @@
         },
         {
             "description": "用户服务",
-            "name": "auth"
+            "name": "user"
         },
         {
             "description": "团队服务",
