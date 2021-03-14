@@ -9,6 +9,7 @@ import (
 )
 
 // GetProjectInfo ... 获取项目信息
+// 新增获取其子节点
 func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *pb.ProjectInfo) error {
 
 	project, err := model.GetProject(req.Id)
@@ -26,6 +27,8 @@ func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *p
 	res.Name = project.Name
 	res.Intro = project.Intro
 	res.UserCount = count
+	res.DocChildren = project.DocChildren
+	res.FileChildren = project.FileChildren
 
 	return nil
 }

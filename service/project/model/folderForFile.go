@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	m "muxi-workbench/model"
 
@@ -36,13 +37,6 @@ func (u *FolderForFileModel) TableName() string {
 // Create ... 创建文件文件夹
 func (u *FolderForFileModel) Create() error {
 	return m.DB.Self.Create(&u).Error
-}
-
-// DeleteFolderForFile ... 删除文件文件夹
-func DeleteFolderForFile(id uint32) error {
-	doc := &FolderForFileModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
 }
 
 // Update ... 更新文件文件夹
@@ -92,7 +86,7 @@ func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, fatherId uint32, 
 			tx.Rollback()
 			return uint32(0), err
 		}
-		item.DocChildren = fmt.Sprintf("%s,%d-%d", item.DocChildren, folder.ID, 1)
+		item.FileChildren = fmt.Sprintf("%s,%d-%d", item.FileChildren, folder.ID, 1)
 		if err := item.Update(); err != nil {
 			tx.Rollback()
 			return uint32(0), err
@@ -111,4 +105,66 @@ func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, fatherId uint32, 
 	}
 
 	return folder.ID, tx.Commit().Error
+}
+
+func DeleteFileFolder(db *gorm.DB, folder *FolderForFileModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := folder.Update(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if fatherType {
+		// 查询结果，解析 children 再更新
+		item, err := GetProject(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.FileChildren) {
+			item.FileChildren = item.FileChildren[:index] + item.FileChildren[index+1:]
+		} else if index-1 == len(item.FileChildren) {
+			item.FileChildren = item.FileChildren[:index]
+		} else {
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	} else {
+		item, err := GetFolderForFileModel(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.Children) {
+			item.Children = item.Children[:index] + item.Children[index+1:]
+		} else if index-1 == len(item.Children) {
+			item.Children = item.Children[:index]
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	m "muxi-workbench/model"
 
@@ -46,13 +47,6 @@ func (u *DocModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
-// DeleteDoc ... 删除文档
-func DeleteDoc(id uint32) error {
-	doc := &DocModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
-}
-
 // Update doc
 func (u *DocModel) Update() error {
 	return m.DB.Self.Save(u).Error
@@ -90,7 +84,7 @@ func GetDocDetail(id uint32) (*DocDetail, error) {
 	return s, d.Error
 }
 
-func CreateDoc(db *gorm.DB, doc *DocModel, fatherId uint32, fatherType bool) (uint32, error) {
+func CreateDoc(db *gorm.DB, doc *DocModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -110,7 +104,18 @@ func CreateDoc(db *gorm.DB, doc *DocModel, fatherId uint32, fatherType bool) (ui
 			tx.Rollback()
 			return uint32(0), err
 		}
-		item.DocChildren = fmt.Sprintf("%s,%d-%d", item.DocChildren, doc.ID, 0)
+
+		// 根据 childrenPositionIndex 判断插入位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.DocChildren) {
+			item.DocChildren = fmt.Sprintf("%s%d-%d,%s", item.DocChildren[:index], doc.ID, 0, item.DocChildren[index:])
+		} else if index-1 == len(item.DocChildren) {
+			item.DocChildren = fmt.Sprintf("%s,%d-%d", item.DocChildren, doc.ID, 0)
+		} else {
+			tx.Rollback()
+			return uint32(0), errors.New("Invalid children position index.")
+		}
+
 		if err := item.Update(); err != nil {
 			tx.Rollback()
 			return uint32(0), err
@@ -121,7 +126,18 @@ func CreateDoc(db *gorm.DB, doc *DocModel, fatherId uint32, fatherType bool) (ui
 			tx.Rollback()
 			return uint32(0), err
 		}
-		item.Children = fmt.Sprintf("%s,%d-%d", item.Children, doc.ID, 0)
+
+		// 根据 childrenPositionIndex 判断插入位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.Children) {
+			item.Children = fmt.Sprintf("%s%d-%d,%s", item.Children[:index], doc.ID, 0, item.Children[index:])
+		} else if index-1 == len(item.Children) {
+			item.Children = fmt.Sprintf("%s,%d-%d", item.Children, doc.ID, 0)
+		} else {
+			tx.Rollback()
+			return uint32(0), errors.New("Invalid children position index.")
+		}
+
 		if err := item.Update(); err != nil {
 			tx.Rollback()
 			return uint32(0), err
@@ -129,4 +145,66 @@ func CreateDoc(db *gorm.DB, doc *DocModel, fatherId uint32, fatherType bool) (ui
 	}
 
 	return doc.ID, tx.Commit().Error
+}
+
+func DeleteDoc(db *gorm.DB, doc *DocModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := doc.Update(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if fatherType {
+		// 查询结果，解析 children 再更新
+		item, err := GetProject(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.DocChildren) {
+			item.DocChildren = item.DocChildren[:index] + item.DocChildren[index+1:]
+		} else if index-1 == len(item.DocChildren) {
+			item.DocChildren = item.DocChildren[:index]
+		} else {
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	} else {
+		item, err := GetFolderForDocModel(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.Children) {
+			item.Children = item.Children[:index] + item.Children[index+1:]
+		} else if index-1 == len(item.Children) {
+			item.Children = item.Children[:index]
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }

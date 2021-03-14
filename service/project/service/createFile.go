@@ -26,7 +26,7 @@ func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res
 		URL:        req.Url,
 	}
 
-	id, err := model.CreateFile(m.DB.Self, &file, req.FatherId, req.FatherType)
+	id, err := model.CreateFile(m.DB.Self, &file, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

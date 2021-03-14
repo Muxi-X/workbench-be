@@ -29,7 +29,7 @@ func UpdateDocTree(c *gin.Context) {
 		return
 	}
 
-	var req UpdateFileTreeRequest
+	var req UpdateFileChildrenRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -38,7 +38,7 @@ func UpdateDocTree(c *gin.Context) {
 	// 处理请求
 	var item string
 	var children string
-	for _, v := range req.FileTree {
+	for _, v := range req.FileChildren {
 		if v.Type {
 			item = fmt.Sprintf("%s-%d", v.Id, 1)
 		} else {
@@ -52,9 +52,9 @@ func UpdateDocTree(c *gin.Context) {
 	}
 
 	// 发送请求
-	_, err = service.ProjectClient.UpdateDocTree(context.Background(), &pbp.UpdateTreeRequest{
-		Id:   uint32(docID),
-		Tree: children,
+	_, err = service.ProjectClient.UpdateDocChildren(context.Background(), &pbp.UpdateChildrenRequest{
+		Id:       uint32(docID),
+		Children: children,
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())

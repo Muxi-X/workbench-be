@@ -29,7 +29,7 @@ func UpdateProjectTree(c *gin.Context) {
 		return
 	}
 
-	var req UpdateProjectTreeRequest
+	var req UpdateProjectChildrenRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -38,7 +38,7 @@ func UpdateProjectTree(c *gin.Context) {
 	// 处理请求
 	var item string
 	var children string
-	for _, v := range req.FileTree {
+	for _, v := range req.FileChildren {
 		if v.Type {
 			item = fmt.Sprintf("%s-%d", v.Id, 1)
 		} else {
@@ -52,10 +52,10 @@ func UpdateProjectTree(c *gin.Context) {
 	}
 
 	// 发送请求
-	_, err = service.ProjectClient.UpdateProjectTree(context.Background(), &pbp.UpdateProjectTreeRequest{
-		Id:   uint32(projectID),
-		Tree: children,
-		Type: req.Type,
+	_, err = service.ProjectClient.UpdateProjectChildren(context.Background(), &pbp.UpdateProjectChildrenRequest{
+		Id:       uint32(projectID),
+		Children: children,
+		Type:     req.Type,
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())

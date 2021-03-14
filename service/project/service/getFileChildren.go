@@ -8,15 +8,15 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// GetDocTree ... 获取任意文档夹目录下的文档树
-func (s *Service) GetDocTree(ctx context.Context, req *pb.GetRequest, res *pb.Tree) error {
+// GetFileChildren ... 获取任意文件夹目录下的文件树
+func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *pb.Children) error {
 
-	item, err := model.GetDocChildrenById(req.Id)
+	item, err := model.GetFileChildrenById(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	res.Tree = item.Children
+	res.Children = item.Children
 
 	return nil
 }

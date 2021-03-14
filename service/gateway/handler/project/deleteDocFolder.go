@@ -25,8 +25,23 @@ func DeleteDocFolder(c *gin.Context) {
 		return
 	}
 
-	deleteDocFolderReq := &pbp.GetRequest{
-		Id: uint32(folderId),
+	// 获取请求
+	var req DeleteFolderRequest
+	if err := c.Bind(&req); err != nil {
+		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+		return
+	}
+
+	// 获取 userID
+	userID := c.MustGet("userID").(uint32)
+	role := c.MustGet("role").(uint32)
+
+	deleteDocFolderReq := &pbp.DeleteRequest{
+		Id:         uint32(folderId),
+		FatherId:   req.FatherId,
+		FatherType: req.FatherType,
+		UserId:     userID,
+		Role:       role,
 	}
 
 	_, err = service.ProjectClient.DeleteDocFolder(context.Background(), deleteDocFolderReq)

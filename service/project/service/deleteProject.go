@@ -10,7 +10,7 @@ import (
 
 // DeleteProject ... 删除项目 使用 gorm 软删除，直接删即可
 func (s *Service) DeleteProject(ctx context.Context, req *pb.GetRequest, res *pb.Response) error {
-	// TODO：软删除，DB 要添加 deleted_at 字段
+	// 软删除
 	if err := model.DeleteProject(req.Id); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

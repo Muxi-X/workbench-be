@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	m "muxi-workbench/model"
 
@@ -37,13 +38,6 @@ func (u *FolderForDocModel) TableName() string {
 // Create ... 创建文档文件夹
 func (u *FolderForDocModel) Create() error {
 	return m.DB.Self.Create(&u).Error
-}
-
-// DeleteFolderForDoc ... 删除文档文件夹
-func DeleteFolderForDoc(id uint32) error {
-	doc := &FolderForDocModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
 }
 
 // Update ... 更新文档文件夹
@@ -112,4 +106,66 @@ func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId uint32, fa
 	}
 
 	return folder.ID, tx.Commit().Error
+}
+
+func DeleteDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := folder.Update(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if fatherType {
+		// 查询结果，解析 children 再更新
+		item, err := GetProject(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.DocChildren) {
+			item.DocChildren = item.DocChildren[:index] + item.DocChildren[index+1:]
+		} else if index-1 == len(item.DocChildren) {
+			item.DocChildren = item.DocChildren[:index]
+		} else {
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	} else {
+		item, err := GetFolderForDocModel(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.Children) {
+			item.Children = item.Children[:index] + item.Children[index+1:]
+		} else if index-1 == len(item.Children) {
+			item.Children = item.Children[:index]
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }

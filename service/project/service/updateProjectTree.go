@@ -9,7 +9,7 @@ import (
 )
 
 // UpdateProjectTree ... 更新任意文档夹的文档树
-func (s *Service) UpdateProjectTree(ctx context.Context, req *pb.UpdateProjectTreeRequest, res *pb.Response) error {
+func (s *Service) UpdateProjectTree(ctx context.Context, req *pb.UpdateProjectChildrenRequest, res *pb.Response) error {
 
 	item, err := model.GetProject(req.Id)
 	if err != nil {
@@ -18,9 +18,9 @@ func (s *Service) UpdateProjectTree(ctx context.Context, req *pb.UpdateProjectTr
 
 	// type=0->doc type=1->file
 	if req.Type {
-		item.FileChildren = req.Tree
+		item.FileChildren = req.Children
 	} else {
-		item.DocChildren = req.Tree
+		item.DocChildren = req.Children
 	}
 
 	if err := item.Update(); err != nil {

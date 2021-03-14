@@ -29,7 +29,7 @@ func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *
 	}
 
 	// 事务
-	id, err := model.CreateDoc(m.DB.Self, &doc, req.FatherId, req.FatherType)
+	id, err := model.CreateDoc(m.DB.Self, &doc, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

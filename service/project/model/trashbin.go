@@ -18,8 +18,8 @@ func DeleteProjectTrashbin(id uint32) error {
 		return d.Error
 	}
 
-	docTree := project.DocChildren
-	docRaw := strings.Split(docTree, ",")
+	docChildren := project.DocChildren
+	docRaw := strings.Split(docChildren, ",")
 	for _, v := range docRaw {
 		r := strings.Split(v, "-")
 		if r[1] == "0" {
@@ -46,8 +46,8 @@ func DeleteProjectTrashbin(id uint32) error {
 	}
 
 	// 删除 file
-	fileTree := project.FileChildren
-	fileRaw := strings.Split(fileTree, ",")
+	fileChildren := project.FileChildren
+	fileRaw := strings.Split(fileChildren, ",")
 	for _, v := range fileRaw {
 		r := strings.Split(v, "-")
 		if r[1] == "0" {
@@ -96,8 +96,8 @@ func DeleteDocFolderTrashbin(id uint32) error {
 		return d.Error
 	}
 
-	tree := docFolder.Children
-	raw := strings.Split(tree, ",")
+	children := docFolder.Children
+	raw := strings.Split(children, ",")
 	for _, v := range raw {
 		r := strings.Split(v, "-")
 		if r[1] == "0" {
@@ -134,8 +134,8 @@ func DeleteFileFolderTrashbin(id uint32) error {
 		return d.Error
 	}
 
-	tree := fileFolder.Children
-	raw := strings.Split(tree, ",")
+	children := fileFolder.Children
+	raw := strings.Split(children, ",")
 	for _, v := range raw {
 		r := strings.Split(v, "-")
 		if r[1] == "0" {

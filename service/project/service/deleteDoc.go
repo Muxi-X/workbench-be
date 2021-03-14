@@ -5,24 +5,34 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
+	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
 )
 
 // DeleteDoc ... 删除文档
-// 所有的 delete 都需要前端调用 updareTree 的 api
-// 也就是文件删一次，文件树里删一次
-func (s *Service) DeleteDoc(ctx context.Context, req *pb.GetRequest, res *pb.ProjectIDResponse) error {
+// 用接口完成文档删除和文件树修改
+func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.ProjectIDResponse) error {
 	// 先查找再删除
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	// 权限判定
+	if item.CreatorID != req.UserId {
+		if req.Role <= constvar.Normal {
+			return e.BadRequestErr(errno.ErrPermissionDenied, "")
+		}
+	}
+
 	item.Re = true
 	res.Id = item.ProjectID
 
-	// TODO：软删除，DB 要添加 deleted_at 字段
-	if err := item.Update(); err != nil {
+	// 软删除,修改 re 字段
+	// 事务
+	err = model.DeleteDoc(m.DB.Self, item, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
+	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

@@ -1,5 +1,11 @@
 package project
 
+type DeleteFolderRequest struct {
+	Id         uint32 `json:"id"`
+	FatherId   uint32 `json:"father_id"`
+	FatherType bool   `json:"father_type"`
+}
+
 type DeleteDocCommentRequest struct {
 	ProjectId uint32 `json:"project_id"`
 }
@@ -65,16 +71,13 @@ type CommentListResponse struct {
 	CommentList []Comment `json:"commentlist"`
 }
 
-type GetProjectTreeResponse struct {
-	DocTree  []*FileTreeItem `json:"doc_tree"`
-	FileTree []*FileTreeItem `json:"file_tree"`
-}
-
 type GetProjectInfoResponse struct {
-	ProjectID   uint32 `json:"project_id"`
-	ProjectName string `json:"project_name"`
-	Intro       string `json:"intro"`
-	UserCount   uint32 `json:"user_count"`
+	ProjectID    uint32              `json:"project_id"`
+	ProjectName  string              `json:"project_name"`
+	Intro        string              `json:"intro"`
+	UserCount    uint32              `json:"user_count"`
+	DocChildren  []*FileChildrenItem `json:"doc_children"`
+	FileChildren []*FileChildrenItem `json:"file_children"`
 }
 
 type UpdateRequest struct {
@@ -110,27 +113,27 @@ type GetProjectListResponse struct {
 	List  []*ProjectListItem `json:"list"`
 }
 
-// FileTreeItem ... 文件树 包括和文件 文档
-type FileTreeItem struct {
+// FileChildrenItem ... 文件树 包括和文件 文档
+type FileChildrenItem struct {
 	Id   string `json:"id"`
 	Type bool   `json:"type"` // 判断是不是 folder 0->file 1->folder
 }
 
-// GetFileTreeResponse ... 文件文档共用
-type GetFileTreeResponse struct {
-	Count    uint32          `json:"count"`
-	FileTree []*FileTreeItem `json:"file_tree"`
+// GetFileChildrenResponse ... 文件文档共用
+type GetFileChildrenResponse struct {
+	Count        uint32              `json:"count"`
+	FileChildren []*FileChildrenItem `json:"file_children"`
 }
 
-// UpdateFileTreeRequest ... 文件文档共用
-type UpdateFileTreeRequest struct {
-	FileTree []*FileTreeItem `json:"file_tree"`
+// UpdateFileChildrenRequest ... 文件文档共用
+type UpdateFileChildrenRequest struct {
+	FileChildren []*FileChildrenItem `json:"file_children"`
 }
 
-// UpdateProjectTreeRequest ... 用于更改项目的子树，相较于前者多了一个 bool 字段判断修改 docChildren 还是 FileChildren
-type UpdateProjectTreeRequest struct {
-	FileTree []*FileTreeItem
-	Type     bool // 判断是 doc 还是 file
+// UpdateProjectChildrenRequest ... 用于更改项目的子树，相较于前者多了一个 bool 字段判断修改 docChildren 还是 FileChildren
+type UpdateProjectChildrenRequest struct {
+	FileChildren []*FileChildrenItem
+	Type         bool // 判断是 doc 还是 file
 }
 
 type CreateFileRequest struct {
@@ -149,17 +152,20 @@ type GetFileDetailResponse struct {
 }
 
 type DeleteFileRequest struct {
-	FileName  string `json:"file_name"`
-	ProjectId uint32 `json:"project_id"`
+	FileName   string `json:"file_name"`
+	ProjectId  uint32 `json:"project_id"`
+	FatherId   uint32 `json:"father_id"`
+	FatherType bool   `json:"father_type"`
 }
 
 type CreateDocRequest struct {
-	Title      string `json:"title"`
-	Content    string `json:"content"`
-	ProjectID  uint32 `json:"project_id"`
-	DocName    string `json:"doc_name"`
-	FatherID   uint32 `json:"father_id"`   // 父节点 id
-	FatherType bool   `json:"father_type"` // 0->project 1->folder
+	Title                 string `json:"title"`
+	Content               string `json:"content"`
+	ProjectID             uint32 `json:"project_id"`
+	DocName               string `json:"doc_name"`
+	FatherID              uint32 `json:"father_id"`               // 父节点 id
+	FatherType            bool   `json:"father_type"`             // 0->project 1->folder
+	ChildrenPositionIndex uint32 `json:"children_position_index"` // 子节点的位置
 }
 
 type GetDocDetailResponse struct {
@@ -173,7 +179,9 @@ type GetDocDetailResponse struct {
 }
 
 type DeleteDocRequest struct {
-	DocName string `json:"doc_name"`
+	DocName    string `json:"doc_name"`
+	FatherId   uint32 `json:"father_id"`
+	FatherType bool   `json:"father_type"`
 }
 
 type UpdateDocRequest struct {

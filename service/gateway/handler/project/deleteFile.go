@@ -37,10 +37,15 @@ func DeleteFile(c *gin.Context) {
 
 	// 获取 userid
 	userID := c.MustGet("userID").(uint32)
+	role := c.MustGet("role").(uint32)
 
 	// 请求
-	_, err = service.ProjectClient.DeleteFile(context.Background(), &pbp.GetRequest{
-		Id: uint32(fileID),
+	_, err = service.ProjectClient.DeleteFile(context.Background(), &pbp.DeleteRequest{
+		Id:         uint32(fileID),
+		FatherId:   req.FatherId,
+		FatherType: req.FatherType,
+		UserId:     userID,
+		Role:       role,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

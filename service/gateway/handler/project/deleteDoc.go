@@ -37,9 +37,14 @@ func DeleteDoc(c *gin.Context) {
 
 	// 获取 userID
 	userID := c.MustGet("userID").(uint32)
+	role := c.MustGet("role").(uint32)
 
-	resp, err := service.ProjectClient.DeleteDoc(context.Background(), &pbp.GetRequest{
-		Id: uint32(docID),
+	resp, err := service.ProjectClient.DeleteDoc(context.Background(), &pbp.DeleteRequest{
+		Id:         uint32(docID),
+		FatherId:   req.FatherId,
+		FatherType: req.FatherType,
+		UserId:     userID,
+		Role:       role,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

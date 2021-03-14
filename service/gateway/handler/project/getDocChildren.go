@@ -28,7 +28,7 @@ func GetDocTree(c *gin.Context) {
 	}
 
 	// 发送请求
-	getDocTreeResp, err := service.ProjectClient.GetDocTree(context.Background(), &pbp.GetRequest{
+	getDocTreeResp, err := service.ProjectClient.GetDocChildren(context.Background(), &pbp.GetRequest{
 		Id: uint32(folderID),
 	})
 	if err != nil {
@@ -37,17 +37,17 @@ func GetDocTree(c *gin.Context) {
 	}
 
 	// 解析结果
-	var list []*FileTreeItem
-	raw := strings.Split(getDocTreeResp.Tree, ",")
+	var list []*FileChildrenItem
+	raw := strings.Split(getDocTreeResp.Children, ",")
 	for _, v := range raw {
 		r := strings.Split(v, "-")
 		if r[1] == "0" {
-			list = append(list, &FileTreeItem{
+			list = append(list, &FileChildrenItem{
 				Id:   r[0],
 				Type: false,
 			})
 		} else {
-			list = append(list, &FileTreeItem{
+			list = append(list, &FileChildrenItem{
 				Id:   r[0],
 				Type: true,
 			})
@@ -55,8 +55,8 @@ func GetDocTree(c *gin.Context) {
 	}
 
 	// 返回结果
-	SendResponse(c, nil, &GetFileTreeResponse{
-		Count:    uint32(len(list)),
-		FileTree: list,
+	SendResponse(c, nil, &GetFileChildrenResponse{
+		Count:        uint32(len(list)),
+		FileChildren: list,
 	})
 }

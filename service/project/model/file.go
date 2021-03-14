@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	m "muxi-workbench/model"
 
@@ -47,13 +48,6 @@ func (u *FileModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
-// DeleteFile ... 删除文件
-func DeleteFile(id uint32) error {
-	doc := &FileModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
-}
-
 // Update ... 更新文件
 func (u *FileModel) Update() error {
 	return m.DB.Self.Save(u).Error
@@ -73,7 +67,7 @@ func GetFileDetail(id uint32) (*FileDetail, error) {
 	return s, d.Error
 }
 
-func CreateFile(db *gorm.DB, file *FileModel, fatherId uint32, fatherType bool) (uint32, error) {
+func CreateFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -93,7 +87,18 @@ func CreateFile(db *gorm.DB, file *FileModel, fatherId uint32, fatherType bool) 
 			tx.Rollback()
 			return uint32(0), err
 		}
-		item.FileChildren = fmt.Sprintf("%s,%d-%d", item.FileChildren, file.ID, 0)
+
+		// 根据 childrenPositionIndex 判断插入位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.FileChildren) {
+			item.FileChildren = fmt.Sprintf("%s%d-%d,%s", item.FileChildren[:index], file.ID, 0, item.FileChildren[index:])
+		} else if index-1 == len(item.DocChildren) {
+			item.FileChildren = fmt.Sprintf("%s,%d-%d", item.FileChildren, file.ID, 0)
+		} else {
+			tx.Rollback()
+			return uint32(0), errors.New("Invalid children position index.")
+		}
+
 		if err := item.Update(); err != nil {
 			tx.Rollback()
 			return uint32(0), err
@@ -104,7 +109,18 @@ func CreateFile(db *gorm.DB, file *FileModel, fatherId uint32, fatherType bool) 
 			tx.Rollback()
 			return uint32(0), err
 		}
-		item.Children = fmt.Sprintf("%s,%d-%d", item.Children, file.ID, 0)
+
+		// 根据 childrenPositionIndex 判断插入位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.Children) {
+			item.Children = fmt.Sprintf("%s%d-%d,%s", item.Children[:index], file.ID, 0, item.Children[index:])
+		} else if index-1 == len(item.Children) {
+			item.Children = fmt.Sprintf("%s,%d-%d", item.Children, file.ID, 0)
+		} else {
+			tx.Rollback()
+			return uint32(0), errors.New("Invalid children position index.")
+		}
+
 		if err := item.Update(); err != nil {
 			tx.Rollback()
 			return uint32(0), err
@@ -118,4 +134,66 @@ func GetFile(id uint32) (*FileModel, error) {
 	s := &FileModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&s)
 	return s, d.Error
+}
+
+func DeleteFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err := file.Update(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if fatherType {
+		// 查询结果，解析 children 再更新
+		item, err := GetProject(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.FileChildren) {
+			item.FileChildren = item.FileChildren[:index] + item.FileChildren[index+1:]
+		} else if index-1 == len(item.FileChildren) {
+			item.FileChildren = item.FileChildren[:index]
+		} else {
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	} else {
+		item, err := GetFolderForFileModel(fatherId)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+
+		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
+		index := int(childrenPositionIndex) * 4
+		if index-1 < len(item.Children) {
+			item.Children = item.Children[:index] + item.Children[index+1:]
+		} else if index-1 == len(item.Children) {
+			item.Children = item.Children[:index]
+			tx.Rollback()
+			return errors.New("Invalid children position index.")
+		}
+
+		if err := item.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }

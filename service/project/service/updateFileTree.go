@@ -9,14 +9,14 @@ import (
 )
 
 // UpdateFileTree ... 更新项目的文件树
-func (s *Service) UpdateFileTree(ctx context.Context, req *pb.UpdateTreeRequest, res *pb.Response) error {
+func (s *Service) UpdateFileTree(ctx context.Context, req *pb.UpdateChildrenRequest, res *pb.Response) error {
 
 	item, err := model.GetFolderForFileModel(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	item.Children = req.Tree
+	item.Children = req.Children
 
 	if err := item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

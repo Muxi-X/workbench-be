@@ -9,15 +9,12 @@ service ProjectService {
   rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
   rpc UpdateProjectInfo(UpdateProjectInfoRequest) returns (Response) {}
   rpc DeleteProject(GetRequest) returns (Response) {}
-  rpc GetFileTree(GetRequest) returns (Tree) {}
-  rpc GetDocTree(GetRequest) returns (Tree) {}
-  rpc UpdateProjectTree(UpdateProjectTreeRequest) returns (Response) {}
-  rpc UpdateFileTree(UpdateTreeRequest) returns (Response) {}
-  rpc UpdateDocTree(UpdateTreeRequest) returns (Response) {}
+  rpc UpdateProjectChildren(UpdateProjectChildrenRequest) returns (Response) {}
+  rpc UpdateFileChildren(UpdateChildrenRequest) returns (Response) {}
+  rpc UpdateDocChildren(UpdateChildrenRequest) returns (Response) {}
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
   rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
   rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
-  rpc GetProjectTree(GetRequest) returns (ProjectTree){}
 
   // 回收站
   rpc GetTrashbin(GetTrashbinRequest) returns (GetTrashbinResponse) {}
@@ -27,14 +24,14 @@ service ProjectService {
   // 文件相关
   rpc CreateFile(CreateFileRequest) returns (ProjectIDResponse) {}
   rpc UpdateFile(UpdateFileRequest) returns (ProjectIDResponse) {}
-  rpc DeleteFile(GetRequest) returns (Response) {}
+  rpc DeleteFile(DeleteRequest) returns (Response) {}
   rpc GetFileDetail(GetRequest) returns (FileDetail) {}
   rpc GetFileInfoList(GetInfoByIdsRequest) returns (GetFileInfoListResponse) {}
 
   // 文档相关
   rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
   rpc UpdateDoc(UpdateDocRequest ) returns (ProjectIDResponse) {}
-  rpc DeleteDoc(GetRequest) returns (ProjectIDResponse) {}
+  rpc DeleteDoc(DeleteRequest) returns (ProjectIDResponse) {}
   rpc GetDocDetail(GetRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   // 文档的评论
@@ -47,13 +44,24 @@ service ProjectService {
   rpc CreateDocFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
   rpc UpdateDocFolder(UpdateFolderRequest) returns (Response) {}
-  rpc DeleteDocFolder(GetRequest) returns (Response) {}
+  rpc DeleteDocFolder(DeleteRequest) returns (Response) {}
+  rpc GetDocChildren(GetRequest) returns (Children) {}
 
   // 文件夹 crud
   rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
   rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
   rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
-  rpc DeleteFileFolder(GetRequest) returns (Response) {}
+  rpc DeleteFileFolder(DeleteRequest) returns (Response) {}
+  rpc GetFileChildren(GetRequest) returns (Children) {}
+}
+
+message DeleteRequest {
+  uint32 id = 1;
+  uint32 father_id = 2;
+  uint32 children_position_index = 3;
+  bool father_type = 4;
+  uint32 user_id = 5;
+  uint32 role = 6;
 }
 
 message GetTrashbinRequest {
@@ -89,7 +97,7 @@ message CreateProjectRequest {
 
 message UpdateFolderRequest {
   uint32 folder_id = 1;
-  string name = 2; // 只提供改名字，移动通过 update tree 实现
+  string name = 2; // 只提供改名字，移动通过 update children 实现
 }
 
 message CreateFolderRequest {
@@ -240,6 +248,8 @@ message ProjectInfo {
   string name = 2;
   string intro = 3;
   uint32 user_count = 4;
+  string doc_children = 5;
+  string file_children = 6;
 }
 
 message UpdateProjectInfoRequest {
@@ -248,24 +258,19 @@ message UpdateProjectInfoRequest {
   string intro = 3;
 }
 
-message UpdateTreeRequest {
+message UpdateChildrenRequest {
   uint32 id = 1;
-  string tree = 2;
+  string children = 2;
 }
 
-message UpdateProjectTreeRequest{
+message UpdateProjectChildrenRequest{
   uint32 id = 1;
-  string tree = 2;
+  string children = 2;
   bool type = 3; // 0->doc 1->file
 }
 
-message Tree {
-  string tree = 1;
-}
-
-message ProjectTree {
-  string doc_tree = 1;
-  string file_tree = 2;
+message Children {
+  string children = 1;
 }
 
 message CreateFileRequest {
@@ -277,6 +282,7 @@ message CreateFileRequest {
   uint32 team_id = 6;
   uint32 father_id = 7;
   bool father_type = 8;
+  uint32 children_position_index = 9;
 }
 
 message CreateDocRequest {
@@ -287,6 +293,7 @@ message CreateDocRequest {
   uint32 team_id = 5;
   uint32 father_id = 6;
   bool father_type =7;
+  uint32 children_position_index = 8;
 }
 
 message UpdateDocRequest {
