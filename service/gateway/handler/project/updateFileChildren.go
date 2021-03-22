@@ -16,8 +16,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// UpdateFileTree ... 修改文件树
-func UpdateFileTree(c *gin.Context) {
+// UpdateFileChildren ... 修改文件树
+func UpdateFileChildren(c *gin.Context) {
 	log.Info("Project filetree Update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 

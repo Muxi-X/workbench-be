@@ -29,14 +29,14 @@ func DeleteTrashbin(c *gin.Context) {
 		return
 	}
 
-	var req EditTrashbinRequest
+	var req DeleteTrashbinRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 发送请求
-	_, err = service.ProjectClient.DeleteTrashbin(context.Background(), &pbp.EditTrashbinRequest{
+	_, err = service.ProjectClient.DeleteTrashbin(context.Background(), &pbp.DeleteTrashbinRequest{
 		Id:   uint32(id),
 		Type: req.Type,
 	})

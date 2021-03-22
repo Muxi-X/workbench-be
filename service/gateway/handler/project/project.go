@@ -10,13 +10,20 @@ type DeleteDocCommentRequest struct {
 	ProjectId uint32 `json:"project_id"`
 }
 
-type EditTrashbinRequest struct {
-	Type string `json:"type"`
+type DeleteTrashbinRequest struct {
+	Type uint32 `json:"type"`
+}
+
+type RemoveTrashbinRequest struct {
+	Type                  uint32 `json:"type"`
+	FatherId              uint32 `json:"fatherId"`
+	ChildrenPositionIndex uint32 `json:"children_position_index"`
+	FatherType            bool   `json:"father_type"`
 }
 
 type Trashbin struct {
 	Id   uint32 `json:"id"`
-	Type string `json:"type"`
+	Type uint32 `json:"type"`
 	Name string `json:"name"`
 }
 
@@ -189,6 +196,7 @@ type UpdateDocRequest struct {
 	Content string `json:"content"`
 }
 
+// 从 query 获取
 // GetFileInfoListRequest ... 获取文件信息请求，包括文件 文档 文件夹
 type GetFileInfoListRequest struct {
 	Ids []uint32 `json:"ids"`

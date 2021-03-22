@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -15,21 +16,29 @@ import (
 )
 
 // GetTrashbin ... 获取回收站文件
-// 通过参数 type 获取不同类型的资源
 // type： 0-project 1-doc 2-file 3-doc folder 4-file folder
 func GetTrashbin(c *gin.Context) {
 	log.Info("project getTrashbin function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 projectID
-	trashbinType := c.Param("type")
+	var limit, page int
+	var err error
 
-	if trashbinType > "5" || trashbinType < "0" {
-		SendBadRequest(c, errno.ErrTrashbinType, nil, "get param type fail.", GetLine())
+	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+		return
+	}
+
+	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+		return
 	}
 
 	// 发送请求
 	getTrashbinResp, err := service.ProjectClient.GetTrashbin(context.Background(), &pbp.GetTrashbinRequest{
-		Type: trashbinType,
+		Offset: uint32(limit * page),
+		Limit:  uint32(limit),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

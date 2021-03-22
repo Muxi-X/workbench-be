@@ -1,11 +1,13 @@
 package model
 
 import (
-	"errors"
 	"fmt"
 	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
+	"time"
 
 	"github.com/jinzhu/gorm"
+	"github.com/spf13/viper"
 )
 
 // FileDetail ... 文件详情
@@ -80,51 +82,9 @@ func CreateFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex ui
 		return uint32(0), err
 	}
 
-	if fatherType {
-		// 查询结果，解析 children 再更新
-		item, err := GetProject(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
-
-		// 根据 childrenPositionIndex 判断插入位置，从 0 计数
-		index := int(childrenPositionIndex) * 4
-		if index-1 < len(item.FileChildren) {
-			item.FileChildren = fmt.Sprintf("%s%d-%d,%s", item.FileChildren[:index], file.ID, 0, item.FileChildren[index:])
-		} else if index-1 == len(item.DocChildren) {
-			item.FileChildren = fmt.Sprintf("%s,%d-%d", item.FileChildren, file.ID, 0)
-		} else {
-			tx.Rollback()
-			return uint32(0), errors.New("Invalid children position index.")
-		}
-
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
-	} else {
-		item, err := GetFolderForFileModel(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
-
-		// 根据 childrenPositionIndex 判断插入位置，从 0 计数
-		index := int(childrenPositionIndex) * 4
-		if index-1 < len(item.Children) {
-			item.Children = fmt.Sprintf("%s%d-%d,%s", item.Children[:index], file.ID, 0, item.Children[index:])
-		} else if index-1 == len(item.Children) {
-			item.Children = fmt.Sprintf("%s,%d-%d", item.Children, file.ID, 0)
-		} else {
-			tx.Rollback()
-			return uint32(0), errors.New("Invalid children position index.")
-		}
-
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
+	if err := AddFileChildren(fatherType, fatherId, childrenPositionIndex, file); err != nil {
+		tx.Rollback()
+		return uint32(0), err
 	}
 
 	return file.ID, tx.Commit().Error
@@ -136,7 +96,7 @@ func GetFile(id uint32) (*FileModel, error) {
 	return s, d.Error
 }
 
-func DeleteFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -144,55 +104,27 @@ func DeleteFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex ui
 		}
 	}()
 
-	if err := file.Update(); err != nil {
+	// 获取时间
+	day := viper.GetInt("trashbin.expired")
+	t := time.Now().Unix()
+	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
+
+	if err := trashbin.Create(); err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	if fatherType {
-		// 查询结果，解析 children 再更新
-		item, err := GetProject(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
+	// 同步 redis
+	// 不需要找子文件夹
+	if err := m.SAddToRedis(constvar.Trashbin,
+		fmt.Sprintf("%d-%d", trashbin.FileId, constvar.FileCode)); err != nil {
+		tx.Rollback()
+		return err
+	}
 
-		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
-		index := int(childrenPositionIndex) * 4
-		if index-1 < len(item.FileChildren) {
-			item.FileChildren = item.FileChildren[:index] + item.FileChildren[index+1:]
-		} else if index-1 == len(item.FileChildren) {
-			item.FileChildren = item.FileChildren[:index]
-		} else {
-			tx.Rollback()
-			return errors.New("Invalid children position index.")
-		}
-
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return err
-		}
-	} else {
-		item, err := GetFolderForFileModel(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
-
-		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
-		index := int(childrenPositionIndex) * 4
-		if index-1 < len(item.Children) {
-			item.Children = item.Children[:index] + item.Children[index+1:]
-		} else if index-1 == len(item.Children) {
-			item.Children = item.Children[:index]
-			tx.Rollback()
-			return errors.New("Invalid children position index.")
-		}
-
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return err
-		}
+	if err := DeleteFileChildren(fatherType, fatherId, childrenPositionIndex); err != nil {
+		tx.Rollback()
+		return err
 	}
 
 	return tx.Commit().Error

@@ -28,16 +28,19 @@ func UpdateTrashbin(c *gin.Context) {
 		return
 	}
 
-	var req EditTrashbinRequest
+	var req RemoveTrashbinRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 发送请求
-	_, err = service.ProjectClient.UpdateTrashbin(context.Background(), &pbp.EditTrashbinRequest{
-		Id:   uint32(id),
-		Type: req.Type,
+	_, err = service.ProjectClient.UpdateTrashbin(context.Background(), &pbp.RemoveTrashbinRequest{
+		Id:                    uint32(id),
+		Type:                  req.Type,
+		FatherId:              req.FatherId,
+		ChildrenPositionIndex: req.ChildrenPositionIndex,
+		FatherType:            req.FatherType,
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())

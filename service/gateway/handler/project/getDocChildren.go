@@ -16,8 +16,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetDocTree ... 获取某个文档夹下的文档树
-func GetDocTree(c *gin.Context) {
+// GetDocChildren ... 获取某个文档夹下的文档树
+func GetDocChildren(c *gin.Context) {
 	log.Info("project getDoctTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 folderID

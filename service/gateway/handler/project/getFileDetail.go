@@ -21,14 +21,21 @@ func GetFileDetail(c *gin.Context) {
 	log.Info("project getFileDetail function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	fileID, err := strconv.Atoi(c.Param("id"))
+	fileID, err := strconv.Atoi(c.Param("file_id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
-	getFileDetailResp, err := service.ProjectClient.GetFileDetail(context.Background(), &pbp.GetRequest{
-		Id: uint32(fileID),
+	fatherID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
+		return
+	}
+
+	getFileDetailResp, err := service.ProjectClient.GetFileDetail(context.Background(), &pbp.GetFileDetailRequest{
+		Id:       uint32(fileID),
+		FatherId: uint32(fatherID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

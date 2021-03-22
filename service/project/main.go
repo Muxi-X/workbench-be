@@ -37,6 +37,18 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
+	// init redis
+	model.RedisDB.Init()
+	defer model.RedisDB.Close()
+
+	// 同步 redis
+	if err := s.SynchronizeTrashbinToRedis(); err != nil {
+		log.Fatal(err)
+	}
+
+	// 定时任务
+	go s.GoTidyTrashbin(model.DB.Self)
+
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),
 		micro.WrapHandler(

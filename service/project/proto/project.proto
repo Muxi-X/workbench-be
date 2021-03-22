@@ -18,21 +18,21 @@ service ProjectService {
 
   // 回收站
   rpc GetTrashbin(GetTrashbinRequest) returns (GetTrashbinResponse) {}
-  rpc UpdateTrashbin(EditTrashbinRequest) returns (Response) {}
-  rpc DeleteTrashbin(EditTrashbinRequest) returns (Response) {}
+  rpc UpdateTrashbin(RemoveTrashbinRequest) returns (Response) {}
+  rpc DeleteTrashbin(DeleteTrashbinRequest) returns (Response) {}
 
   // 文件相关
   rpc CreateFile(CreateFileRequest) returns (ProjectIDResponse) {}
   rpc UpdateFile(UpdateFileRequest) returns (ProjectIDResponse) {}
   rpc DeleteFile(DeleteRequest) returns (Response) {}
-  rpc GetFileDetail(GetRequest) returns (FileDetail) {}
+  rpc GetFileDetail(GetFileDetailRequest) returns (FileDetail) {}
   rpc GetFileInfoList(GetInfoByIdsRequest) returns (GetFileInfoListResponse) {}
 
   // 文档相关
   rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
   rpc UpdateDoc(UpdateDocRequest ) returns (ProjectIDResponse) {}
   rpc DeleteDoc(DeleteRequest) returns (ProjectIDResponse) {}
-  rpc GetDocDetail(GetRequest) returns (DocDetail) {}
+  rpc GetDocDetail(GetFileDetailRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   // 文档的评论
   rpc CreateDocComment(CreateDocCommentRequest) returns (Response) {}
@@ -55,6 +55,12 @@ service ProjectService {
   rpc GetFileChildren(GetRequest) returns (Children) {}
 }
 
+// 获取 文档/文件 详情请求
+message GetFileDetailRequest {
+  uint32 id = 1;
+  uint32 father_id = 2;
+}
+
 message DeleteRequest {
   uint32 id = 1;
   uint32 father_id = 2;
@@ -65,12 +71,13 @@ message DeleteRequest {
 }
 
 message GetTrashbinRequest {
-  string type = 1; 
+  uint32 offset = 1;
+  uint32 limit = 2;
 }
 
 message Trashbin {
   uint32 id = 1;
-  string type = 2; // 0-projct 1-doc 2-file 3-doc folder 4-file folder
+  uint32 type = 2; // 0-projct 1-doc 2-file 3-doc folder 4-file folder
   string name = 3;
 }
 
@@ -78,9 +85,17 @@ message GetTrashbinResponse {
   repeated Trashbin list = 1;
 }
 
-message EditTrashbinRequest {
+message RemoveTrashbinRequest {
   uint32 id = 1;
-  string type = 2;
+  uint32 type = 2;
+  uint32 father_id = 3;
+  uint32 children_position_index = 4;
+  bool father_type = 5; // 0->project 1->folder 还根据 type 来判定恢复在哪
+}
+
+message DeleteTrashbinRequest {
+  uint32 id = 1;
+  uint32 type = 2;
 }
 
 message UpdateFileRequest {
@@ -106,6 +121,7 @@ message CreateFolderRequest {
   string name = 3;
   uint32 project_id = 4;
   uint32 creator_id = 5;
+  uint32 children_position_index = 6;
 }
 
 message DeleteDocCommentRequest {

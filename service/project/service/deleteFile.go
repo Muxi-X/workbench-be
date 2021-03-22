@@ -10,7 +10,7 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// DeleteFile ... 删除文件 只修改 re 字段
+// DeleteFile ... 删除文件
 func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb.Response) error {
 	item, err := model.GetFile(req.Id)
 	if err != nil {
@@ -24,12 +24,14 @@ func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb
 		}
 	}
 
-	item.Re = true
+	trashbin := &model.TrashbinModel{
+		FileId:   req.Id,
+		FileType: constvar.DocCode,
+		Name:     item.Name,
+	}
 
-	// 软删除，修改 re 字段
 	// 事务
-	err = model.DeleteFile(m.DB.Self, item, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
-	if err := item.Update(); err != nil {
+	if err = model.DeleteFile(m.DB.Self, trashbin, req.FatherId, req.ChildrenPositionIndex, req.FatherType); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

@@ -22,7 +22,7 @@ func (s *Service) CreateFileFolder(ctx context.Context, req *pb.CreateFolderRequ
 		ProjectID:  req.ProjectId,
 	}
 
-	id, err := model.CreateFileFolder(m.DB.Self, folder, req.FatherId, req.FatherType)
+	id, err := model.CreateFileFolder(m.DB.Self, folder, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

@@ -5,26 +5,16 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
+	m "muxi-workbench/model"
 	e "muxi-workbench/pkg/err"
 )
 
 // UpdateTrashbin ... 从回收站移除文件
-func (s *Service) UpdateTrashbin(ctx context.Context, req *pb.EditTrashbinRequest, res *pb.Response) error {
-	var err error
-
-	switch req.Type {
-	case "0":
-		err = model.RemoveProjectTrashbin(req.Id)
-	case "1":
-		err = model.RemoveDocTrashbin(req.Id)
-	case "2":
-		err = model.RemoveFileTrashbin(req.Id)
-	case "3":
-		err = model.RemoveDocFolderTrashbin(req.Id)
-	case "4":
-		err = model.RemoveFileFolderTrashbin(req.Id)
-	}
-	if err != nil {
+// 需要事务
+// 删除回收站表 同步删除 redis 恢复文件树
+func (s *Service) UpdateTrashbin(ctx context.Context, req *pb.RemoveTrashbinRequest, res *pb.Response) error {
+	if err := model.RemoveTrashbin(m.DB.Self, req.Id, uint8(req.Type),
+		req.FatherType, req.FatherId, req.ChildrenPositionIndex); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

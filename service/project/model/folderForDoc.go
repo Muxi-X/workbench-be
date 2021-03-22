@@ -1,11 +1,12 @@
 package model
 
 import (
-	"errors"
-	"fmt"
 	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
+	"time"
 
 	"github.com/jinzhu/gorm"
+	"github.com/spf13/viper"
 )
 
 // FolderForDocInfo ... 文档文件夹信息
@@ -67,7 +68,7 @@ func GetDocChildrenById(id uint32) (*FolderForDocChildren, error) {
 }
 
 // CreateDocFolder ... 事务
-func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId uint32, fatherType bool) (uint32, error) {
+func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -80,35 +81,15 @@ func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId uint32, fa
 		return uint32(0), err
 	}
 
-	if fatherType { // 1->project 0->doc folder
-		// 查询结果，解析 children 再更新
-		item, err := GetProject(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
-		item.DocChildren = fmt.Sprintf("%s,%d-%d", item.DocChildren, folder.ID, 1)
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
-	} else {
-		item, err := GetFolderForDocModel(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
-		item.Children = fmt.Sprintf("%s,%d-%d", item.Children, folder.ID, 1)
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return uint32(0), err
-		}
+	if err := AddDocChildren(fatherType, fatherId, childrenPositionIndex, folder); err != nil {
+		tx.Rollback()
+		return uint32(0), err
 	}
 
 	return folder.ID, tx.Commit().Error
 }
 
-func DeleteDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+func DeleteDocFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -116,55 +97,34 @@ func DeleteDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenP
 		}
 	}()
 
-	if err := folder.Update(); err != nil {
+	// 获取时间
+	day := viper.GetInt("trashbin.expired")
+	t := time.Now().Unix()
+	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
+
+	// 插入回收站
+	if err := trashbin.Create(); err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	if fatherType {
-		// 查询结果，解析 children 再更新
-		item, err := GetProject(fatherId)
-		if err != nil {
+	// 获取子文件，同步 redis
+	var res []string
+	if err := GetDocChildFolder(trashbin.FileId, &res); err != nil {
+		tx.Rollback()
+		return err
+	}
+	if len(res) != 0 {
+		if err := m.SAddToRedis(constvar.Trashbin, res); err != nil {
 			tx.Rollback()
 			return err
 		}
+	}
 
-		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
-		index := int(childrenPositionIndex) * 4
-		if index-1 < len(item.DocChildren) {
-			item.DocChildren = item.DocChildren[:index] + item.DocChildren[index+1:]
-		} else if index-1 == len(item.DocChildren) {
-			item.DocChildren = item.DocChildren[:index]
-		} else {
-			tx.Rollback()
-			return errors.New("Invalid children position index.")
-		}
-
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return err
-		}
-	} else {
-		item, err := GetFolderForDocModel(fatherId)
-		if err != nil {
-			tx.Rollback()
-			return err
-		}
-
-		// 根据 childrenPositionIndex 判断删除位置，从 0 计数
-		index := int(childrenPositionIndex) * 4
-		if index-1 < len(item.Children) {
-			item.Children = item.Children[:index] + item.Children[index+1:]
-		} else if index-1 == len(item.Children) {
-			item.Children = item.Children[:index]
-			tx.Rollback()
-			return errors.New("Invalid children position index.")
-		}
-
-		if err := item.Update(); err != nil {
-			tx.Rollback()
-			return err
-		}
+	// 修改文件树
+	if err := DeleteDocChildren(fatherType, fatherId, childrenPositionIndex); err != nil {
+		tx.Rollback()
+		return err
 	}
 
 	return tx.Commit().Error

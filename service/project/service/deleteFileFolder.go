@@ -10,7 +10,7 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// DeleteFileFolder ... 删除文件夹，只是修改 re 字段
+// DeleteFileFolder ... 删除文件夹
 func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, res *pb.Response) error {
 	item, err := model.GetFolderForFileModel(req.Id)
 	if err != nil {
@@ -24,11 +24,14 @@ func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, r
 		}
 	}
 
-	item.Re = true
+	trashbin := &model.TrashbinModel{
+		FileId:   req.Id,
+		FileType: constvar.DocFolderCode,
+		Name:     item.Name,
+	}
 
 	// 事务
-	model.DeleteFileFolder(m.DB.Self, item, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
-	if err = item.Update(); err != nil {
+	if err := model.DeleteFileFolder(m.DB.Self, trashbin, req.FatherId, req.ChildrenPositionIndex, req.FatherType); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

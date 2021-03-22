@@ -3,7 +3,10 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+	"time"
 
+	g "github.com/jinzhu/gorm"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -46,11 +49,61 @@ func (u *ProjectModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
+// RecoverProject ... 恢复软删除
+func RecoverProject(id uint32) error {
+	return m.DB.Self.Unscoped().Table("projects").Where("id = ?", id).Update("deleted_at", "").Error
+}
+
 // DeleteProject ... 删除项目
-func DeleteProject(id uint32) error {
-	doc := &ProjectModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
+// 事务
+func DeleteProject(db *g.DB, id uint32) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	project := &ProjectModel{
+		ID: id,
+	}
+
+	if err := db.Delete(project).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	trashbin := &TrashbinModel{
+		FileId:   id,
+		FileType: constvar.ProjectCode,
+		Name:     project.Name,
+	}
+
+	// 获取时间
+	day := viper.GetInt("trashbin.expired")
+	t := time.Now().Unix()
+	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
+
+	// 插入回收站
+	if err := trashbin.Create(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	var res []string
+	if err := GetProjectChildFolder(trashbin.FileId, &res); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if len(res) != 0 {
+		if err := m.SAddToRedis(constvar.Trashbin, res); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }
 
 // GetProjectName return project's name

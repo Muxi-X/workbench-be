@@ -16,9 +16,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// UpdateProjectTree ... 修改项目树 包括文件文档
+// UpdateProjectChildren ... 修改项目树 包括文件文档
 // 用于和其他 api 配合实现移动文件
-func UpdateProjectTree(c *gin.Context) {
+func UpdateProjectChildren(c *gin.Context) {
 	log.Info("project updateProjectTree funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 

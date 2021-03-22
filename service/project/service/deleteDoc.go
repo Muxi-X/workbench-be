@@ -11,9 +11,9 @@ import (
 )
 
 // DeleteDoc ... 删除文档
-// 用接口完成文档删除和文件树修改
+// 插入回收站 同步 redis
 func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.ProjectIDResponse) error {
-	// 先查找再删除
+	// 找 name 和 creatorId
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
@@ -26,12 +26,14 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 		}
 	}
 
-	item.Re = true
-	res.Id = item.ProjectID
+	trashbin := &model.TrashbinModel{
+		FileId:   req.Id,
+		FileType: constvar.DocCode,
+		Name:     item.Name,
+	}
 
-	// 软删除,修改 re 字段
 	// 事务
-	err = model.DeleteDoc(m.DB.Self, item, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
+	err = model.DeleteDoc(m.DB.Self, trashbin, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

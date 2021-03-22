@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -19,15 +20,26 @@ func GetDocFolderInfoList(c *gin.Context) {
 	log.Info("project getDocFolderInfoList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获得请求
-	var req GetFileInfoListRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+	// 从 query 获得 ids
+	rawIds, isvalid := c.GetQueryArray("ids")
+	if !isvalid {
+		SendBadRequest(c, errno.ErrQuery, nil, "no query parameters", GetLine())
 		return
 	}
 
+	// 转换
+	var ids []uint32
+	for _, v := range rawIds {
+		id, err := strconv.Atoi(v)
+		if err != nil {
+			SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+			return
+		}
+		ids = append(ids, uint32(id))
+	}
+
 	resp, err := service.ProjectClient.GetDocFolderInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
-		List: req.Ids,
+		List: ids,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

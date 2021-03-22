@@ -8,8 +8,8 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// UpdateProjectTree ... 更新任意文档夹的文档树
-func (s *Service) UpdateProjectTree(ctx context.Context, req *pb.UpdateProjectChildrenRequest, res *pb.Response) error {
+// UpdateProjectChildren ... 更新任意文档夹的文档树
+func (s *Service) UpdateProjectChildren(ctx context.Context, req *pb.UpdateProjectChildrenRequest, res *pb.Response) error {
 
 	item, err := model.GetProject(req.Id)
 	if err != nil {

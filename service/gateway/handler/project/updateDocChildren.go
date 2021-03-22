@@ -16,9 +16,9 @@ import (
 	"go.uber.org/zap"
 )
 
-// UpdateDocTree ... 修改某个文档夹下的文档树
+// UpdateDocChildren ... 修改某个文档夹下的文档树
 // 用于和其他 api 配合实现移动文件
-func UpdateDocTree(c *gin.Context) {
+func UpdateDocChildren(c *gin.Context) {
 	log.Info("project updateDocTree funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 

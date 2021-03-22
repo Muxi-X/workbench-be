@@ -21,14 +21,20 @@ func GetDocDetail(c *gin.Context) {
 	log.Info("project getDocDetail function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	docID, err := strconv.Atoi(c.Param("id"))
+	docID, err := strconv.Atoi(c.Param("file_id"))
+	if err != nil {
+		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
+		return
+	}
+	fatherID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
-	getDocDetailResp, err := service.ProjectClient.GetDocDetail(context.Background(), &pbp.GetRequest{
-		Id: uint32(docID),
+	getDocDetailResp, err := service.ProjectClient.GetDocDetail(context.Background(), &pbp.GetFileDetailRequest{
+		Id:       uint32(docID),
+		FatherId: uint32(fatherID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

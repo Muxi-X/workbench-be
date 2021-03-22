@@ -1,6 +1,6 @@
-CREATE DATABASE WORKBENCH_SHOW;
+CREATE DATABASE workbench;
 
-use WORKBENCH_SHOW;
+use workbench;
 
 -- ----------------------------
 -- Table structure for status
