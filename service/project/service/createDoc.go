@@ -12,7 +12,6 @@ import (
 
 // CreateDoc ... 创建文档
 // 事务自动更新文件树
-// 所有的 create 暂时由接口手动更新目录树
 func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *pb.ProjectIDResponse) error {
 	t := time.Now()
 
