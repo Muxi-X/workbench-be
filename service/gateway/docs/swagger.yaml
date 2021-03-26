@@ -106,6 +106,10 @@ definitions:
     properties:
       content:
         type: string
+      like_count:
+        type: integer
+      liked:
+        type: boolean
       sid:
         type: integer
       time:
@@ -318,10 +322,7 @@ host: work.test.muxi-tech.xyz
 info:
   contact: {}
   description: The gateway of muxi-workbench
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
+  license: {}
   title: muxi-workbench-gateway
   version: "1.0"
 paths:
@@ -1489,6 +1490,6 @@ tags:
 - description: 动态服务
   name: status
 - description: 用户服务
-  name: auth
+  name: user
 - description: 团队服务
   name: team

@@ -41,9 +41,12 @@ func Get(c *gin.Context) {
 		return
 	}
 
+	uid := c.MustGet("userID").(uint32)
+
 	// 构造 get status 请求并发送
 	getReq := &pbs.GetRequest{
-		Id: uint32(sid),
+		Id:  uint32(sid),
+		Uid: uid,
 	}
 
 	getResp, err := service.StatusClient.Get(context.Background(), getReq)
@@ -54,11 +57,13 @@ func Get(c *gin.Context) {
 
 	// 构造返回 response
 	resp := GetResponse{
-		Sid:     uint32(sid),
-		Title:   getResp.Status.Title,
-		Content: getResp.Status.Content,
-		UserId:  getResp.Status.UserId,
-		Time:    getResp.Status.Time,
+		Sid:       uint32(sid),
+		Title:     getResp.Status.Title,
+		Content:   getResp.Status.Content,
+		UserId:    getResp.Status.UserId,
+		Time:      getResp.Status.Time,
+		Liked:     getResp.Status.Liked,
+		LikeCount: getResp.Status.Like,
 	}
 
 	SendResponse(c, nil, resp)

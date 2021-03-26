@@ -18,12 +18,8 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "license": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -2001,6 +1997,12 @@ var doc = `{
                 "content": {
                     "type": "string"
                 },
+                "like_count": {
+                    "type": "integer"
+                },
+                "liked": {
+                    "type": "boolean"
+                },
                 "sid": {
                     "type": "integer"
                 },
@@ -2331,7 +2333,7 @@ var doc = `{
         },
         {
             "description": "用户服务",
-            "name": "auth"
+            "name": "user"
         },
         {
             "description": "团队服务",
