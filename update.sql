@@ -38,6 +38,15 @@ ALTER TABLE `foldersforfiles` ADD `children` TEXT DEFAULT NULL;
 
 ALTER TABLE `foldersformds` ADD `children` TEXT DEFAULT NULL;
 
+-- add father_id for doc, file, folder
+ALTER TABLE `docs` ADD `father_id` int(11) DEFAULT 0;
+
+ALTER TABLE `files` ADD `father_id` int(11) DEFAULT 0;
+
+ALTER TABLE `foldersformds` ADD `father_id` int(11) DEFAULT 0;
+
+ALTER TABLE `foldersforfiles` ADD `father_id` int(11) DEFAULT 0;
+
 -- add index for user2projects index
 ALTER TABLE `user2projects` ADD UNIQUE INDEX(`user_id`,`project_id`);
 

@@ -43,8 +43,6 @@ func SynchronizeTrashbinToRedis() error {
 	for _, v := range list {
 		// 修改原表 re 字段 和 获取子文件
 		switch v.FileType {
-		case 0:
-			err = model.GetProjectChildFolder(v.FileId, &res)
 		case 1:
 			res = append(res, fmt.Sprintf("%d-%d", v.FileId, constvar.DocCode))
 		case 2:

@@ -9,6 +9,7 @@ import (
 )
 
 // UpdateDocChildren ... 更新任意文档夹的文档树
+// 禁用
 func (s *Service) UpdateDocChildren(ctx context.Context, req *pb.UpdateChildrenRequest, res *pb.Response) error {
 
 	item, err := model.GetFolderForDocModel(req.Id)

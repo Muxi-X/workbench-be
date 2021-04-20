@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"PROJECT_SCRIPT/constvar"
 	"PROJECT_SCRIPT/log"
 	"PROJECT_SCRIPT/model"
 	"encoding/json"
@@ -10,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// 获取数据
+// getData ... 获取一个 project 的数据，返回整个项目的 文件树 和 文档树
 func getData(id uint32) (*model.FileTreeNode, *model.FileTreeNode, error) {
 	s, err := model.GetProjectTree(id)
 	if err != nil {
@@ -39,14 +40,17 @@ func writeString(s1 string, s2 string, itemType string) string {
 }
 
 // writeItem ... 写入格式 file->0 , folder->1
+// project 专用，中间记录需要更新的 folder
 func writeItem(tree *model.FileTreeNode) (string, []model.FileTreeNode) {
 	var fileChildren string
 	fileFolderItem := make([]model.FileTreeNode, 0) // 返回给下个函数 , fileChildren 中的文件夹部分
 	for _, v := range tree.Children {
 		if v.Folder {
-			fileChildren = writeString(fileChildren, v.Id, "1")
+			fileChildren = writeString(fileChildren, v.Id, "1") // 取出第一层，剩下的层数在 []children 字段里
 			fileFolderItem = append(fileFolderItem, v)
+			// 记录 folder，fatherId 默认为 0，不需要记录
 		} else {
+			// project 下的 children 默认 fatherId 为 0，不需要记录
 			fileChildren = writeString(fileChildren, v.Id, "0")
 		}
 	}
@@ -95,20 +99,37 @@ func updateDataToProject(doc, file *model.FileTreeNode, id uint32) ([]model.File
 	return fileFolderItem, docFolderItem, nil
 }
 
-func writeFolderItem(tree []model.FileTreeNode) string {
+// writeFolderItem ... 格式化字段
+func writeFolderItem(tree []model.FileTreeNode, id uint32, code uint8, childCode uint8) (string, []model.HandleFatherIdSet) {
 	var children string
+	updateSet := make([]model.HandleFatherIdSet, 0)
 	for _, v := range tree {
 		if v.Folder {
 			children = writeString(children, v.Id, "1")
+			// 并入更新 folder father_id 的待处理集
+			// 这里用 BFS，tree 的结构也不好改变，所以只能提取出来再更新一遍
+			idInt, _ := strconv.Atoi(v.Id)
+			updateSet = append(updateSet, model.HandleFatherIdSet{
+				Type:     code,
+				Id:       uint32(idInt),
+				FatherId: id,
+			})
 		} else {
 			children = writeString(children, v.Id, "0")
+			// 并入更新 file father_id 的待处理集
+			idInt, _ := strconv.Atoi(v.Id)
+			updateSet = append(updateSet, model.HandleFatherIdSet{
+				Type:     childCode,
+				Id:       uint32(idInt),
+				FatherId: id,
+			})
 		}
 	}
 
-	return children
+	return children, updateSet
 }
 
-func insertDatabaseForFile(tree []model.FileTreeNode, id string) {
+func insertDatabaseForFileFolder(tree []model.FileTreeNode, id string) []model.HandleFatherIdSet {
 	// 将当前节点子节点都插入
 	idInt, _ := strconv.Atoi(id)
 	s, err := model.GetFolderForFileModel(uint32(idInt))
@@ -116,7 +137,7 @@ func insertDatabaseForFile(tree []model.FileTreeNode, id string) {
 		fmt.Println(err)
 	}
 
-	children := writeFolderItem(tree)
+	children, updateSet := writeFolderItem(tree, uint32(idInt), constvar.FileFolderCode, constvar.FileCode)
 
 	s.Children = children
 
@@ -124,24 +145,30 @@ func insertDatabaseForFile(tree []model.FileTreeNode, id string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	return updateSet
 }
 
-// 写入信息到 fileFolder
-func updateDataToFileFolder(fileTree []model.FileTreeNode) {
+// updateDataToFileFolder ... 写入信息到 fileFolder, BFS
+func updateDataToFileFolder(fileTree []model.FileTreeNode) []model.HandleFatherIdSet {
+	set := make([]model.HandleFatherIdSet, 0)
 	for len(fileTree) != 0 {
 		v := fileTree[0]
 		if v.Children != nil {
-			insertDatabaseForFile(v.Children, v.Id) // 插入结果，将item全部插入
+			updateSet := insertDatabaseForFileFolder(v.Children, v.Id) // 插入结果，将item全部插入
 			fileTree = append(fileTree, v.Children...)
+			set = append(set, updateSet...)
 		}
-		if len(fileTree) == 1 {
+		if len(fileTree) == 1 { // 防止下面取出元素时越界
 			break
 		}
 		fileTree = fileTree[1:]
 	}
+
+	return set
 }
 
-func insertDatabaseForDoc(tree []model.FileTreeNode, id string) {
+func insertDatabaseForDocFolder(tree []model.FileTreeNode, id string) []model.HandleFatherIdSet {
 	// 将当前节点子节点都插入
 	idInt, _ := strconv.Atoi(id)
 	s, err := model.GetFolderForDocModel(uint32(idInt))
@@ -149,7 +176,7 @@ func insertDatabaseForDoc(tree []model.FileTreeNode, id string) {
 		fmt.Println(err)
 	}
 
-	children := writeFolderItem(tree)
+	children, updateSet := writeFolderItem(tree, uint32(idInt), constvar.DocFolderCode, constvar.DocCode)
 
 	s.Children = children
 
@@ -157,24 +184,53 @@ func insertDatabaseForDoc(tree []model.FileTreeNode, id string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	return updateSet
 }
 
-// 写入信息到 docFolder
-func updateDataToDocFolder(fileTree []model.FileTreeNode) {
+// updateDataToDocFolder ... 写入信息到 docFolder, BFS 遍历
+func updateDataToDocFolder(fileTree []model.FileTreeNode) []model.HandleFatherIdSet {
+	set := make([]model.HandleFatherIdSet, 0)
 	for len(fileTree) != 0 {
 		v := fileTree[0]
 		if v.Children != nil {
-			insertDatabaseForDoc(v.Children, v.Id) // 插入结果，将item全部插入
+			updateSet := insertDatabaseForDocFolder(v.Children, v.Id) // 插入结果，将item全部插入
 			fileTree = append(fileTree, v.Children...)
+			set = append(set, updateSet...)
 		}
 		if len(fileTree) == 1 {
 			break
 		}
 		fileTree = fileTree[1:]
 	}
+	return set
+}
+
+// updateFatherId ... 更新 father_id 集合
+func updateFatherId(set []model.HandleFatherIdSet) error {
+	var err error
+	for _, v := range set {
+		switch v.Type {
+		case constvar.DocCode:
+			err = model.UpdateFatherId(v.Id, v.FatherId, "docs")
+		case constvar.DocFolderCode:
+			err = model.UpdateFatherId(v.Id, v.FatherId, "foldersformds")
+		case constvar.FileCode:
+			err = model.UpdateFatherId(v.Id, v.FatherId, "files")
+		case constvar.FileFolderCode:
+			err = model.UpdateFatherId(v.Id, v.FatherId, "foldersforfiles")
+		}
+
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Start ... 开始迁移
+// 新增字段 father_id
+// 不需要更新 project 的下一层，因为默认就是 0
 func Start() {
 	// 获取最大 id 数
 	maxId, err := model.GetProjectMaxId()
@@ -196,7 +252,18 @@ func Start() {
 		}
 
 		// fmt.Println(docTree)
-		updateDataToFileFolder(fileTree)
-		updateDataToDocFolder(docTree)
+		setFile := updateDataToFileFolder(fileTree)
+		setDoc := updateDataToDocFolder(docTree)
+		set := append(setFile, setDoc...)
+
+		// 更新 fahter_id 集合
+		err = updateFatherId(set)
+		if err != nil {
+			log.Error("update record error",
+				zap.String("cause:", err.Error()))
+			panic(err)
+		}
 	}
+
+	log.Info("finsih")
 }

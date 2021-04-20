@@ -41,11 +41,9 @@ func DeleteFile(c *gin.Context) {
 
 	// 请求
 	_, err = service.ProjectClient.DeleteFile(context.Background(), &pbp.DeleteRequest{
-		Id:         uint32(fileID),
-		FatherId:   req.FatherId,
-		FatherType: req.FatherType,
-		UserId:     userID,
-		Role:       role,
+		Id:     uint32(fileID),
+		UserId: userID,
+		Role:   role,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

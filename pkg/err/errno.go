@@ -5,9 +5,9 @@ type Errno struct {
 	Message string `json:"message"`
 }
 
-// func (err Errno) Error() string {
-// 	return err.Message
-// }
+func (err Errno) Error() string {
+	return err.Message
+}
 
 // // Err represents an error
 // type Err struct {

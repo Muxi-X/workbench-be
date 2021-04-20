@@ -25,10 +25,11 @@ func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *
 		ProjectID:    req.ProjectId,
 		EditorID:     req.UserId,
 		LastEditTime: t.Format("2006-01-02 15:04:05"),
+		FatherId:     req.FatherId,
 	}
 
 	// 事务
-	id, err := model.CreateDoc(m.DB.Self, &doc, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
+	id, err := model.CreateDoc(m.DB.Self, &doc, req.ChildrenPositionIndex)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

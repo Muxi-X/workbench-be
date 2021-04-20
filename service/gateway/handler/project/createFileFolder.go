@@ -27,11 +27,11 @@ func CreateFileFolder(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	createFileFolderReq := &pbp.CreateFolderRequest{
-		Name:       req.Name,
-		CreatorId:  userID,
-		ProjectId:  req.ProjectId,
-		FatherId:   req.FatherId,
-		FatherType: req.FatherType,
+		Name:                  req.Name,
+		CreatorId:             userID,
+		ProjectId:             req.ProjectId,
+		FatherId:              req.FatherId,
+		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}
 
 	_, err := service.ProjectClient.CreateFileFolder(context.Background(), createFileFolderReq)

@@ -38,6 +38,7 @@ type FileModel struct {
 	TeamID     uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
 	CreatorID  uint32 `json:"creatorId" gorm:"column:creator_id;" binding:"required"`
 	ProjectID  uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
+	FatherId   uint32 `json:"father_id" gorm:"column:father_id;" binding:"required"`
 }
 
 // TableName ... 物理表名
@@ -69,7 +70,7 @@ func GetFileDetail(id uint32) (*FileDetail, error) {
 	return s, d.Error
 }
 
-func CreateFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
+func CreateFile(db *gorm.DB, file *FileModel, childrenPositionIndex uint32) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -82,7 +83,15 @@ func CreateFile(db *gorm.DB, file *FileModel, fatherId, childrenPositionIndex ui
 		return uint32(0), err
 	}
 
-	if err := AddFileChildren(fatherType, fatherId, childrenPositionIndex, file); err != nil {
+	// 获取 fatherId
+	fatherId := file.FatherId
+	isFatherProject := false
+	if file.FatherId == 0 {
+		isFatherProject = true
+		fatherId = file.ProjectID
+	}
+
+	if err := AddFileChildren(isFatherProject, fatherId, childrenPositionIndex, file); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -96,7 +105,7 @@ func GetFile(id uint32) (*FileModel, error) {
 	return s, d.Error
 }
 
-func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -122,7 +131,7 @@ func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPosition
 		return err
 	}
 
-	if err := DeleteFileChildren(fatherType, fatherId, childrenPositionIndex); err != nil {
+	if err := DeleteFileChildren(isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

@@ -3,7 +3,6 @@ package project
 import (
 	"context"
 	"strconv"
-	"strings"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -37,22 +36,7 @@ func GetDocChildren(c *gin.Context) {
 	}
 
 	// 解析结果
-	var list []*FileChildrenItem
-	raw := strings.Split(getDocTreeResp.Children, ",")
-	for _, v := range raw {
-		r := strings.Split(v, "-")
-		if r[1] == "0" {
-			list = append(list, &FileChildrenItem{
-				Id:   r[0],
-				Type: false,
-			})
-		} else {
-			list = append(list, &FileChildrenItem{
-				Id:   r[0],
-				Type: true,
-			})
-		}
-	}
+	list := FormatChildren(getDocTreeResp.Children)
 
 	// 返回结果
 	SendResponse(c, nil, &GetFileChildrenResponse{

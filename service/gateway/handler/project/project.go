@@ -1,9 +1,17 @@
 package project
 
+import "strings"
+
+type UpdateFilePositionRequest struct {
+	FatherId              uint32
+	FatherType            uint32
+	Type                  uint8
+	ChildrenPositionIndex uint32
+}
+
+// 可能 feed 有用
 type DeleteFolderRequest struct {
-	Id         uint32 `json:"id"`
-	FatherId   uint32 `json:"father_id"`
-	FatherType bool   `json:"father_type"`
+	Id uint32 `json:"id"`
 }
 
 type DeleteDocCommentRequest struct {
@@ -18,7 +26,7 @@ type RemoveTrashbinRequest struct {
 	Type                  uint32 `json:"type"`
 	FatherId              uint32 `json:"fatherId"`
 	ChildrenPositionIndex uint32 `json:"children_position_index"`
-	FatherType            bool   `json:"father_type"`
+	IsFatherProject       bool   `json:"is_father_project"`
 }
 
 type Trashbin struct {
@@ -38,9 +46,8 @@ type UpdateFileRequest struct {
 }
 
 type CreateProjectRequest struct {
-	Name   string `json:"name"`
-	Intro  string `json:"intro"`
-	TeamId uint32 `json:"team_id"`
+	Name  string `json:"name"`
+	Intro string `json:"intro"`
 }
 
 type UpdateFolderRequest struct {
@@ -48,10 +55,10 @@ type UpdateFolderRequest struct {
 }
 
 type CreateFolderRequest struct {
-	FatherId   uint32 `json:"father_id"`
-	FatherType bool   `json:"father_type"`
-	Name       string `json:"name"`
-	ProjectId  uint32 `json:"project_id"`
+	FatherId              uint32 `json:"father_id"`
+	Name                  string `json:"name"`
+	ProjectId             uint32 `json:"project_id"`
+	ChildrenPositionIndex uint32 `json:"children_position_index"`
 }
 
 type CreateDocCommentRequest struct {
@@ -144,11 +151,13 @@ type UpdateProjectChildrenRequest struct {
 }
 
 type CreateFileRequest struct {
-	ProjectID uint32 `json:"project_id"`
-	FileID    uint32 `json:"file_id"`
-	FileName  string `json:"file_name"`
-	HashName  string `json:"hash_name"`
-	Url       string `json:"url"`
+	ProjectID             uint32 `json:"project_id"`
+	FileID                uint32 `json:"file_id"`
+	FileName              string `json:"file_name"`
+	HashName              string `json:"hash_name"`
+	Url                   string `json:"url"`
+	FatherId              uint32 `json:"father_id"`
+	ChildrenPositionIndex uint32 `json:"children_position_index"`
 }
 
 type GetFileDetailResponse struct {
@@ -159,10 +168,8 @@ type GetFileDetailResponse struct {
 }
 
 type DeleteFileRequest struct {
-	FileName   string `json:"file_name"`
-	ProjectId  uint32 `json:"project_id"`
-	FatherId   uint32 `json:"father_id"`
-	FatherType bool   `json:"father_type"`
+	FileName  string `json:"file_name"`
+	ProjectId uint32 `json:"project_id"`
 }
 
 type CreateDocRequest struct {
@@ -171,7 +178,6 @@ type CreateDocRequest struct {
 	ProjectID             uint32 `json:"project_id"`
 	DocName               string `json:"doc_name"`
 	FatherID              uint32 `json:"father_id"`               // 父节点 id
-	FatherType            bool   `json:"father_type"`             // 0->project 1->folder
 	ChildrenPositionIndex uint32 `json:"children_position_index"` // 子节点的位置
 }
 
@@ -185,10 +191,9 @@ type GetDocDetailResponse struct {
 	LastEditTime string `json:"last_edit_time"`
 }
 
+// 可能 feed 有用
 type DeleteDocRequest struct {
-	DocName    string `json:"doc_name"`
-	FatherId   uint32 `json:"father_id"`
-	FatherType bool   `json:"father_type"`
+	DocName string `json:"doc_name"`
 }
 
 type UpdateDocRequest struct {
@@ -215,4 +220,27 @@ type GetFileInfoListResponse struct {
 
 type GetProjectIdsForUserResponse struct {
 	Ids []uint32 `json:"ids"`
+}
+
+// 转换 子文件 共用函数
+
+func FormatChildren(strChildren string) []*FileChildrenItem {
+	var list []*FileChildrenItem
+	raw := strings.Split(strChildren, ",")
+	for _, v := range raw {
+		r := strings.Split(v, "-")
+		if r[1] == "0" {
+			list = append(list, &FileChildrenItem{
+				Id:   r[0],
+				Type: false,
+			})
+		} else {
+			list = append(list, &FileChildrenItem{
+				Id:   r[0],
+				Type: true,
+			})
+		}
+	}
+
+	return list
 }

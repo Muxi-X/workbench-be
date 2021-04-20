@@ -17,6 +17,7 @@ import (
 )
 
 // UpdateFileChildren ... 修改文件树
+// 禁用
 func UpdateFileChildren(c *gin.Context) {
 	log.Info("Project filetree Update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -36,6 +37,7 @@ func UpdateFileChildren(c *gin.Context) {
 	}
 
 	// 处理请求
+	// TODO:抽函数
 	var item string
 	var children string
 	for _, v := range req.FileChildren {

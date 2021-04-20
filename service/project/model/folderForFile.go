@@ -28,6 +28,7 @@ type FolderForFileModel struct {
 	CreatorID  uint32 `json:"creatorID" gorm:"column:create_id;" binding:"required"`
 	ProjectID  uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 	Children   string `json:"children" gorm:"column:children;" binding:"required"`
+	FatherId   uint32 `json:"fahter_id" gorm:"column:father_id;" binding:"required"`
 }
 
 // TableName ... 物理表名
@@ -67,7 +68,7 @@ func GetFileChildrenById(id uint32) (*FolderForFileChildren, error) {
 }
 
 // CreateFileFolder ... 事务
-func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
+func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, childrenPositionIndex uint32) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -80,7 +81,15 @@ func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, fatherId, childre
 		return uint32(0), err
 	}
 
-	if err := AddFileChildren(fatherType, fatherId, childrenPositionIndex, folder); err != nil {
+	// 获取 fatherId
+	fatherId := folder.FatherId
+	isFatherProject := false
+	if folder.FatherId == 0 {
+		isFatherProject = true
+		fatherId = folder.ProjectID
+	}
+
+	if err := AddFileChildren(isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -88,7 +97,7 @@ func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, fatherId, childre
 	return folder.ID, tx.Commit().Error
 }
 
-func DeleteFileFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+func DeleteFileFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -119,7 +128,7 @@ func DeleteFileFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPo
 		}
 	}
 
-	if err := DeleteFileChildren(fatherType, fatherId, childrenPositionIndex); err != nil {
+	if err := DeleteFileChildren(isFatherProject, fatherId, trashbin.FileId, constvar.IsFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

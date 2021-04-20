@@ -16,6 +16,7 @@ import (
 )
 
 // CreateDoc creates a new doc
+// 更新：前端不用传 fatherType 根据 fatherId 是否为 0 来判断
 func CreateDoc(c *gin.Context) {
 	log.Info("project createDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -39,7 +40,6 @@ func CreateDoc(c *gin.Context) {
 		UserId:                userID,
 		TeamId:                teamID,
 		FatherId:              req.FatherID,
-		FatherType:            req.FatherType,
 		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}
 

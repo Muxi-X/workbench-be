@@ -18,6 +18,7 @@ import (
 
 // UpdateDocChildren ... 修改某个文档夹下的文档树
 // 用于和其他 api 配合实现移动文件
+// 禁用
 func UpdateDocChildren(c *gin.Context) {
 	log.Info("project updateDocTree funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

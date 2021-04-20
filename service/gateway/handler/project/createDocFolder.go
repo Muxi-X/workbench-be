@@ -14,6 +14,7 @@ import (
 )
 
 // CreateDocFolder ... 建立文档夹
+// 更新：删除 fatherType，类型根据 father_id 判定，新增 childrenpositionindex
 func CreateDocFolder(c *gin.Context) {
 	log.Info("project createDocFolder function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -27,11 +28,11 @@ func CreateDocFolder(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	createDocFolderReq := &pbp.CreateFolderRequest{
-		Name:       req.Name,
-		CreatorId:  userID,
-		ProjectId:  req.ProjectId,
-		FatherId:   req.FatherId,
-		FatherType: req.FatherType,
+		Name:                  req.Name,
+		CreatorId:             userID,
+		ProjectId:             req.ProjectId,
+		FatherId:              req.FatherId,
+		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}
 
 	_, err := service.ProjectClient.CreateDocFolder(context.Background(), createDocFolderReq)

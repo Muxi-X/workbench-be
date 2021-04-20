@@ -29,6 +29,7 @@ type FolderForDocModel struct {
 	CreatorID  uint32 `json:"creatorID" gorm:"column:create_id;" binding:"required"`
 	ProjectID  uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 	Children   string `json:"children" gorm:"column:children;" binding:"required"`
+	FatherId   uint32 `json:"fahter_id" gorm:"column:father_id;" binding:"required"`
 }
 
 // TableName ... 物理表名
@@ -68,7 +69,7 @@ func GetDocChildrenById(id uint32) (*FolderForDocChildren, error) {
 }
 
 // CreateDocFolder ... 事务
-func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
+func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, childrenPositionIndex uint32) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -81,7 +82,15 @@ func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenP
 		return uint32(0), err
 	}
 
-	if err := AddDocChildren(fatherType, fatherId, childrenPositionIndex, folder); err != nil {
+	// 获取 fatherId
+	fatherId := folder.FatherId
+	isFatherProject := false
+	if folder.FatherId == 0 {
+		isFatherProject = true
+		fatherId = folder.ProjectID
+	}
+
+	if err := AddDocChildren(isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -89,7 +98,7 @@ func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, fatherId, childrenP
 	return folder.ID, tx.Commit().Error
 }
 
-func DeleteDocFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+func DeleteDocFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -122,7 +131,7 @@ func DeleteDocFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPos
 	}
 
 	// 修改文件树
-	if err := DeleteDocChildren(fatherType, fatherId, childrenPositionIndex); err != nil {
+	if err := DeleteDocChildren(isFatherProject, fatherId, trashbin.FileId, constvar.IsFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

@@ -91,18 +91,19 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		projectRouter.GET("/detail/:id/member", normalRequired, project.GetMembers)    // 获取一个 project 的成员
 		projectRouter.PUT("/detail/:id/member", adminRequired, project.UpdateMembers)  // 编辑一个 project 的成员
 		projectRouter.GET("/ids", normalRequired, project.GetProjectIdsForUser)
-		projectRouter.PUT("/children/:id", normalRequired, project.UpdateProjectChildren)
-
+		// projectRouter.PUT("/children/:id", normalRequired, project.UpdateProjectChildren)
 	}
 
 	folderRouter := g.Group("api/v1/folder")
 	folderRouter.Use(normalRequired)
 	{
 		// 文档文件夹下的文件树
-		folderRouter.GET("/file_children/:id", project.GetFileChildren)    // 获取文件树
-		folderRouter.GET("/doc_children/:id", project.GetDocChildren)      // 获取文档树
-		folderRouter.PUT("/file_children/:id", project.UpdateFileChildren) // 编辑文件树
-		folderRouter.PUT("/doc_children/:id", project.UpdateDocChildren)   // 编辑文档树
+		folderRouter.GET("/file_children/:id", project.GetFileChildren) // 获取文件树
+		folderRouter.GET("/doc_children/:id", project.GetDocChildren)   // 获取文档树
+		// folderRouter.PUT("/file_children/:id", project.UpdateFileChildren) // 编辑文件树
+		// folderRouter.PUT("/doc_children/:id", project.UpdateDocChildren)   // 编辑文档树
+		// 移动文件
+		folderRouter.PUT("/children/:old_father_id/:father_id", project.UpdateFilePosition)
 		// 文档夹 crud
 		folderRouter.GET("/docfolder", project.GetDocFolderInfoList)
 		folderRouter.POST("/docfolder", project.CreateDocFolder)
@@ -140,7 +141,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// 回收站 read delete recover
 	trashbinRouter := g.Group("api/v1/trashbin")
-	trashbinRouter.Use(adminRequired)
+	trashbinRouter.Use(normalRequired)
 	{
 		trashbinRouter.GET("", project.GetTrashbin)
 		trashbinRouter.PUT("/:id", project.UpdateTrashbin)

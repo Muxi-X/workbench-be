@@ -40,11 +40,9 @@ func DeleteDoc(c *gin.Context) {
 	role := c.MustGet("role").(uint32)
 
 	resp, err := service.ProjectClient.DeleteDoc(context.Background(), &pbp.DeleteRequest{
-		Id:         uint32(docID),
-		FatherId:   req.FatherId,
-		FatherType: req.FatherType,
-		UserId:     userID,
-		Role:       role,
+		Id:     uint32(docID),
+		UserId: userID,
+		Role:   role,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

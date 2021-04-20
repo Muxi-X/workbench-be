@@ -99,6 +99,7 @@ func SAddToRedis(key string, value interface{}) error {
 }
 
 // SIsmembersFromRedis find members if exist
+// 存在返回 1
 func SIsmembersFromRedis(key string, member interface{}) (bool, error) {
 	val, err := RedisDB.Self.SIsMember(key, member).Result()
 	if err != nil {

@@ -37,6 +37,7 @@ type DocModel struct {
 	EditorID     uint32 `json:"editorId" gorm:"column:editor_id;" binding:"required"`
 	ProjectID    uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 	LastEditTime string `json:"lastEditTime" gorm:"column:last_edit_time;" binding:"required"`
+	FatherId     uint32 `json:"father_id" gorm:"column:father_id;" binding:"required"`
 }
 
 // TableName ... 物理表名
@@ -83,7 +84,7 @@ func GetDocDetail(id uint32) (*DocDetail, error) {
 	return s, d.Error
 }
 
-func CreateDoc(db *gorm.DB, doc *DocModel, fatherId, childrenPositionIndex uint32, fatherType bool) (uint32, error) {
+func CreateDoc(db *gorm.DB, doc *DocModel, childrenPositionIndex uint32) (uint32, error) {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -96,7 +97,15 @@ func CreateDoc(db *gorm.DB, doc *DocModel, fatherId, childrenPositionIndex uint3
 		return uint32(0), err
 	}
 
-	if err := AddDocChildren(fatherType, fatherId, childrenPositionIndex, doc); err != nil {
+	// 获取 isFatherProject
+	isFatherProject := false
+	fatherId := doc.FatherId
+	if doc.FatherId == 0 {
+		isFatherProject = true
+		fatherId = doc.ProjectID
+	}
+
+	if err := AddDocChildren(isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -105,7 +114,8 @@ func CreateDoc(db *gorm.DB, doc *DocModel, fatherId, childrenPositionIndex uint3
 }
 
 // DeleteDoc ... 插入回收站 同步 redis
-func DeleteDoc(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionIndex uint32, fatherType bool) error {
+// 先查表找到 childrenPositionIndex
+func DeleteDoc(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -132,7 +142,7 @@ func DeleteDoc(db *gorm.DB, trashbin *TrashbinModel, fatherId, childrenPositionI
 		return err
 	}
 
-	if err := DeleteDocChildren(fatherType, fatherId, childrenPositionIndex); err != nil {
+	if err := DeleteDocChildren(isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

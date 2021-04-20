@@ -26,11 +26,12 @@ func CreateProject(c *gin.Context) {
 	}
 
 	userID := c.MustGet("userID").(uint32)
+	teamID := c.MustGet("teamID").(uint32)
 
 	createProjectReq := &pbp.CreateProjectRequest{
 		Name:   req.Name,
 		Intro:  req.Intro,
-		TeamId: req.TeamId,
+		TeamId: teamID,
 	}
 
 	resp, err := service.ProjectClient.CreateProject(context.Background(), createProjectReq)

@@ -28,6 +28,17 @@ type FileTreeNode struct {
 	Children      []FileTreeNode `json:"child"`
 }
 
+type HandleFatherIdSet struct {
+	Type     uint8 // 文件类型，沿用 根目录 下的 constvar code
+	Id       uint32
+	FatherId uint32
+}
+
+// Update ... 更新文件
+func UpdateFatherId(id, fatherId uint32, table string) error {
+	return DB.Self.Table(table).Where("id = ?", id).Update("father_id", fatherId).Error
+}
+
 type ProjectId struct {
 	Id int `json:"id" gorm:"column:id;" binding:"required"`
 }

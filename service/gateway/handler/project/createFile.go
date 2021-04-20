@@ -17,6 +17,7 @@ import (
 
 // CreateFile creates a new file
 // 调用 createfile 和 feed push
+// 更新：同步 gateway 和 project
 func CreateFile(c *gin.Context) {
 	log.Info("project createFile function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -34,12 +35,14 @@ func CreateFile(c *gin.Context) {
 
 	// 构造请求
 	createFileReq := &pbp.CreateFileRequest{
-		ProjectId: req.ProjectID,
-		Name:      req.FileName,
-		HashName:  req.HashName,
-		Url:       req.Url,
-		UserId:    userID,
-		TeamId:    teamID,
+		ProjectId:             req.ProjectID,
+		Name:                  req.FileName,
+		HashName:              req.HashName,
+		Url:                   req.Url,
+		UserId:                userID,
+		TeamId:                teamID,
+		FatherId:              req.FatherId,
+		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}
 	resp, err := service.ProjectClient.CreateFile(context.Background(), createFileReq)
 	if err != nil {

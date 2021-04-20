@@ -25,6 +25,16 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 		}
 	}
 
+	// 获取 fatherId
+	isFatherProject := false
+	var fatherId uint32
+	if item.FatherId == 0 { // fatherId 为 0 则是 project
+		isFatherProject = true
+		fatherId = item.ProjectID
+	} else {
+		fatherId = item.FatherId
+	}
+
 	trashbin := &model.TrashbinModel{
 		FileId:   req.Id,
 		FileType: constvar.DocFolderCode,
@@ -32,7 +42,7 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 	}
 
 	// 事务
-	err = model.DeleteDocFolder(m.DB.Self, trashbin, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
+	err = model.DeleteDocFolder(m.DB.Self, trashbin, fatherId, isFatherProject)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

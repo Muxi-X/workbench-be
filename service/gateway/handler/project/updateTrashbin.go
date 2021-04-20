@@ -40,7 +40,7 @@ func UpdateTrashbin(c *gin.Context) {
 		Type:                  req.Type,
 		FatherId:              req.FatherId,
 		ChildrenPositionIndex: req.ChildrenPositionIndex,
-		FatherType:            req.FatherType,
+		IsFatherProject:       req.IsFatherProject,
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())

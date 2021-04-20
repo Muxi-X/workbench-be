@@ -3,10 +3,8 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
-	"time"
 
 	g "github.com/jinzhu/gorm"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -50,60 +48,18 @@ func (u *ProjectModel) Create() error {
 }
 
 // RecoverProject ... 恢复软删除
+// 未使用
 func RecoverProject(id uint32) error {
 	return m.DB.Self.Unscoped().Table("projects").Where("id = ?", id).Update("deleted_at", "").Error
 }
 
 // DeleteProject ... 删除项目
-// 事务
-func DeleteProject(db *g.DB, id uint32) error {
-	tx := db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
+func DeleteProject(id uint32) error {
 	project := &ProjectModel{
 		ID: id,
 	}
 
-	if err := db.Delete(project).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	trashbin := &TrashbinModel{
-		FileId:   id,
-		FileType: constvar.ProjectCode,
-		Name:     project.Name,
-	}
-
-	// 获取时间
-	day := viper.GetInt("trashbin.expired")
-	t := time.Now().Unix()
-	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
-
-	// 插入回收站
-	if err := trashbin.Create(); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	var res []string
-	if err := GetProjectChildFolder(trashbin.FileId, &res); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if len(res) != 0 {
-		if err := m.SAddToRedis(constvar.Trashbin, res); err != nil {
-			tx.Rollback()
-			return err
-		}
-	}
-
-	return tx.Commit().Error
+	return m.DB.Self.Delete(project).Error
 }
 
 // GetProjectName return project's name
@@ -156,4 +112,97 @@ func GetProjectChildrenById(id uint32) (*ProjectChildren, error) {
 	s := &ProjectChildren{}
 	d := m.DB.Self.Table("projects").Select("doc_children", "file_children").Where("id = ?", id).Find(&s)
 	return s, d.Error
+}
+
+/* --- 移动文件 --- */
+
+// UpdateFilePosition ... 移动文件，事务
+func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32,
+	fileType uint8, isFatherProject, isOldFatherProject bool, childrenPositionIndex uint32) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// 将目标文件 father_id 改变
+
+	// 修改父文件的 children 插入子节点
+	// 需要 isProject fatherId childrenPositionIndex obj(需要先断言)
+
+	// 删除之前父文件的 children 子节点
+	// 需要 isProject oldFatherId id isFolder
+	switch fileType {
+	case constvar.DocCode:
+		doc := file.(DocModel)
+		doc.FatherId = fatherId
+		if err := doc.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddDocChildren(isFatherProject, fatherId,
+			childrenPositionIndex, doc); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteDocChildren(isOldFatherProject, oldFatherId, doc.ID,
+			constvar.NotFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	case constvar.FileCode:
+		file := file.(FileModel)
+		file.FatherId = fatherId
+		if err := file.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddFileChildren(isFatherProject, fatherId,
+			childrenPositionIndex, file); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteFileChildren(isOldFatherProject, oldFatherId, file.ID,
+			constvar.NotFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	case constvar.DocFolderCode:
+		folder := file.(FolderForDocModel)
+		folder.FatherId = fatherId
+		if err := folder.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddDocChildren(isFatherProject, fatherId,
+			childrenPositionIndex, folder); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteDocChildren(isOldFatherProject, oldFatherId, folder.ID,
+			constvar.IsFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	case constvar.FileFolderCode:
+		folder := file.(FolderForFileModel)
+		folder.FatherId = fatherId
+		if err := folder.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddFileChildren(isFatherProject, fatherId,
+			childrenPositionIndex, folder); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteFileChildren(isOldFatherProject, oldFatherId, folder.ID,
+			constvar.IsFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }

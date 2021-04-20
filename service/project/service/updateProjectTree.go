@@ -9,6 +9,7 @@ import (
 )
 
 // UpdateProjectChildren ... 更新任意文档夹的文档树
+// 禁用
 func (s *Service) UpdateProjectChildren(ctx context.Context, req *pb.UpdateProjectChildrenRequest, res *pb.Response) error {
 
 	item, err := model.GetProject(req.Id)

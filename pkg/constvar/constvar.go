@@ -22,6 +22,10 @@ const (
 	DocFolderCode  = uint8(3)
 	FileFolderCode = uint8(4)
 
+	// 判断是否是文件夹的 code
+	NotFolderCode = uint8(0)
+	IsFolderCode  = uint8(1)
+
 	// trashbin redis key
 	Trashbin = "trashbin"
 )

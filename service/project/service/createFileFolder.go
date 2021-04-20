@@ -20,9 +20,10 @@ func (s *Service) CreateFileFolder(ctx context.Context, req *pb.CreateFolderRequ
 		CreateTime: t.Format("2006-01-02 15:04:05"),
 		CreatorID:  req.CreatorId,
 		ProjectID:  req.ProjectId,
+		FatherId:   req.FatherId,
 	}
 
-	id, err := model.CreateFileFolder(m.DB.Self, folder, req.FatherId, req.ChildrenPositionIndex, req.FatherType)
+	id, err := model.CreateFileFolder(m.DB.Self, folder, req.ChildrenPositionIndex)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

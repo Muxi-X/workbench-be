@@ -9,6 +9,7 @@ import (
 )
 
 // UpdateFileChildren ... 更新项目的文件树
+// 禁用
 func (s *Service) UpdateFileChildren(ctx context.Context, req *pb.UpdateChildrenRequest, res *pb.Response) error {
 
 	item, err := model.GetFolderForFileModel(req.Id)

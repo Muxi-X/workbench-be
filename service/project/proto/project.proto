@@ -53,6 +53,18 @@ service ProjectService {
   rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
   rpc DeleteFileFolder(DeleteRequest) returns (Response) {}
   rpc GetFileChildren(GetRequest) returns (Children) {}
+
+  rpc UpdateFilePosition(UpdateFilePositionRequest) returns (Response){}
+}
+
+// 移动文件请求
+message UpdateFilePositionRequest {
+  uint32 file_id = 1;
+  uint32 old_father_id = 2; // 旧父 id 判断是否被删
+  uint32 father_id = 3; // 新父 id
+  uint32 father_type = 4; // 根据 constvar 的 file code 确定
+  uint32 type = 5;
+  uint32 children_position_index = 6;
 }
 
 // 获取 文档/文件 详情请求
@@ -63,11 +75,8 @@ message GetFileDetailRequest {
 
 message DeleteRequest {
   uint32 id = 1;
-  uint32 father_id = 2;
-  uint32 children_position_index = 3;
-  bool father_type = 4;
-  uint32 user_id = 5;
-  uint32 role = 6;
+  uint32 user_id = 2;
+  uint32 role = 3;
 }
 
 message GetTrashbinRequest {
@@ -90,7 +99,7 @@ message RemoveTrashbinRequest {
   uint32 type = 2;
   uint32 father_id = 3;
   uint32 children_position_index = 4;
-  bool father_type = 5; // 0->project 1->folder 还根据 type 来判定恢复在哪
+  bool is_father_project = 5; // 1->project 0->folder 还根据 type 来判定恢复在哪
 }
 
 message DeleteTrashbinRequest {
@@ -117,7 +126,6 @@ message UpdateFolderRequest {
 
 message CreateFolderRequest {
   uint32 father_id = 1;
-  bool father_type = 2; // 1->project 0->doc folder
   string name = 3;
   uint32 project_id = 4;
   uint32 creator_id = 5;
@@ -297,7 +305,6 @@ message CreateFileRequest {
   uint32 user_id = 5;
   uint32 team_id = 6;
   uint32 father_id = 7;
-  bool father_type = 8;
   uint32 children_position_index = 9;
 }
 
@@ -308,7 +315,6 @@ message CreateDocRequest {
   uint32 user_id = 4;
   uint32 team_id = 5;
   uint32 father_id = 6;
-  bool father_type =7;
   uint32 children_position_index = 8;
 }
 
@@ -321,6 +327,7 @@ message UpdateDocRequest {
 
 message GetInfoByIdsRequest {
   repeated uint32 list = 1;
+  uint32 father_id = 2;
 }
 
 message FileDetail {
