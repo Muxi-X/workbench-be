@@ -98,7 +98,7 @@ message RemoveTrashbinRequest {
   uint32 id = 1;
   uint32 type = 2;
   uint32 father_id = 3;
-  uint32 children_position_index = 4;
+  uint32 children_position_index = 4; // 还是需要用户给以个来恢复文件
   bool is_father_project = 5; // 1->project 0->folder 还根据 type 来判定恢复在哪
 }
 
