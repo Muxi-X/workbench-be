@@ -91,3 +91,37 @@ func HasExistedInRedis(key string) (bool, error) {
 
 	return val != 0, nil
 }
+
+// SAddToRedis add members to set
+// 过期时间是针对整个 key 设置的，无法对集合中元素设置，所以要定时删除
+func SAddToRedis(key string, value interface{}) error {
+	return RedisDB.Self.SAdd(key, value).Err()
+}
+
+// SIsmembersFromRedis find members if exist
+// 存在返回 1
+func SIsmembersFromRedis(key string, member interface{}) (bool, error) {
+	val, err := RedisDB.Self.SIsMember(key, member).Result()
+	if err != nil {
+		return false, err
+	}
+
+	return val, nil
+}
+
+// SRemToRedis delete members from redis
+func SRemToRedis(key string, member interface{}) error {
+	return RedisDB.Self.SRem(key, member).Err()
+}
+
+// SMembersFromRedis return all members from redis
+func SMembersFromRedis(key string) ([]string, error) {
+	val, err := RedisDB.Self.SMembers(key).Result()
+	if err == redis.Nil {
+		return []string{}, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	return val, nil
+}

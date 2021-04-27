@@ -13,6 +13,22 @@ CREATE TABLE `user2status` (
 	UNIQUE KEY `user_status` (`user_id`,`status_id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
+-- -----------------------------
+-- Table structure for trashbin
+-- -----------------------------
+
+DROP TABLE IF EXISTS `trashbin`;
+CREATE TABLE `trashbin` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`file_id` int(11) DEFAULT NULL,
+	`file_type` tinyint(4) DEFAULT NUll,
+	`name` varchar(255) DEFAULT NULL,
+	`re` tinyint(1) DEFAULT NULL,
+	`expires_at` int(11) unsigned DEFAULT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `idx_id_type` (`file_id`,`file_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
 -- add children for project, foldersformds, foldersforfiles
 ALTER TABLE `projects` ADD `file_children` TEXT DEFAULT NULL;
 
@@ -22,5 +38,20 @@ ALTER TABLE `foldersforfiles` ADD `children` TEXT DEFAULT NULL;
 
 ALTER TABLE `foldersformds` ADD `children` TEXT DEFAULT NULL;
 
+-- add father_id for doc, file, folder
+ALTER TABLE `docs` ADD `father_id` int(11) DEFAULT 0;
+
+ALTER TABLE `files` ADD `father_id` int(11) DEFAULT 0;
+
+ALTER TABLE `foldersformds` ADD `father_id` int(11) DEFAULT 0;
+
+ALTER TABLE `foldersforfiles` ADD `father_id` int(11) DEFAULT 0;
+
 -- add index for user2projects index
 ALTER TABLE `user2projects` ADD UNIQUE INDEX(`user_id`,`project_id`);
+
+-- add last_edit_time for doc
+ALTER TABLE `docs` ADD `last_edit_time` varchar(30) DEFAULT NULL;
+
+-- add project soft delete
+ALTER TABLE `projects` ADD `deleted_at` timestamp DEFAULT NULL;

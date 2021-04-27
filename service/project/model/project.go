@@ -3,18 +3,22 @@ package model
 import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
+
+	g "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ProjectModel project table's structure
 type ProjectModel struct {
-	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name         string `json:"name" gorm:"column:name;" binding:"required"`
-	Intro        string `json:"intro" gorm:"column:intro;" binding:"required"`
-	Time         string `json:"time" gorm:"column:time;" binding:"required"`
-	Count        uint32 `json:"count" gorm:"column:count;" binding:"required"`
-	TeamID       uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
-	FileChildren string `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
-	DocChildren  string `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
+	ID           uint32         `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name         string         `json:"name" gorm:"column:name;" binding:"required"`
+	Intro        string         `json:"intro" gorm:"column:intro;" binding:"required"`
+	Time         string         `json:"time" gorm:"column:time;" binding:"required"`
+	Count        uint32         `json:"count" gorm:"column:count;" binding:"required"`
+	TeamID       uint32         `json:"teamId" gorm:"column:team_id;" binding:"required"`
+	FileChildren string         `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
+	DocChildren  string         `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
+	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;" binding:"required"`
 }
 
 // ProjectListItem ProjectList service item
@@ -28,10 +32,9 @@ type ProjectName struct {
 	Name string `json:"name" gorm:"column:name;" binding:"required"`
 }
 
-// ChildrenItem ... 数据库提取出来的 children 经过序列化形成结构体切片，此为结构体
-type ChildrenItem struct {
-	ID   uint32 `json:"id"`
-	Type int    `json:"type"` // 类型标志 0->project 1->文档夹 2->文件夹 3->文档 4->文件
+type ProjectChildren struct {
+	DocChildren  string `json:"doc_children" gorm:"column:doc_children;" binding:"required"`
+	FileChildren string `json:"file_children" gorm:"column:file_children;" binding:"required"`
 }
 
 // TableName return table name
@@ -44,11 +47,19 @@ func (u *ProjectModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
+// RecoverProject ... 恢复软删除
+// 未使用
+func RecoverProject(id uint32) error {
+	return m.DB.Self.Unscoped().Table("projects").Where("id = ?", id).Update("deleted_at", "").Error
+}
+
 // DeleteProject ... 删除项目
 func DeleteProject(id uint32) error {
-	doc := &ProjectModel{}
-	doc.ID = id
-	return m.DB.Self.Delete(&doc).Error
+	project := &ProjectModel{
+		ID: id,
+	}
+
+	return m.DB.Self.Delete(project).Error
 }
 
 // GetProjectName return project's name
@@ -95,4 +106,103 @@ func ListProject(userID, offset, limit, lastID uint32, pagination bool) ([]*Proj
 	}
 
 	return projectList, count, nil
+}
+
+func GetProjectChildrenById(id uint32) (*ProjectChildren, error) {
+	s := &ProjectChildren{}
+	d := m.DB.Self.Table("projects").Select("doc_children", "file_children").Where("id = ?", id).Find(&s)
+	return s, d.Error
+}
+
+/* --- 移动文件 --- */
+
+// UpdateFilePosition ... 移动文件，事务
+func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32,
+	fileType uint8, isFatherProject, isOldFatherProject bool, childrenPositionIndex uint32) error {
+	tx := db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// 将目标文件 father_id 改变
+
+	// 修改父文件的 children 插入子节点
+	// 需要 isProject fatherId childrenPositionIndex obj(需要先断言)
+
+	// 删除之前父文件的 children 子节点
+	// 需要 isProject oldFatherId id isFolder
+	switch fileType {
+	case constvar.DocCode:
+		doc := file.(DocModel)
+		doc.FatherId = fatherId
+		if err := doc.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddDocChildren(isFatherProject, fatherId,
+			childrenPositionIndex, doc); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteDocChildren(isOldFatherProject, oldFatherId, doc.ID,
+			constvar.NotFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	case constvar.FileCode:
+		file := file.(FileModel)
+		file.FatherId = fatherId
+		if err := file.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddFileChildren(isFatherProject, fatherId,
+			childrenPositionIndex, file); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteFileChildren(isOldFatherProject, oldFatherId, file.ID,
+			constvar.NotFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	case constvar.DocFolderCode:
+		folder := file.(FolderForDocModel)
+		folder.FatherId = fatherId
+		if err := folder.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddDocChildren(isFatherProject, fatherId,
+			childrenPositionIndex, folder); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteDocChildren(isOldFatherProject, oldFatherId, folder.ID,
+			constvar.IsFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	case constvar.FileFolderCode:
+		folder := file.(FolderForFileModel)
+		folder.FatherId = fatherId
+		if err := folder.Update(); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := AddFileChildren(isFatherProject, fatherId,
+			childrenPositionIndex, folder); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if err := DeleteFileChildren(isOldFatherProject, oldFatherId, folder.ID,
+			constvar.IsFolderCode); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	return tx.Commit().Error
 }

@@ -8,15 +8,12 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// GetFileTree ... 获取项目的文件树
-func (s *Service) GetFileTree(ctx context.Context, req *pb.GetRequest, res *pb.Tree) error {
-
-	project, err := model.GetProject(req.Id)
+// DeleteDocComment ... 删除文档评论
+func (s *Service) DeleteDocComment(ctx context.Context, req *pb.DeleteDocCommentRequest, res *pb.Response) error {
+	err := model.DeleteComment(req.CommentId, req.UserId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
-	res.Tree = project.FileTree
 
 	return nil
 }

@@ -52,7 +52,7 @@ func DeleteProject(c *gin.Context) {
 			Kind:        2,
 			Id:          uint32(projectID),
 			Name:        "",
-			ProjectId:   uint32(projectID),
+			ProjectId:   uint32(0),
 			ProjectName: "",
 		},
 	}

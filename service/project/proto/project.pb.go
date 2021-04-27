@@ -26,6 +26,1014 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+// 移动文件请求
+type UpdateFilePositionRequest struct {
+	FileId                uint32   `protobuf:"varint,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`
+	OldFatherId           uint32   `protobuf:"varint,2,opt,name=old_father_id,json=oldFatherId,proto3" json:"old_father_id,omitempty"`
+	FatherId              uint32   `protobuf:"varint,3,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
+	FatherType            uint32   `protobuf:"varint,4,opt,name=father_type,json=fatherType,proto3" json:"father_type,omitempty"`
+	Type                  uint32   `protobuf:"varint,5,opt,name=type,proto3" json:"type,omitempty"`
+	ChildrenPositionIndex uint32   `protobuf:"varint,6,opt,name=children_position_index,json=childrenPositionIndex,proto3" json:"children_position_index,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
+}
+
+func (m *UpdateFilePositionRequest) Reset()         { *m = UpdateFilePositionRequest{} }
+func (m *UpdateFilePositionRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateFilePositionRequest) ProtoMessage()    {}
+func (*UpdateFilePositionRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{0}
+}
+
+func (m *UpdateFilePositionRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateFilePositionRequest.Unmarshal(m, b)
+}
+func (m *UpdateFilePositionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateFilePositionRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateFilePositionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateFilePositionRequest.Merge(m, src)
+}
+func (m *UpdateFilePositionRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateFilePositionRequest.Size(m)
+}
+func (m *UpdateFilePositionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateFilePositionRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateFilePositionRequest proto.InternalMessageInfo
+
+func (m *UpdateFilePositionRequest) GetFileId() uint32 {
+	if m != nil {
+		return m.FileId
+	}
+	return 0
+}
+
+func (m *UpdateFilePositionRequest) GetOldFatherId() uint32 {
+	if m != nil {
+		return m.OldFatherId
+	}
+	return 0
+}
+
+func (m *UpdateFilePositionRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
+func (m *UpdateFilePositionRequest) GetFatherType() uint32 {
+	if m != nil {
+		return m.FatherType
+	}
+	return 0
+}
+
+func (m *UpdateFilePositionRequest) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *UpdateFilePositionRequest) GetChildrenPositionIndex() uint32 {
+	if m != nil {
+		return m.ChildrenPositionIndex
+	}
+	return 0
+}
+
+// 获取 文档/文件 详情请求
+type GetFileDetailRequest struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	FatherId             uint32   `protobuf:"varint,2,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetFileDetailRequest) Reset()         { *m = GetFileDetailRequest{} }
+func (m *GetFileDetailRequest) String() string { return proto.CompactTextString(m) }
+func (*GetFileDetailRequest) ProtoMessage()    {}
+func (*GetFileDetailRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{1}
+}
+
+func (m *GetFileDetailRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetFileDetailRequest.Unmarshal(m, b)
+}
+func (m *GetFileDetailRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetFileDetailRequest.Marshal(b, m, deterministic)
+}
+func (m *GetFileDetailRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFileDetailRequest.Merge(m, src)
+}
+func (m *GetFileDetailRequest) XXX_Size() int {
+	return xxx_messageInfo_GetFileDetailRequest.Size(m)
+}
+func (m *GetFileDetailRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetFileDetailRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetFileDetailRequest proto.InternalMessageInfo
+
+func (m *GetFileDetailRequest) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *GetFileDetailRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
+type DeleteRequest struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId               uint32   `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Role                 uint32   `protobuf:"varint,3,opt,name=role,proto3" json:"role,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteRequest) Reset()         { *m = DeleteRequest{} }
+func (m *DeleteRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteRequest) ProtoMessage()    {}
+func (*DeleteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{2}
+}
+
+func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteRequest.Unmarshal(m, b)
+}
+func (m *DeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRequest.Merge(m, src)
+}
+func (m *DeleteRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteRequest.Size(m)
+}
+func (m *DeleteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
+
+func (m *DeleteRequest) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *DeleteRequest) GetUserId() uint32 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *DeleteRequest) GetRole() uint32 {
+	if m != nil {
+		return m.Role
+	}
+	return 0
+}
+
+type GetTrashbinRequest struct {
+	Offset               uint32   `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
+	Limit                uint32   `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetTrashbinRequest) Reset()         { *m = GetTrashbinRequest{} }
+func (m *GetTrashbinRequest) String() string { return proto.CompactTextString(m) }
+func (*GetTrashbinRequest) ProtoMessage()    {}
+func (*GetTrashbinRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{3}
+}
+
+func (m *GetTrashbinRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetTrashbinRequest.Unmarshal(m, b)
+}
+func (m *GetTrashbinRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetTrashbinRequest.Marshal(b, m, deterministic)
+}
+func (m *GetTrashbinRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTrashbinRequest.Merge(m, src)
+}
+func (m *GetTrashbinRequest) XXX_Size() int {
+	return xxx_messageInfo_GetTrashbinRequest.Size(m)
+}
+func (m *GetTrashbinRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTrashbinRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTrashbinRequest proto.InternalMessageInfo
+
+func (m *GetTrashbinRequest) GetOffset() uint32 {
+	if m != nil {
+		return m.Offset
+	}
+	return 0
+}
+
+func (m *GetTrashbinRequest) GetLimit() uint32 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+type Trashbin struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type                 uint32   `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Trashbin) Reset()         { *m = Trashbin{} }
+func (m *Trashbin) String() string { return proto.CompactTextString(m) }
+func (*Trashbin) ProtoMessage()    {}
+func (*Trashbin) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{4}
+}
+
+func (m *Trashbin) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Trashbin.Unmarshal(m, b)
+}
+func (m *Trashbin) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Trashbin.Marshal(b, m, deterministic)
+}
+func (m *Trashbin) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Trashbin.Merge(m, src)
+}
+func (m *Trashbin) XXX_Size() int {
+	return xxx_messageInfo_Trashbin.Size(m)
+}
+func (m *Trashbin) XXX_DiscardUnknown() {
+	xxx_messageInfo_Trashbin.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Trashbin proto.InternalMessageInfo
+
+func (m *Trashbin) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *Trashbin) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *Trashbin) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type GetTrashbinResponse struct {
+	List                 []*Trashbin `protobuf:"bytes,1,rep,name=list,proto3" json:"list,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *GetTrashbinResponse) Reset()         { *m = GetTrashbinResponse{} }
+func (m *GetTrashbinResponse) String() string { return proto.CompactTextString(m) }
+func (*GetTrashbinResponse) ProtoMessage()    {}
+func (*GetTrashbinResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{5}
+}
+
+func (m *GetTrashbinResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetTrashbinResponse.Unmarshal(m, b)
+}
+func (m *GetTrashbinResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetTrashbinResponse.Marshal(b, m, deterministic)
+}
+func (m *GetTrashbinResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTrashbinResponse.Merge(m, src)
+}
+func (m *GetTrashbinResponse) XXX_Size() int {
+	return xxx_messageInfo_GetTrashbinResponse.Size(m)
+}
+func (m *GetTrashbinResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetTrashbinResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetTrashbinResponse proto.InternalMessageInfo
+
+func (m *GetTrashbinResponse) GetList() []*Trashbin {
+	if m != nil {
+		return m.List
+	}
+	return nil
+}
+
+type RemoveTrashbinRequest struct {
+	Id                    uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type                  uint32   `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	FatherId              uint32   `protobuf:"varint,3,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
+	ChildrenPositionIndex uint32   `protobuf:"varint,4,opt,name=children_position_index,json=childrenPositionIndex,proto3" json:"children_position_index,omitempty"`
+	IsFatherProject       bool     `protobuf:"varint,5,opt,name=is_father_project,json=isFatherProject,proto3" json:"is_father_project,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
+}
+
+func (m *RemoveTrashbinRequest) Reset()         { *m = RemoveTrashbinRequest{} }
+func (m *RemoveTrashbinRequest) String() string { return proto.CompactTextString(m) }
+func (*RemoveTrashbinRequest) ProtoMessage()    {}
+func (*RemoveTrashbinRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{6}
+}
+
+func (m *RemoveTrashbinRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RemoveTrashbinRequest.Unmarshal(m, b)
+}
+func (m *RemoveTrashbinRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RemoveTrashbinRequest.Marshal(b, m, deterministic)
+}
+func (m *RemoveTrashbinRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoveTrashbinRequest.Merge(m, src)
+}
+func (m *RemoveTrashbinRequest) XXX_Size() int {
+	return xxx_messageInfo_RemoveTrashbinRequest.Size(m)
+}
+func (m *RemoveTrashbinRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RemoveTrashbinRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RemoveTrashbinRequest proto.InternalMessageInfo
+
+func (m *RemoveTrashbinRequest) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *RemoveTrashbinRequest) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *RemoveTrashbinRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
+func (m *RemoveTrashbinRequest) GetChildrenPositionIndex() uint32 {
+	if m != nil {
+		return m.ChildrenPositionIndex
+	}
+	return 0
+}
+
+func (m *RemoveTrashbinRequest) GetIsFatherProject() bool {
+	if m != nil {
+		return m.IsFatherProject
+	}
+	return false
+}
+
+type DeleteTrashbinRequest struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type                 uint32   `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteTrashbinRequest) Reset()         { *m = DeleteTrashbinRequest{} }
+func (m *DeleteTrashbinRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteTrashbinRequest) ProtoMessage()    {}
+func (*DeleteTrashbinRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{7}
+}
+
+func (m *DeleteTrashbinRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteTrashbinRequest.Unmarshal(m, b)
+}
+func (m *DeleteTrashbinRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteTrashbinRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteTrashbinRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteTrashbinRequest.Merge(m, src)
+}
+func (m *DeleteTrashbinRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteTrashbinRequest.Size(m)
+}
+func (m *DeleteTrashbinRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteTrashbinRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteTrashbinRequest proto.InternalMessageInfo
+
+func (m *DeleteTrashbinRequest) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *DeleteTrashbinRequest) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+type UpdateFileRequest struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Url                  string   `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateFileRequest) Reset()         { *m = UpdateFileRequest{} }
+func (m *UpdateFileRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateFileRequest) ProtoMessage()    {}
+func (*UpdateFileRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{8}
+}
+
+func (m *UpdateFileRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateFileRequest.Unmarshal(m, b)
+}
+func (m *UpdateFileRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateFileRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateFileRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateFileRequest.Merge(m, src)
+}
+func (m *UpdateFileRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateFileRequest.Size(m)
+}
+func (m *UpdateFileRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateFileRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateFileRequest proto.InternalMessageInfo
+
+func (m *UpdateFileRequest) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *UpdateFileRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateFileRequest) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+type CreateProjectRequest struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Intro                string   `protobuf:"bytes,2,opt,name=intro,proto3" json:"intro,omitempty"`
+	TeamId               uint32   `protobuf:"varint,3,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateProjectRequest) Reset()         { *m = CreateProjectRequest{} }
+func (m *CreateProjectRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateProjectRequest) ProtoMessage()    {}
+func (*CreateProjectRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{9}
+}
+
+func (m *CreateProjectRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateProjectRequest.Unmarshal(m, b)
+}
+func (m *CreateProjectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateProjectRequest.Marshal(b, m, deterministic)
+}
+func (m *CreateProjectRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateProjectRequest.Merge(m, src)
+}
+func (m *CreateProjectRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateProjectRequest.Size(m)
+}
+func (m *CreateProjectRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateProjectRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateProjectRequest proto.InternalMessageInfo
+
+func (m *CreateProjectRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CreateProjectRequest) GetIntro() string {
+	if m != nil {
+		return m.Intro
+	}
+	return ""
+}
+
+func (m *CreateProjectRequest) GetTeamId() uint32 {
+	if m != nil {
+		return m.TeamId
+	}
+	return 0
+}
+
+type UpdateFolderRequest struct {
+	FolderId             uint32   `protobuf:"varint,1,opt,name=folder_id,json=folderId,proto3" json:"folder_id,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateFolderRequest) Reset()         { *m = UpdateFolderRequest{} }
+func (m *UpdateFolderRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateFolderRequest) ProtoMessage()    {}
+func (*UpdateFolderRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{10}
+}
+
+func (m *UpdateFolderRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateFolderRequest.Unmarshal(m, b)
+}
+func (m *UpdateFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateFolderRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateFolderRequest.Merge(m, src)
+}
+func (m *UpdateFolderRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateFolderRequest.Size(m)
+}
+func (m *UpdateFolderRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateFolderRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateFolderRequest proto.InternalMessageInfo
+
+func (m *UpdateFolderRequest) GetFolderId() uint32 {
+	if m != nil {
+		return m.FolderId
+	}
+	return 0
+}
+
+func (m *UpdateFolderRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type CreateFolderRequest struct {
+	FatherId              uint32   `protobuf:"varint,1,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
+	Name                  string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	ProjectId             uint32   `protobuf:"varint,4,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	CreatorId             uint32   `protobuf:"varint,5,opt,name=creator_id,json=creatorId,proto3" json:"creator_id,omitempty"`
+	ChildrenPositionIndex uint32   `protobuf:"varint,6,opt,name=children_position_index,json=childrenPositionIndex,proto3" json:"children_position_index,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
+}
+
+func (m *CreateFolderRequest) Reset()         { *m = CreateFolderRequest{} }
+func (m *CreateFolderRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateFolderRequest) ProtoMessage()    {}
+func (*CreateFolderRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{11}
+}
+
+func (m *CreateFolderRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateFolderRequest.Unmarshal(m, b)
+}
+func (m *CreateFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateFolderRequest.Marshal(b, m, deterministic)
+}
+func (m *CreateFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateFolderRequest.Merge(m, src)
+}
+func (m *CreateFolderRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateFolderRequest.Size(m)
+}
+func (m *CreateFolderRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateFolderRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateFolderRequest proto.InternalMessageInfo
+
+func (m *CreateFolderRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
+func (m *CreateFolderRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CreateFolderRequest) GetProjectId() uint32 {
+	if m != nil {
+		return m.ProjectId
+	}
+	return 0
+}
+
+func (m *CreateFolderRequest) GetCreatorId() uint32 {
+	if m != nil {
+		return m.CreatorId
+	}
+	return 0
+}
+
+func (m *CreateFolderRequest) GetChildrenPositionIndex() uint32 {
+	if m != nil {
+		return m.ChildrenPositionIndex
+	}
+	return 0
+}
+
+type DeleteDocCommentRequest struct {
+	CommentId            uint32   `protobuf:"varint,1,opt,name=comment_id,json=commentId,proto3" json:"comment_id,omitempty"`
+	UserId               uint32   `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteDocCommentRequest) Reset()         { *m = DeleteDocCommentRequest{} }
+func (m *DeleteDocCommentRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteDocCommentRequest) ProtoMessage()    {}
+func (*DeleteDocCommentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{12}
+}
+
+func (m *DeleteDocCommentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteDocCommentRequest.Unmarshal(m, b)
+}
+func (m *DeleteDocCommentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteDocCommentRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteDocCommentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteDocCommentRequest.Merge(m, src)
+}
+func (m *DeleteDocCommentRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteDocCommentRequest.Size(m)
+}
+func (m *DeleteDocCommentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteDocCommentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteDocCommentRequest proto.InternalMessageInfo
+
+func (m *DeleteDocCommentRequest) GetCommentId() uint32 {
+	if m != nil {
+		return m.CommentId
+	}
+	return 0
+}
+
+func (m *DeleteDocCommentRequest) GetUserId() uint32 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+type Comment struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Content              string   `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	UserId               uint32   `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Time                 string   `protobuf:"bytes,5,opt,name=time,proto3" json:"time,omitempty"`
+	Avatar               string   `protobuf:"bytes,6,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	UserName             string   `protobuf:"bytes,7,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Comment) Reset()         { *m = Comment{} }
+func (m *Comment) String() string { return proto.CompactTextString(m) }
+func (*Comment) ProtoMessage()    {}
+func (*Comment) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{13}
+}
+
+func (m *Comment) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Comment.Unmarshal(m, b)
+}
+func (m *Comment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Comment.Marshal(b, m, deterministic)
+}
+func (m *Comment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Comment.Merge(m, src)
+}
+func (m *Comment) XXX_Size() int {
+	return xxx_messageInfo_Comment.Size(m)
+}
+func (m *Comment) XXX_DiscardUnknown() {
+	xxx_messageInfo_Comment.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Comment proto.InternalMessageInfo
+
+func (m *Comment) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *Comment) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+func (m *Comment) GetUserId() uint32 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *Comment) GetTime() string {
+	if m != nil {
+		return m.Time
+	}
+	return ""
+}
+
+func (m *Comment) GetAvatar() string {
+	if m != nil {
+		return m.Avatar
+	}
+	return ""
+}
+
+func (m *Comment) GetUserName() string {
+	if m != nil {
+		return m.UserName
+	}
+	return ""
+}
+
+type CommentListResponse struct {
+	Count                uint32     `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	List                 []*Comment `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *CommentListResponse) Reset()         { *m = CommentListResponse{} }
+func (m *CommentListResponse) String() string { return proto.CompactTextString(m) }
+func (*CommentListResponse) ProtoMessage()    {}
+func (*CommentListResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{14}
+}
+
+func (m *CommentListResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CommentListResponse.Unmarshal(m, b)
+}
+func (m *CommentListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CommentListResponse.Marshal(b, m, deterministic)
+}
+func (m *CommentListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommentListResponse.Merge(m, src)
+}
+func (m *CommentListResponse) XXX_Size() int {
+	return xxx_messageInfo_CommentListResponse.Size(m)
+}
+func (m *CommentListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CommentListResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CommentListResponse proto.InternalMessageInfo
+
+func (m *CommentListResponse) GetCount() uint32 {
+	if m != nil {
+		return m.Count
+	}
+	return 0
+}
+
+func (m *CommentListResponse) GetList() []*Comment {
+	if m != nil {
+		return m.List
+	}
+	return nil
+}
+
+type ListDocCommentRequest struct {
+	LastId               uint32   `protobuf:"varint,1,opt,name=last_id,json=lastId,proto3" json:"last_id,omitempty"`
+	Offset               uint32   `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
+	Limit                uint32   `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	DocId                uint32   `protobuf:"varint,4,opt,name=doc_id,json=docId,proto3" json:"doc_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListDocCommentRequest) Reset()         { *m = ListDocCommentRequest{} }
+func (m *ListDocCommentRequest) String() string { return proto.CompactTextString(m) }
+func (*ListDocCommentRequest) ProtoMessage()    {}
+func (*ListDocCommentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{15}
+}
+
+func (m *ListDocCommentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListDocCommentRequest.Unmarshal(m, b)
+}
+func (m *ListDocCommentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListDocCommentRequest.Marshal(b, m, deterministic)
+}
+func (m *ListDocCommentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListDocCommentRequest.Merge(m, src)
+}
+func (m *ListDocCommentRequest) XXX_Size() int {
+	return xxx_messageInfo_ListDocCommentRequest.Size(m)
+}
+func (m *ListDocCommentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListDocCommentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListDocCommentRequest proto.InternalMessageInfo
+
+func (m *ListDocCommentRequest) GetLastId() uint32 {
+	if m != nil {
+		return m.LastId
+	}
+	return 0
+}
+
+func (m *ListDocCommentRequest) GetOffset() uint32 {
+	if m != nil {
+		return m.Offset
+	}
+	return 0
+}
+
+func (m *ListDocCommentRequest) GetLimit() uint32 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+func (m *ListDocCommentRequest) GetDocId() uint32 {
+	if m != nil {
+		return m.DocId
+	}
+	return 0
+}
+
+type CreateDocCommentRequest struct {
+	DocId                uint32   `protobuf:"varint,1,opt,name=doc_id,json=docId,proto3" json:"doc_id,omitempty"`
+	UserId               uint32   `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Content              string   `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateDocCommentRequest) Reset()         { *m = CreateDocCommentRequest{} }
+func (m *CreateDocCommentRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateDocCommentRequest) ProtoMessage()    {}
+func (*CreateDocCommentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{16}
+}
+
+func (m *CreateDocCommentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateDocCommentRequest.Unmarshal(m, b)
+}
+func (m *CreateDocCommentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateDocCommentRequest.Marshal(b, m, deterministic)
+}
+func (m *CreateDocCommentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateDocCommentRequest.Merge(m, src)
+}
+func (m *CreateDocCommentRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateDocCommentRequest.Size(m)
+}
+func (m *CreateDocCommentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateDocCommentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateDocCommentRequest proto.InternalMessageInfo
+
+func (m *CreateDocCommentRequest) GetDocId() uint32 {
+	if m != nil {
+		return m.DocId
+	}
+	return 0
+}
+
+func (m *CreateDocCommentRequest) GetUserId() uint32 {
+	if m != nil {
+		return m.UserId
+	}
+	return 0
+}
+
+func (m *CreateDocCommentRequest) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+type UpdateDocCommentRequest struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Content              string   `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateDocCommentRequest) Reset()         { *m = UpdateDocCommentRequest{} }
+func (m *UpdateDocCommentRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateDocCommentRequest) ProtoMessage()    {}
+func (*UpdateDocCommentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{17}
+}
+
+func (m *UpdateDocCommentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateDocCommentRequest.Unmarshal(m, b)
+}
+func (m *UpdateDocCommentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateDocCommentRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateDocCommentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateDocCommentRequest.Merge(m, src)
+}
+func (m *UpdateDocCommentRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateDocCommentRequest.Size(m)
+}
+func (m *UpdateDocCommentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateDocCommentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateDocCommentRequest proto.InternalMessageInfo
+
+func (m *UpdateDocCommentRequest) GetId() uint32 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *UpdateDocCommentRequest) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
 type ProjectIDResponse struct {
 	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -37,7 +1045,7 @@ func (m *ProjectIDResponse) Reset()         { *m = ProjectIDResponse{} }
 func (m *ProjectIDResponse) String() string { return proto.CompactTextString(m) }
 func (*ProjectIDResponse) ProtoMessage()    {}
 func (*ProjectIDResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{0}
+	return fileDescriptor_4c0a940f1d2a029f, []int{18}
 }
 
 func (m *ProjectIDResponse) XXX_Unmarshal(b []byte) error {
@@ -76,7 +1084,7 @@ func (m *ProjectIdsResponse) Reset()         { *m = ProjectIdsResponse{} }
 func (m *ProjectIdsResponse) String() string { return proto.CompactTextString(m) }
 func (*ProjectIdsResponse) ProtoMessage()    {}
 func (*ProjectIdsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{1}
+	return fileDescriptor_4c0a940f1d2a029f, []int{19}
 }
 
 func (m *ProjectIdsResponse) XXX_Unmarshal(b []byte) error {
@@ -119,7 +1127,7 @@ func (m *GetProjectListRequest) Reset()         { *m = GetProjectListRequest{} }
 func (m *GetProjectListRequest) String() string { return proto.CompactTextString(m) }
 func (*GetProjectListRequest) ProtoMessage()    {}
 func (*GetProjectListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{2}
+	return fileDescriptor_4c0a940f1d2a029f, []int{20}
 }
 
 func (m *GetProjectListRequest) XXX_Unmarshal(b []byte) error {
@@ -190,7 +1198,7 @@ func (m *GetMemberListRequest) Reset()         { *m = GetMemberListRequest{} }
 func (m *GetMemberListRequest) String() string { return proto.CompactTextString(m) }
 func (*GetMemberListRequest) ProtoMessage()    {}
 func (*GetMemberListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{3}
+	return fileDescriptor_4c0a940f1d2a029f, []int{21}
 }
 
 func (m *GetMemberListRequest) XXX_Unmarshal(b []byte) error {
@@ -257,7 +1265,7 @@ func (m *ProjectListResponse) Reset()         { *m = ProjectListResponse{} }
 func (m *ProjectListResponse) String() string { return proto.CompactTextString(m) }
 func (*ProjectListResponse) ProtoMessage()    {}
 func (*ProjectListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{4}
+	return fileDescriptor_4c0a940f1d2a029f, []int{22}
 }
 
 func (m *ProjectListResponse) XXX_Unmarshal(b []byte) error {
@@ -296,7 +1304,7 @@ func (m *GetRequest) Reset()         { *m = GetRequest{} }
 func (m *GetRequest) String() string { return proto.CompactTextString(m) }
 func (*GetRequest) ProtoMessage()    {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{5}
+	return fileDescriptor_4c0a940f1d2a029f, []int{23}
 }
 
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
@@ -335,7 +1343,7 @@ func (m *GetInfoRequest) Reset()         { *m = GetInfoRequest{} }
 func (m *GetInfoRequest) String() string { return proto.CompactTextString(m) }
 func (*GetInfoRequest) ProtoMessage()    {}
 func (*GetInfoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{6}
+	return fileDescriptor_4c0a940f1d2a029f, []int{24}
 }
 
 func (m *GetInfoRequest) XXX_Unmarshal(b []byte) error {
@@ -375,7 +1383,7 @@ func (m *RegisterRequest) Reset()         { *m = RegisterRequest{} }
 func (m *RegisterRequest) String() string { return proto.CompactTextString(m) }
 func (*RegisterRequest) ProtoMessage()    {}
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{7}
+	return fileDescriptor_4c0a940f1d2a029f, []int{25}
 }
 
 func (m *RegisterRequest) XXX_Unmarshal(b []byte) error {
@@ -422,7 +1430,7 @@ func (m *LoginRequest) Reset()         { *m = LoginRequest{} }
 func (m *LoginRequest) String() string { return proto.CompactTextString(m) }
 func (*LoginRequest) ProtoMessage()    {}
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{8}
+	return fileDescriptor_4c0a940f1d2a029f, []int{26}
 }
 
 func (m *LoginRequest) XXX_Unmarshal(b []byte) error {
@@ -471,7 +1479,7 @@ func (m *UserInfo) Reset()         { *m = UserInfo{} }
 func (m *UserInfo) String() string { return proto.CompactTextString(m) }
 func (*UserInfo) ProtoMessage()    {}
 func (*UserInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{9}
+	return fileDescriptor_4c0a940f1d2a029f, []int{27}
 }
 
 func (m *UserInfo) XXX_Unmarshal(b []byte) error {
@@ -531,7 +1539,7 @@ func (m *UserInfoResponse) Reset()         { *m = UserInfoResponse{} }
 func (m *UserInfoResponse) String() string { return proto.CompactTextString(m) }
 func (*UserInfoResponse) ProtoMessage()    {}
 func (*UserInfoResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{10}
+	return fileDescriptor_4c0a940f1d2a029f, []int{28}
 }
 
 func (m *UserInfoResponse) XXX_Unmarshal(b []byte) error {
@@ -575,7 +1583,7 @@ func (m *UserProfile) Reset()         { *m = UserProfile{} }
 func (m *UserProfile) String() string { return proto.CompactTextString(m) }
 func (*UserProfile) ProtoMessage()    {}
 func (*UserProfile) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{11}
+	return fileDescriptor_4c0a940f1d2a029f, []int{29}
 }
 
 func (m *UserProfile) XXX_Unmarshal(b []byte) error {
@@ -648,7 +1656,7 @@ func (m *Response) Reset()         { *m = Response{} }
 func (m *Response) String() string { return proto.CompactTextString(m) }
 func (*Response) ProtoMessage()    {}
 func (*Response) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{12}
+	return fileDescriptor_4c0a940f1d2a029f, []int{30}
 }
 
 func (m *Response) XXX_Unmarshal(b []byte) error {
@@ -681,7 +1689,7 @@ func (m *User) Reset()         { *m = User{} }
 func (m *User) String() string { return proto.CompactTextString(m) }
 func (*User) ProtoMessage()    {}
 func (*User) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{13}
+	return fileDescriptor_4c0a940f1d2a029f, []int{31}
 }
 
 func (m *User) XXX_Unmarshal(b []byte) error {
@@ -729,7 +1737,7 @@ func (m *ProjectListItem) Reset()         { *m = ProjectListItem{} }
 func (m *ProjectListItem) String() string { return proto.CompactTextString(m) }
 func (*ProjectListItem) ProtoMessage()    {}
 func (*ProjectListItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{14}
+	return fileDescriptor_4c0a940f1d2a029f, []int{32}
 }
 
 func (m *ProjectListItem) XXX_Unmarshal(b []byte) error {
@@ -783,7 +1791,7 @@ func (m *MembersListResponse) Reset()         { *m = MembersListResponse{} }
 func (m *MembersListResponse) String() string { return proto.CompactTextString(m) }
 func (*MembersListResponse) ProtoMessage()    {}
 func (*MembersListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{15}
+	return fileDescriptor_4c0a940f1d2a029f, []int{33}
 }
 
 func (m *MembersListResponse) XXX_Unmarshal(b []byte) error {
@@ -833,7 +1841,7 @@ func (m *MembersListItem) Reset()         { *m = MembersListItem{} }
 func (m *MembersListItem) String() string { return proto.CompactTextString(m) }
 func (*MembersListItem) ProtoMessage()    {}
 func (*MembersListItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{16}
+	return fileDescriptor_4c0a940f1d2a029f, []int{34}
 }
 
 func (m *MembersListItem) XXX_Unmarshal(b []byte) error {
@@ -901,7 +1909,7 @@ func (m *UpdateMemberRequest) Reset()         { *m = UpdateMemberRequest{} }
 func (m *UpdateMemberRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateMemberRequest) ProtoMessage()    {}
 func (*UpdateMemberRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{17}
+	return fileDescriptor_4c0a940f1d2a029f, []int{35}
 }
 
 func (m *UpdateMemberRequest) XXX_Unmarshal(b []byte) error {
@@ -941,6 +1949,8 @@ type ProjectInfo struct {
 	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Intro                string   `protobuf:"bytes,3,opt,name=intro,proto3" json:"intro,omitempty"`
 	UserCount            uint32   `protobuf:"varint,4,opt,name=user_count,json=userCount,proto3" json:"user_count,omitempty"`
+	DocChildren          string   `protobuf:"bytes,5,opt,name=doc_children,json=docChildren,proto3" json:"doc_children,omitempty"`
+	FileChildren         string   `protobuf:"bytes,6,opt,name=file_children,json=fileChildren,proto3" json:"file_children,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -950,7 +1960,7 @@ func (m *ProjectInfo) Reset()         { *m = ProjectInfo{} }
 func (m *ProjectInfo) String() string { return proto.CompactTextString(m) }
 func (*ProjectInfo) ProtoMessage()    {}
 func (*ProjectInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{18}
+	return fileDescriptor_4c0a940f1d2a029f, []int{36}
 }
 
 func (m *ProjectInfo) XXX_Unmarshal(b []byte) error {
@@ -999,6 +2009,20 @@ func (m *ProjectInfo) GetUserCount() uint32 {
 	return 0
 }
 
+func (m *ProjectInfo) GetDocChildren() string {
+	if m != nil {
+		return m.DocChildren
+	}
+	return ""
+}
+
+func (m *ProjectInfo) GetFileChildren() string {
+	if m != nil {
+		return m.FileChildren
+	}
+	return ""
+}
+
 type UpdateProjectInfoRequest struct {
 	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -1012,7 +2036,7 @@ func (m *UpdateProjectInfoRequest) Reset()         { *m = UpdateProjectInfoReque
 func (m *UpdateProjectInfoRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateProjectInfoRequest) ProtoMessage()    {}
 func (*UpdateProjectInfoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{19}
+	return fileDescriptor_4c0a940f1d2a029f, []int{37}
 }
 
 func (m *UpdateProjectInfoRequest) XXX_Unmarshal(b []byte) error {
@@ -1054,108 +2078,166 @@ func (m *UpdateProjectInfoRequest) GetIntro() string {
 	return ""
 }
 
-type UpdateTreeRequest struct {
+type UpdateChildrenRequest struct {
 	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Tree                 string   `protobuf:"bytes,2,opt,name=tree,proto3" json:"tree,omitempty"`
+	Children             string   `protobuf:"bytes,2,opt,name=children,proto3" json:"children,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *UpdateTreeRequest) Reset()         { *m = UpdateTreeRequest{} }
-func (m *UpdateTreeRequest) String() string { return proto.CompactTextString(m) }
-func (*UpdateTreeRequest) ProtoMessage()    {}
-func (*UpdateTreeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{20}
+func (m *UpdateChildrenRequest) Reset()         { *m = UpdateChildrenRequest{} }
+func (m *UpdateChildrenRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateChildrenRequest) ProtoMessage()    {}
+func (*UpdateChildrenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{38}
 }
 
-func (m *UpdateTreeRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UpdateTreeRequest.Unmarshal(m, b)
+func (m *UpdateChildrenRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateChildrenRequest.Unmarshal(m, b)
 }
-func (m *UpdateTreeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UpdateTreeRequest.Marshal(b, m, deterministic)
+func (m *UpdateChildrenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateChildrenRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateTreeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateTreeRequest.Merge(m, src)
+func (m *UpdateChildrenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateChildrenRequest.Merge(m, src)
 }
-func (m *UpdateTreeRequest) XXX_Size() int {
-	return xxx_messageInfo_UpdateTreeRequest.Size(m)
+func (m *UpdateChildrenRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateChildrenRequest.Size(m)
 }
-func (m *UpdateTreeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateTreeRequest.DiscardUnknown(m)
+func (m *UpdateChildrenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateChildrenRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UpdateTreeRequest proto.InternalMessageInfo
+var xxx_messageInfo_UpdateChildrenRequest proto.InternalMessageInfo
 
-func (m *UpdateTreeRequest) GetId() uint32 {
+func (m *UpdateChildrenRequest) GetId() uint32 {
 	if m != nil {
 		return m.Id
 	}
 	return 0
 }
 
-func (m *UpdateTreeRequest) GetTree() string {
+func (m *UpdateChildrenRequest) GetChildren() string {
 	if m != nil {
-		return m.Tree
+		return m.Children
 	}
 	return ""
 }
 
-type Tree struct {
-	Tree                 string   `protobuf:"bytes,1,opt,name=tree,proto3" json:"tree,omitempty"`
+type UpdateProjectChildrenRequest struct {
+	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Children             string   `protobuf:"bytes,2,opt,name=children,proto3" json:"children,omitempty"`
+	Type                 bool     `protobuf:"varint,3,opt,name=type,proto3" json:"type,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Tree) Reset()         { *m = Tree{} }
-func (m *Tree) String() string { return proto.CompactTextString(m) }
-func (*Tree) ProtoMessage()    {}
-func (*Tree) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{21}
+func (m *UpdateProjectChildrenRequest) Reset()         { *m = UpdateProjectChildrenRequest{} }
+func (m *UpdateProjectChildrenRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateProjectChildrenRequest) ProtoMessage()    {}
+func (*UpdateProjectChildrenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{39}
 }
 
-func (m *Tree) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Tree.Unmarshal(m, b)
+func (m *UpdateProjectChildrenRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateProjectChildrenRequest.Unmarshal(m, b)
 }
-func (m *Tree) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Tree.Marshal(b, m, deterministic)
+func (m *UpdateProjectChildrenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateProjectChildrenRequest.Marshal(b, m, deterministic)
 }
-func (m *Tree) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Tree.Merge(m, src)
+func (m *UpdateProjectChildrenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateProjectChildrenRequest.Merge(m, src)
 }
-func (m *Tree) XXX_Size() int {
-	return xxx_messageInfo_Tree.Size(m)
+func (m *UpdateProjectChildrenRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateProjectChildrenRequest.Size(m)
 }
-func (m *Tree) XXX_DiscardUnknown() {
-	xxx_messageInfo_Tree.DiscardUnknown(m)
+func (m *UpdateProjectChildrenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateProjectChildrenRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Tree proto.InternalMessageInfo
+var xxx_messageInfo_UpdateProjectChildrenRequest proto.InternalMessageInfo
 
-func (m *Tree) GetTree() string {
+func (m *UpdateProjectChildrenRequest) GetId() uint32 {
 	if m != nil {
-		return m.Tree
+		return m.Id
+	}
+	return 0
+}
+
+func (m *UpdateProjectChildrenRequest) GetChildren() string {
+	if m != nil {
+		return m.Children
+	}
+	return ""
+}
+
+func (m *UpdateProjectChildrenRequest) GetType() bool {
+	if m != nil {
+		return m.Type
+	}
+	return false
+}
+
+type Children struct {
+	Children             string   `protobuf:"bytes,1,opt,name=children,proto3" json:"children,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Children) Reset()         { *m = Children{} }
+func (m *Children) String() string { return proto.CompactTextString(m) }
+func (*Children) ProtoMessage()    {}
+func (*Children) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4c0a940f1d2a029f, []int{40}
+}
+
+func (m *Children) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Children.Unmarshal(m, b)
+}
+func (m *Children) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Children.Marshal(b, m, deterministic)
+}
+func (m *Children) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Children.Merge(m, src)
+}
+func (m *Children) XXX_Size() int {
+	return xxx_messageInfo_Children.Size(m)
+}
+func (m *Children) XXX_DiscardUnknown() {
+	xxx_messageInfo_Children.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Children proto.InternalMessageInfo
+
+func (m *Children) GetChildren() string {
+	if m != nil {
+		return m.Children
 	}
 	return ""
 }
 
 type CreateFileRequest struct {
-	ProjectId            uint32   `protobuf:"varint,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	HashName             string   `protobuf:"bytes,3,opt,name=hashName,proto3" json:"hashName,omitempty"`
-	Url                  string   `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
-	UserId               uint32   `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	ProjectId             uint32   `protobuf:"varint,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Name                  string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	HashName              string   `protobuf:"bytes,3,opt,name=hashName,proto3" json:"hashName,omitempty"`
+	Url                   string   `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
+	UserId                uint32   `protobuf:"varint,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TeamId                uint32   `protobuf:"varint,6,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
+	FatherId              uint32   `protobuf:"varint,7,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
+	ChildrenPositionIndex uint32   `protobuf:"varint,9,opt,name=children_position_index,json=childrenPositionIndex,proto3" json:"children_position_index,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
 }
 
 func (m *CreateFileRequest) Reset()         { *m = CreateFileRequest{} }
 func (m *CreateFileRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateFileRequest) ProtoMessage()    {}
 func (*CreateFileRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{22}
+	return fileDescriptor_4c0a940f1d2a029f, []int{41}
 }
 
 func (m *CreateFileRequest) XXX_Unmarshal(b []byte) error {
@@ -1211,21 +2293,45 @@ func (m *CreateFileRequest) GetUserId() uint32 {
 	return 0
 }
 
+func (m *CreateFileRequest) GetTeamId() uint32 {
+	if m != nil {
+		return m.TeamId
+	}
+	return 0
+}
+
+func (m *CreateFileRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
+func (m *CreateFileRequest) GetChildrenPositionIndex() uint32 {
+	if m != nil {
+		return m.ChildrenPositionIndex
+	}
+	return 0
+}
+
 type CreateDocRequest struct {
-	Title                string   `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
-	Content              string   `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
-	ProjectId            uint32   `protobuf:"varint,3,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	UserId               uint32   `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Title                 string   `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Content               string   `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	ProjectId             uint32   `protobuf:"varint,3,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	UserId                uint32   `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TeamId                uint32   `protobuf:"varint,5,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
+	FatherId              uint32   `protobuf:"varint,6,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
+	ChildrenPositionIndex uint32   `protobuf:"varint,8,opt,name=children_position_index,json=childrenPositionIndex,proto3" json:"children_position_index,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
+	XXX_unrecognized      []byte   `json:"-"`
+	XXX_sizecache         int32    `json:"-"`
 }
 
 func (m *CreateDocRequest) Reset()         { *m = CreateDocRequest{} }
 func (m *CreateDocRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateDocRequest) ProtoMessage()    {}
 func (*CreateDocRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{23}
+	return fileDescriptor_4c0a940f1d2a029f, []int{42}
 }
 
 func (m *CreateDocRequest) XXX_Unmarshal(b []byte) error {
@@ -1274,10 +2380,32 @@ func (m *CreateDocRequest) GetUserId() uint32 {
 	return 0
 }
 
+func (m *CreateDocRequest) GetTeamId() uint32 {
+	if m != nil {
+		return m.TeamId
+	}
+	return 0
+}
+
+func (m *CreateDocRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
+func (m *CreateDocRequest) GetChildrenPositionIndex() uint32 {
+	if m != nil {
+		return m.ChildrenPositionIndex
+	}
+	return 0
+}
+
 type UpdateDocRequest struct {
 	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title                string   `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Content              string   `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	EditorId             uint32   `protobuf:"varint,4,opt,name=editor_id,json=editorId,proto3" json:"editor_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1287,7 +2415,7 @@ func (m *UpdateDocRequest) Reset()         { *m = UpdateDocRequest{} }
 func (m *UpdateDocRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateDocRequest) ProtoMessage()    {}
 func (*UpdateDocRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{24}
+	return fileDescriptor_4c0a940f1d2a029f, []int{43}
 }
 
 func (m *UpdateDocRequest) XXX_Unmarshal(b []byte) error {
@@ -1329,8 +2457,16 @@ func (m *UpdateDocRequest) GetContent() string {
 	return ""
 }
 
+func (m *UpdateDocRequest) GetEditorId() uint32 {
+	if m != nil {
+		return m.EditorId
+	}
+	return 0
+}
+
 type GetInfoByIdsRequest struct {
 	List                 []uint32 `protobuf:"varint,1,rep,packed,name=list,proto3" json:"list,omitempty"`
+	FatherId             uint32   `protobuf:"varint,2,opt,name=father_id,json=fatherId,proto3" json:"father_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -1340,7 +2476,7 @@ func (m *GetInfoByIdsRequest) Reset()         { *m = GetInfoByIdsRequest{} }
 func (m *GetInfoByIdsRequest) String() string { return proto.CompactTextString(m) }
 func (*GetInfoByIdsRequest) ProtoMessage()    {}
 func (*GetInfoByIdsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{25}
+	return fileDescriptor_4c0a940f1d2a029f, []int{44}
 }
 
 func (m *GetInfoByIdsRequest) XXX_Unmarshal(b []byte) error {
@@ -1368,6 +2504,13 @@ func (m *GetInfoByIdsRequest) GetList() []uint32 {
 	return nil
 }
 
+func (m *GetInfoByIdsRequest) GetFatherId() uint32 {
+	if m != nil {
+		return m.FatherId
+	}
+	return 0
+}
+
 type FileDetail struct {
 	Id                   uint32   `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
@@ -1383,7 +2526,7 @@ func (m *FileDetail) Reset()         { *m = FileDetail{} }
 func (m *FileDetail) String() string { return proto.CompactTextString(m) }
 func (*FileDetail) ProtoMessage()    {}
 func (*FileDetail) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{26}
+	return fileDescriptor_4c0a940f1d2a029f, []int{45}
 }
 
 func (m *FileDetail) XXX_Unmarshal(b []byte) error {
@@ -1450,7 +2593,7 @@ func (m *GetFileInfoListResponse) Reset()         { *m = GetFileInfoListResponse
 func (m *GetFileInfoListResponse) String() string { return proto.CompactTextString(m) }
 func (*GetFileInfoListResponse) ProtoMessage()    {}
 func (*GetFileInfoListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{27}
+	return fileDescriptor_4c0a940f1d2a029f, []int{46}
 }
 
 func (m *GetFileInfoListResponse) XXX_Unmarshal(b []byte) error {
@@ -1489,7 +2632,7 @@ func (m *GetDocInfoListResponse) Reset()         { *m = GetDocInfoListResponse{}
 func (m *GetDocInfoListResponse) String() string { return proto.CompactTextString(m) }
 func (*GetDocInfoListResponse) ProtoMessage()    {}
 func (*GetDocInfoListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{28}
+	return fileDescriptor_4c0a940f1d2a029f, []int{47}
 }
 
 func (m *GetDocInfoListResponse) XXX_Unmarshal(b []byte) error {
@@ -1528,7 +2671,7 @@ func (m *GetFileFolderListResponse) Reset()         { *m = GetFileFolderListResp
 func (m *GetFileFolderListResponse) String() string { return proto.CompactTextString(m) }
 func (*GetFileFolderListResponse) ProtoMessage()    {}
 func (*GetFileFolderListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{29}
+	return fileDescriptor_4c0a940f1d2a029f, []int{48}
 }
 
 func (m *GetFileFolderListResponse) XXX_Unmarshal(b []byte) error {
@@ -1567,7 +2710,7 @@ func (m *GetDocFolderListResponse) Reset()         { *m = GetDocFolderListRespon
 func (m *GetDocFolderListResponse) String() string { return proto.CompactTextString(m) }
 func (*GetDocFolderListResponse) ProtoMessage()    {}
 func (*GetDocFolderListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{30}
+	return fileDescriptor_4c0a940f1d2a029f, []int{49}
 }
 
 func (m *GetDocFolderListResponse) XXX_Unmarshal(b []byte) error {
@@ -1607,7 +2750,7 @@ func (m *FileInfo) Reset()         { *m = FileInfo{} }
 func (m *FileInfo) String() string { return proto.CompactTextString(m) }
 func (*FileInfo) ProtoMessage()    {}
 func (*FileInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{31}
+	return fileDescriptor_4c0a940f1d2a029f, []int{50}
 }
 
 func (m *FileInfo) XXX_Unmarshal(b []byte) error {
@@ -1654,7 +2797,7 @@ func (m *FileFolderDetail) Reset()         { *m = FileFolderDetail{} }
 func (m *FileFolderDetail) String() string { return proto.CompactTextString(m) }
 func (*FileFolderDetail) ProtoMessage()    {}
 func (*FileFolderDetail) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{32}
+	return fileDescriptor_4c0a940f1d2a029f, []int{51}
 }
 
 func (m *FileFolderDetail) XXX_Unmarshal(b []byte) error {
@@ -1706,7 +2849,7 @@ func (m *DocDetail) Reset()         { *m = DocDetail{} }
 func (m *DocDetail) String() string { return proto.CompactTextString(m) }
 func (*DocDetail) ProtoMessage()    {}
 func (*DocDetail) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{33}
+	return fileDescriptor_4c0a940f1d2a029f, []int{52}
 }
 
 func (m *DocDetail) XXX_Unmarshal(b []byte) error {
@@ -1788,7 +2931,7 @@ func (m *DocInfo) Reset()         { *m = DocInfo{} }
 func (m *DocInfo) String() string { return proto.CompactTextString(m) }
 func (*DocInfo) ProtoMessage()    {}
 func (*DocInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{34}
+	return fileDescriptor_4c0a940f1d2a029f, []int{53}
 }
 
 func (m *DocInfo) XXX_Unmarshal(b []byte) error {
@@ -1835,7 +2978,7 @@ func (m *DocFolderDetail) Reset()         { *m = DocFolderDetail{} }
 func (m *DocFolderDetail) String() string { return proto.CompactTextString(m) }
 func (*DocFolderDetail) ProtoMessage()    {}
 func (*DocFolderDetail) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4c0a940f1d2a029f, []int{35}
+	return fileDescriptor_4c0a940f1d2a029f, []int{54}
 }
 
 func (m *DocFolderDetail) XXX_Unmarshal(b []byte) error {
@@ -1871,6 +3014,24 @@ func (m *DocFolderDetail) GetName() string {
 }
 
 func init() {
+	proto.RegisterType((*UpdateFilePositionRequest)(nil), "project.UpdateFilePositionRequest")
+	proto.RegisterType((*GetFileDetailRequest)(nil), "project.GetFileDetailRequest")
+	proto.RegisterType((*DeleteRequest)(nil), "project.DeleteRequest")
+	proto.RegisterType((*GetTrashbinRequest)(nil), "project.GetTrashbinRequest")
+	proto.RegisterType((*Trashbin)(nil), "project.Trashbin")
+	proto.RegisterType((*GetTrashbinResponse)(nil), "project.GetTrashbinResponse")
+	proto.RegisterType((*RemoveTrashbinRequest)(nil), "project.RemoveTrashbinRequest")
+	proto.RegisterType((*DeleteTrashbinRequest)(nil), "project.DeleteTrashbinRequest")
+	proto.RegisterType((*UpdateFileRequest)(nil), "project.UpdateFileRequest")
+	proto.RegisterType((*CreateProjectRequest)(nil), "project.CreateProjectRequest")
+	proto.RegisterType((*UpdateFolderRequest)(nil), "project.UpdateFolderRequest")
+	proto.RegisterType((*CreateFolderRequest)(nil), "project.CreateFolderRequest")
+	proto.RegisterType((*DeleteDocCommentRequest)(nil), "project.DeleteDocCommentRequest")
+	proto.RegisterType((*Comment)(nil), "project.Comment")
+	proto.RegisterType((*CommentListResponse)(nil), "project.CommentListResponse")
+	proto.RegisterType((*ListDocCommentRequest)(nil), "project.ListDocCommentRequest")
+	proto.RegisterType((*CreateDocCommentRequest)(nil), "project.CreateDocCommentRequest")
+	proto.RegisterType((*UpdateDocCommentRequest)(nil), "project.UpdateDocCommentRequest")
 	proto.RegisterType((*ProjectIDResponse)(nil), "project.ProjectIDResponse")
 	proto.RegisterType((*ProjectIdsResponse)(nil), "project.ProjectIdsResponse")
 	proto.RegisterType((*GetProjectListRequest)(nil), "project.GetProjectListRequest")
@@ -1891,8 +3052,9 @@ func init() {
 	proto.RegisterType((*UpdateMemberRequest)(nil), "project.UpdateMemberRequest")
 	proto.RegisterType((*ProjectInfo)(nil), "project.ProjectInfo")
 	proto.RegisterType((*UpdateProjectInfoRequest)(nil), "project.UpdateProjectInfoRequest")
-	proto.RegisterType((*UpdateTreeRequest)(nil), "project.UpdateTreeRequest")
-	proto.RegisterType((*Tree)(nil), "project.Tree")
+	proto.RegisterType((*UpdateChildrenRequest)(nil), "project.UpdateChildrenRequest")
+	proto.RegisterType((*UpdateProjectChildrenRequest)(nil), "project.UpdateProjectChildrenRequest")
+	proto.RegisterType((*Children)(nil), "project.Children")
 	proto.RegisterType((*CreateFileRequest)(nil), "project.CreateFileRequest")
 	proto.RegisterType((*CreateDocRequest)(nil), "project.CreateDocRequest")
 	proto.RegisterType((*UpdateDocRequest)(nil), "project.UpdateDocRequest")
@@ -1912,88 +3074,136 @@ func init() {
 func init() { proto.RegisterFile("proto/project.proto", fileDescriptor_4c0a940f1d2a029f) }
 
 var fileDescriptor_4c0a940f1d2a029f = []byte{
-	// 1286 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0x5d, 0x6f, 0x1b, 0x45,
-	0x17, 0xf6, 0xda, 0xf9, 0xf2, 0x71, 0x9c, 0x38, 0xe3, 0xbc, 0xed, 0xd6, 0x6f, 0xd2, 0xa6, 0x43,
-	0x91, 0x82, 0x54, 0x52, 0x94, 0x8a, 0xa2, 0xa8, 0xa2, 0x2a, 0x8d, 0x89, 0x49, 0x5b, 0xaa, 0xb0,
-	0x4d, 0x2e, 0x2a, 0x2e, 0xac, 0xad, 0x3d, 0x4e, 0x86, 0xac, 0x77, 0xcc, 0xee, 0xb8, 0x12, 0x48,
-	0x48, 0xfc, 0x01, 0x24, 0xae, 0x10, 0x12, 0xbf, 0x89, 0xff, 0x84, 0xe6, 0x63, 0x67, 0x67, 0xd7,
-	0xeb, 0x64, 0x0b, 0x82, 0xbb, 0x99, 0xe3, 0x33, 0xcf, 0x3c, 0xf3, 0x9c, 0x33, 0xe7, 0xcc, 0x1a,
-	0xda, 0x93, 0x88, 0x71, 0xf6, 0x60, 0x12, 0xb1, 0xef, 0xc8, 0x80, 0xef, 0xc9, 0x19, 0x5a, 0xd6,
-	0x53, 0xfc, 0x01, 0x6c, 0x9c, 0xa8, 0xe1, 0x71, 0xd7, 0x23, 0xf1, 0x84, 0x85, 0x31, 0x41, 0x6b,
-	0x50, 0xa5, 0x43, 0xd7, 0xd9, 0x71, 0x76, 0x9b, 0x5e, 0x95, 0x0e, 0xf1, 0x2e, 0xa0, 0xc4, 0x69,
-	0x18, 0x1b, 0x2f, 0x04, 0x0b, 0x01, 0x8d, 0xb9, 0xeb, 0xec, 0xd4, 0x76, 0x9b, 0x9e, 0x1c, 0xe3,
-	0xdf, 0x1c, 0xf8, 0x5f, 0x8f, 0x70, 0xed, 0xfd, 0x92, 0xc6, 0xdc, 0x23, 0xdf, 0x4f, 0x49, 0xcc,
-	0xd1, 0x4d, 0x58, 0x9e, 0xc6, 0x24, 0xea, 0x1b, 0xe0, 0x25, 0x31, 0x3d, 0x1e, 0xa2, 0x1b, 0xb0,
-	0x14, 0xf8, 0x31, 0xa7, 0x43, 0xb7, 0xaa, 0xec, 0x6a, 0x26, 0xec, 0x6c, 0x34, 0x8a, 0x09, 0x77,
-	0x6b, 0xca, 0xae, 0x66, 0x68, 0x13, 0x16, 0x03, 0x3a, 0xa6, 0xdc, 0x5d, 0x90, 0x66, 0x35, 0x41,
-	0xb7, 0x01, 0x26, 0xfe, 0x39, 0x0d, 0x7d, 0x4e, 0x59, 0xe8, 0x2e, 0xee, 0x38, 0xbb, 0x2b, 0x9e,
-	0x65, 0xc1, 0x7f, 0x38, 0xb0, 0xd9, 0x23, 0xfc, 0x6b, 0x32, 0x7e, 0x4b, 0x22, 0x9b, 0xd7, 0x36,
-	0x80, 0xd6, 0x22, 0xa5, 0x56, 0x9f, 0x24, 0xa7, 0xfd, 0x8f, 0xd8, 0x1d, 0x42, 0x3b, 0x23, 0x99,
-	0x56, 0xf8, 0xbe, 0x56, 0xb8, 0xba, 0x53, 0xdb, 0x6d, 0xec, 0xbb, 0x7b, 0x49, 0x0c, 0x2d, 0xdf,
-	0x63, 0x4e, 0xc6, 0x5a, 0xfb, 0x2d, 0x80, 0x1e, 0x31, 0xe7, 0xca, 0xc7, 0x10, 0xc3, 0x5a, 0x8f,
-	0xf0, 0xe3, 0x70, 0xc4, 0x12, 0x8f, 0x16, 0xd4, 0xe8, 0x30, 0xd6, 0xe1, 0x13, 0x43, 0xfc, 0x18,
-	0xd6, 0x3d, 0x72, 0x4e, 0x63, 0x4e, 0xa2, 0xc4, 0x69, 0x13, 0x16, 0xc9, 0xd8, 0xa7, 0x81, 0x44,
-	0xaa, 0x7b, 0x6a, 0x22, 0x42, 0x1f, 0xfa, 0x63, 0x22, 0x35, 0xa9, 0x7b, 0x72, 0x8c, 0x0f, 0x61,
-	0xf5, 0x25, 0x3b, 0xa7, 0xe1, 0xd5, 0x2b, 0xb7, 0x01, 0xfc, 0x29, 0xbf, 0xe8, 0x73, 0x76, 0x49,
-	0x42, 0xbd, 0xbe, 0x2e, 0x2c, 0xa7, 0xc2, 0x80, 0x7d, 0x58, 0x39, 0x13, 0x69, 0x11, 0x8e, 0x58,
-	0xfe, 0x04, 0x72, 0x53, 0x3a, 0xb8, 0x34, 0x9b, 0xd2, 0xc1, 0xa5, 0x21, 0x52, 0x4b, 0x89, 0xc8,
-	0x2d, 0xde, 0xf9, 0xdc, 0x8f, 0xfa, 0xd3, 0x28, 0x90, 0x71, 0x10, 0x5b, 0x48, 0xcb, 0x59, 0x14,
-	0xe0, 0x03, 0x68, 0x25, 0x5b, 0x18, 0xa1, 0x3f, 0xb4, 0x52, 0xb9, 0xb1, 0xbf, 0x61, 0x84, 0x36,
-	0x8e, 0x4a, 0xe1, 0x5f, 0x1d, 0x68, 0x08, 0xd3, 0x49, 0xc4, 0x46, 0x34, 0x20, 0xff, 0x12, 0x43,
-	0xa1, 0x1c, 0x0d, 0x79, 0xc4, 0x64, 0xa2, 0xd4, 0x3d, 0x35, 0x49, 0xf5, 0x5c, 0xb2, 0xf4, 0xc4,
-	0x00, 0x2b, 0xc9, 0x29, 0xf0, 0x1e, 0x2c, 0x08, 0x76, 0x33, 0xb4, 0x6e, 0xc0, 0x92, 0x02, 0xd7,
-	0xc4, 0xf4, 0x0c, 0x1f, 0xc3, 0x7a, 0x2e, 0x93, 0x0a, 0x4f, 0x94, 0x0b, 0xb4, 0xbc, 0xf7, 0xec,
-	0x9c, 0x25, 0x27, 0x12, 0x63, 0xfc, 0x06, 0xda, 0xea, 0x6a, 0xc5, 0x99, 0x04, 0xde, 0x84, 0xc5,
-	0x01, 0x9b, 0x86, 0x5c, 0x23, 0xaa, 0xc9, 0xdc, 0xb4, 0xb6, 0x10, 0xac, 0xb4, 0xfe, 0xd9, 0x81,
-	0xf5, 0xdc, 0x2f, 0xa5, 0x68, 0xa6, 0xa7, 0xae, 0xd9, 0xa7, 0x16, 0xe2, 0x9f, 0x47, 0x6c, 0x3a,
-	0xe9, 0xcb, 0x15, 0x5a, 0x7c, 0x69, 0x79, 0xa5, 0x4f, 0x17, 0xb1, 0x80, 0x48, 0xed, 0x9b, 0x9e,
-	0x1c, 0xe3, 0x03, 0x68, 0x9f, 0x4d, 0x86, 0x3e, 0x27, 0x8a, 0xc7, 0x9c, 0x2b, 0x66, 0x0a, 0x62,
-	0xd5, 0x2a, 0x88, 0x23, 0x68, 0x24, 0xa5, 0x73, 0x5e, 0x4e, 0xe7, 0x89, 0x9b, 0xf0, 0xd7, 0xec,
-	0xf0, 0x6f, 0x03, 0xc8, 0xfa, 0xa9, 0xf4, 0x54, 0xd5, 0xa5, 0x2e, 0x2c, 0x87, 0xc2, 0x80, 0x4f,
-	0xc1, 0x55, 0x14, 0xad, 0xdd, 0xae, 0xe0, 0x59, 0x6e, 0x53, 0xfc, 0x19, 0x6c, 0x28, 0xd4, 0xd3,
-	0x88, 0x90, 0x2b, 0xe0, 0x78, 0x44, 0x0c, 0x9c, 0x18, 0xe3, 0x0e, 0x2c, 0x88, 0x25, 0xe6, 0x37,
-	0xc7, 0xfa, 0xed, 0x17, 0x07, 0x36, 0x0e, 0x23, 0xe2, 0x73, 0x72, 0x44, 0x03, 0x52, 0xb2, 0x0e,
-	0x17, 0x71, 0xee, 0xc0, 0xca, 0x85, 0x1f, 0x5f, 0xbc, 0x4a, 0xaf, 0x97, 0x99, 0x8b, 0xe2, 0x96,
-	0xde, 0x2d, 0x31, 0xb4, 0x1b, 0xd0, 0xa2, 0xdd, 0x80, 0xf0, 0x8f, 0xd0, 0x52, 0x74, 0xba, 0x6c,
-	0x60, 0x15, 0x2f, 0x4e, 0x79, 0x90, 0x10, 0x57, 0x13, 0xe4, 0xc2, 0xf2, 0x80, 0x85, 0x9c, 0x84,
-	0x5c, 0xf3, 0x48, 0xa6, 0x39, 0xf6, 0xb5, 0x3c, 0x7b, 0x6b, 0xef, 0x85, 0xcc, 0xde, 0x1e, 0xb4,
-	0x94, 0xc0, 0xd6, 0xde, 0x79, 0x7d, 0x0d, 0x97, 0xea, 0x1c, 0x2e, 0xb5, 0x0c, 0x17, 0xfc, 0x11,
-	0xb4, 0x75, 0xa5, 0x7f, 0xf6, 0x83, 0xec, 0xd7, 0x0a, 0xb6, 0xa8, 0x5d, 0xff, 0x04, 0x20, 0x62,
-	0xd0, 0x25, 0x5c, 0xd4, 0xe6, 0x32, 0x79, 0xa2, 0x75, 0xad, 0xa5, 0xba, 0x0a, 0x22, 0x42, 0x3e,
-	0x16, 0x69, 0xb5, 0x93, 0x29, 0xba, 0x03, 0x0d, 0x39, 0x24, 0x7d, 0x4e, 0xc7, 0x44, 0x57, 0x33,
-	0x50, 0xa6, 0x53, 0x3a, 0x26, 0xf8, 0x29, 0xdc, 0xec, 0x11, 0x2e, 0x18, 0x08, 0xb6, 0x99, 0xca,
-	0x31, 0xaf, 0x22, 0x27, 0xce, 0xfa, 0x00, 0x4f, 0xe0, 0x46, 0x8f, 0xf0, 0x2e, 0x1b, 0xcc, 0x00,
-	0xdc, 0xcb, 0x00, 0xb4, 0x0c, 0x80, 0xf6, 0xd5, 0xeb, 0x9f, 0xc3, 0x2d, 0xcd, 0xe0, 0x88, 0x05,
-	0xc3, 0xe4, 0x65, 0xa0, 0x21, 0x3e, 0xce, 0x40, 0xdc, 0xca, 0x70, 0x50, 0xee, 0x4a, 0x38, 0x8d,
-	0xf5, 0x15, 0xb8, 0x8a, 0x4b, 0x01, 0xd4, 0xfd, 0x0c, 0x94, 0x6b, 0xb3, 0x29, 0x40, 0xfa, 0x04,
-	0x56, 0x92, 0x73, 0x96, 0xcb, 0x06, 0xfc, 0x08, 0x5a, 0x79, 0x56, 0x65, 0xc2, 0x89, 0xff, 0x74,
-	0xa0, 0xde, 0x65, 0x83, 0x39, 0x2b, 0xde, 0x33, 0xf3, 0xfe, 0x41, 0x2a, 0x08, 0x07, 0xf1, 0xb2,
-	0xea, 0x93, 0x21, 0x15, 0xcb, 0x55, 0x8f, 0x03, 0x61, 0xfa, 0x52, 0x5a, 0xd0, 0x3d, 0x58, 0x33,
-	0x0e, 0x0a, 0x64, 0x59, 0xfa, 0xac, 0x26, 0x3e, 0x32, 0xa3, 0x1e, 0xc0, 0xb2, 0x0e, 0x70, 0x49,
-	0xe1, 0x3e, 0x85, 0xf5, 0x5c, 0x0c, 0xca, 0xe8, 0xb6, 0xff, 0xfb, 0x2a, 0xac, 0xe9, 0x4a, 0xfb,
-	0x9a, 0x44, 0xef, 0xe8, 0x80, 0xa0, 0x13, 0xf9, 0xc0, 0xb2, 0x1a, 0x2a, 0xba, 0x6d, 0xc2, 0x5c,
-	0xf8, 0x24, 0xee, 0x6c, 0x15, 0x3d, 0xe8, 0x4c, 0x37, 0xaf, 0xa0, 0xcf, 0x6d, 0x44, 0x79, 0xa6,
-	0xb6, 0x8d, 0x98, 0xc0, 0x6c, 0xe6, 0x61, 0x84, 0x2b, 0xae, 0xa0, 0x17, 0x49, 0xf1, 0xb6, 0x11,
-	0xee, 0xa6, 0x6f, 0x9b, 0x39, 0xed, 0xa2, 0x93, 0x5e, 0x36, 0x8b, 0xcb, 0x01, 0x34, 0xbb, 0x24,
-	0x20, 0x66, 0x41, 0x31, 0x95, 0xc2, 0xa5, 0x0f, 0xa1, 0xa1, 0xef, 0x98, 0x6c, 0x09, 0x85, 0x0b,
-	0x9b, 0xc6, 0x28, 0x7c, 0x70, 0x05, 0xed, 0xcb, 0xc7, 0x6c, 0x97, 0x0d, 0xde, 0x63, 0xcd, 0x17,
-	0xb0, 0xa6, 0x0e, 0x65, 0xf6, 0xea, 0xe4, 0x4e, 0x6b, 0xb5, 0xb1, 0x62, 0xae, 0x4f, 0xa1, 0x69,
-	0xea, 0xf1, 0xdf, 0x43, 0x78, 0x21, 0x89, 0xeb, 0x07, 0x0b, 0xda, 0xb6, 0x89, 0xcf, 0x7c, 0x7c,
-	0x58, 0x19, 0x50, 0xf0, 0x7a, 0xc2, 0x15, 0xf4, 0x2c, 0xa1, 0x93, 0xe0, 0x6d, 0xe5, 0xe8, 0x64,
-	0x1e, 0x24, 0xc5, 0x84, 0x9e, 0xcb, 0x0f, 0x9f, 0xf4, 0xfb, 0xed, 0x88, 0x45, 0xf2, 0x95, 0x58,
-	0xa8, 0xe9, 0xff, 0x67, 0x72, 0x29, 0xfd, 0xe0, 0xc3, 0x15, 0x74, 0x04, 0x90, 0x76, 0x6e, 0x4b,
-	0x9b, 0x99, 0x76, 0xde, 0xe9, 0xcc, 0x00, 0x75, 0x2d, 0x9c, 0x47, 0x00, 0x2a, 0x9b, 0x24, 0x4e,
-	0xf9, 0x54, 0x7a, 0x0c, 0x4d, 0x9d, 0x4a, 0xfa, 0xae, 0x16, 0x2e, 0x6d, 0x67, 0x2a, 0xb5, 0xf2,
-	0xc4, 0x15, 0xf4, 0x1a, 0xd6, 0x73, 0xdd, 0xc6, 0x92, 0xb3, 0xa0, 0x63, 0x76, 0x76, 0xec, 0x5f,
-	0x8b, 0xba, 0x14, 0xae, 0xa0, 0x6f, 0xe5, 0xf7, 0x6e, 0x5a, 0x7b, 0x4b, 0x42, 0xe3, 0x3c, 0xf4,
-	0x6c, 0xcf, 0xc0, 0x15, 0xd4, 0x85, 0xba, 0x79, 0x99, 0xa0, 0x5b, 0x39, 0xb5, 0xd3, 0x17, 0xc3,
-	0x35, 0x62, 0x77, 0xa1, 0x6e, 0x72, 0xda, 0x42, 0xc9, 0xbf, 0x3b, 0xae, 0x41, 0x79, 0x02, 0x75,
-	0x15, 0x32, 0x81, 0x52, 0x28, 0xfb, 0xd5, 0xeb, 0x0f, 0x60, 0x55, 0x5d, 0xe8, 0xab, 0x22, 0x87,
-	0xec, 0xc6, 0x68, 0x02, 0xf7, 0x8d, 0xac, 0x83, 0x56, 0x93, 0xbf, 0x46, 0xdc, 0x3b, 0xf6, 0xaf,
-	0x05, 0x6f, 0x03, 0x5c, 0x41, 0x6f, 0xe4, 0xa5, 0x30, 0x95, 0xbf, 0x24, 0xf0, 0xdd, 0x1c, 0x70,
-	0x51, 0xd0, 0xde, 0x2e, 0xc9, 0x7f, 0x58, 0x1e, 0xfe, 0x15, 0x00, 0x00, 0xff, 0xff, 0xa3, 0x53,
-	0x0b, 0x6f, 0x78, 0x11, 0x00, 0x00,
+	// 2063 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x59, 0x4b, 0x6f, 0x1b, 0xc9,
+	0x11, 0xd6, 0xf0, 0xcd, 0xd2, 0x83, 0x54, 0x53, 0x2f, 0xd3, 0x96, 0x1f, 0xbd, 0xde, 0xc0, 0x08,
+	0x36, 0xde, 0x60, 0x83, 0x2c, 0xe0, 0x38, 0xd9, 0x24, 0xa6, 0x2c, 0xed, 0xec, 0xda, 0x86, 0xac,
+	0x95, 0x0f, 0x46, 0x80, 0x08, 0x63, 0x4e, 0x4b, 0x9a, 0x78, 0xc8, 0x66, 0x66, 0x46, 0x46, 0x7c,
+	0x08, 0x90, 0x9f, 0x90, 0x4b, 0x72, 0xc9, 0x7f, 0xc8, 0x2f, 0xc8, 0x39, 0xb7, 0xfc, 0x89, 0x9c,
+	0xf2, 0x1f, 0x72, 0x09, 0xfa, 0x39, 0x3d, 0xcd, 0x1e, 0x72, 0x2c, 0x23, 0x7b, 0x63, 0xbf, 0x6a,
+	0xaa, 0xbe, 0xaa, 0xae, 0xfa, 0xba, 0x08, 0x83, 0x59, 0x42, 0x33, 0xfa, 0xf9, 0x2c, 0xa1, 0xbf,
+	0x23, 0xe3, 0xec, 0x21, 0x1f, 0xa1, 0xb6, 0x1c, 0xe2, 0x7f, 0x7b, 0x70, 0xe3, 0xd5, 0x2c, 0x0c,
+	0x32, 0x72, 0x18, 0xc5, 0xe4, 0x98, 0xa6, 0x51, 0x16, 0xd1, 0xe9, 0x09, 0xf9, 0xfd, 0x15, 0x49,
+	0x33, 0xb4, 0x0b, 0xed, 0xf3, 0x28, 0x26, 0x67, 0x51, 0xb8, 0xe7, 0xdd, 0xf5, 0x1e, 0xac, 0x9f,
+	0xb4, 0xd8, 0xd0, 0x0f, 0x11, 0x86, 0x75, 0x1a, 0x87, 0x67, 0xe7, 0x41, 0x76, 0x49, 0x12, 0xb6,
+	0x5c, 0xe3, 0xcb, 0xab, 0x34, 0x0e, 0x0f, 0xf9, 0x9c, 0x1f, 0xa2, 0x9b, 0xd0, 0xcd, 0xd7, 0xeb,
+	0x7c, 0xbd, 0x73, 0xae, 0x16, 0xef, 0xc0, 0xaa, 0x5c, 0xcc, 0xde, 0xcf, 0xc8, 0x5e, 0x83, 0x2f,
+	0x83, 0x98, 0x3a, 0x7d, 0x3f, 0x23, 0x08, 0x41, 0x83, 0xaf, 0x34, 0xf9, 0x0a, 0xff, 0x8d, 0xbe,
+	0x84, 0xdd, 0xf1, 0x65, 0x14, 0x87, 0x09, 0x99, 0x9e, 0xcd, 0xa4, 0xaa, 0x67, 0xd1, 0x34, 0x24,
+	0x7f, 0xd8, 0x6b, 0xf1, 0x6d, 0xdb, 0x6a, 0x59, 0x19, 0xe2, 0xb3, 0x45, 0x3c, 0x82, 0xad, 0x23,
+	0x92, 0x31, 0x03, 0x0f, 0x48, 0x16, 0x44, 0xb1, 0x32, 0x6f, 0x03, 0x6a, 0xda, 0xb2, 0x5a, 0x64,
+	0x69, 0x5c, 0x2b, 0x6a, 0x8c, 0x9f, 0xc1, 0xfa, 0x01, 0x89, 0x49, 0x46, 0xca, 0x4e, 0xef, 0x42,
+	0xfb, 0x2a, 0x35, 0xcf, 0xb6, 0xd8, 0xd0, 0x0f, 0x99, 0x29, 0x09, 0x8d, 0x89, 0xc4, 0x80, 0xff,
+	0xc6, 0x4f, 0x00, 0x1d, 0x91, 0xec, 0x34, 0x09, 0xd2, 0xcb, 0x37, 0x91, 0xc6, 0x7b, 0x07, 0x5a,
+	0xf4, 0xfc, 0x3c, 0x25, 0x99, 0x82, 0x5b, 0x8c, 0xd0, 0x16, 0x34, 0xe3, 0x68, 0x12, 0x65, 0x52,
+	0xb0, 0x18, 0xe0, 0x27, 0xd0, 0x51, 0x02, 0xe6, 0x94, 0x51, 0xf0, 0xd5, 0x0c, 0xf8, 0x10, 0x34,
+	0xa6, 0xc1, 0x44, 0xe8, 0xd1, 0x3d, 0xe1, 0xbf, 0xf1, 0xcf, 0x61, 0x50, 0xd0, 0x23, 0x9d, 0xd1,
+	0x69, 0x4a, 0xd0, 0xa7, 0xd0, 0x88, 0xa3, 0x94, 0xa9, 0x51, 0x7f, 0xb0, 0xfa, 0xc5, 0xe6, 0x43,
+	0x15, 0x3d, 0x7a, 0x23, 0x5f, 0xc6, 0xff, 0xf0, 0x60, 0xfb, 0x84, 0x4c, 0xe8, 0x3b, 0x62, 0x5b,
+	0x52, 0x45, 0x9f, 0x85, 0x01, 0xb2, 0xc0, 0xd7, 0x8d, 0x05, 0xbe, 0x46, 0x3f, 0x84, 0xcd, 0x28,
+	0x55, 0x81, 0x29, 0xd5, 0xe6, 0x41, 0xd4, 0x39, 0xe9, 0x45, 0xa9, 0x08, 0xce, 0x63, 0x19, 0xfc,
+	0x8f, 0x61, 0x5b, 0xb8, 0xf4, 0x1a, 0xda, 0x63, 0x1f, 0x36, 0xf3, 0x8b, 0xb3, 0xe0, 0x20, 0x87,
+	0xbc, 0x96, 0x43, 0x8e, 0xfa, 0x50, 0xbf, 0x4a, 0x62, 0xe9, 0x05, 0xf6, 0x13, 0xbf, 0x86, 0xad,
+	0x51, 0x42, 0x82, 0x8c, 0x48, 0xc5, 0x94, 0x34, 0x75, 0xda, 0x33, 0x4e, 0x6f, 0x41, 0x33, 0x9a,
+	0x66, 0x09, 0x95, 0x22, 0xc5, 0x80, 0xc5, 0x5e, 0x46, 0x82, 0x49, 0x0e, 0x64, 0x8b, 0x0d, 0xfd,
+	0x10, 0x1f, 0xc2, 0x40, 0x6a, 0x49, 0xe3, 0x90, 0x24, 0x4a, 0x32, 0x83, 0x9e, 0x4f, 0xe4, 0x57,
+	0xbb, 0x23, 0x26, 0x7c, 0xa7, 0xd2, 0xcc, 0xd3, 0x03, 0xa1, 0xe3, 0xbc, 0x20, 0xed, 0x43, 0xcf,
+	0xf2, 0xa1, 0x23, 0xe0, 0xd0, 0x3e, 0x80, 0xf4, 0x0a, 0x3b, 0x21, 0x5c, 0xd9, 0x95, 0x33, 0x7e,
+	0xc8, 0x96, 0xc7, 0xec, 0x33, 0x94, 0x0b, 0x14, 0x97, 0xbf, 0x2b, 0x67, 0x16, 0x47, 0xc5, 0xc2,
+	0x0c, 0xf0, 0x12, 0x76, 0x85, 0xa7, 0x0f, 0xe8, 0x78, 0x44, 0x27, 0x13, 0x32, 0xd5, 0x20, 0xb3,
+	0x2f, 0x8a, 0x99, 0xdc, 0x84, 0xae, 0x9c, 0xf1, 0xcb, 0x6f, 0x35, 0xfe, 0x8b, 0x07, 0x6d, 0x29,
+	0x6a, 0xce, 0xed, 0x7b, 0xd0, 0x1e, 0xd3, 0x69, 0x46, 0xa6, 0x99, 0x04, 0x51, 0x0d, 0x4d, 0x71,
+	0x0d, 0x3b, 0x49, 0x64, 0xd1, 0x44, 0xe4, 0xbb, 0xee, 0x09, 0xff, 0xcd, 0xd2, 0x41, 0xf0, 0x2e,
+	0xc8, 0x82, 0x84, 0x1b, 0xd7, 0x3d, 0x91, 0x23, 0x06, 0x3a, 0x17, 0xc2, 0xc1, 0x6d, 0xf3, 0xa5,
+	0x0e, 0x9b, 0x78, 0xc1, 0x3c, 0xf5, 0x12, 0x06, 0x52, 0xad, 0x67, 0x51, 0x9a, 0xe9, 0x1b, 0xbd,
+	0x05, 0xcd, 0x31, 0xbd, 0x9a, 0xaa, 0xcc, 0x22, 0x06, 0xe8, 0xbe, 0xbc, 0xe7, 0x35, 0x7e, 0xcf,
+	0xfb, 0xfa, 0x9e, 0x2b, 0x8c, 0xc4, 0x35, 0xbf, 0x82, 0x6d, 0x26, 0x6b, 0x1e, 0xbb, 0x5d, 0x68,
+	0xc7, 0x41, 0x6a, 0x00, 0xd7, 0x62, 0x43, 0x3f, 0x34, 0x12, 0x59, 0xcd, 0x9d, 0xc8, 0xea, 0x46,
+	0x22, 0x43, 0xdb, 0xd0, 0x0a, 0xe9, 0x38, 0xc7, 0xa4, 0x19, 0xd2, 0xb1, 0x1f, 0xe2, 0x31, 0xec,
+	0x8a, 0x90, 0x9b, 0xff, 0x70, 0x7e, 0xc2, 0x33, 0x4e, 0x94, 0xa7, 0x60, 0xc3, 0x21, 0xf5, 0x82,
+	0x43, 0xf0, 0x08, 0x76, 0xc5, 0x05, 0x99, 0xff, 0x48, 0x65, 0xaf, 0xe2, 0x4f, 0x60, 0x53, 0x5e,
+	0x5d, 0xff, 0x40, 0x23, 0x6e, 0x1d, 0xc7, 0x0f, 0x00, 0xa9, 0x4d, 0x61, 0xaa, 0x77, 0x21, 0x23,
+	0xd3, 0xae, 0x4b, 0xbc, 0xff, 0xea, 0xc1, 0xf6, 0x11, 0xc9, 0xe4, 0x6e, 0xe1, 0x46, 0x0d, 0xb8,
+	0x32, 0xd0, 0x2b, 0x18, 0xb8, 0x03, 0x1c, 0xfa, 0xdc, 0x70, 0x31, 0x32, 0x1c, 0x51, 0x77, 0x3b,
+	0xa2, 0x61, 0x3a, 0xe2, 0x36, 0xc0, 0x2c, 0xb8, 0x88, 0xa6, 0x01, 0xbb, 0x39, 0x32, 0x6b, 0x1a,
+	0x33, 0xf8, 0x6f, 0x1e, 0xaf, 0xa4, 0xcf, 0xc9, 0xe4, 0x0d, 0x49, 0x4c, 0xbd, 0x8a, 0xb7, 0xda,
+	0xb3, 0x6f, 0xf5, 0xf7, 0xa3, 0xdd, 0x08, 0x06, 0x05, 0xc8, 0x24, 0xc2, 0x9f, 0x15, 0x62, 0x7c,
+	0x4f, 0xc7, 0xb8, 0xb1, 0xd7, 0xcf, 0xc8, 0x44, 0x62, 0x7f, 0x0b, 0xe0, 0x88, 0x94, 0x85, 0x00,
+	0xc6, 0xb0, 0x71, 0x44, 0x32, 0x7f, 0x7a, 0x4e, 0xd5, 0x8e, 0x3e, 0xd4, 0xa3, 0x30, 0x95, 0xee,
+	0x63, 0x3f, 0xf1, 0x63, 0xe8, 0x9d, 0x90, 0x8b, 0x28, 0xcd, 0xf2, 0x2c, 0xb9, 0x05, 0x4d, 0x32,
+	0x09, 0xa2, 0x58, 0x66, 0x72, 0x31, 0x70, 0xe6, 0xd9, 0x11, 0xac, 0x3d, 0xa3, 0x17, 0x79, 0x25,
+	0x72, 0x9f, 0xdc, 0x07, 0x08, 0xae, 0xb2, 0xcb, 0xb3, 0x8c, 0xbe, 0x25, 0x53, 0x79, 0xbe, 0xcb,
+	0x66, 0x4e, 0xd9, 0x04, 0x0e, 0xa0, 0xf3, 0x8a, 0x85, 0xc5, 0xf4, 0x9c, 0x3a, 0x2b, 0x52, 0x34,
+	0x7e, 0xab, 0x3f, 0x1a, 0x8d, 0xdf, 0x96, 0xe5, 0x69, 0x91, 0x6d, 0xce, 0x58, 0xb1, 0x6a, 0xc8,
+	0x4f, 0xf0, 0x99, 0x57, 0x49, 0x8c, 0x1f, 0x41, 0x5f, 0x7d, 0x62, 0x29, 0x69, 0xd0, 0x1b, 0x05,
+	0xc2, 0x7f, 0xf6, 0x60, 0x95, 0x4d, 0x1d, 0x27, 0x94, 0xb1, 0xc9, 0xff, 0x93, 0x86, 0x79, 0xa1,
+	0x6c, 0x9a, 0x85, 0x52, 0xe3, 0xd9, 0x32, 0xf0, 0xc4, 0x00, 0x1d, 0x65, 0x05, 0x7e, 0x08, 0x0d,
+	0xa6, 0xdd, 0x9c, 0x5a, 0x79, 0x32, 0xae, 0x99, 0xc9, 0x18, 0xfb, 0xd0, 0xb3, 0x22, 0xa9, 0x12,
+	0x0b, 0x60, 0xf7, 0x9e, 0x5e, 0x50, 0x65, 0x11, 0xfb, 0x8d, 0x5f, 0xc3, 0x40, 0x5c, 0xad, 0xb4,
+	0x42, 0xea, 0x2e, 0x0b, 0x6b, 0x43, 0x82, 0x11, 0xd6, 0x7f, 0xf2, 0xa0, 0x67, 0xad, 0x54, 0x52,
+	0x33, 0xb7, 0xba, 0x5e, 0x28, 0x41, 0xfb, 0x00, 0x17, 0x09, 0xbd, 0x9a, 0x89, 0x1a, 0x24, 0xc1,
+	0xe7, 0x33, 0x2f, 0xa4, 0x75, 0x9c, 0xf2, 0x36, 0x0d, 0xca, 0xfb, 0x48, 0x51, 0x11, 0xa1, 0xc7,
+	0x02, 0xca, 0xa4, 0xed, 0x52, 0x09, 0xf1, 0xef, 0x1e, 0xac, 0xaa, 0xdc, 0x59, 0x16, 0xd4, 0xb6,
+	0xe6, 0xda, 0xff, 0x75, 0xd3, 0xff, 0xfb, 0x00, 0x3c, 0x81, 0x0a, 0x40, 0x25, 0xfd, 0x60, 0x33,
+	0x23, 0x0e, 0xea, 0x3d, 0x58, 0x63, 0x75, 0x45, 0x91, 0x08, 0x19, 0x3b, 0xab, 0x21, 0x1d, 0x8f,
+	0xe4, 0x14, 0xfa, 0x04, 0xd6, 0xf9, 0x9b, 0x48, 0xef, 0x11, 0x91, 0xb4, 0xc6, 0x26, 0xd5, 0x26,
+	0x7c, 0x0a, 0x7b, 0xc2, 0x56, 0x43, 0xeb, 0x0f, 0xe1, 0x88, 0x4e, 0xe5, 0xf1, 0x08, 0xb6, 0x85,
+	0x54, 0xf5, 0x9d, 0x32, 0x91, 0x43, 0xe8, 0x68, 0xf5, 0x84, 0x58, 0x3d, 0xc6, 0xbf, 0x85, 0x5b,
+	0x05, 0xd5, 0x3e, 0x42, 0x96, 0xe6, 0xc5, 0x75, 0x9e, 0x8b, 0x05, 0x2f, 0xfe, 0x01, 0x74, 0x34,
+	0x56, 0xe6, 0x59, 0xcf, 0xd2, 0xe3, 0xbf, 0x1e, 0x6c, 0x4a, 0x46, 0x69, 0x10, 0xe8, 0x25, 0x85,
+	0xc4, 0x85, 0xd5, 0x10, 0x3a, 0x97, 0x41, 0x7a, 0xf9, 0x22, 0xcf, 0x0f, 0x7a, 0xac, 0xb8, 0x76,
+	0x43, 0x73, 0x6d, 0xb3, 0x82, 0x36, 0x0b, 0x15, 0xd4, 0xa0, 0xd0, 0x2d, 0x93, 0x42, 0x17, 0x29,
+	0x6e, 0xbb, 0xfa, 0x33, 0xa5, 0xbb, 0x88, 0x90, 0xfe, 0xc7, 0x83, 0xbe, 0x26, 0x37, 0x46, 0xb2,
+	0xcf, 0xa2, 0x2c, 0x56, 0x84, 0x5f, 0x0c, 0x16, 0x90, 0xc9, 0x22, 0x58, 0x75, 0x1b, 0xac, 0x52,
+	0xae, 0x69, 0x98, 0xda, 0x2c, 0x37, 0xb5, 0x55, 0xdd, 0xd4, 0xce, 0x22, 0x53, 0x29, 0xf4, 0x35,
+	0xc3, 0x2a, 0x0b, 0x32, 0x6d, 0x79, 0xad, 0xc4, 0xf2, 0x22, 0x6b, 0x63, 0x8a, 0x92, 0x30, 0x92,
+	0xaf, 0x04, 0x61, 0x5c, 0x47, 0x4c, 0x88, 0x37, 0x8f, 0x2c, 0xd2, 0x4f, 0xde, 0x73, 0xaa, 0xa5,
+	0x5f, 0x53, 0x36, 0xd3, 0x5a, 0xfc, 0xe2, 0xff, 0x23, 0x40, 0xde, 0x33, 0xb8, 0xde, 0xd3, 0x8e,
+	0x9b, 0x20, 0x5e, 0x2f, 0x32, 0x08, 0xd5, 0x10, 0xdd, 0x81, 0x55, 0xfe, 0x93, 0x9c, 0x19, 0xbc,
+	0x5f, 0x3c, 0x7e, 0xc8, 0x69, 0x34, 0x21, 0xf8, 0x57, 0xb0, 0x2b, 0xbb, 0x16, 0xcc, 0x94, 0x42,
+	0x45, 0x28, 0xab, 0xb4, 0x6a, 0xb3, 0x4c, 0x9b, 0x5f, 0xc1, 0xce, 0x11, 0x61, 0xb4, 0x7d, 0x4e,
+	0xc0, 0xfd, 0x82, 0x80, 0x9c, 0xf7, 0xcb, 0xbd, 0xf2, 0xfc, 0x37, 0x70, 0x43, 0x6a, 0x20, 0x1e,
+	0x7d, 0x05, 0x11, 0x3f, 0x2a, 0x88, 0xb8, 0x51, 0xd0, 0x41, 0x6c, 0x97, 0xcd, 0x16, 0x21, 0xeb,
+	0x6b, 0xd8, 0x13, 0xba, 0x38, 0x44, 0x7d, 0x56, 0x10, 0xb5, 0x67, 0x6a, 0xe3, 0x90, 0xf4, 0x63,
+	0xe8, 0x28, 0x3b, 0xab, 0xc5, 0x11, 0xfe, 0x12, 0xfa, 0xb6, 0x56, 0x55, 0xdc, 0x89, 0xff, 0xe5,
+	0x41, 0xf7, 0x80, 0x8e, 0x4b, 0x4e, 0x7c, 0x68, 0xcc, 0x5e, 0x3f, 0x14, 0xd8, 0x06, 0xfe, 0xce,
+	0x12, 0x21, 0x2e, 0x2b, 0x0e, 0xb0, 0xa9, 0xa7, 0x7c, 0x06, 0xdd, 0x87, 0x0d, 0xbd, 0x41, 0x08,
+	0x11, 0xcf, 0xc2, 0x35, 0xb5, 0x87, 0x47, 0xd4, 0xe7, 0xd0, 0x96, 0x0e, 0xae, 0x08, 0xdc, 0x4f,
+	0xa1, 0x67, 0xf9, 0xa0, 0x0a, 0x6e, 0x5f, 0xfc, 0x73, 0x07, 0x36, 0x64, 0x75, 0xf9, 0x8e, 0x24,
+	0xef, 0xa2, 0x31, 0x41, 0xcf, 0x60, 0xbd, 0xd0, 0xe2, 0x40, 0xfb, 0xf9, 0x5b, 0xd3, 0xd1, 0xfa,
+	0x18, 0x0e, 0x6d, 0x9a, 0x9e, 0x3f, 0xac, 0xf0, 0x0a, 0x3a, 0xe6, 0x34, 0xdc, 0xa0, 0x5d, 0xe8,
+	0xb6, 0xde, 0xef, 0x7c, 0x38, 0x0d, 0x6f, 0xb9, 0x68, 0xbf, 0x21, 0xf1, 0x17, 0xa6, 0x44, 0x8e,
+	0xd0, 0xc0, 0x94, 0xa8, 0xc4, 0x6c, 0xcd, 0xa9, 0x35, 0x3d, 0xa7, 0x78, 0x05, 0x7d, 0xab, 0x9a,
+	0x41, 0xa6, 0x84, 0x7b, 0x39, 0x03, 0x2e, 0xe1, 0x02, 0xc3, 0xfc, 0xea, 0x1a, 0xba, 0x3c, 0x52,
+	0x9d, 0x46, 0x85, 0x95, 0x53, 0x15, 0xe7, 0xd1, 0xef, 0x14, 0x43, 0xb0, 0x8a, 0x3b, 0xfa, 0xd4,
+	0xad, 0x8b, 0x55, 0xfc, 0xdd, 0x42, 0x7d, 0x40, 0x79, 0xa7, 0x4b, 0x4b, 0xbc, 0x6d, 0x49, 0xac,
+	0x24, 0xea, 0x6b, 0x85, 0xd3, 0x81, 0xc1, 0xa8, 0xae, 0x25, 0xe9, 0x5b, 0xfe, 0x4e, 0x93, 0x94,
+	0xd6, 0x88, 0x26, 0xd7, 0xf3, 0xd4, 0xf0, 0xbe, 0x83, 0x5f, 0xe3, 0x15, 0xf4, 0x04, 0xd6, 0x4d,
+	0x6a, 0x9a, 0xa2, 0x5b, 0x96, 0x4a, 0x05, 0xca, 0xea, 0x56, 0xe8, 0x1b, 0xfe, 0x34, 0xce, 0x5f,
+	0xf8, 0x87, 0x34, 0xe1, 0xef, 0x08, 0xa7, 0xf3, 0x6e, 0xce, 0xc5, 0x51, 0xde, 0x12, 0xe0, 0xb2,
+	0x56, 0x8d, 0xae, 0x2c, 0xba, 0x69, 0x8a, 0xb0, 0x7a, 0x95, 0x86, 0x6d, 0x8e, 0x46, 0x2e, 0x5e,
+	0x41, 0x4f, 0x61, 0x43, 0xd8, 0xa0, 0xc5, 0xdd, 0x36, 0xd4, 0x77, 0xf4, 0x6e, 0xdd, 0xe6, 0x3d,
+	0x85, 0x8d, 0x62, 0xaf, 0xd4, 0x10, 0xe3, 0x6c, 0xa2, 0xba, 0xc5, 0x1c, 0x02, 0xe4, 0xa4, 0x0f,
+	0x0d, 0xad, 0x24, 0x60, 0x30, 0xc1, 0x25, 0x19, 0xe0, 0x10, 0x20, 0x8f, 0x49, 0x43, 0xce, 0x5c,
+	0x4b, 0x76, 0x89, 0x9c, 0x47, 0x00, 0x42, 0x7b, 0x2e, 0x67, 0xc7, 0x32, 0x69, 0x09, 0x22, 0xeb,
+	0x85, 0x7f, 0x15, 0x8a, 0x41, 0x38, 0xf7, 0x6f, 0xc3, 0x70, 0x50, 0x28, 0x91, 0x62, 0x8d, 0x5f,
+	0xd9, 0x9e, 0x55, 0xe6, 0x51, 0xc1, 0xa5, 0x36, 0x8f, 0x19, 0xde, 0xb5, 0x3f, 0x63, 0x57, 0x77,
+	0xbc, 0x82, 0x0e, 0xa0, 0xab, 0xd9, 0x25, 0xba, 0x61, 0xa1, 0x9c, 0xf3, 0xb0, 0x25, 0xe0, 0x1c,
+	0x40, 0x57, 0xdf, 0x56, 0x43, 0x8a, 0xcd, 0xe6, 0x96, 0x48, 0xf9, 0x35, 0x74, 0x75, 0xef, 0xb5,
+	0x14, 0xe1, 0xc5, 0x22, 0x46, 0xb0, 0x26, 0xc8, 0x43, 0x35, 0xa4, 0x91, 0xc9, 0x20, 0x34, 0xd0,
+	0x2f, 0x79, 0x8a, 0x37, 0xd8, 0xd0, 0x12, 0x9c, 0xef, 0x98, 0xab, 0x0e, 0x12, 0xc5, 0x33, 0x63,
+	0xdf, 0xee, 0x50, 0xa2, 0xbb, 0xf3, 0x68, 0x17, 0xfb, 0x8a, 0xee, 0x68, 0x3a, 0x86, 0x8d, 0x62,
+	0x8f, 0xd5, 0xb8, 0x5f, 0xce, 0xe6, 0xab, 0x71, 0xf1, 0x1d, 0xfd, 0x5e, 0xa1, 0x9c, 0xdd, 0xd9,
+	0x34, 0x94, 0x2b, 0x69, 0x7a, 0x96, 0x55, 0x80, 0xbe, 0xdd, 0x3e, 0x37, 0x44, 0x95, 0x74, 0xd6,
+	0xdd, 0xa2, 0x9e, 0x43, 0x4f, 0xe3, 0x22, 0x88, 0x85, 0xe1, 0x06, 0xc7, 0x3f, 0x0c, 0x4b, 0x22,
+	0xe3, 0x35, 0xcf, 0xba, 0x5a, 0x56, 0x45, 0xd7, 0xde, 0xb3, 0x5c, 0x3b, 0xcf, 0x49, 0x79, 0xf4,
+	0xf7, 0x34, 0x48, 0x73, 0x9a, 0x3a, 0xfe, 0x54, 0x71, 0xdb, 0xfb, 0x15, 0xf4, 0x34, 0x3e, 0x52,
+	0xca, 0x07, 0x65, 0x99, 0x9f, 0xa9, 0xa8, 0xd5, 0xe5, 0x72, 0x09, 0x1b, 0xd0, 0x3d, 0x88, 0x15,
+	0xf4, 0x42, 0x85, 0x67, 0xce, 0x7e, 0x3f, 0x0a, 0xec, 0xdf, 0xf0, 0xb6, 0x74, 0x2e, 0xac, 0x22,
+	0xda, 0xd8, 0xbe, 0xad, 0x4e, 0xb8, 0x9f, 0xaa, 0x70, 0x75, 0x2a, 0x5b, 0x19, 0xef, 0x5f, 0xaa,
+	0x50, 0x35, 0xc4, 0x7c, 0x10, 0xe0, 0x8f, 0x75, 0x3e, 0xbe, 0x06, 0xe2, 0xcf, 0x4d, 0xaa, 0xa4,
+	0x9e, 0xc1, 0x08, 0x3b, 0xca, 0x93, 0xf5, 0x57, 0xbb, 0x53, 0x97, 0x37, 0x2d, 0xfe, 0x6f, 0xfd,
+	0x4f, 0xfe, 0x17, 0x00, 0x00, 0xff, 0xff, 0x60, 0x59, 0x85, 0xb3, 0xc4, 0x1f, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -2005,31 +3215,51 @@ var _ server.Option
 
 type ProjectServiceClient interface {
 	// 项目相关
+	CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
 	GetProjectList(ctx context.Context, in *GetProjectListRequest, opts ...client.CallOption) (*ProjectListResponse, error)
 	GetProjectInfo(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*ProjectInfo, error)
 	UpdateProjectInfo(ctx context.Context, in *UpdateProjectInfoRequest, opts ...client.CallOption) (*Response, error)
 	DeleteProject(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Response, error)
-	GetFileTree(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Tree, error)
-	GetDocTree(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Tree, error)
-	UpdateFileTree(ctx context.Context, in *UpdateTreeRequest, opts ...client.CallOption) (*Response, error)
-	UpdateDocTree(ctx context.Context, in *UpdateTreeRequest, opts ...client.CallOption) (*Response, error)
+	UpdateProjectChildren(ctx context.Context, in *UpdateProjectChildrenRequest, opts ...client.CallOption) (*Response, error)
+	UpdateFileChildren(ctx context.Context, in *UpdateChildrenRequest, opts ...client.CallOption) (*Response, error)
+	UpdateDocChildren(ctx context.Context, in *UpdateChildrenRequest, opts ...client.CallOption) (*Response, error)
 	GetMembers(ctx context.Context, in *GetMemberListRequest, opts ...client.CallOption) (*MembersListResponse, error)
 	UpdateMembers(ctx context.Context, in *UpdateMemberRequest, opts ...client.CallOption) (*Response, error)
-	// rpc GetTrashbin(GetRequest) returns (Response) {}
 	GetProjectIdsForUser(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*ProjectIdsResponse, error)
+	// 回收站
+	GetTrashbin(ctx context.Context, in *GetTrashbinRequest, opts ...client.CallOption) (*GetTrashbinResponse, error)
+	UpdateTrashbin(ctx context.Context, in *RemoveTrashbinRequest, opts ...client.CallOption) (*Response, error)
+	DeleteTrashbin(ctx context.Context, in *DeleteTrashbinRequest, opts ...client.CallOption) (*Response, error)
 	// 文件相关
 	CreateFile(ctx context.Context, in *CreateFileRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
-	DeleteFile(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Response, error)
-	GetFileDetail(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*FileDetail, error)
+	UpdateFile(ctx context.Context, in *UpdateFileRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
+	DeleteFile(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*Response, error)
+	GetFileDetail(ctx context.Context, in *GetFileDetailRequest, opts ...client.CallOption) (*FileDetail, error)
 	GetFileInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetFileInfoListResponse, error)
-	GetFileFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetFileFolderListResponse, error)
 	// 文档相关
 	CreateDoc(ctx context.Context, in *CreateDocRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
 	UpdateDoc(ctx context.Context, in *UpdateDocRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
-	DeleteDoc(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
-	GetDocDetail(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*DocDetail, error)
+	DeleteDoc(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
+	GetDocDetail(ctx context.Context, in *GetFileDetailRequest, opts ...client.CallOption) (*DocDetail, error)
 	GetDocInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetDocInfoListResponse, error)
+	// 文档的评论
+	CreateDocComment(ctx context.Context, in *CreateDocCommentRequest, opts ...client.CallOption) (*Response, error)
+	ListDocComment(ctx context.Context, in *ListDocCommentRequest, opts ...client.CallOption) (*CommentListResponse, error)
+	UpdateDocComment(ctx context.Context, in *UpdateDocCommentRequest, opts ...client.CallOption) (*Response, error)
+	DeleteDocComment(ctx context.Context, in *DeleteDocCommentRequest, opts ...client.CallOption) (*Response, error)
+	// 文档夹 crud
+	CreateDocFolder(ctx context.Context, in *CreateFolderRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
 	GetDocFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetDocFolderListResponse, error)
+	UpdateDocFolder(ctx context.Context, in *UpdateFolderRequest, opts ...client.CallOption) (*Response, error)
+	DeleteDocFolder(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*Response, error)
+	GetDocChildren(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Children, error)
+	// 文件夹 crud
+	CreateFileFolder(ctx context.Context, in *CreateFolderRequest, opts ...client.CallOption) (*ProjectIDResponse, error)
+	GetFileFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetFileFolderListResponse, error)
+	UpdateFileFolder(ctx context.Context, in *UpdateFolderRequest, opts ...client.CallOption) (*Response, error)
+	DeleteFileFolder(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*Response, error)
+	GetFileChildren(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Children, error)
+	UpdateFilePosition(ctx context.Context, in *UpdateFilePositionRequest, opts ...client.CallOption) (*Response, error)
 }
 
 type projectServiceClient struct {
@@ -2048,6 +3278,16 @@ func NewProjectServiceClient(serviceName string, c client.Client) ProjectService
 		c:           c,
 		serviceName: serviceName,
 	}
+}
+
+func (c *projectServiceClient) CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.CreateProject", in)
+	out := new(ProjectIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *projectServiceClient) GetProjectList(ctx context.Context, in *GetProjectListRequest, opts ...client.CallOption) (*ProjectListResponse, error) {
@@ -2090,28 +3330,8 @@ func (c *projectServiceClient) DeleteProject(ctx context.Context, in *GetRequest
 	return out, nil
 }
 
-func (c *projectServiceClient) GetFileTree(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Tree, error) {
-	req := c.c.NewRequest(c.serviceName, "ProjectService.GetFileTree", in)
-	out := new(Tree)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *projectServiceClient) GetDocTree(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Tree, error) {
-	req := c.c.NewRequest(c.serviceName, "ProjectService.GetDocTree", in)
-	out := new(Tree)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *projectServiceClient) UpdateFileTree(ctx context.Context, in *UpdateTreeRequest, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateFileTree", in)
+func (c *projectServiceClient) UpdateProjectChildren(ctx context.Context, in *UpdateProjectChildrenRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateProjectChildren", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -2120,8 +3340,18 @@ func (c *projectServiceClient) UpdateFileTree(ctx context.Context, in *UpdateTre
 	return out, nil
 }
 
-func (c *projectServiceClient) UpdateDocTree(ctx context.Context, in *UpdateTreeRequest, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateDocTree", in)
+func (c *projectServiceClient) UpdateFileChildren(ctx context.Context, in *UpdateChildrenRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateFileChildren", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) UpdateDocChildren(ctx context.Context, in *UpdateChildrenRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateDocChildren", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -2160,6 +3390,36 @@ func (c *projectServiceClient) GetProjectIdsForUser(ctx context.Context, in *Get
 	return out, nil
 }
 
+func (c *projectServiceClient) GetTrashbin(ctx context.Context, in *GetTrashbinRequest, opts ...client.CallOption) (*GetTrashbinResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.GetTrashbin", in)
+	out := new(GetTrashbinResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) UpdateTrashbin(ctx context.Context, in *RemoveTrashbinRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateTrashbin", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) DeleteTrashbin(ctx context.Context, in *DeleteTrashbinRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.DeleteTrashbin", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *projectServiceClient) CreateFile(ctx context.Context, in *CreateFileRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.CreateFile", in)
 	out := new(ProjectIDResponse)
@@ -2170,7 +3430,17 @@ func (c *projectServiceClient) CreateFile(ctx context.Context, in *CreateFileReq
 	return out, nil
 }
 
-func (c *projectServiceClient) DeleteFile(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Response, error) {
+func (c *projectServiceClient) UpdateFile(ctx context.Context, in *UpdateFileRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateFile", in)
+	out := new(ProjectIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) DeleteFile(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.DeleteFile", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -2180,7 +3450,7 @@ func (c *projectServiceClient) DeleteFile(ctx context.Context, in *GetRequest, o
 	return out, nil
 }
 
-func (c *projectServiceClient) GetFileDetail(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*FileDetail, error) {
+func (c *projectServiceClient) GetFileDetail(ctx context.Context, in *GetFileDetailRequest, opts ...client.CallOption) (*FileDetail, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.GetFileDetail", in)
 	out := new(FileDetail)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -2193,16 +3463,6 @@ func (c *projectServiceClient) GetFileDetail(ctx context.Context, in *GetRequest
 func (c *projectServiceClient) GetFileInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetFileInfoListResponse, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.GetFileInfoList", in)
 	out := new(GetFileInfoListResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *projectServiceClient) GetFileFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetFileFolderListResponse, error) {
-	req := c.c.NewRequest(c.serviceName, "ProjectService.GetFileFolderInfoList", in)
-	out := new(GetFileFolderListResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -2230,7 +3490,7 @@ func (c *projectServiceClient) UpdateDoc(ctx context.Context, in *UpdateDocReque
 	return out, nil
 }
 
-func (c *projectServiceClient) DeleteDoc(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
+func (c *projectServiceClient) DeleteDoc(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.DeleteDoc", in)
 	out := new(ProjectIDResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -2240,7 +3500,7 @@ func (c *projectServiceClient) DeleteDoc(ctx context.Context, in *GetRequest, op
 	return out, nil
 }
 
-func (c *projectServiceClient) GetDocDetail(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*DocDetail, error) {
+func (c *projectServiceClient) GetDocDetail(ctx context.Context, in *GetFileDetailRequest, opts ...client.CallOption) (*DocDetail, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.GetDocDetail", in)
 	out := new(DocDetail)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -2260,9 +3520,149 @@ func (c *projectServiceClient) GetDocInfoList(ctx context.Context, in *GetInfoBy
 	return out, nil
 }
 
+func (c *projectServiceClient) CreateDocComment(ctx context.Context, in *CreateDocCommentRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.CreateDocComment", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) ListDocComment(ctx context.Context, in *ListDocCommentRequest, opts ...client.CallOption) (*CommentListResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.ListDocComment", in)
+	out := new(CommentListResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) UpdateDocComment(ctx context.Context, in *UpdateDocCommentRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateDocComment", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) DeleteDocComment(ctx context.Context, in *DeleteDocCommentRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.DeleteDocComment", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) CreateDocFolder(ctx context.Context, in *CreateFolderRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.CreateDocFolder", in)
+	out := new(ProjectIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *projectServiceClient) GetDocFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetDocFolderListResponse, error) {
 	req := c.c.NewRequest(c.serviceName, "ProjectService.GetDocFolderInfoList", in)
 	out := new(GetDocFolderListResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) UpdateDocFolder(ctx context.Context, in *UpdateFolderRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateDocFolder", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) DeleteDocFolder(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.DeleteDocFolder", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) GetDocChildren(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Children, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.GetDocChildren", in)
+	out := new(Children)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) CreateFileFolder(ctx context.Context, in *CreateFolderRequest, opts ...client.CallOption) (*ProjectIDResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.CreateFileFolder", in)
+	out := new(ProjectIDResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) GetFileFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, opts ...client.CallOption) (*GetFileFolderListResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.GetFileFolderInfoList", in)
+	out := new(GetFileFolderListResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) UpdateFileFolder(ctx context.Context, in *UpdateFolderRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateFileFolder", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) DeleteFileFolder(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.DeleteFileFolder", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) GetFileChildren(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*Children, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.GetFileChildren", in)
+	out := new(Children)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *projectServiceClient) UpdateFilePosition(ctx context.Context, in *UpdateFilePositionRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.serviceName, "ProjectService.UpdateFilePosition", in)
+	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -2274,31 +3674,51 @@ func (c *projectServiceClient) GetDocFolderInfoList(ctx context.Context, in *Get
 
 type ProjectServiceHandler interface {
 	// 项目相关
+	CreateProject(context.Context, *CreateProjectRequest, *ProjectIDResponse) error
 	GetProjectList(context.Context, *GetProjectListRequest, *ProjectListResponse) error
 	GetProjectInfo(context.Context, *GetRequest, *ProjectInfo) error
 	UpdateProjectInfo(context.Context, *UpdateProjectInfoRequest, *Response) error
 	DeleteProject(context.Context, *GetRequest, *Response) error
-	GetFileTree(context.Context, *GetRequest, *Tree) error
-	GetDocTree(context.Context, *GetRequest, *Tree) error
-	UpdateFileTree(context.Context, *UpdateTreeRequest, *Response) error
-	UpdateDocTree(context.Context, *UpdateTreeRequest, *Response) error
+	UpdateProjectChildren(context.Context, *UpdateProjectChildrenRequest, *Response) error
+	UpdateFileChildren(context.Context, *UpdateChildrenRequest, *Response) error
+	UpdateDocChildren(context.Context, *UpdateChildrenRequest, *Response) error
 	GetMembers(context.Context, *GetMemberListRequest, *MembersListResponse) error
 	UpdateMembers(context.Context, *UpdateMemberRequest, *Response) error
-	// rpc GetTrashbin(GetRequest) returns (Response) {}
 	GetProjectIdsForUser(context.Context, *GetRequest, *ProjectIdsResponse) error
+	// 回收站
+	GetTrashbin(context.Context, *GetTrashbinRequest, *GetTrashbinResponse) error
+	UpdateTrashbin(context.Context, *RemoveTrashbinRequest, *Response) error
+	DeleteTrashbin(context.Context, *DeleteTrashbinRequest, *Response) error
 	// 文件相关
 	CreateFile(context.Context, *CreateFileRequest, *ProjectIDResponse) error
-	DeleteFile(context.Context, *GetRequest, *Response) error
-	GetFileDetail(context.Context, *GetRequest, *FileDetail) error
+	UpdateFile(context.Context, *UpdateFileRequest, *ProjectIDResponse) error
+	DeleteFile(context.Context, *DeleteRequest, *Response) error
+	GetFileDetail(context.Context, *GetFileDetailRequest, *FileDetail) error
 	GetFileInfoList(context.Context, *GetInfoByIdsRequest, *GetFileInfoListResponse) error
-	GetFileFolderInfoList(context.Context, *GetInfoByIdsRequest, *GetFileFolderListResponse) error
 	// 文档相关
 	CreateDoc(context.Context, *CreateDocRequest, *ProjectIDResponse) error
 	UpdateDoc(context.Context, *UpdateDocRequest, *ProjectIDResponse) error
-	DeleteDoc(context.Context, *GetRequest, *ProjectIDResponse) error
-	GetDocDetail(context.Context, *GetRequest, *DocDetail) error
+	DeleteDoc(context.Context, *DeleteRequest, *ProjectIDResponse) error
+	GetDocDetail(context.Context, *GetFileDetailRequest, *DocDetail) error
 	GetDocInfoList(context.Context, *GetInfoByIdsRequest, *GetDocInfoListResponse) error
+	// 文档的评论
+	CreateDocComment(context.Context, *CreateDocCommentRequest, *Response) error
+	ListDocComment(context.Context, *ListDocCommentRequest, *CommentListResponse) error
+	UpdateDocComment(context.Context, *UpdateDocCommentRequest, *Response) error
+	DeleteDocComment(context.Context, *DeleteDocCommentRequest, *Response) error
+	// 文档夹 crud
+	CreateDocFolder(context.Context, *CreateFolderRequest, *ProjectIDResponse) error
 	GetDocFolderInfoList(context.Context, *GetInfoByIdsRequest, *GetDocFolderListResponse) error
+	UpdateDocFolder(context.Context, *UpdateFolderRequest, *Response) error
+	DeleteDocFolder(context.Context, *DeleteRequest, *Response) error
+	GetDocChildren(context.Context, *GetRequest, *Children) error
+	// 文件夹 crud
+	CreateFileFolder(context.Context, *CreateFolderRequest, *ProjectIDResponse) error
+	GetFileFolderInfoList(context.Context, *GetInfoByIdsRequest, *GetFileFolderListResponse) error
+	UpdateFileFolder(context.Context, *UpdateFolderRequest, *Response) error
+	DeleteFileFolder(context.Context, *DeleteRequest, *Response) error
+	GetFileChildren(context.Context, *GetRequest, *Children) error
+	UpdateFilePosition(context.Context, *UpdateFilePositionRequest, *Response) error
 }
 
 func RegisterProjectServiceHandler(s server.Server, hdlr ProjectServiceHandler, opts ...server.HandlerOption) {
@@ -2307,6 +3727,10 @@ func RegisterProjectServiceHandler(s server.Server, hdlr ProjectServiceHandler, 
 
 type ProjectService struct {
 	ProjectServiceHandler
+}
+
+func (h *ProjectService) CreateProject(ctx context.Context, in *CreateProjectRequest, out *ProjectIDResponse) error {
+	return h.ProjectServiceHandler.CreateProject(ctx, in, out)
 }
 
 func (h *ProjectService) GetProjectList(ctx context.Context, in *GetProjectListRequest, out *ProjectListResponse) error {
@@ -2325,20 +3749,16 @@ func (h *ProjectService) DeleteProject(ctx context.Context, in *GetRequest, out 
 	return h.ProjectServiceHandler.DeleteProject(ctx, in, out)
 }
 
-func (h *ProjectService) GetFileTree(ctx context.Context, in *GetRequest, out *Tree) error {
-	return h.ProjectServiceHandler.GetFileTree(ctx, in, out)
+func (h *ProjectService) UpdateProjectChildren(ctx context.Context, in *UpdateProjectChildrenRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateProjectChildren(ctx, in, out)
 }
 
-func (h *ProjectService) GetDocTree(ctx context.Context, in *GetRequest, out *Tree) error {
-	return h.ProjectServiceHandler.GetDocTree(ctx, in, out)
+func (h *ProjectService) UpdateFileChildren(ctx context.Context, in *UpdateChildrenRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateFileChildren(ctx, in, out)
 }
 
-func (h *ProjectService) UpdateFileTree(ctx context.Context, in *UpdateTreeRequest, out *Response) error {
-	return h.ProjectServiceHandler.UpdateFileTree(ctx, in, out)
-}
-
-func (h *ProjectService) UpdateDocTree(ctx context.Context, in *UpdateTreeRequest, out *Response) error {
-	return h.ProjectServiceHandler.UpdateDocTree(ctx, in, out)
+func (h *ProjectService) UpdateDocChildren(ctx context.Context, in *UpdateChildrenRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateDocChildren(ctx, in, out)
 }
 
 func (h *ProjectService) GetMembers(ctx context.Context, in *GetMemberListRequest, out *MembersListResponse) error {
@@ -2353,24 +3773,36 @@ func (h *ProjectService) GetProjectIdsForUser(ctx context.Context, in *GetReques
 	return h.ProjectServiceHandler.GetProjectIdsForUser(ctx, in, out)
 }
 
+func (h *ProjectService) GetTrashbin(ctx context.Context, in *GetTrashbinRequest, out *GetTrashbinResponse) error {
+	return h.ProjectServiceHandler.GetTrashbin(ctx, in, out)
+}
+
+func (h *ProjectService) UpdateTrashbin(ctx context.Context, in *RemoveTrashbinRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateTrashbin(ctx, in, out)
+}
+
+func (h *ProjectService) DeleteTrashbin(ctx context.Context, in *DeleteTrashbinRequest, out *Response) error {
+	return h.ProjectServiceHandler.DeleteTrashbin(ctx, in, out)
+}
+
 func (h *ProjectService) CreateFile(ctx context.Context, in *CreateFileRequest, out *ProjectIDResponse) error {
 	return h.ProjectServiceHandler.CreateFile(ctx, in, out)
 }
 
-func (h *ProjectService) DeleteFile(ctx context.Context, in *GetRequest, out *Response) error {
+func (h *ProjectService) UpdateFile(ctx context.Context, in *UpdateFileRequest, out *ProjectIDResponse) error {
+	return h.ProjectServiceHandler.UpdateFile(ctx, in, out)
+}
+
+func (h *ProjectService) DeleteFile(ctx context.Context, in *DeleteRequest, out *Response) error {
 	return h.ProjectServiceHandler.DeleteFile(ctx, in, out)
 }
 
-func (h *ProjectService) GetFileDetail(ctx context.Context, in *GetRequest, out *FileDetail) error {
+func (h *ProjectService) GetFileDetail(ctx context.Context, in *GetFileDetailRequest, out *FileDetail) error {
 	return h.ProjectServiceHandler.GetFileDetail(ctx, in, out)
 }
 
 func (h *ProjectService) GetFileInfoList(ctx context.Context, in *GetInfoByIdsRequest, out *GetFileInfoListResponse) error {
 	return h.ProjectServiceHandler.GetFileInfoList(ctx, in, out)
-}
-
-func (h *ProjectService) GetFileFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, out *GetFileFolderListResponse) error {
-	return h.ProjectServiceHandler.GetFileFolderInfoList(ctx, in, out)
 }
 
 func (h *ProjectService) CreateDoc(ctx context.Context, in *CreateDocRequest, out *ProjectIDResponse) error {
@@ -2381,11 +3813,11 @@ func (h *ProjectService) UpdateDoc(ctx context.Context, in *UpdateDocRequest, ou
 	return h.ProjectServiceHandler.UpdateDoc(ctx, in, out)
 }
 
-func (h *ProjectService) DeleteDoc(ctx context.Context, in *GetRequest, out *ProjectIDResponse) error {
+func (h *ProjectService) DeleteDoc(ctx context.Context, in *DeleteRequest, out *ProjectIDResponse) error {
 	return h.ProjectServiceHandler.DeleteDoc(ctx, in, out)
 }
 
-func (h *ProjectService) GetDocDetail(ctx context.Context, in *GetRequest, out *DocDetail) error {
+func (h *ProjectService) GetDocDetail(ctx context.Context, in *GetFileDetailRequest, out *DocDetail) error {
 	return h.ProjectServiceHandler.GetDocDetail(ctx, in, out)
 }
 
@@ -2393,6 +3825,62 @@ func (h *ProjectService) GetDocInfoList(ctx context.Context, in *GetInfoByIdsReq
 	return h.ProjectServiceHandler.GetDocInfoList(ctx, in, out)
 }
 
+func (h *ProjectService) CreateDocComment(ctx context.Context, in *CreateDocCommentRequest, out *Response) error {
+	return h.ProjectServiceHandler.CreateDocComment(ctx, in, out)
+}
+
+func (h *ProjectService) ListDocComment(ctx context.Context, in *ListDocCommentRequest, out *CommentListResponse) error {
+	return h.ProjectServiceHandler.ListDocComment(ctx, in, out)
+}
+
+func (h *ProjectService) UpdateDocComment(ctx context.Context, in *UpdateDocCommentRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateDocComment(ctx, in, out)
+}
+
+func (h *ProjectService) DeleteDocComment(ctx context.Context, in *DeleteDocCommentRequest, out *Response) error {
+	return h.ProjectServiceHandler.DeleteDocComment(ctx, in, out)
+}
+
+func (h *ProjectService) CreateDocFolder(ctx context.Context, in *CreateFolderRequest, out *ProjectIDResponse) error {
+	return h.ProjectServiceHandler.CreateDocFolder(ctx, in, out)
+}
+
 func (h *ProjectService) GetDocFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, out *GetDocFolderListResponse) error {
 	return h.ProjectServiceHandler.GetDocFolderInfoList(ctx, in, out)
+}
+
+func (h *ProjectService) UpdateDocFolder(ctx context.Context, in *UpdateFolderRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateDocFolder(ctx, in, out)
+}
+
+func (h *ProjectService) DeleteDocFolder(ctx context.Context, in *DeleteRequest, out *Response) error {
+	return h.ProjectServiceHandler.DeleteDocFolder(ctx, in, out)
+}
+
+func (h *ProjectService) GetDocChildren(ctx context.Context, in *GetRequest, out *Children) error {
+	return h.ProjectServiceHandler.GetDocChildren(ctx, in, out)
+}
+
+func (h *ProjectService) CreateFileFolder(ctx context.Context, in *CreateFolderRequest, out *ProjectIDResponse) error {
+	return h.ProjectServiceHandler.CreateFileFolder(ctx, in, out)
+}
+
+func (h *ProjectService) GetFileFolderInfoList(ctx context.Context, in *GetInfoByIdsRequest, out *GetFileFolderListResponse) error {
+	return h.ProjectServiceHandler.GetFileFolderInfoList(ctx, in, out)
+}
+
+func (h *ProjectService) UpdateFileFolder(ctx context.Context, in *UpdateFolderRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateFileFolder(ctx, in, out)
+}
+
+func (h *ProjectService) DeleteFileFolder(ctx context.Context, in *DeleteRequest, out *Response) error {
+	return h.ProjectServiceHandler.DeleteFileFolder(ctx, in, out)
+}
+
+func (h *ProjectService) GetFileChildren(ctx context.Context, in *GetRequest, out *Children) error {
+	return h.ProjectServiceHandler.GetFileChildren(ctx, in, out)
+}
+
+func (h *ProjectService) UpdateFilePosition(ctx context.Context, in *UpdateFilePositionRequest, out *Response) error {
+	return h.ProjectServiceHandler.UpdateFilePosition(ctx, in, out)
 }

@@ -8,17 +8,16 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// UpdateFileTree ... 更新项目的文件树
-func (s *Service) UpdateFileTree(ctx context.Context, req *pb.UpdateTreeRequest, res *pb.Response) error {
-
-	project, err := model.GetProject(req.Id)
+// UpdateFileFolder ... 修改文件夹，改名
+func (s *Service) UpdateFileFolder(ctx context.Context, req *pb.UpdateFolderRequest, res *pb.Response) error {
+	item, err := model.GetFolderForFileModel(req.FolderId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	project.FileTree = req.Tree
+	item.Name = req.Name
 
-	if err := project.Update(); err != nil {
+	if err = item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

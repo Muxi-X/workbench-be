@@ -15,27 +15,31 @@ import (
 	"go.uber.org/zap"
 )
 
-// GetFileTree ... 获取文件树
-func GetFileTree(c *gin.Context) {
+// GetFileChildren ... 获取某个文件夹下的文件树
+func GetFileChildren(c *gin.Context) {
 	log.Info("project getFileTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 projectID
-	projectID, err := strconv.Atoi(c.Param("id"))
+	// 获取 folderID
+	folderID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 发送请求
-	getFileTreeResp, err := service.ProjectClient.GetFileTree(context.Background(), &pbp.GetRequest{
-		Id: uint32(projectID),
+	getFileTreeResp, err := service.ProjectClient.GetFileChildren(context.Background(), &pbp.GetRequest{
+		Id: uint32(folderID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	SendResponse(c, nil, &GetFileTreeResponse{
-		FileTree: getFileTreeResp.Tree,
+	// 解析结果
+	list := FormatChildren(getFileTreeResp.Children)
+
+	SendResponse(c, nil, &GetFileChildrenResponse{
+		Count:        uint32(len(list)),
+		FileChildren: list,
 	})
 }

@@ -1,10 +1,97 @@
 package project
 
+import "strings"
+
+type UpdateFilePositionRequest struct {
+	FatherId              uint32
+	FatherType            uint32
+	Type                  uint8
+	ChildrenPositionIndex uint32
+}
+
+// 可能 feed 有用
+type DeleteFolderRequest struct {
+	Id uint32 `json:"id"`
+}
+
+type DeleteDocCommentRequest struct {
+	ProjectId uint32 `json:"project_id"`
+}
+
+type DeleteTrashbinRequest struct {
+	Type uint32 `json:"type"`
+}
+
+type RemoveTrashbinRequest struct {
+	Type                  uint32 `json:"type"`
+	FatherId              uint32 `json:"fatherId"`
+	ChildrenPositionIndex uint32 `json:"children_position_index"`
+	IsFatherProject       bool   `json:"is_father_project"`
+}
+
+type Trashbin struct {
+	Id   uint32 `json:"id"`
+	Type uint32 `json:"type"`
+	Name string `json:"name"`
+}
+
+type GetTrashbinResponse struct {
+	Count uint32      `json:"count"`
+	List  []*Trashbin `json:"list"`
+}
+
+type UpdateFileRequest struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}
+
+type CreateProjectRequest struct {
+	Name  string `json:"name"`
+	Intro string `json:"intro"`
+}
+
+type UpdateFolderRequest struct {
+	Name string `json:"name"`
+}
+
+type CreateFolderRequest struct {
+	FatherId              uint32 `json:"father_id"`
+	Name                  string `json:"name"`
+	ProjectId             uint32 `json:"project_id"`
+	ChildrenPositionIndex uint32 `json:"children_position_index"`
+}
+
+type CreateDocCommentRequest struct {
+	Content   string `json:"content"`
+	ProjectId uint32 `json:"project_id"`
+}
+
+type UpdateDocCommentRequest struct {
+	Content   string `json:"content"`
+	ProjectId uint32 `json:"project_id"`
+}
+
+type Comment struct {
+	Cid      uint32 `json:"cid"`
+	Uid      uint32 `json:"uid"`
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
+	Time     string `json:"time"`
+	Content  string `json:"content"`
+}
+
+type CommentListResponse struct {
+	Count       uint32    `json:"count"`
+	CommentList []Comment `json:"commentlist"`
+}
+
 type GetProjectInfoResponse struct {
-	ProjectID   uint32 `json:"project_id"`
-	ProjectName string `json:"project_name"`
-	Intro       string `json:"intro"`
-	UserCount   uint32 `json:"user_count"`
+	ProjectID    uint32              `json:"project_id"`
+	ProjectName  string              `json:"project_name"`
+	Intro        string              `json:"intro"`
+	UserCount    uint32              `json:"user_count"`
+	DocChildren  []*FileChildrenItem `json:"doc_children"`
+	FileChildren []*FileChildrenItem `json:"file_children"`
 }
 
 type UpdateRequest struct {
@@ -40,41 +127,58 @@ type GetProjectListResponse struct {
 	List  []*ProjectListItem `json:"list"`
 }
 
-type GetFileTreeResponse struct {
-	FileTree string `json:"file_tree"`
+// FileChildrenItem ... 文件树 包括和文件 文档
+type FileChildrenItem struct {
+	Id   string `json:"id"`
+	Type bool   `json:"type"` // 判断是不是 folder 0->file 1->folder
 }
 
-type UpdateFileTreeRequest struct {
-	ProjectName string `json:"project_name"`
-	FileTree    string `json:"file_tree"`
+// GetFileChildrenResponse ... 文件文档共用
+type GetFileChildrenResponse struct {
+	Count        uint32              `json:"count"`
+	FileChildren []*FileChildrenItem `json:"file_children"`
 }
 
-type GetDocTreeResponse struct {
-	DocTree string `json:"doc_tree"`
+// UpdateFileChildrenRequest ... 文件文档共用
+type UpdateFileChildrenRequest struct {
+	FileChildren []*FileChildrenItem `json:"file_children"`
 }
 
-type UpdateDocTreeRequest struct {
-	ProjectName string `json:"project_name"`
-	DocTree     string `json:"doc_tree"`
+// UpdateProjectChildrenRequest ... 用于更改项目的子树，相较于前者多了一个 bool 字段判断修改 docChildren 还是 FileChildren
+type UpdateProjectChildrenRequest struct {
+	FileChildren []*FileChildrenItem
+	Type         bool // 判断是 doc 还是 file
 }
 
 type CreateFileRequest struct {
-	ProjectID uint32 `json:"project_id"`
-	FileID    uint32 `json:"file_id"`
-	FileName  string `json:"file_name"`
-	HashName  string `json:"hash_name"`
-	Url       string `json:"url"`
+	ProjectID             uint32 `json:"project_id"`
+	FileID                uint32 `json:"file_id"`
+	FileName              string `json:"file_name"`
+	HashName              string `json:"hash_name"`
+	Url                   string `json:"url"`
+	FatherId              uint32 `json:"father_id"`
+	ChildrenPositionIndex uint32 `json:"children_position_index"`
+}
+
+type GetFileDetailResponse struct {
+	Id         uint32 `json:"file_id"`
+	Url        string `json:"url"`
+	Creator    string `json:"creator"`
+	CreateTime string `json:"create_time"`
 }
 
 type DeleteFileRequest struct {
-	FileName string `json:"file_name"`
+	FileName  string `json:"file_name"`
+	ProjectId uint32 `json:"project_id"`
 }
 
 type CreateDocRequest struct {
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	ProjectID uint32 `json:"project_id"`
-	DocName   string `json:"doc_name"`
+	Title                 string `json:"title"`
+	Content               string `json:"content"`
+	ProjectID             uint32 `json:"project_id"`
+	DocName               string `json:"doc_name"`
+	FatherID              uint32 `json:"father_id"`               // 父节点 id
+	ChildrenPositionIndex uint32 `json:"children_position_index"` // 子节点的位置
 }
 
 type GetDocDetailResponse struct {
@@ -87,6 +191,7 @@ type GetDocDetailResponse struct {
 	LastEditTime string `json:"last_edit_time"`
 }
 
+// 可能 feed 有用
 type DeleteDocRequest struct {
 	DocName string `json:"doc_name"`
 }
@@ -96,131 +201,46 @@ type UpdateDocRequest struct {
 	Content string `json:"content"`
 }
 
-// 下面是待抽离的 api
-/*
-func GetProjectIdsForUser(c *gin.Context) {
-	var req pb.GetRequest
-	if err := c.BindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	resp, err2 := ProjectClient.GetProjectIdsForUser(context.Background(), &req)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		c.JSON(500, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	c.JSON(200, resp)
+// 从 query 获取
+// GetFileInfoListRequest ... 获取文件信息请求，包括文件 文档 文件夹
+type GetFileInfoListRequest struct {
+	Ids []uint32 `json:"ids"`
 }
 
-func GetFileDetail(c *gin.Context) {
-	var req pb.GetRequest
-	if err := c.BindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	resp, err2 := ProjectClient.GetFileDetail(context.Background(), &req)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		c.JSON(500, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	c.JSON(200, resp)
+type FileInfoItem struct {
+	Id   uint32 `json:"id"`
+	Name string `json:"name"`
 }
 
-func GetFileInfoList(c *gin.Context) {
-	var req pb.GetInfoByIdsRequest
-	if err := c.BindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	resp, err2 := ProjectClient.GetFileInfoList(context.Background(), &req)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		c.JSON(500, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	c.JSON(200, resp)
+// GetFileInfoListResponse ... 获取文件信息，包括文件 文档 文件夹
+type GetFileInfoListResponse struct {
+	Count uint32          `json:"count"`
+	List  []*FileInfoItem `json:"list"`
 }
 
-func GetFileFolderInfoList(c *gin.Context) {
-	var req pb.GetInfoByIdsRequest
-	if err := c.BindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	resp, err2 := ProjectClient.GetFileFolderInfoList(context.Background(), &req)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		c.JSON(500, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	c.JSON(200, resp)
+type GetProjectIdsForUserResponse struct {
+	Ids []uint32 `json:"ids"`
 }
 
-func GetDocInfoList(c *gin.Context) {
-	var req pb.GetInfoByIdsRequest
-	if err := c.BindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "wrong",
-		})
-		return
+// 转换 子文件 共用函数
+
+func FormatChildren(strChildren string) []*FileChildrenItem {
+	var list []*FileChildrenItem
+	raw := strings.Split(strChildren, ",")
+	for _, v := range raw {
+		r := strings.Split(v, "-")
+		if r[1] == "0" {
+			list = append(list, &FileChildrenItem{
+				Id:   r[0],
+				Type: false,
+			})
+		} else {
+			list = append(list, &FileChildrenItem{
+				Id:   r[0],
+				Type: true,
+			})
+		}
 	}
 
-	resp, err2 := ProjectClient.GetDocInfoList(context.Background(), &req)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		c.JSON(500, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	c.JSON(200, resp)
+	return list
 }
-
-func GetDocFolderInfoList(c *gin.Context) {
-	var req pb.GetInfoByIdsRequest
-	if err := c.BindJSON(req); err != nil {
-		c.JSON(400, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	resp, err2 := ProjectClient.GetDocFolderInfoList(context.Background(), &req)
-	if err2 != nil {
-		log.Fatalf("Could not greet: %v", err2)
-		c.JSON(500, gin.H{
-			"message": "wrong",
-		})
-		return
-	}
-
-	c.JSON(200, resp)
-}
-*/

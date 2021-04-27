@@ -35,12 +35,18 @@ func GetProjectInfo(c *gin.Context) {
 		return
 	}
 
+	// 解析结果
+	docList := FormatChildren(getProInfoResp.DocChildren)
+	fileList := FormatChildren(getProInfoResp.FileChildren)
+
 	// 构造返回 response
 	resp := GetProjectInfoResponse{
-		ProjectID:   getProInfoResp.Id,
-		ProjectName: getProInfoResp.Name,
-		Intro:       getProInfoResp.Intro,
-		UserCount:   getProInfoResp.UserCount,
+		ProjectID:    getProInfoResp.Id,
+		ProjectName:  getProInfoResp.Name,
+		Intro:        getProInfoResp.Intro,
+		UserCount:    getProInfoResp.UserCount,
+		DocChildren:  docList,
+		FileChildren: fileList,
 	}
 
 	// 返回结果

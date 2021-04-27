@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	. "muxi-workbench-gateway/handler"
@@ -15,9 +16,11 @@ import (
 	"go.uber.org/zap"
 )
 
-// 需要从 token 获取 userid
-func UpdateDocTree(c *gin.Context) {
-	log.Info("project updateDocTree funcation call.",
+// UpdateProjectChildren ... 修改项目树 包括文件文档
+// 用于和其他 api 配合实现移动文件
+// 禁用
+func UpdateProjectChildren(c *gin.Context) {
+	log.Info("project updateProjectTree funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
@@ -27,16 +30,33 @@ func UpdateDocTree(c *gin.Context) {
 		return
 	}
 
-	var req UpdateDocTreeRequest
+	var req UpdateProjectChildrenRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
+	// 处理请求
+	var item string
+	var children string
+	for _, v := range req.FileChildren {
+		if v.Type {
+			item = fmt.Sprintf("%s-%d", v.Id, 1)
+		} else {
+			item = fmt.Sprintf("%s-%d", v.Id, 0)
+		}
+		if children == "" {
+			children = item
+			continue
+		}
+		children = fmt.Sprintf("%s,%s", children, item)
+	}
+
 	// 发送请求
-	_, err = service.ProjectClient.UpdateDocTree(context.Background(), &pbp.UpdateTreeRequest{
-		Id:   uint32(projectID),
-		Tree: req.DocTree,
+	_, err = service.ProjectClient.UpdateProjectChildren(context.Background(), &pbp.UpdateProjectChildrenRequest{
+		Id:       uint32(projectID),
+		Children: children,
+		Type:     req.Type,
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())

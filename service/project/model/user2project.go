@@ -109,11 +109,13 @@ func GetProjectMemberList(projectID, offset, limit, lastID uint32, pagination bo
 			limit = constvar.DefaultLimit
 		}
 
-		query = query.Offset(offset).Limit(limit).Count(&count)
+		query = query.Offset(offset).Limit(limit)
 
 		if lastID != 0 {
 			query = query.Where("user.id < ?", lastID)
 		}
+
+		count = uint64(limit)
 	}
 
 	if err := query.Scan(&list).Error; err != nil {

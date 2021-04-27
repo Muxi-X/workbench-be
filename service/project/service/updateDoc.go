@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"time"
+
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
@@ -18,6 +20,10 @@ func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *
 
 	item.Name = req.Title
 	item.Content = req.Content
+	item.EditorID = req.EditorId
+
+	t := time.Now()
+	item.LastEditTime = t.Format("2006-01-02 15:04:05")
 
 	if err := item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

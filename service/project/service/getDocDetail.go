@@ -5,11 +5,21 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
+	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
 )
 
 // GetDocDetail ... 获取文档详情
-func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetRequest, res *pb.DocDetail) error {
+func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetFileDetailRequest, res *pb.DocDetail) error {
+	// 判断自己 id 和父 id 是否被删
+	// 不用判断 father 是否是 project，因为 project 被删访问不到。
+	isDeleted, err := model.AdjustSelfAndFatherIfExist(req.Id, req.FatherId, constvar.DocCode, constvar.DocFolderCode)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+	if isDeleted {
+		return e.NotFoundErr(errno.ErrNotFound, "This file has been deleted.")
+	}
 
 	doc, err := model.GetDocDetail(req.Id)
 	if err != nil {
@@ -22,7 +32,6 @@ func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetRequest, res *pb.
 	res.Creator = doc.Creator
 	res.LastEditor = doc.Editor
 	res.CreateTime = doc.CreateTime
-	res.LastEditTime = "" // TODO LastEditTime 数据缺失
-
+	res.LastEditTime = doc.LastEditTime
 	return nil
 }

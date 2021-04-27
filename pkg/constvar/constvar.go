@@ -14,4 +14,18 @@ const (
 	AuthLevelNormal     = 1 // 普通用户级别
 	AuthLevelAdmin      = 2 // 管理员级别
 	AuthLevelSuperAdmin = 4 // 超管级别
+
+	// 项目编码 字符串
+	ProjectCode    = uint8(0)
+	DocCode        = uint8(1)
+	FileCode       = uint8(2)
+	DocFolderCode  = uint8(3)
+	FileFolderCode = uint8(4)
+
+	// 判断是否是文件夹的 code
+	NotFolderCode = uint8(0)
+	IsFolderCode  = uint8(1)
+
+	// trashbin redis key
+	Trashbin = "trashbin"
 )

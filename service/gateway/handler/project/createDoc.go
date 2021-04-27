@@ -16,10 +16,12 @@ import (
 )
 
 // CreateDoc creates a new doc
+// 更新：前端不用传 fatherType 根据 fatherId 是否为 0 来判断
 func CreateDoc(c *gin.Context) {
 	log.Info("project createDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	// 先建立 doc ，再修改 docChildren
 	// 获得请求
 	var req CreateDocRequest
 	if err := c.Bind(&req); err != nil {
@@ -29,13 +31,18 @@ func CreateDoc(c *gin.Context) {
 
 	// 获取 userid
 	userID := c.MustGet("userID").(uint32)
+	teamID := c.MustGet("teamID").(uint32)
 
 	createDocReq := &pbp.CreateDocRequest{
-		Title:     req.Title,
-		Content:   req.Content,
-		ProjectId: req.ProjectID,
-		UserId:    userID,
+		Title:                 req.Title,
+		Content:               req.Content,
+		ProjectId:             req.ProjectID,
+		UserId:                userID,
+		TeamId:                teamID,
+		FatherId:              req.FatherID,
+		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}
+
 	resp, err := service.ProjectClient.CreateDoc(context.Background(), createDocReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
