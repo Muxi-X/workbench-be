@@ -2,6 +2,7 @@ package status
 
 import (
 	"context"
+	pbf "muxi-workbench-feed/proto"
 	"strconv"
 
 	// pbf "muxi-workbench-feed/proto"
@@ -69,27 +70,25 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	/*
-		// 构造 push 请求
-		pushReq := &pbf.PushRequest{
-			Action: "编辑",
-			UserId: id,
-			Source: &pbf.Source{
-				Kind:        6,
-				Id:          uint32(sid),
-				Name:        req.Title,
-				ProjectId:   0,
-				ProjectName: "",
-			},
-		}
+	// 构造 push 请求
+	pushReq := &pbf.PushRequest{
+		Action: "编辑",
+		UserId: id,
+		Source: &pbf.Source{
+			Kind:        6,
+			Id:          uint32(sid),
+			Name:        req.Title,
+			ProjectId:   0,
+			ProjectName: "",
+		},
+	}
 
-		// 向 feed 发送请求
-		_, err = service.FeedClient.Push(context.Background(), pushReq)
-		if err != nil {
-			SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
-			return
-		}
-	*/
+	// 向 feed 发送请求
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+		return
+	}
 
 	SendResponse(c, errno.OK, nil)
 }
