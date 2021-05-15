@@ -2,6 +2,7 @@ package status
 
 import (
 	"context"
+	pbf "muxi-workbench-feed/proto"
 	"strconv"
 
 	// pbf "muxi-workbench-feed/proto"
@@ -65,7 +66,6 @@ func DeleteComment(c *gin.Context) {
 		return
 	}
 
-	/*
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "取消评论",
@@ -85,7 +85,6 @@ func DeleteComment(c *gin.Context) {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
-	*/
 
 	SendResponse(c, errno.OK, nil)
 }
