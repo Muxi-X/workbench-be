@@ -49,21 +49,21 @@ func (u *FolderForFileModel) Update() error {
 // GetFolderForFileModel ... 获取文件文件夹
 func GetFolderForFileModel(id uint32) (*FolderForFileModel, error) {
 	s := &FolderForFileModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&s)
+	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 
 // GetFolderForFileInfoByIds ... 获取文件文件夹信息列表
 func GetFolderForFileInfoByIds(ids []uint32) ([]*FolderForFileInfo, error) {
 	s := make([]*FolderForFileInfo, 0)
-	d := m.DB.Self.Table("foldersforfiles").Where("id IN (?)", ids).Find(&s)
+	d := m.DB.Self.Table("foldersforfiles").Where("id IN (?) AND re = 0", ids).Find(&s)
 	return s, d.Error
 }
 
 // GetFileChildrenById ... 获取子文件
 func GetFileChildrenById(id uint32) (*FolderForFileChildren, error) {
 	s := &FolderForFileChildren{}
-	d := m.DB.Self.Table("foldersforfiles").Where("id = ?", id).Find(&s)
+	d := m.DB.Self.Table("foldersforfiles").Where("id = ? AND re = 0", id).Find(&s)
 	return s, d.Error
 }
 
@@ -89,7 +89,7 @@ func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, childrenPositionI
 		fatherId = folder.ProjectID
 	}
 
-	if err := AddFileChildren(isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
+	if err := AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -128,7 +128,7 @@ func DeleteFileFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isF
 		}
 	}
 
-	if err := DeleteFileChildren(isFatherProject, fatherId, trashbin.FileId, constvar.IsFolderCode); err != nil {
+	if err := DeleteFileChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.IsFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

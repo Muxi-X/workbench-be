@@ -17,6 +17,7 @@ func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *p
 	}
 
 	if user == nil {
+		// TODO: 不是 用户已存在，是用户不存在
 		return e.ServerErr(errno.ErrUserExisted, "")
 	}
 

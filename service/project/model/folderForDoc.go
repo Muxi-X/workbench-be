@@ -12,7 +12,7 @@ import (
 // FolderForDocInfo ... 文档文件夹信息
 type FolderForDocInfo struct {
 	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name string `json:"name" gorm:"column:filename;" binding:"required"`
+	Name string `json:"name" gorm:"column:name;" binding:"required"`
 }
 
 // FolderForDocChildren ... 子文档/夹
@@ -23,7 +23,7 @@ type FolderForDocChildren struct {
 // FolderForDocModel ... 文档文件夹模型
 type FolderForDocModel struct {
 	ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name       string `json:"name" gorm:"column:filename;" binding:"required"`
+	Name       string `json:"name" gorm:"column:name;" binding:"required"`
 	Re         bool   `json:"re" gorm:"column:re;" binding:"required"`
 	CreateTime string `json:"createTime" gorm:"column:create_time;" binding:"required"`
 	CreatorID  uint32 `json:"creatorID" gorm:"column:create_id;" binding:"required"`
@@ -50,21 +50,21 @@ func (u *FolderForDocModel) Update() error {
 // GetFolderForDocModel ... 获取文档文件夹
 func GetFolderForDocModel(id uint32) (*FolderForDocModel, error) {
 	s := &FolderForDocModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&s)
+	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 
 // GetFolderForDocInfoByIds ... 获取文档文件夹信息列表
 func GetFolderForDocInfoByIds(ids []uint32) ([]*FolderForDocInfo, error) {
 	s := make([]*FolderForDocInfo, 0)
-	d := m.DB.Self.Table("foldersformds").Where("id IN (?)", ids).Find(&s)
+	d := m.DB.Self.Table("foldersformds").Where("id IN (?) AND re = 0", ids).Find(&s)
 	return s, d.Error
 }
 
 // GetDocChildrenById ... 获取子文档/夹
 func GetDocChildrenById(id uint32) (*FolderForDocChildren, error) {
 	s := &FolderForDocChildren{}
-	d := m.DB.Self.Table("foldersformds").Select("children").Where("id = ?", id).Find(&s)
+	d := m.DB.Self.Table("foldersformds").Select("children").Where("id = ? AND re = 0", id).Find(&s)
 	return s, d.Error
 }
 
@@ -90,7 +90,7 @@ func CreateDocFolder(db *gorm.DB, folder *FolderForDocModel, childrenPositionInd
 		fatherId = folder.ProjectID
 	}
 
-	if err := AddDocChildren(isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
+	if err := AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -131,7 +131,7 @@ func DeleteDocFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFa
 	}
 
 	// 修改文件树
-	if err := DeleteDocChildren(isFatherProject, fatherId, trashbin.FileId, constvar.IsFolderCode); err != nil {
+	if err := DeleteDocChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.IsFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

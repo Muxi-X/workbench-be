@@ -10,6 +10,7 @@ import (
 )
 
 // GetDocInfoList ... 获取文档信息列表
+// TODO: 加上 father_id 限定条件，给的 idlist 必须是对应 father 的 children
 func (s *Service) GetDocInfoList(ctx context.Context, req *pb.GetInfoByIdsRequest, res *pb.GetDocInfoListResponse) error {
 	// 新增过滤 id
 	scope, err := model.AdjustFileListIfExist(req.List, req.FatherId, constvar.DocCode, constvar.DocFolderCode)

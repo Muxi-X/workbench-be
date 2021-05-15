@@ -40,120 +40,85 @@ func main() {
 
 	client := pb.NewProjectServiceClient("workbench.service.project", service.Client())
 
-	// 获取项目列表
-	// req := &pb.GetProjectListRequest{
-	// 	UserId:     22,
-	// 	Offset:     0,
-	// 	Limit:      20,
-	// 	Lastid:     0,
-	// 	Pagination: false,
-	// }
-
-	// resp, err := client.GetProjectList(context.Background(), req)
-	// if err != nil {
-	// 	log.Fatalf("Could not greet: %v", err)
-	// }
-	// fmt.Println(resp.List)
-
-	// 获取项目信息
+	// getDocChildren
 	// req := &pb.GetRequest{
-	// 	Id: 3,
+	// 	Id: 173,
 	// }
-
-	// resp, err := client.GetProjectInfo(context.Background(), req)
+	// resp, err := client.GetDocChildren(context.Background(), req)
 	// if err != nil {
-	// 	log.Fatalf("Could not greet: %v", err)
+	// 	log.Fatal("Could not greet: %v", err)
 	// }
 	// fmt.Println(resp)
 
-	// 获取成员列表
-	// req := &pb.GetMemberListRequest{
-	// 	ProjectId:  2,
-	// 	Offset:     0,
-	// 	Limit:      20,
-	// 	Lastid:     0,
-	// 	Pagination: false,
+	// getDocDetail
+	// TODO: 测试删除能否获取
+	// req := &pb.GetFileDetailRequest{
+	// 	Id:       uint32(173),
+	// 	FatherId: uint32(3),
 	// }
-
-	// resp, err := client.GetMembers(context.Background(), req)
-	// if err != nil {
-	// 	log.Fatalf("Could not greet: %v", err)
-	// }
-	// fmt.Println(resp.List)
-
-	// 获取文档详情
-	// req := &pb.GetRequest{
-	// 	Id: 2,
-	// }
-
 	// resp, err := client.GetDocDetail(context.Background(), req)
 	// if err != nil {
+	// 	log.Fatal("Could not greet: %v", err)
+	// }
+	// fmt.Printf("%+v\n", *resp)
+
+	// getDocFolderInfoList
+	// req := &pb.GetInfoByIdsRequest{
+	// 	List:     []uint32{173, 174, 176, 190},
+	// 	FatherId: 3,
+	// }
+	// resp, err := client.GetDocFolderInfoList(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatal("Could not greet: %v", err)
+	// }
+	// fmt.Printf("%+v\n", *resp)
+
+	// getDocInfoList
+	// req := &pb.GetInfoByIdsRequest{
+	// 	List:     []uint32{6, 70, 88, 93, 99, 103, 105, 107, 153},
+	// 	FatherId: 173,
+	// }
+	// resp, err := client.GetDocInfoList(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatal("Could not greet: %v", err)
+	// }
+	// fmt.Printf("%+v\n", *resp)
+
+	// getFileChildren
+	// req := &pb.GetRequest{
+	// 	Id: 29,
+	// }
+	// resp, err := client.GetFileChildren(context.Background(), req)
+	// if err != nil {
+	// 	log.Fatal("Could not greet: %v", err)
+	// }
+	// fmt.Printf("%+v\n", *resp)
+
+	// getFileDetail
+	req := &pb.GetFileDetailRequest{
+		Id:       69,
+		FatherId: 29,
+	}
+	resp, err := client.GetFileDetail(context.Background(), req)
+	if err != nil {
+		log.Fatal("Could not greet: %v", err)
+	}
+	fmt.Printf("%+v\n", *resp)
+
+	// 创建文档
+	// req := &pb.CreateDocRequest{
+	// 	Title:                 "测试",
+	// 	Content:               "测试",
+	// 	ProjectId:             2,
+	// 	UserId:                1,
+	// 	TeamId:                1,
+	// 	FatherId:              1,
+	// 	ChildrenPositionIndex: 0,
+	// }
+	// resp, err := client.CreateDoc(context.Background(), req)
+	// if err != nil {
 	// 	log.Fatalf("Could not greet: %v", err)
 	// }
 	// fmt.Println(resp)
-
-	// 获取文档信息列表
-	req := &pb.GetInfoByIdsRequest{
-		List: []uint32{1, 2, 3},
-	}
-
-	resp, err := client.GetDocInfoList(context.Background(), req)
-	if err != nil {
-		log.Fatalf("Could not greet: %v", err)
-	}
-	fmt.Println(resp)
-
-	// new request context
-	// ctx := metadata.NewContext(context.Background(), map[string]string{"key1": "val1", "key2": "val2"})
-	// add key-value pairs of metadata to context
-
-	// req := &pb.CreateRequest{
-	// 	UserId:  0,
-	// 	Title:   "哈哈哈哈😁",
-	// 	Content: "后废物废物分为",
-	// }
-
-	// _, err = client.Create(context.Background(), req)
-
-	// // span.SetTag("req", req)
-	// // span.SetTag("resp", resp)
-
-	// if err != nil {
-	// 	// span.SetTag("err", err)
-	// 	log.Fatalf("Could not greet: %v", err)
-	// }
-
-	// resp, err := client.Get(context.Background(), &pb.GetRequest{
-	// 	Id: 1,
-	// })
-
-	// if err != nil {
-	// 	log.Fatalf("Could not greet: %v", err)
-	// }
-
-	// fmt.Println(resp.Status.Title)
-
-	// resp, err := client.List(context.Background(), &pb.ListRequest{
-	// 	Offset: 0,
-	// 	Limit:  20,
-	// 	Lastid: 162,
-	// 	Group:  3,
-	// 	Uid:    0,
-	// })
-
-	// if err != nil {
-	// 	log.Fatalf("Could not greet: %v", err)
-	// }
-
-	// fmt.Println(resp.List, resp.Count)
-
-	//
-	//req := &pb.CreateCommentRequest{
-	//	UserId:  0,
-	//	StatusId: 3488,
-	//	Content: "后废物废物分为",
-	//}
-	//
-	//_, err = client.CreateComment(context.Background(), req)
 
 }
