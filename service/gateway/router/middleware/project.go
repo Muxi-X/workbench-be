@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"muxi-workbench-gateway/handler"
@@ -24,7 +23,6 @@ func ProjectMiddleware() gin.HandlerFunc {
 		}
 
 		userID := c.MustGet("userID").(uint32)
-		fmt.Println(userID)
 
 		// 检查
 		resp, err := service.ProjectClient.CheckProjectForUser(context.Background(), &pbp.CheckProjectRequest{
