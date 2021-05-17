@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"muxi-workbench-feed/errno"
@@ -14,6 +15,7 @@ import (
 
 // Push ... 异步新增feed
 func (s *FeedService) Push(ctx context.Context, req *pb.PushRequest, res *pb.Response) error {
+	fmt.Println("hello")
 	// get username and avatar by userId from user-service
 	username, avatar, err := GetInfoFromUserService(req.UserId)
 	if err != nil {

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	ppb "muxi-workbench-project/proto"
 	upb "muxi-workbench-user/proto"
@@ -28,15 +29,19 @@ func GetFilterFromProjectService(id uint32) ([]uint32, error) {
 
 // GetInfoFromUserService get user's name and avatar from user-service
 func GetInfoFromUserService(id uint32) (string, string, error) {
+	fmt.Println("hello?")
 	service := micro.NewService()
 	service.Init()
 
 	client := upb.NewUserServiceClient("workbench.service.user", service.Client())
 
+	fmt.Println("hello2")
 	rsp, err := client.GetProfile(context.Background(), &upb.GetRequest{Id: id})
 	if err != nil {
 		return "", "", err
 	}
+
+	fmt.Println("hello3")
 
 	return rsp.Name, rsp.Avatar, nil
 }
