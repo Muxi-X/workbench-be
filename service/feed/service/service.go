@@ -30,7 +30,7 @@ func GetFilterFromProjectService(id uint32) ([]uint32, error) {
 // GetInfoFromUserService get user's name and avatar from user-service
 func GetInfoFromUserService(id uint32) (string, string, error) {
 	fmt.Println("hello?")
-	service := micro.NewService()
+	service := micro.NewService(micro.Name("workbench.cli.feed"))
 	service.Init()
 
 	client := upb.NewUserServiceClient("workbench.service.user", service.Client())
