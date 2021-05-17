@@ -1,12 +1,12 @@
 package router
 
 import (
+	"muxi-workbench-gateway/handler/sd"
 	"net/http"
 
 	_ "muxi-workbench-gateway/docs"
 	"muxi-workbench-gateway/handler/feed"
 	"muxi-workbench-gateway/handler/project"
-	"muxi-workbench-gateway/handler/sd"
 	"muxi-workbench-gateway/handler/status"
 	"muxi-workbench-gateway/handler/team"
 	"muxi-workbench-gateway/handler/user"
@@ -38,6 +38,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	normalRequired := middleware.AuthMiddleware(constvar.AuthLevelNormal)
 	adminRequired := middleware.AuthMiddleware(constvar.AuthLevelAdmin)
 	superAdminRequired := middleware.AuthMiddleware(constvar.AuthLevelSuperAdmin)
+
+	// project 权限
+	projectCheck := middleware.ProjectMiddleware()
 
 	// auth 模块
 	authRouter := g.Group("api/v1/auth")
@@ -83,19 +86,20 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// project
 	projectRouter := g.Group("api/v1/project")
 	{
-		projectRouter.POST("", adminRequired, project.CreateProject)
-		projectRouter.GET("/list", normalRequired, project.GetProjectList)             // 获取 project 的 list
-		projectRouter.GET("/detail/:id", normalRequired, project.GetProjectInfo)       // 获取一个 project 的信息
-		projectRouter.DELETE("/detail/:id", superAdminRequired, project.DeleteProject) // 删除一个 project
-		projectRouter.PUT("/detail/:id", adminRequired, project.UpdateProjectInfo)     // 修改 project 的信息
-		projectRouter.GET("/detail/:id/member", normalRequired, project.GetMembers)    // 获取一个 project 的成员
-		projectRouter.PUT("/detail/:id/member", adminRequired, project.UpdateMembers)  // 编辑一个 project 的成员
-		projectRouter.GET("/ids", normalRequired, project.GetProjectIdsForUser)
+		projectRouter.POST("", adminRequired, projectCheck, project.CreateProject)
+		projectRouter.GET("/list", normalRequired, projectCheck, project.GetProjectList)             // 获取 project 的 list
+		projectRouter.GET("/detail/:id", normalRequired, projectCheck, project.GetProjectInfo)       // 获取一个 project 的信息
+		projectRouter.DELETE("/detail/:id", superAdminRequired, projectCheck, project.DeleteProject) // 删除一个 project
+		projectRouter.PUT("/detail/:id", adminRequired, projectCheck, project.UpdateProjectInfo)     // 修改 project 的信息
+		projectRouter.GET("/detail/:id/member", normalRequired, projectCheck, project.GetMembers)    // 获取一个 project 的成员
+		projectRouter.PUT("/detail/:id/member", adminRequired, projectCheck, project.UpdateMembers)  // 编辑一个 project 的成员
+		projectRouter.GET("/ids", normalRequired, projectCheck, project.GetProjectIdsForUser)
 		// projectRouter.PUT("/children/:id", normalRequired, project.UpdateProjectChildren)
 	}
 
 	folderRouter := g.Group("api/v1/folder")
 	folderRouter.Use(normalRequired)
+	folderRouter.Use(projectCheck)
 	{
 		// 文档文件夹下的文件树
 		folderRouter.GET("/file_children/:id", project.GetFileChildren) // 获取文件树
@@ -120,6 +124,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// 文件&文档
 	fileRouter := g.Group("api/v1/file")
 	fileRouter.Use(normalRequired)
+	fileRouter.Use(projectCheck)
 	{
 		// 文件
 		fileRouter.POST("file", project.CreateFile)
@@ -142,6 +147,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// 回收站 read delete recover
 	trashbinRouter := g.Group("api/v1/trashbin")
 	trashbinRouter.Use(normalRequired)
+	trashbinRouter.Use(projectCheck)
 	{
 		trashbinRouter.GET("", project.GetTrashbin)
 		trashbinRouter.PUT("/:id", project.UpdateTrashbin)

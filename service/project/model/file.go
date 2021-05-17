@@ -59,14 +59,14 @@ func (u *FileModel) Update() error {
 // GetFileInfoByIds ... 获取文件信息列表
 func GetFileInfoByIds(ids []uint32) ([]*FileInfo, error) {
 	s := make([]*FileInfo, 0)
-	d := m.DB.Self.Table("files").Where("id IN (?)", ids).Find(&s)
+	d := m.DB.Self.Table("files").Where("id IN (?) AND re = 0", ids).Find(&s)
 	return s, d.Error
 }
 
 // GetFileDetail ... 获取文件详情
 func GetFileDetail(id uint32) (*FileDetail, error) {
 	s := &FileDetail{}
-	d := m.DB.Self.Table("files").Where("files.id = ?", id).Select("files.*, users.name as creator").Joins("left join users on users.id = files.creator_id").First(&s)
+	d := m.DB.Self.Table("files").Where("files.id = ? AND re = 0", id).Select("files.*, users.name as creator").Joins("left join users on users.id = files.creator_id").First(&s)
 	return s, d.Error
 }
 
@@ -78,7 +78,7 @@ func CreateFile(db *gorm.DB, file *FileModel, childrenPositionIndex uint32) (uin
 		}
 	}()
 
-	if err := file.Create(); err != nil {
+	if err := tx.Create(file).Error; err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -91,7 +91,7 @@ func CreateFile(db *gorm.DB, file *FileModel, childrenPositionIndex uint32) (uin
 		fatherId = file.ProjectID
 	}
 
-	if err := AddFileChildren(isFatherProject, fatherId, childrenPositionIndex, file); err != nil {
+	if err := AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, file); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -101,7 +101,7 @@ func CreateFile(db *gorm.DB, file *FileModel, childrenPositionIndex uint32) (uin
 
 func GetFile(id uint32) (*FileModel, error) {
 	s := &FileModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&s)
+	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 
@@ -118,7 +118,7 @@ func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherP
 	t := time.Now().Unix()
 	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
 
-	if err := trashbin.Create(); err != nil {
+	if err := tx.Create(trashbin).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -131,7 +131,7 @@ func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherP
 		return err
 	}
 
-	if err := DeleteFileChildren(isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
+	if err := DeleteFileChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

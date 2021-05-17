@@ -9,12 +9,10 @@ service ProjectService {
   rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
   rpc UpdateProjectInfo(UpdateProjectInfoRequest) returns (Response) {}
   rpc DeleteProject(GetRequest) returns (Response) {}
-  rpc UpdateProjectChildren(UpdateProjectChildrenRequest) returns (Response) {}
-  rpc UpdateFileChildren(UpdateChildrenRequest) returns (Response) {}
-  rpc UpdateDocChildren(UpdateChildrenRequest) returns (Response) {}
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
   rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
   rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
+  rpc CheckProjectForUser(CheckProjectRequest) returns (CheckProjectResponse){}
 
   // 回收站
   rpc GetTrashbin(GetTrashbinRequest) returns (GetTrashbinResponse) {}
@@ -55,6 +53,15 @@ service ProjectService {
   rpc GetFileChildren(GetRequest) returns (Children) {}
 
   rpc UpdateFilePosition(UpdateFilePositionRequest) returns (Response){}
+}
+
+message CheckProjectRequest {
+  uint32 user_id = 1;
+  uint32 project_id = 2;
+}
+
+message CheckProjectResponse {
+  bool if_valid = 1;
 }
 
 // 移动文件请求
@@ -280,17 +287,6 @@ message UpdateProjectInfoRequest {
   uint32 id = 1;
   string name = 2;
   string intro = 3;
-}
-
-message UpdateChildrenRequest {
-  uint32 id = 1;
-  string children = 2;
-}
-
-message UpdateProjectChildrenRequest{
-  uint32 id = 1;
-  string children = 2;
-  bool type = 3; // 0->doc 1->file
 }
 
 message Children {

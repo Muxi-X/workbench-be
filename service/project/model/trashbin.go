@@ -201,6 +201,10 @@ func TidyTrashbin(db *gorm.DB) error {
 		}
 	}
 
+	if len(res) == 0 {
+		return tx.Commit().Error
+	}
+
 	// 同步 redis
 	if err := m.SRemToRedis(constvar.Trashbin, res); err != nil {
 		tx.Rollback()
@@ -347,7 +351,7 @@ func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject
 	}
 
 	// 同步 redis
-	if len(res) == 0 {
+	if len(res) != 0 {
 		if err = m.SRemToRedis(constvar.Trashbin, res); err != nil {
 			tx.Rollback()
 			return err
@@ -358,13 +362,13 @@ func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject
 	// 分类 project doc file docfolder filefolder
 	switch fileType {
 	case constvar.DocCode:
-		err = AddDocChildren(isFatherProject, fatherId, childrenPositionIndex, &DocModel{ID: fileId})
+		err = AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &DocModel{ID: fileId})
 	case constvar.FileCode:
-		err = AddFileChildren(isFatherProject, fatherId, childrenPositionIndex, &FileModel{ID: fileId})
+		err = AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FileModel{ID: fileId})
 	case constvar.DocFolderCode:
-		err = AddDocChildren(isFatherProject, fatherId, childrenPositionIndex, &FolderForDocModel{ID: fileId})
+		err = AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForDocModel{ID: fileId})
 	case constvar.FileFolderCode:
-		err = AddFileChildren(isFatherProject, fatherId, childrenPositionIndex, &FolderForFileModel{ID: fileId})
+		err = AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForFileModel{ID: fileId})
 	}
 
 	if err != nil {
@@ -386,11 +390,9 @@ func AdjustSelfIfExist(id uint32, code uint8) (bool, error) {
 
 // AdjustSelfAndFatherIfExist ... 判断自身和父节点是否存在，多用于 file
 func AdjustSelfAndFatherIfExist(id, fatherId uint32, code, fatherCode uint8) (bool, error) {
-	var target []string
 	self := fmt.Sprintf("%d-%d", id, code)
 	father := fmt.Sprintf("%d-%d", fatherId, fatherCode)
-	target = append(target, self, father)
-	isDeleted, err := m.SIsmembersFromRedis(constvar.Trashbin, target)
+	isDeleted, err := m.SIsmembersFromRedis(constvar.Trashbin, self, father)
 	return isDeleted, err
 }
 

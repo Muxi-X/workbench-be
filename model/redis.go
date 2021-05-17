@@ -100,10 +100,17 @@ func SAddToRedis(key string, value interface{}) error {
 
 // SIsmembersFromRedis find members if exist
 // 存在返回 1
-func SIsmembersFromRedis(key string, member interface{}) (bool, error) {
-	val, err := RedisDB.Self.SIsMember(key, member).Result()
-	if err != nil {
-		return false, err
+func SIsmembersFromRedis(key string, member ...interface{}) (bool, error) {
+	var val bool
+	for _, v := range member {
+		isDeleted, err := RedisDB.Self.SIsMember(key, v).Result()
+		if err != nil {
+			return false, err
+		}
+
+		if isDeleted {
+			val = isDeleted
+		}
 	}
 
 	return val, nil

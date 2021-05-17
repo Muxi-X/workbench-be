@@ -47,12 +47,6 @@ func (u *ProjectModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
-// RecoverProject ... 恢复软删除
-// 未使用
-func RecoverProject(id uint32) error {
-	return m.DB.Self.Unscoped().Table("projects").Where("id = ?", id).Update("deleted_at", "").Error
-}
-
 // DeleteProject ... 删除项目
 func DeleteProject(id uint32) error {
 	project := &ProjectModel{
@@ -137,16 +131,16 @@ func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32
 	case constvar.DocCode:
 		doc := file.(DocModel)
 		doc.FatherId = fatherId
-		if err := doc.Update(); err != nil {
+		if err := tx.Update(doc).Error; err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := AddDocChildren(isFatherProject, fatherId,
+		if err := AddDocChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, doc); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteDocChildren(isOldFatherProject, oldFatherId, doc.ID,
+		if err := DeleteDocChildren(tx, isOldFatherProject, oldFatherId, doc.ID,
 			constvar.NotFolderCode); err != nil {
 			tx.Rollback()
 			return err
@@ -158,12 +152,12 @@ func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32
 			tx.Rollback()
 			return err
 		}
-		if err := AddFileChildren(isFatherProject, fatherId,
+		if err := AddFileChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, file); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteFileChildren(isOldFatherProject, oldFatherId, file.ID,
+		if err := DeleteFileChildren(tx, isOldFatherProject, oldFatherId, file.ID,
 			constvar.NotFolderCode); err != nil {
 			tx.Rollback()
 			return err
@@ -171,16 +165,16 @@ func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32
 	case constvar.DocFolderCode:
 		folder := file.(FolderForDocModel)
 		folder.FatherId = fatherId
-		if err := folder.Update(); err != nil {
+		if err := tx.Update(folder).Error; err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := AddDocChildren(isFatherProject, fatherId,
+		if err := AddDocChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, folder); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteDocChildren(isOldFatherProject, oldFatherId, folder.ID,
+		if err := DeleteDocChildren(tx, isOldFatherProject, oldFatherId, folder.ID,
 			constvar.IsFolderCode); err != nil {
 			tx.Rollback()
 			return err
@@ -188,16 +182,16 @@ func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32
 	case constvar.FileFolderCode:
 		folder := file.(FolderForFileModel)
 		folder.FatherId = fatherId
-		if err := folder.Update(); err != nil {
+		if err := tx.Update(folder).Error; err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := AddFileChildren(isFatherProject, fatherId,
+		if err := AddFileChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, folder); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteFileChildren(isOldFatherProject, oldFatherId, folder.ID,
+		if err := DeleteFileChildren(tx, isOldFatherProject, oldFatherId, folder.ID,
 			constvar.IsFolderCode); err != nil {
 			tx.Rollback()
 			return err

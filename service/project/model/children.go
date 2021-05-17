@@ -5,17 +5,35 @@ import (
 	"fmt"
 	"muxi-workbench-project/errno"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
 // 放修改文件树的函数，包括 add 和 delete
 
 // AddChildren ... 返回新 children
 func AddChildren(children string, id, childrenPositionIndex, isFolder uint32) (string, error) {
+	if childrenPositionIndex == 0 { // 插在开头
+		children = fmt.Sprintf("%d-%d,%s", id, isFolder, children)
+		return children, nil
+	}
+
 	// 根据 childrenPositionIndex 判断插入位置，从 0 计数
-	index := int(childrenPositionIndex) * 4
-	if index-1 < len(children) {
+	index := 0
+	count := 0
+	for k, v := range children {
+		if v == ',' {
+			count++
+		}
+
+		if count == int(childrenPositionIndex) {
+			index = k + 1 // index+1 取逗号后一位，即下一个文件的开头
+		}
+	}
+
+	if count == int(childrenPositionIndex) { // 插在中间的情况
 		children = fmt.Sprintf("%s%d-%d,%s", children[:index], id, isFolder, children[index:])
-	} else if index-1 == len(children) {
+	} else if count+1 == int(childrenPositionIndex) { // 插在结尾
 		children = fmt.Sprintf("%s,%d-%d", children, id, isFolder)
 	} else {
 		return "", errors.New("Invalid children position index.")
@@ -31,20 +49,18 @@ func DeleteChildren(children string, id uint32, isFolder uint8) (string, error) 
 		return "", errno.ErrFileNotFound
 	}
 
-	// index + 4 刚好取到下一个片段的第一个元素，以此区分是否在末尾
-	if index+4 < len(children) {
-		children = children[:index] + children[index+4:]
-	} else if index+4 > len(children) {
+	nextIndex := strings.Index(children[index:], ",")
+	if nextIndex == -1 { // 找不到，说明当前文件是最后的文件
 		children = children[:index]
-	} else {
-		return "", errno.ErrInvalidIndex
+	} else { // 找到了，说明是中间的文件
+		children = children[:index] + children[nextIndex:]
 	}
 
 	return children, nil
 }
 
 // AddDocChildren ... 新增 doc 文件树
-func AddDocChildren(isFatherProject bool, fatherId, childrenPositionIndex uint32, obj interface{}) error {
+func AddDocChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositionIndex uint32, obj interface{}) error {
 	var id uint32
 	var isFolder uint32 // 0->file 1->folder
 
@@ -70,7 +86,7 @@ func AddDocChildren(isFatherProject bool, fatherId, childrenPositionIndex uint32
 
 		item.DocChildren = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -86,7 +102,7 @@ func AddDocChildren(isFatherProject bool, fatherId, childrenPositionIndex uint32
 
 		item.Children = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	}
@@ -95,7 +111,7 @@ func AddDocChildren(isFatherProject bool, fatherId, childrenPositionIndex uint32
 }
 
 // DeleteDocChildren ... 删除 文档 树
-func DeleteDocChildren(isFatherProject bool, fatherId, id uint32, isFolder uint8) error {
+func DeleteDocChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, isFolder uint8) error {
 	// 修改文件树
 	if isFatherProject {
 		// 查询结果，解析 children 再更新
@@ -111,7 +127,7 @@ func DeleteDocChildren(isFatherProject bool, fatherId, id uint32, isFolder uint8
 
 		item.DocChildren = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -127,7 +143,7 @@ func DeleteDocChildren(isFatherProject bool, fatherId, id uint32, isFolder uint8
 
 		item.Children = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	}
@@ -135,7 +151,7 @@ func DeleteDocChildren(isFatherProject bool, fatherId, id uint32, isFolder uint8
 	return nil
 }
 
-func AddFileChildren(isFatherProject bool, fatherId, childrenPositionIndex uint32, obj interface{}) error {
+func AddFileChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositionIndex uint32, obj interface{}) error {
 	var id uint32
 	var isFolder uint32
 
@@ -161,7 +177,7 @@ func AddFileChildren(isFatherProject bool, fatherId, childrenPositionIndex uint3
 
 		item.FileChildren = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -177,7 +193,7 @@ func AddFileChildren(isFatherProject bool, fatherId, childrenPositionIndex uint3
 
 		item.Children = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	}
@@ -185,7 +201,7 @@ func AddFileChildren(isFatherProject bool, fatherId, childrenPositionIndex uint3
 	return nil
 }
 
-func DeleteFileChildren(isFatherProject bool, fatherId, id uint32, isFolder uint8) error {
+func DeleteFileChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, isFolder uint8) error {
 	if isFatherProject {
 		// 查询结果，解析 children 再更新
 		item, err := GetProject(fatherId)
@@ -200,7 +216,7 @@ func DeleteFileChildren(isFatherProject bool, fatherId, id uint32, isFolder uint
 
 		item.DocChildren = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -216,7 +232,7 @@ func DeleteFileChildren(isFatherProject bool, fatherId, id uint32, isFolder uint
 
 		item.Children = newChildren
 
-		if err := item.Update(); err != nil {
+		if err := tx.Update(item).Error; err != nil {
 			return err
 		}
 	}

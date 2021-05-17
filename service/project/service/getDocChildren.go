@@ -7,6 +7,8 @@ import (
 	pb "muxi-workbench-project/proto"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+
+	"github.com/jinzhu/gorm"
 )
 
 // GetDocChildren ... 获取任意文档夹目录下的文档树
@@ -23,6 +25,9 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 
 	item, err := model.GetDocChildrenById(req.Id)
 	if err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return e.NotFoundErr(errno.ErrNotFound, err.Error())
+		}
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

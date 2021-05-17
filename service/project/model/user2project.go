@@ -29,6 +29,19 @@ type UserID struct {
 	ID uint32 `json:"userId" gorm:"column:user_id;" binding:"required"`
 }
 
+// CheckUser2ProjectRecord ... 查找有无记录
+func CheckUser2ProjectRecord(user_id, project_id uint32) (bool, error) {
+	d := m.DB.Self.Table("user2projects").Where("user_id = ? AND project_id = ?", user_id, project_id).First(&UserToProjectModel{}).Error
+	if d != nil {
+		if gorm.IsRecordNotFoundError(d) {
+			return false, nil
+		}
+		return false, d
+	}
+
+	return true, nil
+}
+
 // GetProjectUserCount ... 获取项目人数
 func GetProjectUserCount(id uint32) (uint32, error) {
 	count := &UserCount{}
