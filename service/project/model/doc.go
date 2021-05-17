@@ -24,6 +24,7 @@ type DocInfo struct {
 }
 
 // DocModel ... 文档物理模型
+// TODO: 表没有 last_edit_time
 type DocModel struct {
 	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Name         string `json:"name" gorm:"column:filename;" binding:"required"`
@@ -58,21 +59,21 @@ func (u *DocModel) Update() error {
 // GetDoc ... 获取文档
 func GetDoc(id uint32) (*DocModel, error) {
 	s := &DocModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&s)
+	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 
 // GetDocInfo ... 获取文档信息
 func GetDocInfo(id uint32) (*DocInfo, error) {
 	info := &DocInfo{}
-	d := m.DB.Self.Table("docs").Select("id,name").Where("id = ?", id).Scan(&info)
+	d := m.DB.Self.Table("docs").Select("id,name").Where("id = ? AND re = 0", id).Scan(&info)
 	return info, d.Error
 }
 
 // GetDocInfoByIds ... 获取文档信息列表
 func GetDocInfoByIds(ids []uint32) ([]*DocInfo, error) {
 	s := make([]*DocInfo, 0)
-	d := m.DB.Self.Table("docs").Where("id IN (?)", ids).Find(&s)
+	d := m.DB.Self.Table("docs").Where("id IN (?) AND re = 0", ids).Find(&s)
 	return s, d.Error
 }
 
@@ -80,7 +81,7 @@ func GetDocInfoByIds(ids []uint32) ([]*DocInfo, error) {
 func GetDocDetail(id uint32) (*DocDetail, error) {
 	s := &DocDetail{}
 	// multiple left join
-	d := m.DB.Self.Table("docs").Where("docs.id = ?", id).Select("docs.*, c.name as creator, e.name as editor").Joins("left join users c on c.id = docs.creator_id").Joins("left join users e on e.id = docs.editor_id").First(&s)
+	d := m.DB.Self.Table("docs").Where("docs.id = ? AND re = 0", id).Select("docs.*, c.name as creator, e.name as editor").Joins("left join users c on c.id = docs.creator_id").Joins("left join users e on e.id = docs.editor_id").First(&s)
 	return s, d.Error
 }
 
@@ -92,7 +93,7 @@ func CreateDoc(db *gorm.DB, doc *DocModel, childrenPositionIndex uint32) (uint32
 		}
 	}()
 
-	if err := doc.Create(); err != nil {
+	if err := tx.Create(doc).Error; err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -105,7 +106,7 @@ func CreateDoc(db *gorm.DB, doc *DocModel, childrenPositionIndex uint32) (uint32
 		fatherId = doc.ProjectID
 	}
 
-	if err := AddDocChildren(isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
+	if err := AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -129,7 +130,7 @@ func DeleteDoc(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherPr
 	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
 
 	// 插入回收站
-	if err := trashbin.Create(); err != nil {
+	if err := tx.Create(trashbin).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -142,7 +143,7 @@ func DeleteDoc(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherPr
 		return err
 	}
 
-	if err := DeleteDocChildren(isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
+	if err := DeleteDocChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
 		tx.Rollback()
 		return err
 	}

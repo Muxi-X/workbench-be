@@ -8,6 +8,8 @@ import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+
+	"github.com/jinzhu/gorm"
 )
 
 // DeleteDoc ... 删除文档
@@ -16,6 +18,9 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 	// 找 name 和 creatorId
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			return e.ServerErr(errno.ErrNotFound, err.Error())
+		}
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
