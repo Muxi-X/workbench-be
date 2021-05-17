@@ -30,6 +30,7 @@ func (s *Service) GetFileDetail(ctx context.Context, req *pb.GetFileDetailReques
 	res.Url = file.URL
 	res.Creator = file.Creator
 	res.CreateTime = file.CreateTime
+	res.Name = file.Name
 
 	return nil
 }
