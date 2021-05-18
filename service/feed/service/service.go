@@ -10,6 +10,17 @@ import (
 	"github.com/micro/go-micro"
 )
 
+var UserService micro.Service
+var UserClient upb.UserServiceClient
+
+func UserInit() {
+	UserService = micro.NewService(micro.Name("workbench.cli.user"))
+
+	UserService.Init()
+
+	UserClient = upb.NewUserServiceClient("workbench.service.user", UserService.Client())
+}
+
 // FeedService ... 动态服务
 type FeedService struct{}
 
@@ -30,13 +41,13 @@ func GetFilterFromProjectService(id uint32) ([]uint32, error) {
 // GetInfoFromUserService get user's name and avatar from user-service
 func GetInfoFromUserService(id uint32) (string, string, error) {
 	fmt.Println("hello?")
-	service := micro.NewService(micro.Name("workbench.cli.user"))
-	service.Init()
+	// service := micro.NewService(micro.Name("workbench.cli.user"))
+	// service.Init()
 
-	client := upb.NewUserServiceClient("workbench.service.user", service.Client())
+	// client := upb.NewUserServiceClient("workbench.service.user", service.Client())
 
-	fmt.Println("hello2")
-	rsp, err := client.GetProfile(context.Background(), &upb.GetRequest{Id: id})
+	// fmt.Println("hello2")
+	rsp, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{Id: id})
 	if err != nil {
 		return "", "", err
 	}
