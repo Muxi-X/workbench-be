@@ -28,6 +28,7 @@ var subFg = flag.Bool("sub", false, "use subscribe service mode")
 
 func init() {
 	s.UserInit()
+	s.ProjectInit()
 }
 
 // 包含两个服务：feed服务和subscribe服务
