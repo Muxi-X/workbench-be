@@ -4,7 +4,7 @@ type User struct {
 	Name      string `json:"name"`
 	Id        uint32 `json:"id"`
 	AvatarUrl string `json:"avatar_url"`
-}
+} //@name User
 
 type Source struct {
 	Kind        uint32 `json:"kind"` // 类型，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
@@ -12,7 +12,7 @@ type Source struct {
 	Name        string `json:"name"`
 	ProjectId   uint32 `json:"project_id"`
 	ProjectName string `json:"project_name"`
-}
+} //@name Source
 
 type FeedItem struct {
 	Id          uint32  `json:"id"`
@@ -22,9 +22,9 @@ type FeedItem struct {
 	Time        string  `json:"time"`
 	User        *User   `json:"user"`
 	Source      *Source `json:"source"`
-}
+} //@name FeedItem
 
 type ListResponse struct {
 	Count uint32      `json:"count"`
 	List  []*FeedItem `json:"list"`
-}
+} //@name ListResponse

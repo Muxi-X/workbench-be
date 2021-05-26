@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// List lists feeds.
+// List ... lists feeds.
 // @Summary get feed list api
 // @Description 获取此用户的动态list
 // @Tags feed

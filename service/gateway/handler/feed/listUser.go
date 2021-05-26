@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// ListUser list feeds filtered by user id.
+// ListUser ... list feeds filtered by user id.
 // @Summary list feeds filtered by user_id api
 // @Description 获取此用户的动态list
 // @Tags feed

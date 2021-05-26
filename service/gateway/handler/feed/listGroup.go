@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// ListGroup list feeds filtered by group id.
+// ListGroup ... list feeds filtered by group id.
 // 0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
 // @Summary get feed group_list by group_id api
 // @Description 获取某一组的动态list，0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
