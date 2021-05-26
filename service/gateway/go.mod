@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
-	github.com/gin-gonic/gin v1.5.0
+	github.com/gin-gonic/gin v1.7.1
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-plugins v1.5.1
@@ -19,9 +19,7 @@ require (
 	github.com/swaggo/swag v1.6.7
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
 	github.com/willf/pad v0.0.0-20190207183901-eccfe5d84172
-	go.uber.org/zap v1.15.0
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
-	gopkg.in/go-playground/validator.v9 v9.30.2 // indirect
+	go.uber.org/zap v1.16.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	muxi-workbench v0.0.0-00010101000000-000000000000

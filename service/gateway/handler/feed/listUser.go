@@ -16,6 +16,20 @@ import (
 )
 
 // ListUser list feeds filtered by user id.
+// @Summary list feeds filtered by user_id api
+// @Description 获取此用户的动态list
+// @Tags feed
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "filtered_user_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Security ApiKeyAuth
+// @Success 200 {object} ListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /feed/list/user/{id} [get]
 func ListUser(c *gin.Context) {
 	log.Info("Feed listUser function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 

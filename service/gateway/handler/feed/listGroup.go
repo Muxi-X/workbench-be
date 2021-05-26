@@ -17,6 +17,20 @@ import (
 
 // ListGroup list feeds filtered by group id.
 // 0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
+// @Summary get feed group_list by group_id api
+// @Description 获取某一组的动态list，0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
+// @Tags feed
+// @Accept  application/json
+// @Produce  application/json
+// @Param id path int true "group_id"
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Security ApiKeyAuth
+// @Success 200 {object} ListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /feed/list/group/{id} [get]
 func ListGroup(c *gin.Context) {
 	log.Info("Feed listGroup function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 

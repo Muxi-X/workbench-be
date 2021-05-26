@@ -16,6 +16,19 @@ import (
 )
 
 // List lists feeds.
+// @Summary get feed list api
+// @Description 获取此用户的动态list
+// @Tags feed
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Security ApiKeyAuth
+// @Success 200 {object} ListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /feed/list [get]
 func List(c *gin.Context) {
 	log.Info("feed List function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
