@@ -18,6 +18,7 @@ func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *p
 
 	if user == nil {
 		return e.ServerErr(errno.ErrUserNotExisted, "")
+
 	}
 
 	res.Id = user.ID

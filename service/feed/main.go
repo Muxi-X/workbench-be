@@ -26,6 +26,11 @@ import (
 // 否则默认运行feed服务
 var subFg = flag.Bool("sub", false, "use subscribe service mode")
 
+func init() {
+	s.UserInit()
+	s.ProjectInit()
+}
+
 // 包含两个服务：feed服务和subscribe服务
 // subscribe服务 --> 异步将feed数据写入数据库
 func main() {

@@ -83,12 +83,13 @@ func main() {
 	// 	log.Fatal("Could not greet: %v", err)
 	// }
 	// fmt.Printf("%+v\n", *resp)
-
-	// getFileChildren
+	
+  // getFileChildren
 	req := &pb.GetRequest{
 		Id: 29,
 	}
 	resp, err := client.GetFileChildren(context.Background(), req)
+
 	if err != nil {
 		log.Fatal("Could not greet: %v", err)
 	}

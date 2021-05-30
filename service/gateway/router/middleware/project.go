@@ -21,11 +21,13 @@ func ProjectMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
 		if projectID == -1 {
 			handler.SendBadRequest(c, errno.ErrNoProjectId, nil, err.Error(), handler.GetLine())
 			c.Abort()
 			return
 		}
+
 
 		userID := c.MustGet("userID").(uint32)
 

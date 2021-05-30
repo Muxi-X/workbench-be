@@ -61,10 +61,10 @@ func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, u
 	return commentsList, count, nil
 }
 
-func DeleteComment(id, uid uint32) error {
+func DeleteComment(tx *gorm.DB, id, uid uint32) error {
 	comment := &CommentsModel{}
 	comment.ID = id
-	return m.DB.Self.Where("creator =?", strconv.Itoa(int(uid))).Delete(&comment).Error
+	return tx.Where("creator =?", strconv.Itoa(int(uid))).Delete(&comment).Error
 }
 
 // CreateStatusComment ... 创建 comment 和修改 status 的评论总数
@@ -106,7 +106,7 @@ func DeleteStatusComment(db *gorm.DB, id uint32, uid uint32, m *StatusModel) err
 		return err
 	}
 
-	if err := DeleteComment(id, uid); err != nil {
+	if err := DeleteComment(tx, id, uid); err != nil {
 		tx.Rollback()
 		return err
 	}

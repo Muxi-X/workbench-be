@@ -57,19 +57,19 @@ func DeleteStatus(db *gorm.DB, id, uid uint32) error {
 	// 删除 status
 	status := &StatusModel{}
 	status.ID = id
-	if err := m.DB.Self.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error; err != nil {
+	if err := tx.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	// 删除 comment
-	if err := m.DB.Self.Where("statu_id=?", strconv.Itoa(int(id))).Delete(&CommentsModel{}).Error; err != nil {
+	if err := tx.Where("statu_id=?", strconv.Itoa(int(id))).Delete(&CommentsModel{}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	// 删除 user2status
-	if err := m.DB.Self.Where("status_id=?", strconv.Itoa(int(id))).Delete(&UserToStatusModel{}).Error; err != nil {
+	if err := tx.Where("status_id=?", strconv.Itoa(int(id))).Delete(&UserToStatusModel{}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
