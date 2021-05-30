@@ -17,6 +17,19 @@ import (
 )
 
 // GetDocDetail gets a doc's detail
+// @Summary get doc detail api
+// @Description 获取某个文档的详情
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param file_id path int true "doc_id"
+// @Param id path int true "fahter_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetDocDetailResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id}/children/{file_id} [get]
 func GetDocDetail(c *gin.Context) {
 	log.Info("project getDocDetail function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

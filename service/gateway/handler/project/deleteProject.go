@@ -2,7 +2,6 @@ package project
 
 import (
 	"context"
-	"strconv"
 
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
@@ -19,23 +18,31 @@ import (
 // DeleteProject deletes a project
 // 要求要超管权限
 // 需要 delete project 和 feed push
+// @Summary delete a project api
+// @Description 删除项目
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteFolderRequest true "delete_folder_request"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /project [delete]
 func DeleteProject(c *gin.Context) {
 	log.Info("project deleteProject function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
-		return
-	}
+	projectID := c.MustGet("projectID").(uint32)
 
 	// 获取 userid
 	userID := c.MustGet("userID").(uint32)
 
 	// 发送 delete 请求
-	_, err = service.ProjectClient.DeleteProject(context.Background(), &pbp.GetRequest{
-		Id: uint32(projectID),
+	_, err := service.ProjectClient.DeleteProject(context.Background(), &pbp.GetRequest{
+		Id: projectID,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -50,7 +57,7 @@ func DeleteProject(c *gin.Context) {
 		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        2,
-			Id:          uint32(projectID),
+			Id:          projectID,
 			Name:        "",
 			ProjectId:   uint32(0),
 			ProjectName: "",

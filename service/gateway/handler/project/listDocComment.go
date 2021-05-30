@@ -15,6 +15,21 @@ import (
 )
 
 // ListDocComment ... 获取文档评论列表
+// @Summary list doc comments api
+// @Description 获取文档评论列表
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "doc_id"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Param page query int false "page"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} CommentListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id}/comments [get]
 func ListDocComment(c *gin.Context) {
 	log.Info("Project listDocComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

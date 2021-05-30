@@ -21,7 +21,6 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param object body RegisterRequest true "register_request"
-// @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

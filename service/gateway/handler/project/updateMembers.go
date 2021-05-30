@@ -2,7 +2,6 @@ package project
 
 import (
 	"context"
-	"strconv"
 
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
@@ -18,16 +17,24 @@ import (
 )
 
 // UpdateMembers updates the members in the project
+// @Summary update project member api
+// @Description 修改项目成员
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body UpdateMemberRequest true "update_member_request"
+// @Param project_id query int true "项目 id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /project/member [put]
 func UpdateMembers(c *gin.Context) {
 	log.Info("Project member update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
-		return
-	}
+	projectID := c.MustGet("projectID").(uint32)
 
 	// 获取请求
 	var req UpdateMemberRequest
@@ -42,7 +49,7 @@ func UpdateMembers(c *gin.Context) {
 	// 构造请求
 	// 这里 list 应该是 uint32 表示 uid
 	updateMemReq := &pbp.UpdateMemberRequest{
-		Id: uint32(projectID),
+		Id: projectID,
 	}
 
 	for i := 0; i < len(req.UserList); i++ {
@@ -50,7 +57,7 @@ func UpdateMembers(c *gin.Context) {
 	}
 
 	// 发送请求
-	_, err = service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
+	_, err := service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -64,9 +71,9 @@ func UpdateMembers(c *gin.Context) {
 		UserId: userID,
 		Source: &pbf.Source{
 			Kind:        2,
-			Id:          uint32(projectID),
+			Id:          projectID,
 			Name:        "",
-			ProjectId:   uint32(projectID),
+			ProjectId:   projectID,
 			ProjectName: "",
 		},
 	}

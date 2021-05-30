@@ -17,6 +17,19 @@ import (
 )
 
 // UpdateDoc updates a doc' info
+// @Summary update doc info api
+// @Description 修改文档
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "doc_id"
+// @Param object body UpdateDocRequest true "update_doc_request"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id} [put]
 func UpdateDoc(c *gin.Context) {
 	log.Info("project updateDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

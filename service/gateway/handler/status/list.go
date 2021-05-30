@@ -29,7 +29,6 @@ import (
 // @Param group query int false "group"
 // @Param uid query int false "uid"
 // @Param team query int false "team"
-// @Security ApiKeyAuth
 // @Success 200 {object} ListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

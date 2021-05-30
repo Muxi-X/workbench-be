@@ -17,6 +17,20 @@ import (
 )
 
 // UpdateDocComment ... 修改文档评论
+// @Summary update doc comment api
+// @Description 修改文档评论
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "doc_id"
+// @Param comment_id path int true "comment_id"
+// @Param object body UpdateDocCommentRequest true "update_doc_comment_request"
+// @Param project_id query int true "此文档所属项目 id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id}/comment/{comment_id} [put]
 func UpdateDocComment(c *gin.Context) {
 	log.Info("Project updateDocComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

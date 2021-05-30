@@ -86,15 +86,14 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// project
 	projectRouter := g.Group("api/v1/project")
 	{
-		projectRouter.POST("", adminRequired, projectCheck, project.CreateProject)
-		projectRouter.GET("/list", normalRequired, projectCheck, project.GetProjectList)             // 获取 project 的 list
-		projectRouter.GET("/detail/:id", normalRequired, projectCheck, project.GetProjectInfo)       // 获取一个 project 的信息
-		projectRouter.DELETE("/detail/:id", superAdminRequired, projectCheck, project.DeleteProject) // 删除一个 project
-		projectRouter.PUT("/detail/:id", adminRequired, projectCheck, project.UpdateProjectInfo)     // 修改 project 的信息
-		projectRouter.GET("/detail/:id/member", normalRequired, projectCheck, project.GetMembers)    // 获取一个 project 的成员
-		projectRouter.PUT("/detail/:id/member", adminRequired, projectCheck, project.UpdateMembers)  // 编辑一个 project 的成员
-		projectRouter.GET("/ids", normalRequired, projectCheck, project.GetProjectIdsForUser)
-		// projectRouter.PUT("/children/:id", normalRequired, project.UpdateProjectChildren)
+		projectRouter.POST("", adminRequired, project.CreateProject)
+		projectRouter.GET("/list", normalRequired, project.GetProjectList)                // 获取 project 的 list
+		projectRouter.GET("", normalRequired, projectCheck, project.GetProjectInfo)       // 获取一个 project 的信息
+		projectRouter.DELETE("", superAdminRequired, projectCheck, project.DeleteProject) // 删除一个 project
+		projectRouter.PUT("", adminRequired, projectCheck, project.UpdateProjectInfo)     // 修改 project 的信息
+		projectRouter.GET("/member", normalRequired, projectCheck, project.GetMembers)    // 获取一个 project 的成员
+		projectRouter.PUT("/member", adminRequired, projectCheck, project.UpdateMembers)  // 编辑一个 project 的成员
+		projectRouter.GET("/ids", normalRequired, project.GetProjectIdsForUser)
 	}
 
 	folderRouter := g.Group("api/v1/folder")
@@ -104,10 +103,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// 文档文件夹下的文件树
 		folderRouter.GET("/file_children/:id", project.GetFileChildren) // 获取文件树
 		folderRouter.GET("/doc_children/:id", project.GetDocChildren)   // 获取文档树
-		// folderRouter.PUT("/file_children/:id", project.UpdateFileChildren) // 编辑文件树
-		// folderRouter.PUT("/doc_children/:id", project.UpdateDocChildren)   // 编辑文档树
 		// 移动文件
-		folderRouter.PUT("/children/:old_father_id/:father_id", project.UpdateFilePosition)
+		folderRouter.PUT("/children/:old_father_id/:id", project.UpdateFilePosition)
 		// 文档夹 crud
 		folderRouter.GET("/docfolder", project.GetDocFolderInfoList)
 		folderRouter.POST("/docfolder", project.CreateDocFolder)
@@ -127,7 +124,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	fileRouter.Use(projectCheck)
 	{
 		// 文件
-		fileRouter.POST("file", project.CreateFile)
+		fileRouter.POST("/file", project.CreateFile)
 		fileRouter.DELETE("/file/:id", project.DeleteFile)
 		fileRouter.PUT("/file/:id", project.UpdateFile)
 		fileRouter.GET("/file/:id/children/:file_id", project.GetFileDetail)

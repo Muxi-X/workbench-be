@@ -17,6 +17,18 @@ import (
 
 // CreateDoc creates a new doc
 // 更新：前端不用传 fatherType 根据 fatherId 是否为 0 来判断
+// @Summary create a new doc api
+// @Description 通过父节点 id，和插入节点位置确定新建文档的位置。
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateDocRequest true "create_doc_request"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc [post]
 func CreateDoc(c *gin.Context) {
 	log.Info("project createDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -32,11 +44,13 @@ func CreateDoc(c *gin.Context) {
 	// 获取 userid
 	userID := c.MustGet("userID").(uint32)
 	teamID := c.MustGet("teamID").(uint32)
+	// 获取 projectid
+	projectID := c.MustGet("projectID").(uint32)
 
 	createDocReq := &pbp.CreateDocRequest{
 		Title:                 req.Title,
 		Content:               req.Content,
-		ProjectId:             req.ProjectID,
+		ProjectId:             projectID,
 		UserId:                userID,
 		TeamId:                teamID,
 		FatherId:              req.FatherID,
@@ -59,7 +73,7 @@ func CreateDoc(c *gin.Context) {
 			Kind:        3,
 			Id:          resp.Id,
 			Name:        req.DocName,
-			ProjectId:   req.ProjectID,
+			ProjectId:   projectID,
 			ProjectName: "",
 		},
 	}

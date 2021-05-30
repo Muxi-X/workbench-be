@@ -17,6 +17,19 @@ import (
 )
 
 // DeleteDoc deletes a doc
+// @Summary delete a doc api
+// @Description 新建文件夹
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteDocRequest true "delete_doc_request"
+// @Param id path int true "doc_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id} [post]
 func DeleteDoc(c *gin.Context) {
 	log.Info("Doc delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

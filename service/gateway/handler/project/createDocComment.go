@@ -16,6 +16,19 @@ import (
 )
 
 // CreateDocComment ... 创建文档评论
+// @Summary create a doc comment api
+// @Description 新建文档评论
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateDocCommentRequest true "create_doc_comment_request"
+// @Param id path int true "doc_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id}/comment [post]
 func CreateDocComment(c *gin.Context) {
 	log.Info("project createDocComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -33,6 +46,7 @@ func CreateDocComment(c *gin.Context) {
 	}
 
 	userID := c.MustGet("userID").(uint32)
+	projectID := c.MustGet("projectID").(uint32)
 
 	createDocCommentReq := &pbp.CreateDocCommentRequest{
 		UserId:  userID,
@@ -54,7 +68,7 @@ func CreateDocComment(c *gin.Context) {
 			Kind:        3,
 			Id:          uint32(docId),
 			Name:        "",
-			ProjectId:   req.ProjectId,
+			ProjectId:   projectID,
 			ProjectName: "",
 		},
 	}

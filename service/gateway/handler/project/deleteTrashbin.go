@@ -17,7 +17,20 @@ import (
 
 // DeleteTrashbin ... 删除垃圾资源 传不同的 type 删不一样的资源
 // type： 0-project 1-doc 2-file 3-doc folder 4-file folder
-// 其中 project 和两个 folder 是递归删除
+// TODO: 服务逻辑上有问题，需要增加 project id 限定
+// @Summary delete a trashbin api
+// @Description 删除回收站内文件,其中 type：0-project 1-doc 2-file 3-doc folder 4-file folder
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "file_id"
+// @Param object body DeleteFolderRequest true "delete_trashbin_request"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /trashbin/{id} [delete]
 func DeleteTrashbin(c *gin.Context) {
 	log.Info("project deleteTrashbin funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

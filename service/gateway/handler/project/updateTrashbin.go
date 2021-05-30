@@ -17,6 +17,19 @@ import (
 
 // UpdateTrashbin ... 用于恢复资源
 // 通过 type 恢复不同资源
+// @Summary update trashbin api
+// @Description 恢复回收站资源
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "回收站中文件的 id"
+// @Param object body RemoveTrashbinRequest true "remove_trashbin_request"
+// @Param project_id query int true "此回收站对应的项目 id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /trashbin/{id} [put]
 func UpdateTrashbin(c *gin.Context) {
 	log.Info("project updateTrashbin funcation call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

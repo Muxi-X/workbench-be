@@ -16,6 +16,18 @@ import (
 )
 
 // GetDocChildren ... 获取某个文档夹下的文档树
+// @Summary get doc children api
+// @Description 获取某个文档夹下的节点(文档或文档夹)
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "doc_folder_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetFileChildrenResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /folder/doc_children/{id} [get]
 func GetDocChildren(c *gin.Context) {
 	log.Info("project getDoctTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 

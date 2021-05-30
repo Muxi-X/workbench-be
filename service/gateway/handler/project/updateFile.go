@@ -17,6 +17,19 @@ import (
 )
 
 // UpdateFile updates a file' info
+// @Summary update file api
+// @Description 修改文件
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "此文件 id"
+// @Param object body UpdateFileRequest true "update_file_request"
+// @Param project_id query int true "此文件所属项目 id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/file/{id} [put]
 func UpdateFile(c *gin.Context) {
 	log.Info("project updateFile function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

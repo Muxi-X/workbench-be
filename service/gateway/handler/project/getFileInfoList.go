@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -15,19 +16,42 @@ import (
 )
 
 // GetFileInfoList ... 获取文件列表
+// @Summary get file info list api
+// @Description 获取文件列表
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param ids query int true "folder_ids 是一个数组"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetFileInfoListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/files [get]
 func GetFileInfoList(c *gin.Context) {
 	log.Info("project getFileInfoList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获得请求
-	var req GetFileInfoListRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
+	// 从 query 获得 ids
+	rawIds, isvalid := c.GetQueryArray("ids")
+	if !isvalid {
+		SendBadRequest(c, errno.ErrQuery, nil, "no query parameters", GetLine())
 		return
 	}
 
+	// 转换
+	var ids []uint32
+	for _, v := range rawIds {
+		id, err := strconv.Atoi(v)
+		if err != nil {
+			SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
+			return
+		}
+		ids = append(ids, uint32(id))
+	}
+
 	resp, err := service.ProjectClient.GetFileInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
-		List: req.Ids,
+		List: ids,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

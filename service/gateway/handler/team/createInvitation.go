@@ -23,7 +23,6 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param expired query int false " expired 以秒为单位， 默认为 3600 秒"
-// @Security ApiKeyAuth
 // @Success 200 {object} CreateInvitationResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

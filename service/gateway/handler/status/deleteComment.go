@@ -26,7 +26,6 @@ import (
 // @Param id path int true "comment_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param object body DeleteCommentRequest  true "delete_comment_request"
-// @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
@@ -66,25 +65,25 @@ func DeleteComment(c *gin.Context) {
 	}
 
 	/*
-	// 构造 push 请求
-	pushReq := &pbf.PushRequest{
-		Action: "取消评论",
-		UserId: id,
-		Source: &pbf.Source{
-			Kind:        6,
-			Id:          uint32(cid),
-			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
-		},
-	}
+		// 构造 push 请求
+		pushReq := &pbf.PushRequest{
+			Action: "取消评论",
+			UserId: id,
+			Source: &pbf.Source{
+				Kind:        6,
+				Id:          uint32(cid),
+				Name:        req.Title,
+				ProjectId:   0,
+				ProjectName: "",
+			},
+		}
 
-	// 向 feed 发送请求
-	_, err = service.FeedClient.Push(context.Background(), pushReq)
-	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
-		return
-	}
+		// 向 feed 发送请求
+		_, err = service.FeedClient.Push(context.Background(), pushReq)
+		if err != nil {
+			SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+			return
+		}
 	*/
 
 	SendResponse(c, errno.OK, nil)
