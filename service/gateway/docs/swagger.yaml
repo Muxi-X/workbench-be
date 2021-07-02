@@ -146,6 +146,24 @@ definitions:
       team_id:
         type: integer
     type: object
+  FeedItem:
+    properties:
+      action:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      show_divider:
+        description: 分割线
+        type: boolean
+      source:
+        $ref: '#/definitions/Source'
+      time:
+        type: string
+      user:
+        $ref: '#/definitions/User'
+    type: object
   FileChildrenItem:
     properties:
       id:
@@ -424,6 +442,20 @@ definitions:
       message:
         type: string
     type: object
+  Source:
+    properties:
+      id:
+        type: integer
+      kind:
+        description: 类型，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
+        type: integer
+      name:
+        type: string
+      project_id:
+        type: integer
+      project_name:
+        type: string
+    type: object
   Status:
     properties:
       avatar:
@@ -520,6 +552,15 @@ definitions:
       new_name:
         type: string
     type: object
+  User:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   UserProfile:
     properties:
       avatar:
@@ -540,6 +581,15 @@ definitions:
         type: integer
       tel:
         type: string
+    type: object
+  muxi-workbench-gateway_handler_feed.ListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FeedItem'
+        type: array
     type: object
   muxi-workbench-gateway_handler_project.Comment:
     properties:
@@ -676,7 +726,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/LoginResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/LoginResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -718,6 +773,148 @@ paths:
       summary: register api
       tags:
       - auth
+  /feed/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_feed.ListResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get feed list api
+      tags:
+      - feed
+  /feed/list/group/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某一组的动态list，0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_feed.ListResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get feed group_list by group_id api
+      tags:
+      - feed
+  /feed/list/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: filtered_user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_feed.ListResponse'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: list feeds filtered by user_id api
+      tags:
+      - feed
   /file/doc:
     post:
       consumes:
@@ -879,7 +1076,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetDocDetailResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetDocDetailResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1074,7 +1276,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1113,7 +1320,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileInfoListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileInfoListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1286,7 +1498,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileDetailResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileDetailResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1325,7 +1542,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileInfoListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileInfoListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1414,7 +1636,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileChildrenResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileChildrenResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1453,7 +1680,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileInfoListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileInfoListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1620,7 +1852,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileChildrenResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileChildrenResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1659,7 +1896,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetFileInfoListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetFileInfoListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1860,7 +2102,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetProjectInfoResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetProjectInfoResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -1962,7 +2209,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetProjectIdsForUserResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetProjectIdsForUserResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2003,7 +2255,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetProjectListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetProjectListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2049,7 +2306,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetMemberResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetMemberResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2141,7 +2403,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_status.ListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_status.ListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2327,7 +2594,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2412,7 +2684,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2651,7 +2928,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ApplicationListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/ApplicationListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2796,7 +3078,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GroupListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GroupListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2873,7 +3160,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/MemberListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/MemberListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2906,7 +3198,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/CreateInvitationResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/CreateInvitationResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -2940,7 +3237,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/ParseInvitationResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/ParseInvitationResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -3051,7 +3353,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/GetTrashbinResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/GetTrashbinResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -3074,6 +3381,11 @@ paths:
         name: Authorization
         required: true
         type: string
+      - description: file_id
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: delete_trashbin_request
         in: body
         name: object
@@ -3213,7 +3525,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_user.ListResponse'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/muxi-workbench-gateway_handler_user.ListResponse'
+              type: object
         "401":
           description: Unauthorized
           schema:
@@ -3253,7 +3570,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/UserProfile'
+            allOf:
+            - $ref: '#/definitions/Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/UserProfile'
+              type: object
         "401":
           description: Unauthorized
           schema:

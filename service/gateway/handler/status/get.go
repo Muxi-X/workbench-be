@@ -23,7 +23,7 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param id path int true "status_id"
-// @Success 200 {object} GetResponse
+// @Success 200 {object} handler.Response{data=GetResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /status/detail/{id} [get]

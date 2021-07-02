@@ -52,7 +52,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/LoginResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/LoginResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -99,6 +111,239 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/feed/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取此用户的动态list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "get feed list api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.ListResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/feed/list/group/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取某一组的动态list，0 代表不筛选，1-\u003e产品，2-\u003e前端，3-\u003e后端，4-\u003e安卓，5-\u003e设计",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "get feed group_list by group_id api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "group_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.ListResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/feed/list/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取此用户的动态list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "list feeds filtered by user_id api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "filtered_user_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.ListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -355,7 +600,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetDocDetailResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetDocDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -644,7 +901,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -702,7 +971,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileInfoListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileInfoListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -959,7 +1240,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileDetailResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1017,7 +1310,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileInfoListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileInfoListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1149,7 +1454,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileChildrenResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileChildrenResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1207,7 +1524,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileInfoListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileInfoListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1455,7 +1784,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileChildrenResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileChildrenResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1513,7 +1854,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetFileInfoListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetFileInfoListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1754,7 +2107,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetProjectInfoResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetProjectInfoResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -1965,7 +2330,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetProjectIdsForUserResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetProjectIdsForUserResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2027,7 +2404,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetProjectListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetProjectListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2096,7 +2485,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetMemberResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetMemberResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2234,7 +2635,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.ListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.ListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2454,7 +2867,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2639,7 +3064,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -2999,7 +3436,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ApplicationListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/ApplicationListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3108,7 +3557,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GroupListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GroupListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3224,7 +3685,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/MemberListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/MemberListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3383,7 +3856,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/CreateInvitationResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/CreateInvitationResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3434,7 +3919,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ParseInvitationResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/ParseInvitationResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3601,7 +4098,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/GetTrashbinResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/GetTrashbinResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3703,6 +4212,13 @@ var doc = `{
                         "description": "token 用户令牌",
                         "name": "Authorization",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "file_id",
+                        "name": "id",
+                        "in": "path",
                         "required": true
                     },
                     {
@@ -3844,7 +4360,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_user.ListResponse"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_user.ListResponse"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -3904,7 +4432,19 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/UserProfile"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/UserProfile"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     "401": {
@@ -4149,6 +4689,33 @@ var doc = `{
             "properties": {
                 "team_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "FeedItem": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "show_divider": {
+                    "description": "分割线",
+                    "type": "boolean"
+                },
+                "source": {
+                    "$ref": "#/definitions/Source"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/User"
                 }
             }
         },
@@ -4582,6 +5149,27 @@ var doc = `{
                 }
             }
         },
+        "Source": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "description": "类型，1 -\u003e 团队，2 -\u003e 项目，3 -\u003e 文档，4 -\u003e 文件，6 -\u003e 进度（5 不使用）",
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "project_id": {
+                    "type": "integer"
+                },
+                "project_name": {
+                    "type": "string"
+                }
+            }
+        },
         "Status": {
             "type": "object",
             "properties": {
@@ -4731,6 +5319,20 @@ var doc = `{
                 }
             }
         },
+        "User": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "UserProfile": {
             "type": "object",
             "properties": {
@@ -4760,6 +5362,20 @@ var doc = `{
                 },
                 "tel": {
                     "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_feed.ListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FeedItem"
+                    }
                 }
             }
         },

@@ -21,7 +21,7 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Success 200 {object} GetProjectIdsForUserResponse
+// @Success 200 {object} handler.Response{data=GetProjectIdsForUserResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /project/ids [get]

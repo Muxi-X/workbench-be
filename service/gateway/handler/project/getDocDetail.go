@@ -26,7 +26,7 @@ import (
 // @Param file_id path int true "doc_id"
 // @Param id path int true "fahter_id"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} GetDocDetailResponse
+// @Success 200 {object} handler.Response{data=GetDocDetailResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /file/doc/{id}/children/{file_id} [get]
