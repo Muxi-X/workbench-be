@@ -21,7 +21,6 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /team/application [post]

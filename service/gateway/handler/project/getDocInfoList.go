@@ -16,6 +16,18 @@ import (
 )
 
 // GetDocInfoList ... 获取文档列表
+// @Summary get doc info list api
+// @Description 获取文档列表
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param ids query int true "folder_ids 是一个数组"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetFileInfoListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/docs [get]
 func GetDocInfoList(c *gin.Context) {
 	log.Info("project getDocInfoList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

@@ -14,6 +14,18 @@ import (
 )
 
 // CreateFileFolder ... 建立文件夹
+// @Summary create a doc folder api
+// @Description 新建文件夹
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateFolderRequest true "create_folder_request"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /folder/filefolder [post]
 func CreateFileFolder(c *gin.Context) {
 	log.Info("project createFileFolder function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -25,11 +37,12 @@ func CreateFileFolder(c *gin.Context) {
 	}
 
 	userID := c.MustGet("userID").(uint32)
+	projectID := c.MustGet("projectID").(uint32)
 
 	createFileFolderReq := &pbp.CreateFolderRequest{
 		Name:                  req.Name,
 		CreatorId:             userID,
-		ProjectId:             req.ProjectId,
+		ProjectId:             projectID,
 		FatherId:              req.FatherId,
 		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}

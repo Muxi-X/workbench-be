@@ -2,7 +2,6 @@ package project
 
 import (
 	"context"
-	"strconv"
 
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
@@ -17,15 +16,23 @@ import (
 )
 
 // UpdateProjectInfo updates a project's info
+// @Summary update project info api
+// @Description 修改项目详情
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body UpdateRequest true "update_request"
+// @Param project_id query int true "项目 id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /project [put]
 func UpdateProjectInfo(c *gin.Context) {
 	log.Info("Project updateProjectInfo function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
-		return
-	}
+	projectID := c.MustGet("projectID").(uint32)
 
 	// 获取请求
 	var req UpdateRequest
@@ -45,7 +52,7 @@ func UpdateProjectInfo(c *gin.Context) {
 	}
 
 	// 发送 update 请求
-	_, err = service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
+	_, err := service.ProjectClient.UpdateProjectInfo(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

@@ -83,27 +83,34 @@ func main() {
 	// 	log.Fatal("Could not greet: %v", err)
 	// }
 	// fmt.Printf("%+v\n", *resp)
-
-	// getFileChildren
-	// req := &pb.GetRequest{
-	// 	Id: 29,
-	// }
-	// resp, err := client.GetFileChildren(context.Background(), req)
-	// if err != nil {
-	// 	log.Fatal("Could not greet: %v", err)
-	// }
-	// fmt.Printf("%+v\n", *resp)
-
-	// getFileDetail
-	req := &pb.GetFileDetailRequest{
-		Id:       69,
-		FatherId: 29,
+	
+  // getFileChildren
+	req := &pb.GetRequest{
+		Id: 29,
 	}
-	resp, err := client.GetFileDetail(context.Background(), req)
+	resp, err := client.GetFileChildren(context.Background(), req)
+
 	if err != nil {
 		log.Fatal("Could not greet: %v", err)
 	}
 	fmt.Printf("%+v\n", *resp)
+
+	// getFileDetail
+	//req := &pb.GetFileDetailRequest{
+	//	Id:       69,
+	//	FatherId: 29,
+	//}
+	//resp, err := client.GetFileDetail(context.Background(), req)
+	//if err != nil {
+	//	log.Fatal("Could not greet: %v", err)
+	//}
+	//fmt.Printf("%+v\n", *resp)
+
+	// getFileFolderInfoList
+	//req := &pb.GetInfoByIdsRequest{
+	//	List: []uint32{},
+	//	FatherId: uint32(),
+	//}
 
 	// 创建文档
 	// req := &pb.CreateDocRequest{

@@ -24,7 +24,6 @@ import (
 // @Param id path int true "group_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param object body UpdateGroupInfoRequest true "update_group_info_request"
-// @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

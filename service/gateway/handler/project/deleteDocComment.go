@@ -16,6 +16,20 @@ import (
 )
 
 // DeleteDocComment ... 删除文档评论
+// @Summary delete a doc comment api
+// @Description 删除文档的评论
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteDocCommentRequest true "delete_doc_comment_request"
+// @Param id path int true "doc_id"
+// @Param comment_id path int true "comment_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /file/doc/{id}/comment/{comment_id} [delete]
 func DeleteDocComment(c *gin.Context) {
 	log.Info("project deleteDocComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

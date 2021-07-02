@@ -27,7 +27,6 @@ import (
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Param page query int false "page"
-// @Security ApiKeyAuth
 // @Success 200 {object} CommentListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

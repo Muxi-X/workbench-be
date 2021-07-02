@@ -24,7 +24,6 @@ import (
 // @Produce  application/json
 // @Param object body CreateRequest true "create_request"
 // @Param Authorization header string true "token 用户令牌"
-// @Security ApiKeyAuth
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

@@ -15,6 +15,18 @@ import (
 
 // CreateDocFolder ... 建立文档夹
 // 更新：删除 fatherType，类型根据 father_id 判定，新增 childrenpositionindex
+// @Summary create a doc folder api
+// @Description 新建文档夹
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateFolderRequest true "create_folder_request"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /folder/docfolder [post]
 func CreateDocFolder(c *gin.Context) {
 	log.Info("project createDocFolder function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -26,11 +38,12 @@ func CreateDocFolder(c *gin.Context) {
 	}
 
 	userID := c.MustGet("userID").(uint32)
+	projectID := c.MustGet("projectID").(uint32)
 
 	createDocFolderReq := &pbp.CreateFolderRequest{
 		Name:                  req.Name,
 		CreatorId:             userID,
-		ProjectId:             req.ProjectId,
+		ProjectId:             projectID,
 		FatherId:              req.FatherId,
 		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}

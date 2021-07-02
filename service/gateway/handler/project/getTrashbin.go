@@ -17,6 +17,20 @@ import (
 
 // GetTrashbin ... 获取回收站文件
 // type： 0-project 1-doc 2-file 3-doc folder 4-file folder
+// TODO: 需要加上 project id 限制
+// @Summary get project trashbin api
+// @Description 获取项目回收站资源
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param page query int false "page"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetTrashbinResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /trashbin [get]
 func GetTrashbin(c *gin.Context) {
 	log.Info("project getTrashbin function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 

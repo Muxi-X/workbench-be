@@ -16,6 +16,19 @@ import (
 )
 
 // UpdateFileFolder ... 修改文件夹
+// @Summary update file folder's name api
+// @Description 修改文件夹名字
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "此文件夹 id"
+// @Param object body UpdateFolderRequest true "update_folder_request"
+// @Param project_id query int true "此文件夹所属项目 id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /folder/filefolder/{id} [put]
 func UpdateFileFolder(c *gin.Context) {
 	log.Info("Project updateFileFolder function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

@@ -16,6 +16,19 @@ import (
 )
 
 // GetProjectList gets project list
+// @Summary get project list api
+// @Description 获取项目列表
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param limit query int false "limit"
+// @Param last_id query int false "last_id"
+// @Param page query int false "page"
+// @Success 200 {object} GetProjectListResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /project/list [get]
 func GetProjectList(c *gin.Context) {
 	log.Info("project getProjectList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

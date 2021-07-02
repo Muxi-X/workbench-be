@@ -16,6 +16,18 @@ import (
 )
 
 // GetFileChildren ... 获取某个文件夹下的文件树
+// @Summary get file children api
+// @Description 获取某个文件夹下的节点(文件或文件夹)
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param id path int true "file_folder_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetFileChildrenResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /folder/file_children/{id} [get]
 func GetFileChildren(c *gin.Context) {
 	log.Info("project getFileTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 

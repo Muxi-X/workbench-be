@@ -21,7 +21,6 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param object body LoginRequest true "login_request"
-// @Security ApiKeyAuth
 // @Success 200 {object} LoginResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

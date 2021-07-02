@@ -24,7 +24,6 @@ import (
 // @Param id path int true "user_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param object body GetProfileRequest  true "get_profile_request"
-// @Security ApiKeyAuth
 // @Success 200 {object} UserProfile
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

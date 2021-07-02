@@ -15,6 +15,17 @@ import (
 )
 
 // CreateProject creates new project
+// @Summary create a project api
+// @Description 新建项目
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body CreateProjectRequest true "create_project_request"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /project [post]
 func CreateProject(c *gin.Context) {
 	log.Info("project createProject function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

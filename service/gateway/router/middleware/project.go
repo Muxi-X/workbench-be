@@ -15,12 +15,19 @@ import (
 // ProjectMiddleware ... 检查用户是否有 projectid 权限
 func ProjectMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		projectID, err := strconv.Atoi(c.Param("project_id"))
+		projectID, err := strconv.Atoi(c.DefaultQuery("project_id", "-1"))
 		if err != nil {
 			handler.SendBadRequest(c, errno.ErrNoProjectId, nil, err.Error(), handler.GetLine())
 			c.Abort()
 			return
 		}
+
+		if projectID == -1 {
+			handler.SendBadRequest(c, errno.ErrNoProjectId, nil, err.Error(), handler.GetLine())
+			c.Abort()
+			return
+		}
+
 
 		userID := c.MustGet("userID").(uint32)
 

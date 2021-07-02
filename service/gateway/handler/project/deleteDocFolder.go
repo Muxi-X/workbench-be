@@ -15,6 +15,19 @@ import (
 )
 
 // DeleteDocFolder ... 删除文档夹
+// @Summary delete a doc folder api
+// @Description 删除文档文件夹
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param object body DeleteFolderRequest true "delete_folder_request"
+// @Param id path int true "doc_folder_id"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} handler.Response
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /folder/docfolder/{id} [delete]
 func DeleteDocFolder(c *gin.Context) {
 	log.Info("project deleteDocFolder function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

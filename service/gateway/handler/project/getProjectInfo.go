@@ -2,7 +2,6 @@ package project
 
 import (
 	"context"
-	"strconv"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -16,19 +15,26 @@ import (
 )
 
 // GetProjectInfo gets a project's information by its id
+// @Summary get project info api
+// @Description 获取项目的详情
+// @Tags project
+// @Accept  application/json
+// @Produce  application/json
+// @Param Authorization header string true "token 用户令牌"
+// @Param project_id query int true "project_id"
+// @Success 200 {object} GetProjectInfoResponse
+// @Failure 401 {object} handler.Response
+// @Failure 500 {object} handler.Response
+// @Router /project [get]
 func GetProjectInfo(c *gin.Context) {
 	log.Info("project getProjectInfo function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
-		return
-	}
+	projectID := c.MustGet("projectID").(uint32)
 
 	// 发送请求
 	getProInfoResp, err := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
-		Id: uint32(projectID),
+		Id: projectID,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

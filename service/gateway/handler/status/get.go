@@ -23,7 +23,6 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param id path int true "status_id"
-// @Security ApiKeyAuth
 // @Success 200 {object} GetResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
