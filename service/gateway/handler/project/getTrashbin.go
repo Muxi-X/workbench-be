@@ -27,7 +27,7 @@ import (
 // @Param limit query int false "limit"
 // @Param page query int false "page"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} GetTrashbinResponse
+// @Success 200 {object} handler.Response{data=GetTrashbinResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /trashbin [get]

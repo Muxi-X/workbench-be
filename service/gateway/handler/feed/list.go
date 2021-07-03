@@ -25,7 +25,7 @@ import (
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Security ApiKeyAuth
-// @Success 200 {object} ListResponse
+// @Success 200 {object} handler.Response{data=ListResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /feed/list [get]

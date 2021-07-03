@@ -21,7 +21,7 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param object body LoginRequest true "login_request"
-// @Success 200 {object} LoginResponse
+// @Success 200 {object} handler.Response{data=LoginResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /auth/login [post]

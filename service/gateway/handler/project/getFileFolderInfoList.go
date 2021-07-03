@@ -24,7 +24,7 @@ import (
 // @Param Authorization header string true "token 用户令牌"
 // @Param ids query int true "folder_ids 是一个数组"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} GetFileInfoListResponse
+// @Success 200 {object} handler.Response{data=GetFileInfoListResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /folder/filefolder [get]

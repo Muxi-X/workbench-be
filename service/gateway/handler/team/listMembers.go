@@ -25,7 +25,7 @@ import (
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
 // @Param page query int false "page 从 0 开始计数， 如果传入非负数或者不传值则不分页"
-// @Success 200 {object} MemberListResponse
+// @Success 200 {object} handler.Response{data=MemberListResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /team/group/members/list/{id} [get]

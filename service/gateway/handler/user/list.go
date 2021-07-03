@@ -25,7 +25,7 @@ import (
 // @Param page query int false "page"
 // @Param Authorization header string true "token 用户令牌"
 // @Param object body ListRequest true "get_user_list_request"
-// @Success 200 {object} ListResponse
+// @Success 200 {object} handler.Response{data=ListResponse}
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /user/list [get]
