@@ -116,6 +116,203 @@ var doc = `{
                 }
             }
         },
+        "/feed/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取此用户的动态list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "get feed list api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/FeedListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/feed/list/group/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取某一组的动态list，0 代表不筛选，1-\u003e产品，2-\u003e前端，3-\u003e后端，4-\u003e安卓，5-\u003e设计",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "get feed group_list by group_id api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "group_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/FeedListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/feed/list/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取此用户的动态list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "list feeds filtered by user_id api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "filtered_user_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/FeedListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
         "/file/doc": {
             "post": {
                 "description": "通过父节点 id，和插入节点位置确定新建文档的位置。",
@@ -644,7 +841,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse"
+                            "$ref": "#/definitions/DocCommentListResponse"
                         }
                     },
                     "401": {
@@ -1797,7 +1994,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.UpdateRequest"
+                            "$ref": "#/definitions/ProjectUpdateRequest"
                         }
                     },
                     {
@@ -2234,7 +2431,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.ListResponse"
+                            "$ref": "#/definitions/StatusListResponse"
                         }
                     },
                     "401": {
@@ -2504,7 +2701,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.UpdateRequest"
+                            "$ref": "#/definitions/UpdateRequest"
                         }
                     }
                 ],
@@ -2639,7 +2836,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
+                            "$ref": "#/definitions/CommentListResponse"
                         }
                     },
                     "401": {
@@ -3706,6 +3903,13 @@ var doc = `{
                         "required": true
                     },
                     {
+                        "type": "integer",
+                        "description": "file_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "delete_trashbin_request",
                         "name": "object",
                         "in": "body",
@@ -3844,7 +4048,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_user.ListResponse"
+                            "$ref": "#/definitions/ListResponse"
                         }
                     },
                     "401": {
@@ -3949,6 +4153,43 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "cid": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "CommentListResponse": {
+            "type": "object",
+            "properties": {
+                "commentlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Comment"
+                    }
+                },
+                "count": {
+                    "type": "integer"
                 }
             }
         },
@@ -4144,11 +4385,89 @@ var doc = `{
                 }
             }
         },
+        "DocComment": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "cid": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "DocCommentListResponse": {
+            "type": "object",
+            "properties": {
+                "commentlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DocComment"
+                    }
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
         "DropTeamRequest": {
             "type": "object",
             "properties": {
                 "team_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "FeedItem": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "show_divider": {
+                    "description": "分割线",
+                    "type": "boolean"
+                },
+                "source": {
+                    "$ref": "#/definitions/Source"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/User"
+                }
+            }
+        },
+        "FeedListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FeedItem"
+                    }
                 }
             }
         },
@@ -4420,6 +4739,20 @@ var doc = `{
                 }
             }
         },
+        "ListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.User"
+                    }
+                }
+            }
+        },
         "LoginRequest": {
             "type": "object",
             "properties": {
@@ -4521,6 +4854,17 @@ var doc = `{
                 }
             }
         },
+        "ProjectUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "intro": {
+                    "type": "string"
+                },
+                "project_name": {
+                    "type": "string"
+                }
+            }
+        },
         "RegisterRequest": {
             "type": "object",
             "required": [
@@ -4582,6 +4926,27 @@ var doc = `{
                 }
             }
         },
+        "Source": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "description": "类型，1 -\u003e 团队，2 -\u003e 项目，3 -\u003e 文档，4 -\u003e 文件，6 -\u003e 进度（5 不使用）",
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "project_id": {
+                    "type": "integer"
+                },
+                "project_name": {
+                    "type": "string"
+                }
+            }
+        },
         "Status": {
             "type": "object",
             "properties": {
@@ -4611,6 +4976,20 @@ var doc = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "StatusListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "stauts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Status"
+                    }
                 }
             }
         },
@@ -4723,10 +5102,35 @@ var doc = `{
                 }
             }
         },
+        "UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "UpdateTeamInfoRequest": {
             "type": "object",
             "properties": {
                 "new_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -4760,130 +5164,6 @@ var doc = `{
                 },
                 "tel": {
                     "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_project.Comment": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "cid": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "uid": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_project.CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "commentlist": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/muxi-workbench-gateway_handler_project.Comment"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_project.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "intro": {
-                    "type": "string"
-                },
-                "project_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.Comment": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "cid": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "uid": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "commentlist": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/muxi-workbench-gateway_handler_status.Comment"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "stauts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Status"
-                    }
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_user.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/user.User"
-                    }
                 }
             }
         },

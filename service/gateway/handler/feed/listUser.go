@@ -26,7 +26,7 @@ import (
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Security ApiKeyAuth
-// @Success 200 {object} ListResponse
+// @Success 200 {object} FeedListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /feed/list/user/{id} [get]
@@ -96,7 +96,7 @@ func ListUser(c *gin.Context) {
 		})
 	}
 
-	SendResponse(c, nil, ListResponse{
+	SendResponse(c, nil, FeedListResponse{
 		Count: listResp.Count,
 		List:  list,
 	})

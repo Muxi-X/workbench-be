@@ -22,7 +22,7 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param object body UpdateRequest true "update_request"
+// @Param object body ProjectUpdateRequest true "update_request"
 // @Param project_id query int true "项目 id"
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
@@ -35,7 +35,7 @@ func UpdateProjectInfo(c *gin.Context) {
 	projectID := c.MustGet("projectID").(uint32)
 
 	// 获取请求
-	var req UpdateRequest
+	var req ProjectUpdateRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return

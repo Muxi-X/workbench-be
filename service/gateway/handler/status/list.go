@@ -29,7 +29,7 @@ import (
 // @Param group query int false "group"
 // @Param uid query int false "uid"
 // @Param team query int false "team"
-// @Success 200 {object} ListResponse
+// @Success 200 {object} StatusListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /status [get]
@@ -109,7 +109,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	var resp ListResponse
+	var resp StatusListResponse
 	for _, item := range listResp.List {
 		resp.Status = append(resp.Status, Status{
 			Id:           item.Id,

@@ -18,6 +18,30 @@ definitions:
       name:
         type: string
     type: object
+  Comment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
+  CommentListResponse:
+    properties:
+      commentlist:
+        items:
+          $ref: '#/definitions/Comment'
+        type: array
+      count:
+        type: integer
+    type: object
   CreateCommentRequest:
     properties:
       content:
@@ -141,10 +165,61 @@ definitions:
       title:
         type: string
     type: object
+  DocComment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
+  DocCommentListResponse:
+    properties:
+      commentlist:
+        items:
+          $ref: '#/definitions/DocComment'
+        type: array
+      count:
+        type: integer
+    type: object
   DropTeamRequest:
     properties:
       team_id:
         type: integer
+    type: object
+  FeedItem:
+    properties:
+      action:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      show_divider:
+        description: 分割线
+        type: boolean
+      source:
+        $ref: '#/definitions/Source'
+      time:
+        type: string
+      user:
+        $ref: '#/definitions/User'
+    type: object
+  FeedListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FeedItem'
+        type: array
     type: object
   FileChildrenItem:
     properties:
@@ -319,6 +394,15 @@ definitions:
       team:
         type: integer
     type: object
+  ListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/user.User'
+        type: array
+    type: object
   LoginRequest:
     properties:
       oauth_code:
@@ -384,6 +468,13 @@ definitions:
       name:
         type: string
     type: object
+  ProjectUpdateRequest:
+    properties:
+      intro:
+        type: string
+      project_name:
+        type: string
+    type: object
   RegisterRequest:
     properties:
       email:
@@ -424,6 +515,20 @@ definitions:
       message:
         type: string
     type: object
+  Source:
+    properties:
+      id:
+        type: integer
+      kind:
+        description: 类型，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
+        type: integer
+      name:
+        type: string
+      project_id:
+        type: integer
+      project_name:
+        type: string
+    type: object
   Status:
     properties:
       avatar:
@@ -444,6 +549,15 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  StatusListResponse:
+    properties:
+      count:
+        type: integer
+      stauts:
+        items:
+          $ref: '#/definitions/Status'
+        type: array
     type: object
   Trashbin:
     properties:
@@ -515,9 +629,25 @@ definitions:
           type: integer
         type: array
     type: object
+  UpdateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
   UpdateTeamInfoRequest:
     properties:
       new_name:
+        type: string
+    type: object
+  User:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
   UserProfile:
@@ -540,86 +670,6 @@ definitions:
         type: integer
       tel:
         type: string
-    type: object
-  muxi-workbench-gateway_handler_project.Comment:
-    properties:
-      avatar:
-        type: string
-      cid:
-        type: integer
-      content:
-        type: string
-      time:
-        type: string
-      uid:
-        type: integer
-      username:
-        type: string
-    type: object
-  muxi-workbench-gateway_handler_project.CommentListResponse:
-    properties:
-      commentlist:
-        items:
-          $ref: '#/definitions/muxi-workbench-gateway_handler_project.Comment'
-        type: array
-      count:
-        type: integer
-    type: object
-  muxi-workbench-gateway_handler_project.UpdateRequest:
-    properties:
-      intro:
-        type: string
-      project_name:
-        type: string
-    type: object
-  muxi-workbench-gateway_handler_status.Comment:
-    properties:
-      avatar:
-        type: string
-      cid:
-        type: integer
-      content:
-        type: string
-      time:
-        type: string
-      uid:
-        type: integer
-      username:
-        type: string
-    type: object
-  muxi-workbench-gateway_handler_status.CommentListResponse:
-    properties:
-      commentlist:
-        items:
-          $ref: '#/definitions/muxi-workbench-gateway_handler_status.Comment'
-        type: array
-      count:
-        type: integer
-    type: object
-  muxi-workbench-gateway_handler_status.ListResponse:
-    properties:
-      count:
-        type: integer
-      stauts:
-        items:
-          $ref: '#/definitions/Status'
-        type: array
-    type: object
-  muxi-workbench-gateway_handler_status.UpdateRequest:
-    properties:
-      content:
-        type: string
-      title:
-        type: string
-    type: object
-  muxi-workbench-gateway_handler_user.ListResponse:
-    properties:
-      count:
-        type: integer
-      list:
-        items:
-          $ref: '#/definitions/user.User'
-        type: array
     type: object
   project.UpdateFilePositionRequest:
     properties:
@@ -718,6 +768,133 @@ paths:
       summary: register api
       tags:
       - auth
+  /feed/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FeedListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get feed list api
+      tags:
+      - feed
+  /feed/list/group/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某一组的动态list，0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FeedListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get feed group_list by group_id api
+      tags:
+      - feed
+  /feed/list/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: filtered_user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FeedListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      security:
+      - ApiKeyAuth: []
+      summary: list feeds filtered by user_id api
+      tags:
+      - feed
   /file/doc:
     post:
       consumes:
@@ -1074,7 +1251,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse'
+            $ref: '#/definitions/DocCommentListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1921,7 +2098,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/muxi-workbench-gateway_handler_project.UpdateRequest'
+          $ref: '#/definitions/ProjectUpdateRequest'
       - description: 项目 id
         in: query
         name: project_id
@@ -2141,7 +2318,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_status.ListResponse'
+            $ref: '#/definitions/StatusListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -2359,7 +2536,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/muxi-workbench-gateway_handler_status.UpdateRequest'
+          $ref: '#/definitions/UpdateRequest'
       produces:
       - application/json
       responses:
@@ -2412,7 +2589,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse'
+            $ref: '#/definitions/CommentListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -3074,6 +3251,11 @@ paths:
         name: Authorization
         required: true
         type: string
+      - description: file_id
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: delete_trashbin_request
         in: body
         name: object
@@ -3213,7 +3395,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/muxi-workbench-gateway_handler_user.ListResponse'
+            $ref: '#/definitions/ListResponse'
         "401":
           description: Unauthorized
           schema:

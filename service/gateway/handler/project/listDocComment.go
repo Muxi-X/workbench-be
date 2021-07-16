@@ -26,7 +26,7 @@ import (
 // @Param last_id query int false "last_id"
 // @Param page query int false "page"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} CommentListResponse
+// @Success 200 {object} DocCommentListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /file/doc/{id}/comments [get]
@@ -81,12 +81,12 @@ func ListDocComment(c *gin.Context) {
 	}
 
 	// 构造返回 response
-	resp := CommentListResponse{
+	resp := DocCommentListResponse{
 		Count: listComResp.Count,
 	}
 
 	for _, item := range listComResp.List {
-		resp.CommentList = append(resp.CommentList, Comment{
+		resp.CommentList = append(resp.CommentList, DocComment{
 			Cid:      item.Id,
 			Uid:      item.UserId,
 			Username: item.UserName,
