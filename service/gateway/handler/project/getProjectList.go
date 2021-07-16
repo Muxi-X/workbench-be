@@ -25,7 +25,7 @@ import (
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Param page query int false "page"
-// @Success 200 {object} handler.Response{data=GetProjectListResponse}
+// @Success 200 {object} GetProjectListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /project/list [get]

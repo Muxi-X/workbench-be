@@ -79,21 +79,21 @@ type UpdateDocCommentRequest struct {
 	ProjectId uint32 `json:"project_id"`
 } //@name UpdateDocCommentRequest
 
-// Comment
-type Comment struct {
+// DocComment
+type DocComment struct {
 	Cid      uint32 `json:"cid"`
 	Uid      uint32 `json:"uid"`
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
 	Content  string `json:"content"`
-} //@name Comment
+} //@name DocComment
 
-// CommentListResponse ... 获取文档评论响应
-type CommentListResponse struct {
+// DocCommentListResponse ... 获取文档评论响应
+type DocCommentListResponse struct {
 	Count       uint32    `json:"count"`
-	CommentList []Comment `json:"commentlist"`
-} //@name CommentListResponse
+	CommentList []DocComment `json:"commentlist"`
+} //@name DocCommentListResponse
 
 // GetProjectInfoResponse ... 获取项目详情响应
 type GetProjectInfoResponse struct {
@@ -105,11 +105,11 @@ type GetProjectInfoResponse struct {
 	FileChildren []*FileChildrenItem `json:"file_children"`
 } //@name GetProjectInfoResponse
 
-// UpdateRequest ... 修改项目详情请求
-type UpdateRequest struct {
+// ProjectRequest ... 修改项目详情请求
+type ProjectUpdateRequest struct {
 	ProjectName string `json:"project_name"`
 	Intro       string `json:"intro"`
-} //@name UpdateRequest
+} //@name ProjectUpdateRequest
 
 // ProjectListItem
 type ProjectListItem struct {

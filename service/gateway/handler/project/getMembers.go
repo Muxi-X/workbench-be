@@ -26,7 +26,7 @@ import (
 // @Param last_id query int false "last_id"
 // @Param page query int false "page"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} handler.Response{data=GetMemberResponse}
+// @Success 200 {object} GetMemberResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /project/member [get]

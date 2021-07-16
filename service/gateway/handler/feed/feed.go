@@ -24,7 +24,7 @@ type FeedItem struct {
 	Source      *Source `json:"source"`
 } //@name FeedItem
 
-type ListResponse struct {
+type FeedListResponse struct {
 	Count uint32      `json:"count"`
 	List  []*FeedItem `json:"list"`
-} //@name ListResponse
+} //@name FeedListResponse

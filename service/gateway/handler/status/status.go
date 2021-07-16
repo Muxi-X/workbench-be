@@ -60,11 +60,11 @@ type Status struct {
 	Liked        bool   `json:"liked"`
 } //@name Status
 
-// ListResponse 获取进度列表响应
-type ListResponse struct {
+// StatusListResponse 获取进度列表响应
+type StatusListResponse struct {
 	Count  uint32   `json:"count"`
 	Status []Status `json:"stauts"`
-} //@name ListResponse
+} //@name StatusListResponse
 
 // CreateCommentRequest 创建评论请求
 type CreateCommentRequest struct {

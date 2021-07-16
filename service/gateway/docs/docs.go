@@ -52,19 +52,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/LoginResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/LoginResponse"
                         }
                     },
                     "401": {
@@ -171,19 +159,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.ListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -251,19 +227,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.ListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -331,19 +295,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.ListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -600,19 +552,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetDocDetailResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetDocDetailResponse"
                         }
                     },
                     "401": {
@@ -901,19 +841,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/DocCommentListResponse"
                         }
                     },
                     "401": {
@@ -971,19 +899,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileInfoListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileInfoListResponse"
                         }
                     },
                     "401": {
@@ -1240,19 +1156,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileDetailResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileDetailResponse"
                         }
                     },
                     "401": {
@@ -1310,19 +1214,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileInfoListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileInfoListResponse"
                         }
                     },
                     "401": {
@@ -1454,19 +1346,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileChildrenResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileChildrenResponse"
                         }
                     },
                     "401": {
@@ -1524,19 +1404,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileInfoListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileInfoListResponse"
                         }
                     },
                     "401": {
@@ -1784,19 +1652,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileChildrenResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileChildrenResponse"
                         }
                     },
                     "401": {
@@ -1854,19 +1710,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetFileInfoListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetFileInfoListResponse"
                         }
                     },
                     "401": {
@@ -2107,19 +1951,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetProjectInfoResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetProjectInfoResponse"
                         }
                     },
                     "401": {
@@ -2162,7 +1994,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.UpdateRequest"
+                            "$ref": "#/definitions/ProjectUpdateRequest"
                         }
                     },
                     {
@@ -2330,19 +2162,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetProjectIdsForUserResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetProjectIdsForUserResponse"
                         }
                     },
                     "401": {
@@ -2404,19 +2224,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetProjectListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetProjectListResponse"
                         }
                     },
                     "401": {
@@ -2485,19 +2293,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetMemberResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetMemberResponse"
                         }
                     },
                     "401": {
@@ -2635,19 +2431,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.ListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/StatusListResponse"
                         }
                     },
                     "401": {
@@ -2867,19 +2651,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetResponse"
                         }
                     },
                     "401": {
@@ -2929,7 +2701,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.UpdateRequest"
+                            "$ref": "#/definitions/UpdateRequest"
                         }
                     }
                 ],
@@ -3064,19 +2836,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/CommentListResponse"
                         }
                     },
                     "401": {
@@ -3436,19 +3196,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/ApplicationListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/ApplicationListResponse"
                         }
                     },
                     "401": {
@@ -3557,19 +3305,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GroupListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GroupListResponse"
                         }
                     },
                     "401": {
@@ -3685,19 +3421,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/MemberListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/MemberListResponse"
                         }
                     },
                     "401": {
@@ -3856,19 +3580,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/CreateInvitationResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/CreateInvitationResponse"
                         }
                     },
                     "401": {
@@ -3919,19 +3631,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/ParseInvitationResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/ParseInvitationResponse"
                         }
                     },
                     "401": {
@@ -4098,19 +3798,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/GetTrashbinResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/GetTrashbinResponse"
                         }
                     },
                     "401": {
@@ -4360,19 +4048,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/muxi-workbench-gateway_handler_user.ListResponse"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/ListResponse"
                         }
                     },
                     "401": {
@@ -4432,19 +4108,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/UserProfile"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/UserProfile"
                         }
                     },
                     "401": {
@@ -4489,6 +4153,43 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "Comment": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "cid": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "CommentListResponse": {
+            "type": "object",
+            "properties": {
+                "commentlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Comment"
+                    }
+                },
+                "count": {
+                    "type": "integer"
                 }
             }
         },
@@ -4684,6 +4385,43 @@ var doc = `{
                 }
             }
         },
+        "DocComment": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "cid": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "DocCommentListResponse": {
+            "type": "object",
+            "properties": {
+                "commentlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DocComment"
+                    }
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
         "DropTeamRequest": {
             "type": "object",
             "properties": {
@@ -4716,6 +4454,20 @@ var doc = `{
                 },
                 "user": {
                     "$ref": "#/definitions/User"
+                }
+            }
+        },
+        "FeedListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FeedItem"
+                    }
                 }
             }
         },
@@ -4987,6 +4739,20 @@ var doc = `{
                 }
             }
         },
+        "ListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.User"
+                    }
+                }
+            }
+        },
         "LoginRequest": {
             "type": "object",
             "properties": {
@@ -5084,6 +4850,17 @@ var doc = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ProjectUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "intro": {
+                    "type": "string"
+                },
+                "project_name": {
                     "type": "string"
                 }
             }
@@ -5202,6 +4979,20 @@ var doc = `{
                 }
             }
         },
+        "StatusListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "stauts": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Status"
+                    }
+                }
+            }
+        },
         "Trashbin": {
             "type": "object",
             "properties": {
@@ -5311,6 +5102,17 @@ var doc = `{
                 }
             }
         },
+        "UpdateRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "UpdateTeamInfoRequest": {
             "type": "object",
             "properties": {
@@ -5362,144 +5164,6 @@ var doc = `{
                 },
                 "tel": {
                     "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_feed.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/FeedItem"
-                    }
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_project.Comment": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "cid": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "uid": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_project.CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "commentlist": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/muxi-workbench-gateway_handler_project.Comment"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_project.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "intro": {
-                    "type": "string"
-                },
-                "project_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.Comment": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "cid": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "uid": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "commentlist": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/muxi-workbench-gateway_handler_status.Comment"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "stauts": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Status"
-                    }
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_status.UpdateRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_user.ListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/user.User"
-                    }
                 }
             }
         },

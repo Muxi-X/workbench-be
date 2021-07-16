@@ -22,7 +22,7 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} handler.Response{data=GetProjectInfoResponse}
+// @Success 200 {object} GetProjectInfoResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /project [get]

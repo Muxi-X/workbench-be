@@ -26,7 +26,7 @@ import (
 // @Param file_id path int true "file_id"
 // @Param id path int true "fahter_id"
 // @Param project_id query int true "project_id"
-// @Success 200 {object} handler.Response{data=GetFileDetailResponse}
+// @Success 200 {object} GetFileDetailResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /file/file/{id}/children/{file_id} [get]
