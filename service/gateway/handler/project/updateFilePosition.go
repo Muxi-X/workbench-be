@@ -56,11 +56,11 @@ func UpdateFilePosition(c *gin.Context) {
 	// 构造请求
 	// 这里 list 应该是 uint32 表示 uid
 	updateFilePositionReq := &pbp.UpdateFilePositionRequest{
-		FileId:                uint32(id),
-		OldFatherId:           uint32(oldFatherId),
-		FatherId:              req.FatherId,
-		FatherType:            req.FatherType,
-		Type:                  uint32(req.Type),
+		FileId:      uint32(id),
+		OldFatherId: uint32(oldFatherId),
+		FatherId:    req.FatherId,
+		FatherType:  req.FatherType,
+		Type:        uint32(req.Type),
 		ChildrenPositionIndex: req.ChildrenPositionIndex,
 	}
 

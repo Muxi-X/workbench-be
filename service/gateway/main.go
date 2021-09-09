@@ -44,6 +44,8 @@ func init() {
 // @tag.description 团队服务
 // @tag.name project
 // @tag.description 项目服务
+// @tag.name auth
+// @tag.description 用户服务
 
 func main() {
 	pflag.Parse()

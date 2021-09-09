@@ -5215,6 +5215,10 @@
         {
             "description": "项目服务",
             "name": "project"
+        },
+        {
+            "description": "用户服务",
+            "name": "auth"
         }
     ]
 }

@@ -91,7 +91,7 @@ type DocComment struct {
 
 // DocCommentListResponse ... 获取文档评论响应
 type DocCommentListResponse struct {
-	Count       uint32    `json:"count"`
+	Count       uint32       `json:"count"`
 	CommentList []DocComment `json:"commentlist"`
 } //@name DocCommentListResponse
 
