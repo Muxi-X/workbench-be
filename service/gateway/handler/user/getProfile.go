@@ -15,6 +15,32 @@ import (
 	"go.uber.org/zap"
 )
 
+func GetUserProfile(id uint32) (*UserProfile, error) {
+
+	getProfileReq := &pb.GetRequest{Id: uint32(id)}
+
+	// 发送请求
+	getProfileResp, err := service.UserClient.GetProfile(context.Background(), getProfileReq)
+	if err != nil {
+		return nil, err
+	}
+
+	// 构造返回 response
+	resp := &UserProfile{
+		Id:     getProfileResp.Id,
+		Nick:   getProfileResp.Nick,
+		Name:   getProfileResp.Name,
+		Avatar: getProfileResp.Avatar,
+		Email:  getProfileResp.Email,
+		Tel:    getProfileResp.Tel,
+		Role:   getProfileResp.Role,
+		Team:   getProfileResp.Team,
+		Group:  getProfileResp.Group,
+	}
+
+	return resp, nil
+}
+
 // GetProfile ... 获取 userProfile
 // @Summary get user_profile api
 // @Description 通过 userId 获取完整 user 信息
@@ -40,28 +66,13 @@ func GetProfile(c *gin.Context) {
 		return
 	}
 
-	getProfileReq := &pb.GetRequest{Id: uint32(id)}
+	user, err := GetUserProfile(uint32(id))
 
-	// 发送请求
-	getProfileResp, err := service.UserClient.GetProfile(context.Background(), getProfileReq)
 	if err != nil {
 		// TO DO: 判断错误是否是用户不存在
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造返回 response
-	resp := UserProfile{
-		Id:     getProfileResp.Id,
-		Nick:   getProfileResp.Nick,
-		Name:   getProfileResp.Name,
-		Avatar: getProfileResp.Avatar,
-		Email:  getProfileResp.Email,
-		Tel:    getProfileResp.Tel,
-		Role:   getProfileResp.Role,
-		Team:   getProfileResp.Team,
-		Group:  getProfileResp.Group,
-	}
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, user)
 }

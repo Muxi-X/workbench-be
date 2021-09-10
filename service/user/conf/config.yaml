@@ -5,13 +5,13 @@ jwt_secret: workbenchmuxihacker
 tracing:
   jager: localhost:6831 # opentracing
 db:  # DB 配置 部署时环境变量覆盖
-  name: workbench
-  addr: 0.0.0.0:3306
-  username: root
-  password: root
+  name: workbench_test
+  addr: rm-bp1pkcz9y269h30fm5o.mysql.rds.aliyuncs.com:3306
+  username: workbench_test
+  password: Muxistudio304
 auth_server:  # auth 内网
-  host: localhost:8083
-  client_id: 4b194ad8-7d97-4dca-b078-6c3c65b31c75
-  client_secret: 8c066b19-e507-4887-88f3-7e7edd99bfd8
+  host: pass.muxi-tech.xyz
+  client_id: 51f03389-2a18-4941-ba73-c85d08201d42
+  client_secret: 7d52480f-730d-45a1-99cc-1397985ebe0e
 token:
   expired: 30 # 过期时间（天）
