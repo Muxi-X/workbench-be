@@ -6,3 +6,4 @@ muxi-workbench
 *.tmp
 *.mod
 *.sum
+.DS_Store

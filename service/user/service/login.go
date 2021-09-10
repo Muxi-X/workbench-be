@@ -41,10 +41,23 @@ func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest, res *pb.L
 
 	// 根据 eamil 在本地 DB 查询 user
 	user, err := model.GetUserByEmail(userInfo.Email)
+
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	} else if user == nil {
-		return e.ServerErr(errno.ErrDatabase, "user does not exist")
+		info := &RegisterInfo{
+			Name:  userInfo.Username,
+			Email: userInfo.Email,
+		}
+		// 用户未注册，自动注册
+		if err := RegisterUser(info); err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+		// 注册后重新查询
+		user, err = model.GetUserByEmail(userInfo.Email)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
 	}
 
 	// 生成 auth token

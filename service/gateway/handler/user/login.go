@@ -9,6 +9,9 @@ import (
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pb "muxi-workbench-user/proto"
+	e "muxi-workbench/pkg/err"
+
+	errors "github.com/micro/go-micro/errors"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -43,8 +46,19 @@ func Login(c *gin.Context) {
 
 	// 发送请求
 	loginResp, err := service.UserClient.Login(context.Background(), loginReq)
+
 	if err != nil {
-		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+		parsedErr := errors.Parse(err.Error())
+		detail, errr := e.ParseDetail(parsedErr.Detail)
+
+		finalErrno := errno.InternalServerError
+		if errr == nil {
+			finalErrno = &errno.Errno{
+				Code:    detail.Code,
+				Message: detail.Cause,
+			}
+		}
+		SendError(c, finalErrno, nil, err.Error(), GetLine())
 		return
 	}
 

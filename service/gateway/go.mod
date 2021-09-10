@@ -15,17 +15,18 @@ require (
 	github.com/micro/go-plugins v1.5.1
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/satori/go.uuid v1.2.0
-	github.com/shirou/gopsutil v2.19.11+incompatible
+	github.com/shirou/gopsutil v3.21.8+incompatible
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.7.1
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
+	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/willf/pad v0.0.0-20190207183901-eccfe5d84172
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210908191846-a5e095526f91 // indirect
-	golang.org/x/sys v0.0.0-20210908233432-aa78b53d3365 // indirect
+	golang.org/x/sys v0.0.0-20210909193231-528a39cd75f3 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0

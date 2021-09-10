@@ -5,41 +5,58 @@ import (
 
 	"muxi-workbench-user/errno"
 	"muxi-workbench-user/model"
-	"muxi-workbench-user/pkg/auth"
 	pb "muxi-workbench-user/proto"
+	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+
+	uuid "github.com/satori/go.uuid"
 )
 
-// Register ... 注册
-func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res *pb.Response) error {
+type RegisterInfo struct {
+	Name  string `json:"name" binding:"required"`
+	Email string `json:"email" binding:"required"`
+}
 
-	// muxi-auth-service 注册用户
-	if err := auth.RegisterRequest(req.Name, req.Email, req.Password); err != nil {
-		return e.ServerErr(errno.ErrRegister, err.Error())
-	}
-
+func RegisterUser(info *RegisterInfo) error {
 	// 本地 user 数据库创建用户
-
+	name := info.Name
 	// 用户是否存在
-	if userExisted, err := CheckUserExisted(req.Name, req.Email); err != nil {
+	if userExisted, nameExisted, err := CheckUserExisted(info.Name, info.Email); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	} else if userExisted {
 		return e.ServerErr(errno.ErrUserExisted, "")
+	} else if nameExisted {
+		u4 := uuid.NewV4()
+		name = "用户" + u4.String()
 	}
 
 	// 创建用户
 	user := &model.UserModel{
+		Name:   name,
+		Email:  info.Email,
+		Role:   constvar.AuthLevelNormal,
+		TeamID: 1, // TODO 后期删除
+	}
+	if err := user.Create(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Register ... 注册
+func (s *UserService) Register(ctx context.Context, req *pb.RegisterRequest, res *pb.Response) error {
+	info := &RegisterInfo{
 		Name:  req.Name,
 		Email: req.Email,
 	}
-	if err := user.Create(); err != nil {
+	if err := RegisterUser(info); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 	return nil
 }
 
 // CheckUserExisted check whether the user exists by name and email.
-func CheckUserExisted(name, email string) (bool, error) {
+func CheckUserExisted(name, email string) (bool, bool, error) {
 	sameEmailChannel, sameNameChannel, errChannel := make(chan bool), make(chan bool), make(chan error)
 
 	// 检查邮箱
@@ -67,6 +84,7 @@ func CheckUserExisted(name, email string) (bool, error) {
 	}(name)
 
 	var userExisted = false
+	var nameExisted = false
 	var err error
 
 	// 循环两次
@@ -80,7 +98,7 @@ func CheckUserExisted(name, email string) (bool, error) {
 			}
 		case result := <-sameNameChannel:
 			if result {
-				userExisted = true
+				nameExisted = true
 			}
 		}
 	}
@@ -89,5 +107,5 @@ func CheckUserExisted(name, email string) (bool, error) {
 	close(sameNameChannel)
 	close(errChannel)
 
-	return userExisted, err
+	return userExisted, nameExisted, err
 }

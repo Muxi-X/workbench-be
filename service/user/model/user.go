@@ -8,15 +8,17 @@ import (
 )
 
 type UserModel struct {
-	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name     string `json:"name" gorm:"column:name;" binding:"required"`
-	RealName string `json:"realName" gorm:"column:real_name;" binding:"required"`
-	Email    string `json:"email" gorm:"column:email;" binding:"required"`
-	Avatar   string `json:"avatar" gorm:"column:avatar;" binding:"required"`
-	Tel      string `json:"tel" gorm:"column:tel;"`
-	Role     uint32 `json:"role" gorm:"column:role;" binding:"required"`
-	TeamID   uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
-	GroupID  uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
+	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name         string `json:"name" gorm:"column:name;" binding:"required"`
+	RealName     string `json:"realName" gorm:"column:real_name;" binding:"required"`
+	Email        string `json:"email" gorm:"column:email;" binding:"required"`
+	Avatar       string `json:"avatar" gorm:"column:avatar;" binding:"required"`
+	Tel          string `json:"tel" gorm:"column:tel;"`
+	Role         uint32 `json:"role" gorm:"column:role;" binding:"required"`
+	TeamID       uint32 `json:"teamId" gorm:"column:team_id;" binding:"required"`
+	GroupID      uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
+	EmailService uint32 `json:"emailService" gorm:"column:email_service;" binding:"required"`
+	Message      uint32 `json:"message" gorm:"column:message;" binding:"required"`
 }
 
 func (u *UserModel) TableName() string {

@@ -14,6 +14,7 @@ var (
 	// auth errors
 	ErrTokenInvalid     = &Errno{Code: 20101, Message: "The token was invalid."}
 	ErrPermissionDenied = &Errno{Code: 20102, Message: "Permission denied."}
+	ErrNotJoined        = &Errno{Code: 20103, Message: "User not join any team."}
 
 	// user errors
 	ErrUserNotFound      = &Errno{Code: 20201, Message: "The user was not found."}

@@ -24,7 +24,7 @@ func NotFoundErr(errno *Errno, cause string) error {
 		Id:     "serverName",
 		Code:   404,
 		Detail: string(detailStr),
-		Status: http.StatusText(400),
+		Status: http.StatusText(404),
 	}
 }
 
@@ -38,7 +38,7 @@ func BadRequestErr(errno *Errno, cause string) error {
 
 	return &errors.Error{
 		Id:     "serverName",
-		Code:   409,
+		Code:   400,
 		Detail: string(detailStr),
 		Status: http.StatusText(400),
 	}
@@ -58,4 +58,13 @@ func ServerErr(errno *Errno, cause string) error {
 		Detail: string(detailStr),
 		Status: http.StatusText(500),
 	}
+}
+
+func ParseDetail(detail string) (*ErrDetail, error) {
+	d := &ErrDetail{}
+	err := json.Unmarshal([]byte(detail), d)
+	if err != nil {
+		return nil, err
+	}
+	return d, nil
 }
