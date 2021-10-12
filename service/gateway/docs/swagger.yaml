@@ -510,8 +510,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: object
+      data: {}
       message:
         type: string
     type: object
@@ -802,8 +801,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      security:
-      - ApiKeyAuth: []
       summary: get feed list api
       tags:
       - feed
@@ -846,8 +843,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      security:
-      - ApiKeyAuth: []
       summary: get feed group_list by group_id api
       tags:
       - feed
@@ -890,8 +885,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      security:
-      - ApiKeyAuth: []
       summary: list feeds filtered by user_id api
       tags:
       - feed

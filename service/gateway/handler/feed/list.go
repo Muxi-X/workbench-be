@@ -24,7 +24,6 @@ import (
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
-// @Security ApiKeyAuth
 // @Success 200 {object} FeedListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

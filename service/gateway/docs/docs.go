@@ -117,11 +117,6 @@ var doc = `{
         },
         "/feed/list": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取此用户的动态list",
                 "consumes": [
                     "application/json"
@@ -178,11 +173,6 @@ var doc = `{
         },
         "/feed/list/group/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取某一组的动态list，0 代表不筛选，1-\u003e产品，2-\u003e前端，3-\u003e后端，4-\u003e安卓，5-\u003e设计",
                 "consumes": [
                     "application/json"
@@ -246,11 +236,6 @@ var doc = `{
         },
         "/feed/list/user/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取此用户的动态list",
                 "consumes": [
                     "application/json"
@@ -4917,9 +4902,7 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "message": {
                     "type": "string"
                 }
