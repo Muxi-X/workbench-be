@@ -5199,6 +5199,10 @@ var doc = `{
     "tags": [
         {
             "description": "动态服务",
+            "name": "feed"
+        },
+        {
+            "description": "进度服务",
             "name": "status"
         },
         {
@@ -5206,16 +5210,28 @@ var doc = `{
             "name": "user"
         },
         {
-            "description": "团队服务",
-            "name": "team"
+            "description": "认证服务",
+            "name": "auth"
         },
         {
             "description": "项目服务",
             "name": "project"
         },
         {
-            "description": "用户服务",
-            "name": "auth"
+            "description": "团队服务",
+            "name": "team"
+        },
+        {
+            "description": "团队/组服务",
+            "name": "group"
+        },
+        {
+            "description": "团队/邀请服务",
+            "name": "invitation"
+        },
+        {
+            "description": "团队/申请服务",
+            "name": "application"
         }
     ]
 }`

@@ -36,16 +36,24 @@ func init() {
 // @host work.test.muxi-tech.xyz
 // @BasePath /api/v1
 
-// @tag.name status
+// @tag.name feed
 // @tag.description 动态服务
+// @tag.name status
+// @tag.description 进度服务
 // @tag.name user
 // @tag.description 用户服务
-// @tag.name team
-// @tag.description 团队服务
+// @tag.name auth
+// @tag.description 认证服务
 // @tag.name project
 // @tag.description 项目服务
-// @tag.name auth
-// @tag.description 用户服务
+// @tag.name team
+// @tag.description 团队服务
+// @tag.name group
+// @tag.description 团队/组服务
+// @tag.name invitation
+// @tag.description 团队/邀请服务
+// @tag.name application
+// @tag.description 团队/申请服务
 
 func main() {
 	pflag.Parse()
