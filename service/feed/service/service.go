@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
+	"muxi-workbench/pkg/handler"
 
 	ppb "muxi-workbench-project/proto"
 	upb "muxi-workbench-user/proto"
@@ -15,7 +18,12 @@ var ProjectService micro.Service
 var ProjectClient ppb.ProjectServiceClient
 
 func UserInit() {
-	UserService = micro.NewService(micro.Name("workbench.cli.user"))
+	UserService = micro.NewService(micro.Name("workbench.cli.user"),
+		micro.WrapClient(
+			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
+		),
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
 
 	UserService.Init()
 
@@ -23,7 +31,12 @@ func UserInit() {
 }
 
 func ProjectInit() {
-	ProjectService = micro.NewService(micro.Name("workbench.cli.project"))
+	ProjectService = micro.NewService(micro.Name("workbench.cli.project"),
+		micro.WrapClient(
+			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
+		),
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
 
 	ProjectService.Init()
 
