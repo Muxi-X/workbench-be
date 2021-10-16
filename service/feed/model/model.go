@@ -14,7 +14,7 @@ type FeedModel struct {
 	SourceObjectName  string `json:"source_object_name" gorm:"column:source_objectname"`
 	SourceObjectId    uint32 `json:"source_object_id" gorm:"column:source_objectid"`
 	SourceProjectName string `json:"source_project_name" gorm:"column:source_projectname"`
-	SourceProjectId   uint32 `json:"source_project_id" gorm:"column:source_projectid"`
+	SourceProjectId   int32 `json:"source_project_id" gorm:"column:source_projectid"`
 	TimeDay           string `json:"time_day" gorm:"column:timeday"`
 	TimeHm            string `json:"time_hm" gorm:"column:timehm"`
 }

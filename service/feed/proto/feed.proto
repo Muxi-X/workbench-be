@@ -55,6 +55,6 @@ message Source {
     uint32 kind = 1;
     uint32 id = 2;
     string name = 3;
-    uint32 project_id = 4;
+    int32 project_id = 4;
     string project_name = 5;
 }
