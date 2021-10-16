@@ -23,7 +23,7 @@ func UserInit() {
 }
 
 func ProjectInit() {
-	ProjectService = micro.NewService(micro.Name("workebnch.cli.project"))
+	ProjectService = micro.NewService(micro.Name("workbench.cli.project"))
 
 	ProjectService.Init()
 
