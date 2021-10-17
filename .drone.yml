@@ -136,14 +136,14 @@ steps:
       tags: ${DRONE_TAG} 
       build_args:
         - service_name=feed
-  - name: send remind
-    image: golang
-    when:
-      status:
-        - success
-        - failure
-    commands:
-      - curl -X POST 'http://47.97.74.180:1217/bot/remind?build_status=${DRONE_BUILD_STATUS}&author=${DRONE_COMMIT_AUTHOR}&repo=${DRONE_REPO}&host=${DRONE_SYSTEM_HOST}&repo_link=${DRONE_REPO_LINK}&tag=${DRONE_TAG}&failed_steps=${DRONE_FAILED_STEPS}'
+#  - name: send remind
+#    image: golang
+#    when:
+#      status:
+#        - success
+#        - failure
+#    commands:
+#      - curl -X POST 'http://47.97.74.180:1217/bot/remind?build_status=${DRONE_BUILD_STATUS}&author=${DRONE_COMMIT_AUTHOR}&repo=${DRONE_REPO}&host=${DRONE_SYSTEM_HOST}&repo_link=${DRONE_REPO_LINK}&tag=${DRONE_TAG}&failed_steps=${DRONE_FAILED_STEPS}'
 volumes:
 - name: dockersock
   host:

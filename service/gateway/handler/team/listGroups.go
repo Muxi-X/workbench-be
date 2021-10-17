@@ -27,7 +27,7 @@ import (
 // @Success 200 {object} GroupListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
-// @Router /team/group/list [get]
+// @Router /team/group [get]
 func GetGroupList(c *gin.Context) {
 	log.Info("Groups list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -37,7 +37,7 @@ func GetGroupList(c *gin.Context) {
 	var err error
 	pagination := true
 
-	limit, err = strconv.Atoi(c.Query("limit"))
+	limit, err = strconv.Atoi(c.DefaultQuery("limit","20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
@@ -48,8 +48,9 @@ func GetGroupList(c *gin.Context) {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page < 0 {
+	if page == 0 {
 		pagination = false
+		page = 0 // 解决下面 uint 转换问题
 	}
 
 	// 构造 GroupList 请求

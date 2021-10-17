@@ -28,6 +28,7 @@ func init() {
 	service.StatusInit()
 	service.ProjectInit()
 	service.UserInit()
+	service.TeamInit()
 }
 
 // @title muxi-workbench-gateway
