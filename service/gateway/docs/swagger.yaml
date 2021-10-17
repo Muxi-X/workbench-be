@@ -2834,6 +2834,42 @@ paths:
       tags:
       - application
   /team/group:
+    get:
+      consumes:
+      - application/json
+      description: 拉取 group 列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GroupListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list group api
+      tags:
+      - group
     post:
       consumes:
       - application/json
@@ -2939,43 +2975,6 @@ paths:
           schema:
             $ref: '#/definitions/Response'
       summary: update group info api
-      tags:
-      - group
-  /team/group/list:
-    get:
-      consumes:
-      - application/json
-      description: 拉取 group 列表
-      parameters:
-      - description: token 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: limit
-        in: query
-        name: limit
-        type: integer
-      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
-        in: query
-        name: page
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/GroupListResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Response'
-      summary: list group api
       tags:
       - group
   /team/group/members:

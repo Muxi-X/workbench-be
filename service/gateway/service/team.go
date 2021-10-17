@@ -15,7 +15,7 @@ var TeamService micro.Service
 var TeamClient tpb.TeamServiceClient
 
 func TeamInit() {
-	UserService = micro.NewService(micro.Name("workbench.cli.team"),
+	TeamService = micro.NewService(micro.Name("workbench.cli.team"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
 		),
