@@ -48,7 +48,7 @@ func GetGroupList(c *gin.Context) {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
-	if page == 0 {
+	if page < 0 {
 		pagination = false
 		page = 0 // 解决下面 uint 转换问题
 	}
