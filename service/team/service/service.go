@@ -99,7 +99,7 @@ func GetMemberInfo(groupID uint32, limit uint32, offset uint32, pagination bool)
 			Role:      item.Role,
 			Email:     item.Email,
 			Avatar:    item.Avatar,
-			Name:      item.Name,
+			Name:      item.Nick,
 		})
 	}
 	return memberlist, count, nil
