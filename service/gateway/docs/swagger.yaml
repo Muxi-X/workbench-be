@@ -3012,7 +3012,7 @@ paths:
       summary: update members of group api
       tags:
       - group
-  /team/group/members/list/{id}:
+  /team/group/members/{id}:
     get:
       consumes:
       - application/json

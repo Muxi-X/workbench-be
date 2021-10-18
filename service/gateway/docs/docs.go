@@ -3358,7 +3358,7 @@ var doc = `{
                 }
             }
         },
-        "/team/group/members/list/{id}": {
+        "/team/group/members/{id}": {
             "get": {
                 "description": "根据 groupID 拉取 members 列表",
                 "consumes": [

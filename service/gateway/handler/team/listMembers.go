@@ -28,7 +28,7 @@ import (
 // @Success 200 {object} MemberListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
-// @Router /team/group/members/list/{id} [get]
+// @Router /team/group/members/{id} [get]
 func GetMemberList(c *gin.Context) {
 	log.Info("Members List function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
