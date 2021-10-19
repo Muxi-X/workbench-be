@@ -21,11 +21,23 @@ type MemberModel struct {
 
 // GetMemberList …… 组别内成员列表
 func (ts *TeamService) GetMemberList(ctx context.Context, req *pb.MemberListRequest, res *pb.MemberListResponse) error {
-	list, count, err := GetMemberInfo(req.GroupId, req.Limit, req.Offset, req.Pagination)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
+	var list []*MemberModel
+	var count uint64
 
+	if req.GroupId == 0 { // get all members
+		l, c, err := GetMemberInfo(req.GroupId, req.Limit, req.Offset, req.Pagination)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+		list = append(list, l...)
+		count += c
+	} else {
+		var err error
+		list, count, err = GetMemberInfo(req.GroupId, req.Limit, req.Offset, req.Pagination)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+	}
 	resList := make([]*pb.Member, 0)
 
 	for index := 0; index < len(list); index++ {
