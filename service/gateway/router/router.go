@@ -167,7 +167,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		// group
 		teamRouter.GET("/group", normalRequired, team.GetGroupList)
 		teamRouter.GET("/group/members/:id", normalRequired, team.GetMemberList)
-		teamRouter.GET("/group/members/all", normalRequired, team.GetAllMemberList)
 
 		teamRouter.PUT("/group/members", adminRequired, team.UpdateMembersForGroup)
 		teamRouter.POST("/group", superAdminRequired, team.CreateGroup)
