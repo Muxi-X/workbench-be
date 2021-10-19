@@ -17,7 +17,7 @@ import (
 
 // GetMemberList ... 获取组别内成员列表
 // @Summary list members api
-// @Description 根据 groupID 拉取 members 列表
+// @Description 根据 groupID 拉取 members 列表 (0 -> all)
 // @Tags group
 // @Accept  application/json
 // @Produce  application/json
