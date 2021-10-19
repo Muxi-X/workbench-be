@@ -16,12 +16,11 @@ import (
 )
 
 // GetAllMemberList ... 获取组别内成员列表
-// @Summary list members api
-// @Description 根据 groupID 拉取 members 列表
+// @Summary list all members api
+// @Description 直接拉取 所有 members 列表
 // @Tags group
 // @Accept  application/json
 // @Produce  application/json
-// @Param id path int true "group_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
 // @Param page query int false "page 从 0 开始计数， 如果传入非负数或者不传值则不分页"
