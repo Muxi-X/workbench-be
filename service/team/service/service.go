@@ -71,7 +71,7 @@ func GetMemberInfo(groupID uint32, limit uint32, offset uint32, pagination bool)
 		offset = 0
 	}
 
-	memberlist := make([]*MemberModel, 0)
+	memberList := make([]*MemberModel, 0)
 
 	rsp, err := UserClient.List(context.Background(), &upb.ListRequest{
 		LastId: 0,
@@ -81,28 +81,32 @@ func GetMemberInfo(groupID uint32, limit uint32, offset uint32, pagination bool)
 		Group:  groupID,
 	})
 	if err != nil {
-		return memberlist, 0, err
+		return memberList, 0, err
 	}
 	count := uint64(rsp.Count)
 
-	group, err := model.GetGroup(groupID)
+	groups, number, err := model.ListGroup(offset, limit, pagination)
 	if err != nil {
-		return memberlist, count, err
+		return memberList, count, err
+	}
+	var groupMap = make(map[uint32]string, number)
+	for i, group := range groups {
+		groupMap[uint32(i)] = group.Name
 	}
 
 	for _, item := range rsp.List {
-		memberlist = append(memberlist, &MemberModel{
+		memberList = append(memberList, &MemberModel{
 			UserID:    item.Id,
 			TeamID:    item.Team,
 			GroupID:   item.Group,
-			GroupName: group.Name,
+			GroupName: groupMap[item.Group],
 			Role:      item.Role,
 			Email:     item.Email,
 			Avatar:    item.Avatar,
 			Name:      item.Nick,
 		})
 	}
-	return memberlist, count, nil
+	return memberList, count, nil
 }
 
 // GetUsersByApplys get users by applys ID
