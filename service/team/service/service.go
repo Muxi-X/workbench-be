@@ -91,7 +91,7 @@ func GetMemberInfo(groupID uint32, limit uint32, offset uint32, pagination bool)
 	}
 	var groupMap = make(map[uint32]string, number)
 	for i, group := range groups {
-		groupMap[uint32(i)] = group.Name
+		groupMap[uint32(i+1)] = group.Name
 	}
 
 	for _, item := range rsp.List {
