@@ -5,7 +5,7 @@ replace muxi-workbench => ../../
 go 1.13
 
 require (
-	github.com/codahale/hdrhistogram v0.0.0-20161010025455-3a0bb77429bd // indirect
+	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/golang/protobuf v1.3.3
 	github.com/jinzhu/gorm v1.9.15
 	github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect

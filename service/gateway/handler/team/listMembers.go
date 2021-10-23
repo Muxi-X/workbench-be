@@ -86,6 +86,7 @@ func GetMemberList(c *gin.Context) {
 			GroupName: item.GroupName,
 			Email:     item.Email,
 			Avatar:    item.Avatar,
+			Role:      item.Role,
 		})
 	}
 	resp.Count = listResp.Count

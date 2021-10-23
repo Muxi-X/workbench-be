@@ -1,3 +1,5 @@
+name=gateway
+
 all: gotool
 	@go build -o main -v .
 clean:
@@ -13,6 +15,11 @@ test:
 	@go test -v -count=1  ./...
 ca:
 	openssl req -new -nodes -x509 -out conf/server.crt -keyout conf/server.key -days 3650 -subj "/C=DE/ST=NRW/L=Earth/O=Random Company/OU=IT/CN=127.0.0.1/emailAddress=xxxxx@qq.com"
+github:
+	git push origin && git push --tags origin
+gitea:
+	git tag release-${name}-${ver} && git push --tags muxi
+push: gitea github
 
 help:
 	@echo "make - compile the source code with local vendor"
@@ -20,5 +27,6 @@ help:
 	@echo "make clean - remove binary file and vim swp files"
 	@echo "make gotool - run go tool 'fmt' and 'vet'"
 	@echo "make ca - generate ca files"
+	@echo "make deploy name=gateway ver=1.0.x - push code and tag to github and gitea"
 
 .PHONY: clean gotool ca help

@@ -7,3 +7,4 @@ muxi-workbench
 *.mod
 *.sum
 .DS_Store
+config.yaml

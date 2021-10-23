@@ -6,7 +6,7 @@ tracing:
 db:  # DB 配置 部署时环境变量覆盖
   name: workbench_test
   addr: rm-bp1pkcz9y269h30fm5o.mysql.rds.aliyuncs.com
-  username: uworkbench_test
+  username: workbench_test
   password: Muxistudio304
 redis:
   addr: 127.0.0.1:6379

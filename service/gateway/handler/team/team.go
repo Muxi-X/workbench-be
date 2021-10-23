@@ -8,6 +8,7 @@ type Member struct {
 	GroupName string `json:"group_name"`
 	Email     string `json:"email"`
 	Avatar    string `json:"avatar"`
+	Role      uint32 `json:"role"`
 } //@name Member
 
 type Group struct {
