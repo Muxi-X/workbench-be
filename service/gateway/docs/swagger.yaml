@@ -291,11 +291,6 @@ definitions:
           $ref: '#/definitions/MemberListItem'
         type: array
     type: object
-  GetProfileRequest:
-    properties:
-      id:
-        type: integer
-    type: object
   GetProjectIdsForUserResponse:
     properties:
       ids:
@@ -3398,6 +3393,40 @@ paths:
           schema:
             $ref: '#/definitions/Response'
       summary: get user_list api
+      tags:
+      - user
+  /user/myprofile:
+    get:
+      consumes:
+      - application/json
+      description: 获取 my 完整 user 信息
+      parameters:
+      - description: user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserProfile'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get my_profile api
       tags:
       - user
   /user/profile/{id}:
