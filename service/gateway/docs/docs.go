@@ -4809,6 +4809,9 @@ var doc = `{
                 "name": {
                     "type": "string"
                 },
+                "role": {
+                    "type": "integer"
+                },
                 "team_id": {
                     "type": "integer"
                 }
