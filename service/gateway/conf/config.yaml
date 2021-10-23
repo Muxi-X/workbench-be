@@ -14,10 +14,10 @@ log:
   log_rotate_size: 1
   log_backup_count: 7
 db:  # DB 配置 部署时环境变量覆盖
-  name: workbench
-  addr: 0.0.0.0:3306
-  username: root
-  password: root
+  name: workbench_test
+  addr: rm-bp1pkcz9y269h30fm5o.mysql.rds.aliyuncs.com
+  username: uworkbench_test
+  password: Muxistudio304
 redis:
   addr: 127.0.0.1:6379
   password: ""

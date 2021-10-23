@@ -3360,7 +3360,7 @@ var doc = `{
         },
         "/team/group/members/{id}": {
             "get": {
-                "description": "根据 groupID 拉取 members 列表",
+                "description": "根据 groupID 拉取 members 列表 (0 -\u003e all)",
                 "consumes": [
                     "application/json"
                 ],
@@ -4075,15 +4075,6 @@ var doc = `{
                         "name": "Authorization",
                         "in": "header",
                         "required": true
-                    },
-                    {
-                        "description": "get_profile_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/GetProfileRequest"
-                        }
                     }
                 ],
                 "responses": {
@@ -4900,7 +4891,9 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {},
+                "data": {
+                    "type": "object"
+                },
                 "message": {
                     "type": "string"
                 }

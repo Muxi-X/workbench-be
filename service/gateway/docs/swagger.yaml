@@ -510,7 +510,8 @@ definitions:
     properties:
       code:
         type: integer
-      data: {}
+      data:
+        type: object
       message:
         type: string
     type: object
@@ -3016,7 +3017,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 根据 groupID 拉取 members 列表
+      description: 根据 groupID 拉取 members 列表 (0 -> all)
       parameters:
       - description: group_id
         in: path
@@ -3415,12 +3416,6 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: get_profile_request
-        in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/GetProfileRequest'
       produces:
       - application/json
       responses:
