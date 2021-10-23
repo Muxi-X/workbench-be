@@ -136,6 +136,7 @@ message Member {
     string group_name = 5;
     string email = 6;
     string avatar = 7;
+    uint32 role = 8;
 }
 
 message ApplyUserItem {

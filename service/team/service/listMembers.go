@@ -37,6 +37,7 @@ func (ts *TeamService) GetMemberList(ctx context.Context, req *pb.MemberListRequ
 			GroupId:   item.GroupID,
 			GroupName: item.GroupName,
 			Email:     item.Email,
+			Role:      item.Role,
 			Avatar:    item.Avatar,
 		})
 	}
