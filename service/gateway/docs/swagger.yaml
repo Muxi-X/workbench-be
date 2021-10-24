@@ -3403,11 +3403,6 @@ paths:
       - application/json
       description: 获取 my 完整 user 信息
       parameters:
-      - description: user_id
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: token 用户令牌
         in: header
         name: Authorization

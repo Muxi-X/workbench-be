@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"fmt"
 
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -30,7 +31,11 @@ func GetProjectInfo(c *gin.Context) {
 	log.Info("project getProjectInfo function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID := c.MustGet("projectID").(uint32)
+	projectID, ok := c.MustGet("projectID").(uint32)
+	fmt.Println(ok)
+	fmt.Println(ok)
+	fmt.Println(ok)
+	fmt.Println(ok)
 
 	// 发送请求
 	getProInfoResp, err := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{

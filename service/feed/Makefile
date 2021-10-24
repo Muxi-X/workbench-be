@@ -1,4 +1,5 @@
 name=feed
+
 build:
 	go build -o main
 proto:
@@ -6,5 +7,7 @@ proto:
 github:
 	git push origin && git push --tags origin
 gitea:
-	git tag release-${name}-${ver} && git push --tags muxi
-push: gitea github
+	git push --tags muxi
+tag:
+	git tag release-${name}-${ver}
+push: tag github gitea

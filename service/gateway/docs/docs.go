@@ -4063,13 +4063,6 @@ var doc = `{
                 "summary": "get my_profile api",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "user_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
                         "type": "string",
                         "description": "token 用户令牌",
                         "name": "Authorization",
