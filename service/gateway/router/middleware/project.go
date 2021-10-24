@@ -44,7 +44,7 @@ func ProjectMiddleware() gin.HandlerFunc {
 		if resp.IfValid {
 			c.Set("projectID", projectID)
 		} else {
-			handler.SendBadRequest(c, errno.ErrProjectPermissionDenied, nil, err.Error(), handler.GetLine())
+			handler.SendBadRequest(c, errno.ErrProjectPermissionDenied, nil, "", handler.GetLine())
 			c.Abort()
 		}
 
