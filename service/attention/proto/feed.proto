@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package feed;
+
+service FeedService {
+    rpc Push(PushRequest) returns (Response) {}
+    rpc List(ListRequest) returns (ListResponse) {}
+}
+
+message PushRequest {
+    string action = 1;
+    uint32 user_id = 2;
+    Source source = 3;
+}
+
+message Response {}
+
+message ListRequest {
+    uint32 last_id = 1;
+    uint32 limit = 2;
+    uint32 role = 3;
+    uint32 user_id = 4;
+    Filter filter = 5;
+}
+
+message Filter  {
+    uint32 user_id = 1;   // 0 代表不筛选
+    uint32 group_id = 2;  // 0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
+}
+
+message ListResponse {
+    repeated FeedItem list = 1;
+    uint32 count = 2;
+}
+
+message FeedItem {
+    uint32 id = 1;
+    string action = 2; // action：创建、编辑、删除、评论、加入
+    bool show_divider = 3; // 分隔线
+    string date = 4; // 日期
+    string time = 5; // 时间
+    User user = 6;
+    Source source = 7;
+}
+
+message User {
+    string name = 1;
+    uint32 id = 2;
+    string avatar_url = 3;
+}
+
+// source: feed的来源.
+// kind的对应关系如下，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
+message Source {
+    uint32 kind = 1;
+    uint32 id = 2;
+    string name = 3;
+    uint32 project_id = 4;
+    string project_name = 5;
+}

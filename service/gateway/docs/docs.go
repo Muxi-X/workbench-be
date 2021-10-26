@@ -153,7 +153,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/FeedListResponse"
+                            "$ref": "#/definitions/feed.FeedListResponse"
                         }
                     },
                     "401": {
@@ -216,7 +216,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/FeedListResponse"
+                            "$ref": "#/definitions/feed.FeedListResponse"
                         }
                     },
                     "401": {
@@ -279,7 +279,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/FeedListResponse"
+                            "$ref": "#/definitions/feed.FeedListResponse"
                         }
                     },
                     "401": {
@@ -4474,20 +4474,6 @@ var doc = `{
                 }
             }
         },
-        "FeedListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/FeedItem"
-                    }
-                }
-            }
-        },
         "FileChildrenItem": {
             "type": "object",
             "properties": {
@@ -5176,6 +5162,20 @@ var doc = `{
                 },
                 "tel": {
                     "type": "string"
+                }
+            }
+        },
+        "feed.FeedListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FeedItem"
+                    }
                 }
             }
         },

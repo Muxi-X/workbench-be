@@ -212,15 +212,6 @@ definitions:
       user:
         $ref: '#/definitions/User'
     type: object
-  FeedListResponse:
-    properties:
-      count:
-        type: integer
-      list:
-        items:
-          $ref: '#/definitions/FeedItem'
-        type: array
-    type: object
   FileChildrenItem:
     properties:
       id:
@@ -668,6 +659,15 @@ definitions:
       tel:
         type: string
     type: object
+  feed.FeedListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FeedItem'
+        type: array
+    type: object
   project.UpdateFilePositionRequest:
     properties:
       childrenPositionIndex:
@@ -790,7 +790,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/FeedListResponse'
+            $ref: '#/definitions/feed.FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -832,7 +832,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/FeedListResponse'
+            $ref: '#/definitions/feed.FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -874,7 +874,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/FeedListResponse'
+            $ref: '#/definitions/feed.FeedListResponse'
         "401":
           description: Unauthorized
           schema:
