@@ -1,4 +1,4 @@
-name=feed
+name=attention
 
 build:
 	go build -o main

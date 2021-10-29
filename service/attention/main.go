@@ -4,9 +4,8 @@ import (
 	"flag"
 	"log"
 
-	m "muxi-workbench-feed/model"
-	pb "muxi-workbench-feed/proto"
-	s "muxi-workbench-feed/service"
+	pb "muxi-workbench-attention/proto"
+	s "muxi-workbench-attention/service"
 	"muxi-workbench/config"
 	logger "muxi-workbench/log"
 	"muxi-workbench/model"
@@ -95,15 +94,15 @@ func main() {
 		if err := srv.Run(); err != nil {
 			logger.Error(err.Error())
 		}
-
-	} else {
-		// sub-service
-
-		// init redis pub/sub client
-		model.PubSubClient.Init(m.RdbChan)
-		defer model.PubSubClient.Close()
-
-		logger.Info("Subscribe service start...")
-		s.SubServiceRun()
 	}
+	// } else {
+	// 	// sub-service
+	//
+	// 	// init redis pub/sub client
+	// 	model.PubSubClient.Init(m.RdbChan)
+	// 	defer model.PubSubClient.Close()
+	//
+	// 	logger.Info("Subscribe service start...")
+	// 	s.SubServiceRun()
+	// }
 }

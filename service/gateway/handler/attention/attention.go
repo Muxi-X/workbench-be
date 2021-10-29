@@ -21,7 +21,7 @@ type AttentionListResponse struct {
 type Doc struct {
 	Id          uint32 `json:"id"`
 	Name        string `json:"name"`
-	DocCreator  *User  `json:"doc_creator"`
+	DocCreator  *User  `json:"creator"`
 	ProjectId   uint32 `json:"project_id"`
 	ProjectName string `json:"project_name"`
 } //@name Doc

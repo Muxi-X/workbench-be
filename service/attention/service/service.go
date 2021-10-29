@@ -4,6 +4,7 @@ import (
 	"context"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/opentracing/opentracing-go"
+	"muxi-workbench-attention/model"
 	"muxi-workbench/pkg/handler"
 
 	ppb "muxi-workbench-project/proto"
@@ -43,24 +44,30 @@ func ProjectInit() {
 	ProjectClient = ppb.NewProjectServiceClient("workbench.service.project", ProjectService.Client())
 }
 
-// FeedService ... 动态服务
-type FeedService struct{}
+// AttentionService ... 动态服务
+type AttentionService struct{}
 
-// GetFilterFromProjectService get filter data from project-service
-func GetFilterFromProjectService(id uint32) ([]uint32, error) {
-	rsp, err := ProjectClient.GetProjectIdsForUser(context.Background(), &ppb.GetRequest{Id: id})
-	if err != nil {
-		return nil, err
+// GetInfoFromProjectService get filter data from project-service
+func GetInfoFromProjectService(id uint32) (model.Doc, error) {
+	// rsp, err := ProjectClient.GetProjectIdsForUser(context.Background(), &ppb.GetRequest{Id: id})
+	rsp, err := ProjectClient.GetDocDetail(context.Background(), &ppb.GetFileDetailRequest{Id: id})
+	doc := model.Doc{
+		CreatorName: rsp.Creator,
+		Name:        rsp.Title,
+		Id:          rsp.Id,
 	}
-	return rsp.List, nil
+	if err != nil {
+		return doc, err
+	}
+	return doc, nil
 }
 
 // GetInfoFromUserService get user's name and avatar from user-service
-func GetInfoFromUserService(id uint32) (string, string, error) {
+func GetInfoFromUserService(id uint32) (string, error) {
 	rsp, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{Id: id})
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 
-	return rsp.Name, rsp.Avatar, nil
+	return rsp.Name, nil
 }

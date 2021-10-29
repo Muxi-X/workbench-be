@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package attention;
+
+service AttentionService {
+    rpc Create(PushRequest) returns (Response) {}
+    rpc Delete(PushRequest) returns (Response) {}
+    rpc List(ListRequest) returns (AttentionListResponse) {}
+}
+message PushRequest {
+    uint32 user_id = 1;
+    uint32 doc_id = 2;
+}
+
+message Response {}
+
+message ListRequest {
+    uint32 last_id = 1;
+    uint32 limit = 2;
+    uint32 user_id = 3;
+}
+
+message AttentionListResponse {
+    repeated AttentionItem list = 1;
+    uint32 count = 2;
+}
+
+message AttentionItem {
+    uint32 id = 1;
+    string date = 2; // 日期
+    string time = 3; // 时间
+    User user = 4;
+    Doc doc = 5;
+}
+
+message Doc {
+    uint32 id = 1;
+    string name = 2;
+    User doc_creator = 3;
+    uint32 project_id = 4;
+    string project_name = 5;
+}
+
+message User {
+    string name = 1;
+    uint32 id = 2;
+}

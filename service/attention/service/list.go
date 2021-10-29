@@ -3,46 +3,32 @@ package service
 import (
 	"context"
 
-	"muxi-workbench-feed/errno"
-	"muxi-workbench-feed/model"
-	pb "muxi-workbench-feed/proto"
+	"muxi-workbench-attention/errno"
+	"muxi-workbench-attention/model"
+	pb "muxi-workbench-attention/proto"
 	e "muxi-workbench/pkg/err"
 )
 
-const (
-	NOBODY     = 0 // 无权限用户
-	NORMAL     = 1 // 普通用户
-	ADMIN      = 3 // 管理员
-	SUPERADMIN = 7 // 超管
-)
-
-// List ... feed列表
-func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
-	var projectIds []uint32
-	var err error
-
-	// 普通用户，只能返回有权限访问的 projects
-	if req.Role == NORMAL {
-		projectIds, err = GetFilterFromProjectService(req.UserId)
-		if err != nil {
-			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
-		}
+// List ... attention列表
+func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
+	// get username and avatar by userId from user-service
+	username, err := GetInfoFromUserService(req.UserId)
+	if err != nil {
+		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 	}
 
 	// 筛选条件
 	var filter = &model.FilterParams{
-		UserId:     req.Filter.UserId,
-		GroupId:    req.Filter.GroupId,
-		ProjectIds: projectIds,
+		UserId: req.UserId,
 	}
 
-	feeds, err := model.GetFeedList(req.LastId, req.Limit, filter)
+	attentions, err := model.List(req.LastId, req.Limit, filter)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
 	// 数据格式化
-	list, err := FormatListData(feeds)
+	list, err := FormatListData(attentions, username)
 	if err != nil {
 		return e.ServerErr(errno.ErrFormatList, err.Error())
 	}
@@ -53,48 +39,22 @@ func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.Lis
 	return nil
 }
 
-func FormatListData(list []*model.FeedModel) ([]*pb.FeedItem, error) {
-	var result []*pb.FeedItem
-	var date string
-	var sourceId uint32
+func FormatListData(list []*model.AttentionModel, username string) ([]*pb.AttentionItem, error) {
+	var result []*pb.AttentionItem
 
-	for index, feed := range list {
+	for _, attention := range list {
 
-		data := &pb.FeedItem{
-			Id:          feed.Id,
-			Action:      feed.Action,
-			ShowDivider: false,
-			Date:        feed.TimeDay,
-			Time:        feed.TimeHm,
-			User: &pb.User{
-				Name:      feed.Username,
-				Id:        feed.UserId,
-				AvatarUrl: feed.UserAvatar,
-			},
-			Source: &pb.Source{
-				Kind:        feed.SourceKindId,
-				Id:          feed.SourceObjectId,
-				Name:        feed.SourceObjectName,
-				ProjectId:   feed.SourceProjectId,
-				ProjectName: feed.SourceProjectName,
+		data := &pb.AttentionItem{
+			Date: attention.TimeDay,
+			Time: attention.TimeHm,
+			Doc: &pb.Doc{
+				Name: attention.Doc.Name,
+				DocCreator: &pb.User{
+					Name: attention.Doc.CreatorName,
+				},
+				ProjectName: attention.Doc.ProjectName,
 			},
 		}
-
-		// showDivider --> 分割线
-		// 需要分割的情况
-		// 1.第一条数据 2.不同日期 3.不同项目
-		if index == 0 {
-			date = data.Date
-			sourceId = data.Source.Id
-			data.ShowDivider = true
-		} else if date != data.Date {
-			date = data.Date
-			data.ShowDivider = true
-		} else if sourceId != data.Source.Id {
-			sourceId = data.Source.Id
-			data.ShowDivider = true
-		}
-
 		result = append(result, data)
 	}
 
