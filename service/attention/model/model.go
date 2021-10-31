@@ -2,6 +2,7 @@ package model
 
 import (
 	m "muxi-workbench/model"
+	"muxi-workbench/pkg/constvar"
 )
 
 type AttentionModel struct {
@@ -33,7 +34,7 @@ func (a *AttentionModel) Create() error {
 
 // Delete a being attention
 func (a *AttentionModel) Delete() error {
-	return m.DB.Self.Delete(a).Error
+	return m.DB.Self.Where("user_id = ? and doc_id = ?", a.UserId, a.Doc.Id).Delete(a).Error
 }
 
 // FilterParams provide filter's params.
@@ -44,6 +45,10 @@ type FilterParams struct {
 // List ... 查找attention
 func List(lastId, limit uint32, filter *FilterParams) ([]*AttentionModel, error) {
 	var data []*AttentionModel
+
+	if limit == 0 {
+		limit = constvar.DefaultLimit
+	}
 
 	query := m.DB.Self.Table("attentions").Select("attentions.*").Order("attentions.id desc").Limit(limit)
 

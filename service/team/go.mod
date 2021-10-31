@@ -7,6 +7,7 @@ replace muxi-workbench-user => ../user
 go 1.14
 
 require (
+	github.com/gin-gonic/gin v1.7.4 // indirect
 	github.com/golang/protobuf v1.3.3
 	github.com/jinzhu/gorm v1.9.15
 	github.com/micro/go-micro v1.18.0

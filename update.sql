@@ -55,3 +55,15 @@ ALTER TABLE `docs` ADD `last_edit_time` varchar(30) DEFAULT NULL;
 
 -- add project soft delete
 ALTER TABLE `projects` ADD `deleted_at` datetime DEFAULT NULL;
+
+-- ----------------------------
+-- Table structure for attentions
+-- ----------------------------
+
+DROP TABLE IF EXISTS `attentions`;
+CREATE TABLE `attentions` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `userid` int(11) DEFAULT NULL,
+    `doc_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

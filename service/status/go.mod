@@ -12,7 +12,6 @@ require (
 	github.com/micro/go-plugins v1.5.1
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.7.1
-	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 	golang.org/x/tools v0.0.0-20200227200655-6862ededa516 // indirect
 	honnef.co/go/tools v0.0.1-2020.1.3 // indirect

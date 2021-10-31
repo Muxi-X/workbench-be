@@ -1,5 +1,7 @@
 module muxi-workbench-gateway
 
+exclude github.com/micro/go-plugins v1.5.1
+
 go 1.14
 
 require (
@@ -10,7 +12,9 @@ require (
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/micro/go-micro v1.18.0
-	github.com/micro/go-plugins v1.5.1
+	github.com/micro/go-plugins v2.0.1+incompatible
+	github.com/micro/go-plugins/registry/kubernetes v0.0.0-20200119172437-4fe21aa238fd
+	github.com/micro/go-plugins/wrapper/trace/opentracing v0.0.0-20200119172437-4fe21aa238fd
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v3.21.8+incompatible

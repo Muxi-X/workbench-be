@@ -55,6 +55,7 @@ func GetInfoFromProjectService(id uint32) (model.Doc, error) {
 		CreatorName: rsp.Creator,
 		Name:        rsp.Title,
 		Id:          rsp.Id,
+		// ProjectId:   rsp. TODO:project新增一个通过doc获取project rpc
 	}
 	if err != nil {
 		return doc, err
