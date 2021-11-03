@@ -22,8 +22,8 @@ func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *p
 	}
 
 	res.Id = user.ID
-	res.Nick = user.Name
-	res.Name = user.RealName
+	res.Name = user.Name
+	res.RealName = user.RealName
 	res.Avatar = user.Avatar
 	res.Email = user.Email
 	res.Tel = user.Tel

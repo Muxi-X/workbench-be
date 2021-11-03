@@ -28,14 +28,14 @@ func (s *UserService) List(ctx context.Context, req *pb.ListRequest, res *pb.Lis
 
 	for _, item := range list {
 		resList = append(resList, &pb.User{
-			Id:     item.ID,
-			Nick:   item.Name,
-			Name:   item.RealName,
-			Email:  item.Email,
-			Avatar: item.Avatar,
-			Role:   item.Role,
-			Team:   item.TeamID,
-			Group:  item.GroupID,
+			Id:       item.ID,
+			Name:     item.Name,
+			RealName: item.RealName,
+			Email:    item.Email,
+			Avatar:   item.Avatar,
+			Role:     item.Role,
+			Team:     item.TeamID,
+			Group:    item.GroupID,
 		})
 	}
 

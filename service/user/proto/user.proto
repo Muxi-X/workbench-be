@@ -49,8 +49,8 @@ message LoginResponse {
 
 message UserInfo {
   uint32 id = 1;
-  string nick = 2;
-  string name = 3;
+  string name = 2;
+  string real_name = 3;
   string avatar_url = 4;
   string email = 5;
 }
@@ -61,8 +61,8 @@ message UserInfoResponse {
 
 message UserProfile {
   uint32 id = 1;
-  string nick = 2;
-  string name = 3;
+  string name = 2;
+  string real_name = 3;
   string avatar = 4;
   string email = 5;
   string tel = 6;
@@ -94,8 +94,8 @@ message Response {}
 
 message User {
   uint32 id = 1;
-  string nick = 2;
-  string name = 3;
+  string name = 2;
+  string real_name = 3;
   string email = 4;
   string avatar = 5;
   uint32 role = 6;

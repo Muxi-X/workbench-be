@@ -20,8 +20,8 @@ func (s *UserService) UpdateInfo(ctx context.Context, req *pb.UpdateInfoRequest,
 		return e.ServerErr(errno.ErrUserExisted, err.Error())
 	}
 
-	user.Name = req.Info.Nick
-	user.RealName = req.Info.Name
+	user.Name = req.Info.Name
+	user.RealName = req.Info.RealName
 	user.Avatar = req.Info.AvatarUrl
 
 	if err := user.Save(); err != nil {

@@ -22,8 +22,8 @@ func (s *UserService) GetInfo(ctx context.Context, req *pb.GetInfoRequest, res *
 	for _, user := range list {
 		userInfos = append(userInfos, &pb.UserInfo{
 			Id:        user.ID,
-			Nick:      user.Name,
-			Name:      user.RealName,
+			Name:      user.Name,
+			RealName:  user.RealName,
 			AvatarUrl: user.Avatar,
 			Email:     user.Email,
 		})
