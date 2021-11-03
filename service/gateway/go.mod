@@ -12,7 +12,6 @@ require (
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/micro/go-micro v1.18.0
-	github.com/micro/go-plugins v2.0.1+incompatible
 	github.com/micro/go-plugins/registry/kubernetes v0.0.0-20200119172437-4fe21aa238fd
 	github.com/micro/go-plugins/wrapper/trace/opentracing v0.0.0-20200119172437-4fe21aa238fd
 	github.com/opentracing/opentracing-go v1.2.0
@@ -33,6 +32,7 @@ require (
 	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	muxi-workbench v0.0.0-00010101000000-000000000000
+	muxi-workbench-attention v0.0.0-00010101000000-000000000000
 	muxi-workbench-feed v0.0.0-00010101000000-000000000000
 	muxi-workbench-project v0.0.0-00010101000000-000000000000
 	muxi-workbench-status v0.0.0-00010101000000-000000000000
@@ -43,6 +43,8 @@ require (
 replace muxi-workbench-gateway => ./
 
 replace muxi-workbench-feed => ../feed
+
+replace muxi-workbench-attention => ../attention
 
 replace muxi-workbench-status => ../status
 

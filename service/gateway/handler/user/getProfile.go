@@ -27,15 +27,15 @@ func GetUserProfile(id uint32) (*UserProfile, error) {
 
 	// 构造返回 response
 	resp := &UserProfile{
-		Id:     getProfileResp.Id,
-		Nick:   getProfileResp.Nick,
-		Name:   getProfileResp.Name,
-		Avatar: getProfileResp.Avatar,
-		Email:  getProfileResp.Email,
-		Tel:    getProfileResp.Tel,
-		Role:   getProfileResp.Role,
-		Team:   getProfileResp.Team,
-		Group:  getProfileResp.Group,
+		Id:       getProfileResp.Id,
+		Name:     getProfileResp.Name,
+		RealName: getProfileResp.RealName,
+		Avatar:   getProfileResp.Avatar,
+		Email:    getProfileResp.Email,
+		Tel:      getProfileResp.Tel,
+		Role:     getProfileResp.Role,
+		Team:     getProfileResp.Team,
+		Group:    getProfileResp.Group,
 	}
 
 	return resp, nil

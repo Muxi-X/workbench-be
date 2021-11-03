@@ -79,14 +79,14 @@ func List(c *gin.Context) {
 	var resp = &ListResponse{Count: listResp.Count}
 	for _, item := range listResp.List {
 		resp.List = append(resp.List, User{
-			Id:     item.Id,
-			Nick:   item.Nick,
-			Name:   item.Name,
-			Avatar: item.Avatar,
-			Email:  item.Email,
-			Role:   item.Role,
-			Team:   item.Team,
-			Group:  item.Group,
+			Id:       item.Id,
+			Name:     item.Name,
+			RealName: item.RealName,
+			Avatar:   item.Avatar,
+			Email:    item.Email,
+			Role:     item.Role,
+			Team:     item.Team,
+			Group:    item.Group,
 		})
 	}
 

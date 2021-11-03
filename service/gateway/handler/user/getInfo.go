@@ -49,8 +49,8 @@ func GetInfo(c *gin.Context) {
 	for _, item := range getInfoResp.List {
 		resp.List = append(resp.List, UserInfo{
 			Id:        item.Id,
-			Nick:      item.Nick,
 			Name:      item.Name,
+			RealName:  item.RealName,
 			AvatarURL: item.AvatarUrl,
 			Email:     item.Email,
 		})

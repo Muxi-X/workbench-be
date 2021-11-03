@@ -25,8 +25,8 @@ type GetInfoRequest struct {
 
 type UserInfo struct {
 	Id        uint32 `json:"id"`
-	Nick      string `json:"nick"`
 	Name      string `json:"name"`
+	RealName  string `json:"real_name"`
 	AvatarURL string `json:"avatar_url"`
 	Email     string `json:"email"`
 }
@@ -43,15 +43,15 @@ type GetProfileRequest struct {
 
 // UserProfile 获取 profile 响应
 type UserProfile struct {
-	Id     uint32 `json:"id"`
-	Nick   string `json:"nick"`
-	Name   string `json:"name"`
-	Avatar string `json:"avatar"`
-	Email  string `json:"email"`
-	Tel    string `json:"tel"`
-	Role   uint32 `json:"role"`
-	Team   uint32 `json:"team"`
-	Group  uint32 `json:"group"`
+	Id       uint32 `json:"id"`
+	Name     string `json:"name"`
+	RealName string `json:"real_name"`
+	Avatar   string `json:"avatar"`
+	Email    string `json:"email"`
+	Tel      string `json:"tel"`
+	Role     uint32 `json:"role"`
+	Team     uint32 `json:"team"`
+	Group    uint32 `json:"group"`
 } //@name UserProfile
 
 // ListRequest 获取 userList 请求
@@ -61,14 +61,14 @@ type ListRequest struct {
 } //@name ListRequest
 
 type User struct {
-	Id     uint32 `json:"id"`
-	Nick   string `json:"nick"`
-	Name   string `json:"name"`
-	Email  string `json:"email"`
-	Avatar string `json:"avatar"`
-	Role   uint32 `json:"role"`
-	Team   uint32 `json:"team"`
-	Group  uint32 `json:"group"`
+	Id       uint32 `json:"id"`
+	Name     string `json:"name"`
+	RealName string `json:"real_name"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
+	Role     uint32 `json:"role"`
+	Team     uint32 `json:"team"`
+	Group    uint32 `json:"group"`
 }
 
 // ListResponse 获取 userList 响应

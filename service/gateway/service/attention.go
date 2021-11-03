@@ -1,8 +1,8 @@
 package service
 
 import (
-	//tracer "muxi-workbench-feed-client/tracer"
-	pb "muxi-workbench-feed/proto"
+	//tracer "muxi-workbench-attention-client/tracer"
+	pb "muxi-workbench-attention/proto"
 	handler "muxi-workbench/pkg/handler"
 
 	micro "github.com/micro/go-micro"
@@ -11,18 +11,20 @@ import (
 	"github.com/opentracing/opentracing-go"
 )
 
-var FeedService micro.Service
-var FeedClient pb.FeedServiceClient
+var AttentionService micro.Service
+var AttentionClient pb.AttentionServiceClient
 
-func FeedInit() {
-	FeedService = micro.NewService(micro.Name("workbench.cli.feed"),
+func AttentionInit() {
+	AttentionService = micro.NewService(
+		micro.Name("workbench.cli.attention"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
 		),
-		micro.WrapCall(handler.ClientErrorHandlerWrapper()))
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
 
-	FeedService.Init()
+	AttentionService.Init()
 
-	FeedClient = pb.NewFeedServiceClient("workbench.service.feed", FeedService.Client())
+	AttentionClient = pb.NewAttentionServiceClient("workbench.service.attention", AttentionService.Client())
 
 }

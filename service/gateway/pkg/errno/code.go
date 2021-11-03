@@ -23,6 +23,9 @@ var (
 	// feed errors
 	ErrFeedList = &Errno{Code: 20301, Message: "Error occurred while getting feed list."}
 
+	// attention errors
+	ErrAttentionList = &Errno{Code: 20401, Message: "Error occurred while getting attention list."}
+
 	// status errors
 	// ...
 

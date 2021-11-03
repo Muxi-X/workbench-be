@@ -18,6 +18,28 @@ definitions:
       name:
         type: string
     type: object
+  AttentionItem:
+    properties:
+      date:
+        type: string
+      doc:
+        $ref: '#/definitions/Doc'
+      id:
+        type: integer
+      time:
+        type: string
+      user:
+        $ref: '#/definitions/muxi-workbench-gateway_handler_attention.User'
+    type: object
+  AttentionListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/AttentionItem'
+        type: array
+    type: object
   Comment:
     properties:
       avatar:
@@ -165,6 +187,19 @@ definitions:
       title:
         type: string
     type: object
+  Doc:
+    properties:
+      creator:
+        $ref: '#/definitions/muxi-workbench-gateway_handler_attention.User'
+      id:
+        type: integer
+      name:
+        type: string
+      project_id:
+        type: integer
+      project_name:
+        type: string
+    type: object
   DocComment:
     properties:
       avatar:
@@ -210,7 +245,7 @@ definitions:
       time:
         type: string
       user:
-        $ref: '#/definitions/User'
+        $ref: '#/definitions/muxi-workbench-gateway_handler_feed.User'
     type: object
   FileChildrenItem:
     properties:
@@ -597,7 +632,7 @@ definitions:
         type: integer
       name:
         type: string
-      nick:
+      real_name:
         type: string
     type: object
   UpdateMemberRequest:
@@ -629,15 +664,6 @@ definitions:
       new_name:
         type: string
     type: object
-  User:
-    properties:
-      avatar_url:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
   UserProfile:
     properties:
       avatar:
@@ -650,7 +676,7 @@ definitions:
         type: integer
       name:
         type: string
-      nick:
+      real_name:
         type: string
       role:
         type: integer
@@ -667,6 +693,22 @@ definitions:
         items:
           $ref: '#/definitions/FeedItem'
         type: array
+    type: object
+  muxi-workbench-gateway_handler_attention.User:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  muxi-workbench-gateway_handler_feed.User:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   project.UpdateFilePositionRequest:
     properties:
@@ -691,7 +733,7 @@ definitions:
         type: integer
       name:
         type: string
-      nick:
+      real_name:
         type: string
       role:
         type: integer
@@ -705,6 +747,115 @@ info:
   title: muxi-workbench-gateway
   version: "1.0"
 paths:
+  /attention/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 取消关注
+      parameters:
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete attention api
+      tags:
+      - attention
+    post:
+      consumes:
+      - application/json
+      description: 创建关注
+      parameters:
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create attention api
+      tags:
+      - attention
+  /attention/list/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AttentionListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get attention list api
+      tags:
+      - attention
   /auth/login:
     post:
       consumes:

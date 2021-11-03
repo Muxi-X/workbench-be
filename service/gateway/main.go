@@ -25,6 +25,7 @@ var (
 
 func init() {
 	service.FeedInit()
+	service.AttentionInit()
 	service.StatusInit()
 	service.ProjectInit()
 	service.UserInit()
@@ -122,5 +123,5 @@ func pingServer() error {
 		log.Info("Waiting for the router, retry in 1 second.")
 		time.Sleep(time.Second)
 	}
-	return errors.New("Cannot connect to the router.")
+	return errors.New("cannot connect to the router")
 }

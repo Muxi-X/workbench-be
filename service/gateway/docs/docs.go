@@ -23,6 +23,169 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/attention/list/{id}": {
+            "get": {
+                "description": "获取此用户的动态list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attention"
+                ],
+                "summary": "get attention list api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/AttentionListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/attention/{id}": {
+            "post": {
+                "description": "创建关注",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attention"
+                ],
+                "summary": "create attention api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "doc_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "取消关注",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attention"
+                ],
+                "summary": "delete attention api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "doc_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "login the workbench",
@@ -4173,6 +4336,40 @@ var doc = `{
                 }
             }
         },
+        "AttentionItem": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "doc": {
+                    "$ref": "#/definitions/Doc"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/muxi-workbench-gateway_handler_attention.User"
+                }
+            }
+        },
+        "AttentionListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/AttentionItem"
+                    }
+                }
+            }
+        },
         "Comment": {
             "type": "object",
             "properties": {
@@ -4402,6 +4599,26 @@ var doc = `{
                 }
             }
         },
+        "Doc": {
+            "type": "object",
+            "properties": {
+                "creator": {
+                    "$ref": "#/definitions/muxi-workbench-gateway_handler_attention.User"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "project_id": {
+                    "type": "integer"
+                },
+                "project_name": {
+                    "type": "string"
+                }
+            }
+        },
         "DocComment": {
             "type": "object",
             "properties": {
@@ -4470,7 +4687,7 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/User"
+                    "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.User"
                 }
             }
         },
@@ -5069,7 +5286,7 @@ var doc = `{
                 "name": {
                     "type": "string"
                 },
-                "nick": {
+                "real_name": {
                     "type": "string"
                 }
             }
@@ -5119,20 +5336,6 @@ var doc = `{
                 }
             }
         },
-        "User": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "UserProfile": {
             "type": "object",
             "properties": {
@@ -5151,7 +5354,7 @@ var doc = `{
                 "name": {
                     "type": "string"
                 },
-                "nick": {
+                "real_name": {
                     "type": "string"
                 },
                 "role": {
@@ -5176,6 +5379,31 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/FeedItem"
                     }
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_attention.User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_feed.User": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -5214,7 +5442,7 @@ var doc = `{
                 "name": {
                     "type": "string"
                 },
-                "nick": {
+                "real_name": {
                     "type": "string"
                 },
                 "role": {

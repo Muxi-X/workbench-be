@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	_ "muxi-workbench-gateway/docs"
+	"muxi-workbench-gateway/handler/attention"
 	"muxi-workbench-gateway/handler/feed"
 	"muxi-workbench-gateway/handler/project"
 	"muxi-workbench-gateway/handler/status"
@@ -176,6 +177,14 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		teamRouter.POST("/application", normalRequired, team.CreateApplication)
 		teamRouter.GET("/application", adminRequired, team.GetApplications)
 		teamRouter.DELETE("/application", adminRequired, team.DeleteApplication)
+	}
+
+	attentionRouter := g.Group("api/v1/attention")
+	attentionRouter.Use(normalRequired)
+	{
+		attentionRouter.GET("/list/:id", attention.List)
+		attentionRouter.DELETE("/:id", attention.Delete)
+		attentionRouter.POST("/:id", attention.Create)
 	}
 
 	// The health check handlers

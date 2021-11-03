@@ -14,7 +14,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// register ... 注册
+// Register ... 注册
 // @Summary register api
 // @Description register user
 // @Tags auth

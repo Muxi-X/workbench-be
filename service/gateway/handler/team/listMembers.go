@@ -33,25 +33,21 @@ func GetMemberList(c *gin.Context) {
 	log.Info("Members List function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	var limit int
-	var groupID int
-	var page int
-	var err error
 	pagination := true
 
-	groupID, err = strconv.Atoi(c.Param("id"))
+	groupID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("page", "-1"))
+	page, err := strconv.Atoi(c.DefaultQuery("page", "-1"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
