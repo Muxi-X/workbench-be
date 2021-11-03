@@ -16,7 +16,7 @@ type ApplyModel struct {
 type ApplyUserItem struct {
 	ID    uint32
 	Name  string
-	Eamil string
+	Email string
 }
 
 func (a *ApplyModel) TableName() string {

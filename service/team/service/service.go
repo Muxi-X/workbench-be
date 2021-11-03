@@ -124,7 +124,7 @@ func GetUsersByApplys(applys []*model.ApplyModel, count uint64) ([]*model.ApplyU
 		applyuserList = append(applyuserList, &model.ApplyUserItem{
 			Name:  item.Name,
 			ID:    item.Id,
-			Eamil: "",
+			Email: "",
 		})
 	}
 

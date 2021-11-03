@@ -17,12 +17,12 @@ type TeamModel struct {
 }
 
 const (
-	MUXI = 1 //muxi
+	MUXI = 1 // muxi
 )
 
 const (
-	ADD = 1  //加法操作
-	SUB = -1 //减法操作
+	ADD = 1  // 加法操作
+	SUB = -1 // 减法操作
 )
 
 func (t *TeamModel) TableName() string {

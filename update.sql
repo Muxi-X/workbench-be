@@ -63,7 +63,9 @@ ALTER TABLE `projects` ADD `deleted_at` datetime DEFAULT NULL;
 DROP TABLE IF EXISTS `attentions`;
 CREATE TABLE `attentions` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `userid` int(11) DEFAULT NULL,
+    `user_id` int(11) DEFAULT NULL,
     `doc_id` int(11) DEFAULT NULL,
+    `time_day` varchar(20) DEFAULT NULL,
+    `time_hm` varchar(20) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;

@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"context"
 	"fmt"
@@ -26,7 +25,8 @@ func main() {
 	// set var t to Global Tracer (opentracing single instance mode)
 	opentracing.SetGlobalTracer(t)
 
-	service := micro.NewService(micro.Name("workbench.cli.attention"),
+	service := micro.NewService(
+		micro.Name("workbench.cli.attention"),
 		micro.WrapClient(
 			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
 		),
@@ -39,20 +39,21 @@ func main() {
 
 	// 获取attention
 	req := &pb.ListRequest{
-		LastId: 67,
+		LastId: 167,
 		Limit:  5,
-		UserId: 53,
+		UserId: 100,
 	}
-
 	resp, err := client.List(context.Background(), req)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("11111111111")
 	fmt.Println(resp)
+	fmt.Println(resp.List[0])
 
 	// 新增attention
 	addReq := &pb.PushRequest{
-		UserId: 2333,
+		UserId: 100,
 		DocId:  6666, // status id
 	}
 	addResp, err := client.Create(context.Background(), addReq)

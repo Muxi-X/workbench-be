@@ -3,7 +3,7 @@ name=attention
 build:
 	go build -o main
 proto:
-	protoc --go_out=plugins=micro:. ./proto/feed.proto
+	protoc --go_out=plugins=micro:. ./proto/attention.proto
 github:
 	git push origin && git push --tags origin
 gitea:
