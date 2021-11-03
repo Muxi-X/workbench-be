@@ -11,9 +11,7 @@ func (s *AttentionService) Delete(ctx context.Context, req *pb.PushRequest, res 
 
 	attention := &model.AttentionModel{
 		UserId: req.UserId,
-		Doc: model.Doc{
-			Id: req.DocId,
-		},
+		DocId:  req.DocId,
 	}
 
 	if err := attention.Delete(); err != nil {

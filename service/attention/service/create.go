@@ -10,12 +10,10 @@ import (
 
 // Create ... 新增attention
 func (s *AttentionService) Create(ctx context.Context, req *pb.PushRequest, res *pb.Response) error {
-
+	// TODO: 判断docId存在 与 禁止重复创建
 	attention := &model.AttentionModel{
-		UserId: req.UserId,
-		Doc: model.Doc{
-			Id: req.DocId,
-		},
+		UserId:  req.UserId,
+		DocId:   req.DocId,
 		TimeDay: time.Now().Format("2006/01/02"),
 		TimeHm:  time.Now().Format("15:04"),
 	}

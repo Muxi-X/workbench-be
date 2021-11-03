@@ -48,10 +48,14 @@ func ProjectInit() {
 type AttentionService struct{}
 
 // GetInfoFromProjectService get filter data from project-service
-func GetInfoFromProjectService(id uint32) (model.Doc, error) {
+func GetInfoFromProjectService(id uint32) (*model.Doc, error) {
 	// rsp, err := ProjectClient.GetProjectIdsForUser(context.Background(), &ppb.GetRequest{Id: id})
 	rsp, err := ProjectClient.GetDocDetail(context.Background(), &ppb.GetFileDetailRequest{Id: id})
-	doc := model.Doc{
+	if err != nil {
+		return nil, err
+	}
+
+	doc := &model.Doc{
 		CreatorName: rsp.Creator,
 		Name:        rsp.Title,
 		Id:          rsp.Id,

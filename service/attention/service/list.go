@@ -11,8 +11,8 @@ import (
 
 // List ... attention列表
 func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *pb.AttentionListResponse) error {
-	// get username and avatar by userId from user-service
-	username, err := GetInfoFromUserService(req.UserId)
+	// get username by userId from user-service
+	userName, err := GetInfoFromUserService(req.UserId)
 	if err != nil {
 		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 	}
@@ -21,21 +21,22 @@ func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *p
 	var filter = &model.FilterParams{
 		UserId: req.UserId,
 	}
+
 	attentions, err := model.List(req.LastId, req.Limit, filter)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	for _, attention := range attentions {
-		if doc, err := GetInfoFromProjectService(attention.Doc.Id); err != nil {
+	for _, a := range attentions {
+		if doc, err := GetInfoFromProjectService(a.Doc.Id); err != nil {
 			return err
 		} else {
-			attention.Doc = doc
+			a.Doc = *doc
 		}
 	}
 
 	// 数据格式化
-	list, err := FormatListData(attentions, username)
+	list, err := FormatListData(attentions, userName)
 	if err != nil {
 		return e.ServerErr(errno.ErrFormatList, err.Error())
 	}
@@ -46,11 +47,10 @@ func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *p
 	return nil
 }
 
-func FormatListData(list []*model.AttentionModel, username string) ([]*pb.AttentionItem, error) {
+func FormatListData(list []*model.AttentionDetail, username string) ([]*pb.AttentionItem, error) {
 	var result []*pb.AttentionItem
 
 	for _, attention := range list {
-
 		data := &pb.AttentionItem{
 			Date: attention.TimeDay,
 			Time: attention.TimeHm,
