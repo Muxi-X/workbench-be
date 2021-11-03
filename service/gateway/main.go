@@ -40,6 +40,8 @@ func init() {
 
 // @tag.name feed
 // @tag.description 动态服务
+// @tag.name attention
+// @tag.description 关注服务
 // @tag.name status
 // @tag.description 进度服务
 // @tag.name user

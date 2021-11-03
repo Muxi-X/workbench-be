@@ -37,7 +37,7 @@ func GetGroupList(c *gin.Context) {
 	var err error
 	pagination := true
 
-	limit, err = strconv.Atoi(c.DefaultQuery("limit","20"))
+	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
