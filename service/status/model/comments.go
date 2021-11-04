@@ -46,7 +46,7 @@ func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, u
 
 	commentsList := make([]*CommentListItem, 0)
 
-	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments.statu_id = ?", statusID).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id desc")
+	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments.statu_id = ?", statusID).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id asc")
 
 	if lastID != 0 {
 		query = query.Where("comments.id < ?", lastID)
