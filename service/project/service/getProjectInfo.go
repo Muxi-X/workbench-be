@@ -21,12 +21,19 @@ func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *p
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	creatorName, err := GetInfoFromUserService(project.CreatorId)
+	if err != nil {
+		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+	}
+
 	res.Id = project.ID
 	res.Name = project.Name
 	res.Intro = project.Intro
 	res.UserCount = count
 	res.DocChildren = project.DocChildren
 	res.FileChildren = project.FileChildren
+	res.Time = project.Time
+	res.CreatorName = creatorName
 
 	return nil
 }

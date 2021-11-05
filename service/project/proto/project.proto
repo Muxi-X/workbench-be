@@ -124,6 +124,7 @@ message CreateProjectRequest {
   string name = 1;
   string intro = 2;
   uint32 team_id = 3;
+  uint32 creator_id = 4;
 }
 
 message UpdateFolderRequest {
@@ -281,6 +282,8 @@ message ProjectInfo {
   uint32 user_count = 4;
   string doc_children = 5;
   string file_children = 6;
+  string time = 7;
+  string creator_name = 8;
 }
 
 message UpdateProjectInfoRequest {

@@ -14,10 +14,11 @@ func (s *Service) CreateProject(ctx context.Context, req *pb.CreateProjectReques
 	t := time.Now()
 
 	project := &model.ProjectModel{
-		Name:   req.Name,
-		Intro:  req.Intro,
-		TeamID: req.TeamId,
-		Time:   t.Format("2006-01-02 15:04:05"),
+		Name:      req.Name,
+		Intro:     req.Intro,
+		TeamID:    req.TeamId,
+		CreatorId: req.CreatorId,
+		Time:      t.Format("2006-01-02 15:04:05"),
 	}
 
 	if err := project.Create(); err != nil {

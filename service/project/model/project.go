@@ -19,6 +19,7 @@ type ProjectModel struct {
 	FileChildren string         `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
 	DocChildren  string         `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
 	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;" binding:"required"`
+	CreatorId    uint32         `json:"creator_id" gorm:"column:creator_id;"`
 }
 
 // ProjectListItem ProjectList service item
