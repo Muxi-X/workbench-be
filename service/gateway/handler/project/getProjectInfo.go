@@ -3,16 +3,15 @@ package project
 import (
 	"context"
 	"fmt"
-
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"strconv"
 )
 
 // GetProjectInfo gets a project's information by its id
@@ -31,11 +30,7 @@ func GetProjectInfo(c *gin.Context) {
 	log.Info("project getProjectInfo function call", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 projectID
-	projectID, ok := c.MustGet("projectID").(uint32)
-	fmt.Println(ok)
-	fmt.Println(ok)
-	fmt.Println(ok)
-	fmt.Println(ok)
+	projectID := c.MustGet("projectID").(uint32)
 
 	// 发送请求
 	getProInfoResp, err := service.ProjectClient.GetProjectInfo(context.Background(), &pbp.GetRequest{
@@ -47,8 +42,62 @@ func GetProjectInfo(c *gin.Context) {
 	}
 
 	// 解析结果
-	docList := FormatChildren(getProInfoResp.DocChildren)
 	fileList := FormatChildren(getProInfoResp.FileChildren)
+	for _, file := range fileList {
+		// 发送请求获取name
+		id, _ := strconv.Atoi(file.Id)
+		if file.Type { // file folder
+			getFileNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
+				Id:   uint32(id),
+				Type: 3,
+			})
+			if err != nil {
+				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+				return
+			}
+			file.Name = getFileNameResp.Name
+		} else {
+			getFileNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
+				Id:   uint32(id),
+				Type: 1,
+			})
+			if err != nil {
+				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+				return
+			}
+			file.Name = getFileNameResp.Name
+		}
+		fmt.Println(file.Name)
+		fmt.Println(file.Name)
+		fmt.Println(file.Name)
+	}
+
+	docList := FormatChildren(getProInfoResp.DocChildren)
+	for _, doc := range docList {
+		// 发送请求获取name
+		id, _ := strconv.Atoi(doc.Id)
+		if doc.Type { // doc folder
+			getDocNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
+				Id:   uint32(id),
+				Type: 4,
+			})
+			if err != nil {
+				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+				return
+			}
+			doc.Name = getDocNameResp.Name
+		} else {
+			getDocNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
+				Id:   uint32(id),
+				Type: 2,
+			})
+			if err != nil {
+				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+				return
+			}
+			doc.Name = getDocNameResp.Name
+		}
+	}
 
 	// 构造返回 response
 	resp := GetProjectInfoResponse{
@@ -58,6 +107,8 @@ func GetProjectInfo(c *gin.Context) {
 		UserCount:    getProInfoResp.UserCount,
 		DocChildren:  docList,
 		FileChildren: fileList,
+		Time:         getProInfoResp.Time,
+		CreatorName:  getProInfoResp.CreatorName,
 	}
 
 	// 返回结果

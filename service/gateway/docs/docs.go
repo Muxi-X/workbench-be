@@ -4697,6 +4697,9 @@ var doc = `{
                 "id": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                },
                 "type": {
                     "description": "判断是不是 folder 0-\u003efile 1-\u003efolder",
                     "type": "boolean"
@@ -4813,6 +4816,9 @@ var doc = `{
         "GetProjectInfoResponse": {
             "type": "object",
             "properties": {
+                "creator_name": {
+                    "type": "string"
+                },
                 "doc_children": {
                     "type": "array",
                     "items": {
@@ -4832,6 +4838,9 @@ var doc = `{
                     "type": "integer"
                 },
                 "project_name": {
+                    "type": "string"
+                },
+                "time": {
                     "type": "string"
                 },
                 "user_count": {
@@ -5458,6 +5467,10 @@ var doc = `{
         {
             "description": "动态服务",
             "name": "feed"
+        },
+        {
+            "description": "关注服务",
+            "name": "attention"
         },
         {
             "description": "进度服务",

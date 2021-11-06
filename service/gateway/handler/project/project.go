@@ -103,6 +103,8 @@ type GetProjectInfoResponse struct {
 	UserCount    uint32              `json:"user_count"`
 	DocChildren  []*FileChildrenItem `json:"doc_children"`
 	FileChildren []*FileChildrenItem `json:"file_children"`
+	Time         string              `json:"time"`
+	CreatorName  string              `json:"creator_name"`
 } //@name GetProjectInfoResponse
 
 // ProjectRequest ... 修改项目详情请求
@@ -147,6 +149,7 @@ type GetProjectListResponse struct {
 // FileChildrenItem ... 文件树 包括和文件 文档
 type FileChildrenItem struct {
 	Id   string `json:"id"`
+	Name string `json:"name"`
 	Type bool   `json:"type"` // 判断是不是 folder 0->file 1->folder
 } //@name FileChildrenItem
 

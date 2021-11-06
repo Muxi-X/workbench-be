@@ -29,7 +29,7 @@ import (
 // @Failure 500 {object} handler.Response
 // @Router /folder/doc_children/{id} [get]
 func GetDocChildren(c *gin.Context) {
-	log.Info("project getDoctTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("project getDocTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 folderID
 	folderID, err := strconv.Atoi(c.Param("id"))
