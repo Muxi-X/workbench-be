@@ -5220,6 +5220,12 @@ var doc = `{
         "Trashbin": {
             "type": "object",
             "properties": {
+                "create_time": {
+                    "type": "string"
+                },
+                "delete_time": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },

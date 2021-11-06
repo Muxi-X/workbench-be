@@ -34,9 +34,11 @@ type RemoveTrashbinRequest struct {
 
 // Trashbin
 type Trashbin struct {
-	Id   uint32 `json:"id"`
-	Type uint32 `json:"type"`
-	Name string `json:"name"`
+	Id         uint32 `json:"id"`
+	Type       uint32 `json:"type"`
+	Name       string `json:"name"`
+	DeleteTime string `json:"delete_time"`
+	CreateTime string `json:"create_time"`
 } //@name Trashbin
 
 // GetTrashbinResponse ... 获取回收站资源响应

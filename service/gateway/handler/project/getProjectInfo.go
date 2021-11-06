@@ -2,7 +2,6 @@ package project
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
@@ -67,9 +66,6 @@ func GetProjectInfo(c *gin.Context) {
 			}
 			file.Name = getFileNameResp.Name
 		}
-		fmt.Println(file.Name)
-		fmt.Println(file.Name)
-		fmt.Println(file.Name)
 	}
 
 	docList := FormatChildren(getProInfoResp.DocChildren)

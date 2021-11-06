@@ -590,6 +590,10 @@ definitions:
     type: object
   Trashbin:
     properties:
+      create_time:
+        type: string
+      delete_time:
+        type: string
       id:
         type: integer
       name:

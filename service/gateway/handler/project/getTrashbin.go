@@ -64,9 +64,11 @@ func GetTrashbin(c *gin.Context) {
 	var count uint32
 	for _, v := range getTrashbinResp.List {
 		resp.List = append(resp.List, &Trashbin{
-			Id:   v.Id,
-			Type: v.Type,
-			Name: v.Name,
+			Id:         v.Id,
+			Type:       v.Type,
+			Name:       v.Name,
+			CreateTime: v.CreateTime,
+			DeleteTime: v.DeleteTime,
 		})
 		count++
 	}
