@@ -8,6 +8,7 @@ import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -42,9 +43,11 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 	}
 
 	trashbin := &model.TrashbinModel{
-		FileId:   req.Id,
-		FileType: constvar.DocCode,
-		Name:     item.Name,
+		FileId:     req.Id,
+		FileType:   constvar.DocCode,
+		Name:       item.Name,
+		DeleteTime: time.Now().Format("2006-01-02 15:04:05"),
+		CreateTime: item.CreateTime,
 	}
 
 	// 事务

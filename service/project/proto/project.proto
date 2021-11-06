@@ -96,6 +96,8 @@ message Trashbin {
   uint32 id = 1;
   uint32 type = 2; // 0-projct 1-doc 2-file 3-doc folder 4-file folder
   string name = 3;
+  string create_time = 4;
+  string delete_time = 5;
 }
 
 message GetTrashbinResponse {

@@ -8,6 +8,7 @@ import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+	"time"
 )
 
 // DeleteFileFolder ... 删除文件夹
@@ -35,9 +36,11 @@ func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, r
 	}
 
 	trashbin := &model.TrashbinModel{
-		FileId:   req.Id,
-		FileType: constvar.DocFolderCode,
-		Name:     item.Name,
+		FileId:     req.Id,
+		FileType:   constvar.DocFolderCode,
+		Name:       item.Name,
+		DeleteTime: time.Now().Format("2006-01-02 15:04:05"),
+		CreateTime: item.CreateTime,
 	}
 
 	// 事务

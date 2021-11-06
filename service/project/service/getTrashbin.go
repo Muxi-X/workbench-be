@@ -20,9 +20,11 @@ func (s *Service) GetTrashbin(ctx context.Context, req *pb.GetTrashbinRequest, r
 
 	for _, v := range list {
 		item = append(item, &pb.Trashbin{
-			Id:   v.FileId,
-			Type: uint32(v.FileType),
-			Name: v.Name,
+			Id:         v.FileId,
+			Type:       uint32(v.FileType),
+			Name:       v.Name,
+			CreateTime: v.CreateTime,
+			DeleteTime: v.DeleteTime,
 		})
 	}
 

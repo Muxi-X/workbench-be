@@ -13,19 +13,23 @@ import (
 
 // TrashbinModel ... 回收站表
 type TrashbinModel struct {
-	Id        uint32 `json:"id" gorm:"column:id;" binding:"required"`
-	FileId    uint32 `json:"file_id" gorm:"column:file_id;" binding:"required"`
-	FileType  uint8  `json:"file_type" gorm:"column:file_type;" binding:"required"`
-	Name      string `json:"name" gorm:"column:name;" binding:"required"`
-	Re        bool   `json:"re" gorm:"column:re;" binding:"required"`
-	ExpiresAt int64  `json:"expires_at" gorm:"column:expires_at;" binding:"required"`
+	Id         uint32 `json:"id" gorm:"column:id;" binding:"required"`
+	FileId     uint32 `json:"file_id" gorm:"column:file_id;" binding:"required"`
+	FileType   uint8  `json:"file_type" gorm:"column:file_type;" binding:"required"`
+	Name       string `json:"name" gorm:"column:name;" binding:"required"`
+	Re         bool   `json:"re" gorm:"column:re;" binding:"required"`
+	ExpiresAt  int64  `json:"expires_at" gorm:"column:expires_at;" binding:"required"`
+	DeleteTime string `json:"delete_time" gorm:"column:delete_time;" binding:"required"`
+	CreateTime string `json:"create_time" gorm:"column:create_time;" binding:"required"`
 }
 
 // TrashbinListItem
 type TrashbinListItem struct {
-	FileId   uint32 `json:"file_id" gorm:"column:file_id;" binding:"required"`
-	FileType uint8  `json:"file_type" gorm:"column:file_type;" binding:"required"`
-	Name     string `json:"name" gorm:"column:name;" binding:"required"`
+	FileId     uint32 `json:"file_id" gorm:"column:file_id;" binding:"required"`
+	FileType   uint8  `json:"file_type" gorm:"column:file_type;" binding:"required"`
+	Name       string `json:"name" gorm:"column:name;" binding:"required"`
+	DeleteTime string `json:"delete_time" gorm:"column:delete_time;" binding:"required"`
+	CreateTime string `json:"create_time" gorm:"column:create_time;" binding:"required"`
 }
 
 func (u *TrashbinModel) TableName() string {
