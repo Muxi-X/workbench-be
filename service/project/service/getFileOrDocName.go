@@ -8,24 +8,35 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// GetFileOrDocNames ... 获取文件或文档的名字
-func (s *Service) GetFileOrDocNames(ctx context.Context, req *pb.GetFileOrDocNamesRequest, res *pb.GetFileOrDocNamesResponse) error {
-	// var names []string
-	if req.Type == 1 { // file
+// GetFileOrDocName ... 获取文件或文档的名字
+func (s *Service) GetFileOrDocName(ctx context.Context, req *pb.GetFileOrDocNameRequest, res *pb.GetFileOrDocNameResponse) error {
+	switch req.Type {
+	case 1: // file
 		file, err := model.GetFileDetail(req.Id)
 		if err != nil {
 			return e.NotFoundErr(errno.ErrDatabase, err.Error())
 		}
 		res.Name = file.Name
-
-	} else if req.Type == 2 { // doc
+	case 2: // doc
 		doc, err := model.GetDocDetail(req.Id)
 		if err != nil {
 			return e.NotFoundErr(errno.ErrDatabase, err.Error())
 		}
 		res.Name = doc.Name
-	} else {
-		return e.BadRequestErr(errno.ErrGetDataFromRPC, "type == 1 -> file, 2 -> doc")
+	case 3:
+		fileFolder, err := model.GetFolderForFileModel(req.Id)
+		if err != nil {
+			return e.NotFoundErr(errno.ErrDatabase, err.Error())
+		}
+		res.Name = fileFolder.Name
+	case 4:
+		docFolder, err := model.GetFolderForDocModel(req.Id)
+		if err != nil {
+			return e.NotFoundErr(errno.ErrDatabase, err.Error())
+		}
+		res.Name = docFolder.Name
+	default:
+		return e.BadRequestErr(errno.ErrGetDataFromRPC, "type == 1 -> file, 2 -> doc, 3 -> file folder, 4 -> doc folder")
 	}
 
 	return nil

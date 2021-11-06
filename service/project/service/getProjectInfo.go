@@ -20,10 +20,13 @@ func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *p
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+	creatorName := ""
 
-	creatorName, err := GetInfoFromUserService(project.CreatorId)
-	if err != nil {
-		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+	if project.CreatorId != 0 {
+		creatorName, err = GetInfoFromUserService(project.CreatorId)
+		if err != nil {
+			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+		}
 	}
 
 	res.Id = project.ID

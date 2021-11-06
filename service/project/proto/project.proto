@@ -12,7 +12,8 @@ service ProjectService {
   rpc GetMembers(GetMemberListRequest) returns (MembersListResponse) {}
   rpc UpdateMembers(UpdateMemberRequest) returns (Response) {}
   rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
-  rpc CheckProjectForUser(CheckProjectRequest) returns (CheckProjectResponse){}
+  rpc CheckProjectForUser(CheckProjectRequest) returns (CheckProjectResponse) {}
+  rpc GetFileOrDocName(GetFileOrDocNameRequest) returns (GetFileOrDocNameResponse) {}
 
   // 回收站
   rpc GetTrashbin(GetTrashbinRequest) returns (GetTrashbinResponse) {}
@@ -382,4 +383,13 @@ message DocInfo {
 message DocFolderDetail {
   uint32 id = 1;
   string name = 2;
+}
+
+message GetFileOrDocNameRequest {
+  uint32 id = 1;
+  uint32 type = 2;
+}
+
+message GetFileOrDocNameResponse {
+  string name = 1;
 }

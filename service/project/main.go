@@ -19,6 +19,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+func init() {
+	s.UserInit()
+}
+
 func main() {
 	// init config
 	if err := config.Init("", "WORKBENCH_PROJECT"); err != nil {
