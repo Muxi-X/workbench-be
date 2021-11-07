@@ -29,7 +29,7 @@ definitions:
       time:
         type: string
       user:
-        $ref: '#/definitions/muxi-workbench-gateway_handler_attention.User'
+        $ref: '#/definitions/AttentionUser'
     type: object
   AttentionListResponse:
     properties:
@@ -39,6 +39,13 @@ definitions:
         items:
           $ref: '#/definitions/AttentionItem'
         type: array
+    type: object
+  AttentionUser:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   Comment:
     properties:
@@ -190,7 +197,7 @@ definitions:
   Doc:
     properties:
       creator:
-        $ref: '#/definitions/muxi-workbench-gateway_handler_attention.User'
+        $ref: '#/definitions/AttentionUser'
       id:
         type: integer
       name:
@@ -245,7 +252,7 @@ definitions:
       time:
         type: string
       user:
-        $ref: '#/definitions/muxi-workbench-gateway_handler_feed.User'
+        $ref: '#/definitions/User'
     type: object
   FileChildrenItem:
     properties:
@@ -674,6 +681,15 @@ definitions:
       new_name:
         type: string
     type: object
+  User:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   UserProfile:
     properties:
       avatar:
@@ -703,22 +719,6 @@ definitions:
         items:
           $ref: '#/definitions/FeedItem'
         type: array
-    type: object
-  muxi-workbench-gateway_handler_attention.User:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
-  muxi-workbench-gateway_handler_feed.User:
-    properties:
-      avatar_url:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
     type: object
   project.UpdateFilePositionRequest:
     properties:

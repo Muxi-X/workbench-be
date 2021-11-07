@@ -4352,7 +4352,7 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/muxi-workbench-gateway_handler_attention.User"
+                    "$ref": "#/definitions/AttentionUser"
                 }
             }
         },
@@ -4367,6 +4367,17 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/AttentionItem"
                     }
+                }
+            }
+        },
+        "AttentionUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -4603,7 +4614,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "creator": {
-                    "$ref": "#/definitions/muxi-workbench-gateway_handler_attention.User"
+                    "$ref": "#/definitions/AttentionUser"
                 },
                 "id": {
                     "type": "integer"
@@ -4687,7 +4698,7 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.User"
+                    "$ref": "#/definitions/User"
                 }
             }
         },
@@ -5351,6 +5362,20 @@ var doc = `{
                 }
             }
         },
+        "User": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "UserProfile": {
             "type": "object",
             "properties": {
@@ -5394,31 +5419,6 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/FeedItem"
                     }
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_attention.User": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_feed.User": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },

@@ -31,7 +31,7 @@ import (
 // @Failure 500 {object} handler.Response
 // @Router /trashbin/{id} [put]
 func UpdateTrashbin(c *gin.Context) {
-	log.Info("project updateTrashbin funcation call.",
+	log.Info("project updateTrashbin function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 ID
