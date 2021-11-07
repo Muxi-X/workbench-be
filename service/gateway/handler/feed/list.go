@@ -74,7 +74,7 @@ func List(c *gin.Context) {
 			ShowDivider: item.ShowDivider,
 			Date:        item.Date,
 			Time:        item.Time,
-			User: &User{
+			FeedUser: &FeedUser{
 				Name:      item.User.Name,
 				Id:        item.User.Id,
 				AvatarUrl: item.User.AvatarUrl,

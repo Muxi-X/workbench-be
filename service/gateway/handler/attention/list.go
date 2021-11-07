@@ -64,5 +64,33 @@ func List(c *gin.Context) {
 		return
 	}
 
+	// var list []*AttentionItem
+	// for _, item := range listResp.List {
+	// 	list = append(list, &AttentionItem{
+	// 		Id:   item.Id,
+	// 		Date: item.Date,
+	// 		Time: item.Time,
+	// 		User: &AttentionUser{
+	// 			Name:      item.User.Name,
+	// 			Id:        item.User.Id,
+	// 		},
+	// 		Doc:  &Doc{
+	// 			Id:          item.Doc.Id,
+	// 			Name:        item.Doc.Name,
+	// 			DocCreator: &AttentionUser{
+	// 				Name: item.Doc.DocCreator.Name,
+	// 				Id:   item.Doc.DocCreator.Id,
+	// 			},
+	// 			ProjectId:   item.Doc.ProjectId,
+	// 			ProjectName: item.Doc.ProjectName,
+	// 		},
+	// 	})
+	// }
+	//
+	// SendResponse(c, nil, AttentionListResponse{
+	// 	Count: listResp.Count,
+	// 	List:  list,
+	// })
+
 	SendResponse(c, nil, listResp)
 }
