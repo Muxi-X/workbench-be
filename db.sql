@@ -11,8 +11,8 @@ CREATE TABLE `status` (
   `content` text,
   `title` varchar(20) DEFAULT NULL,
   `time` varchar(50) DEFAULT NULL,
-  `like` int(11) DEFAULT NULL,
-  `comment` int(11) DEFAULT NULL,
+  `like` int(11) DEFAULT NULL COMMENT "点赞数",
+  `comment` int(11) DEFAULT NULL COMMENT "评论数",
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
@@ -29,11 +29,11 @@ CREATE TABLE `users` (
   `email` varchar(35) DEFAULT NULL,
   `avatar` text,
   `tel` varchar(15) DEFAULT NULL,
-  `role` int(11) DEFAULT NULL,
+  `role` int(11) DEFAULT NULL COMMENT "权限 0-无权限用户 1-普通用户 3-管理员 4-超级管理员",
   `email_service` tinyint(1) DEFAULT NULL,
   `message` tinyint(1) DEFAULT NULL,
-  `team_id` int(11) DEFAULT NULL,
-  `group_id` int(11) DEFAULT NULL,
+  `team_id` int(11) DEFAULT NULL COMMENT "团队 id，木犀团队是1",
+  `group_id` int(11) DEFAULT NULL COMMENT "组别 id 1-产品 2-前端 3-后端 4-安卓 5-设计",
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`),
@@ -51,14 +51,14 @@ CREATE TABLE `feeds` (
   `userid` int(11) DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
   `useravatar` varchar(200) DEFAULT NULL,
-  `action` varchar(20) DEFAULT NULL,
-  `source_kindid` int(11) DEFAULT NULL,
-  `source_objectname` varchar(100) DEFAULT NULL,
-  `source_objectid` int(11) DEFAULT NULL,
-  `source_projectname` varchar(100) DEFAULT NULL,
-  `source_projectid` int(11) DEFAULT NULL,
-  `timeday` varchar(20) DEFAULT NULL,
-  `timehm` varchar(20) DEFAULT NULL,
+  `action` varchar(20) DEFAULT NULL COMMENT "动作，存储如 <创建>、<编辑>、<删除>、<评论>、<加入> 等常量字符串",
+  `source_kindid` int(11) DEFAULT NULL COMMENT "动态的类型 1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）",
+  `source_objectname` varchar(100) DEFAULT NULL COMMENT "object 包括 status、file、doc、等，这里是它们的名字",
+  `source_objectid` int(11) DEFAULT NULL COMMENT "对象的 id",
+  `source_projectname` varchar(100) DEFAULT NULL COMMENT "如果是 file/doc，这里存储其项目名，否则为 NULL",
+  `source_projectid` int(11) DEFAULT NULL COMMENT "如果是 file/doc，这里存项目id，否则为 NULL",
+  `timeday` varchar(20) DEFAULT NULL COMMENT "日期",
+  `timehm` varchar(20) DEFAULT NULL COMMENT "时间",
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
@@ -74,8 +74,8 @@ CREATE TABLE `projects` (
   `time` varchar(50) DEFAULT NULL,
   `count` int(11) DEFAULT NULL,
   `team_id` int(11) DEFAULT NULL,
-  `filetree` text,
-  `doctree` text,
+  `filetree` text COMMENT "旧版的子文件树，现已弃用，详情见 update.sql",
+  `doctree` text COMMENT "旧版的子文档树，现已启用，详情见 update.sql",
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `team_id` (`team_id`)
@@ -164,13 +164,13 @@ CREATE TABLE `docs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `filename` varchar(150) DEFAULT NULL,
   `content` text,
-  `re` tinyint(1) DEFAULT NULL,
+  `re` tinyint(1) DEFAULT NULL COMMENT "标志是否删除，0-未删除 1-删除 删除时只要将 re 置为 1",
   `top` tinyint(1) DEFAULT NULL,
   `create_time` varchar(30) DEFAULT NULL,
   `delete_time` varchar(30) DEFAULT NULL,
   `editor_id` int(11) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
-  `project_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL COMMENT "此文档所属的项目 id",
   PRIMARY KEY (`id`),
   KEY `editor_id` (`editor_id`),
   KEY `creator_id` (`creator_id`),
@@ -184,27 +184,27 @@ CREATE TABLE `files` (
   `url` varchar(150) DEFAULT NULL,
   `filename` varchar(150) DEFAULT NULL,
   `realname` varchar(150) DEFAULT NULL,
-  `re` tinyint(1) DEFAULT NULL,
+  `re` tinyint(1) DEFAULT NULL COMMENT "标志是否删除，0-未删除 1-删除 删除时只要将 re 置为 1",
   `top` tinyint(1) DEFAULT NULL,
   `create_time` varchar(30) DEFAULT NULL,
   `delete_time` varchar(30) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
-  `project_id` int(11) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL COMMENT "此文件所属的项目 id",
   PRIMARY KEY (`id`),
   KEY `creator_id` (`creator_id`),
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
-# user2files to user2attention;
-# DROP TABLE IF EXISTS `user2files`;
-# CREATE TABLE `user2files` (
-#   `id` int(11) NOT NULL AUTO_INCREMENT,
-#   `user_id` int(11) DEFAULT NULL,
-#   `file_id` int(11) DEFAULT NULL,
-#   `file_kind` int(11) DEFAULT NULL,
-#   PRIMARY KEY (`id`)
-# ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-#
+-- 用户-文件关注表
+#!!! user2files to user2attention;
+DROP TABLE IF EXISTS `user2files`;
+CREATE TABLE `user2files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `file_id` int(11) DEFAULT NULL COMMENT "文件的 id，这里文件包括 doc 和 file",
+  `file_kind` int(11) DEFAULT NULL COMMENT "file 的类型，包括 doc 和 file，0-doc 1-file",
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- 文件-文件夹
 DROP TABLE IF EXISTS `foldersforfiles`;
@@ -213,8 +213,8 @@ CREATE TABLE `foldersforfiles` (
   `name` varchar(30) NOT NULL,
   `create_time` varchar(30) DEFAULT NULL,
   `create_id` int(11) DEFAULT NULL,
-  `project_id` int(11) DEFAULT NULL,
-  `re` tinyint(1) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL COMMENT "该文件夹所属项目 id",
+  `re` tinyint(1) DEFAULT NULL COMMENT "标志是否删除，0-未删除 1-删除 删除时只要将 re 置为 1",
   PRIMARY KEY (`id`),
   KEY `create_id` (`create_id`),
   KEY `project_id` (`project_id`)
@@ -228,8 +228,8 @@ CREATE TABLE `foldersformds` (
   `name` varchar(30) NOT NULL,
   `create_time` varchar(30) DEFAULT NULL,
   `create_id` int(11) DEFAULT NULL,
-  `project_id` int(11) DEFAULT NULL,
-  `re` tinyint(1) DEFAULT NULL,
+  `project_id` int(11) DEFAULT NULL COMMENT "该文档夹所属项目 id",
+  `re` tinyint(1) DEFAULT NULL COMMENT "标志是否删除，0-未删除 1-删除 删除时只要将 re 置为 1",
   PRIMARY KEY (`id`),
   KEY `create_id` (`create_id`),
   KEY `project_id` (`project_id`)

@@ -316,7 +316,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/feed.FeedListResponse"
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -379,7 +379,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/feed.FeedListResponse"
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -442,7 +442,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/feed.FeedListResponse"
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -1420,7 +1420,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/project.UpdateFilePositionRequest"
+                            "$ref": "#/definitions/UpdateFilePositionRequest"
                         }
                     },
                     {
@@ -4698,7 +4698,35 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/User"
+                    "$ref": "#/definitions/FeedUser"
+                }
+            }
+        },
+        "FeedListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FeedItem"
+                    }
+                }
+            }
+        },
+        "FeedUser": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -4980,7 +5008,7 @@ var doc = `{
                 "list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/user.User"
+                        "$ref": "#/definitions/User"
                     }
                 }
             }
@@ -5153,9 +5181,7 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "message": {
                     "type": "string"
                 }
@@ -5270,6 +5296,23 @@ var doc = `{
                 }
             }
         },
+        "UpdateFilePositionRequest": {
+            "type": "object",
+            "properties": {
+                "childrenPositionIndex": {
+                    "type": "integer"
+                },
+                "fatherId": {
+                    "type": "integer"
+                },
+                "fatherType": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
         "UpdateFileRequest": {
             "type": "object",
             "properties": {
@@ -5365,14 +5408,29 @@ var doc = `{
         "User": {
             "type": "object",
             "properties": {
-                "avatar_url": {
+                "avatar": {
                     "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
                     "type": "string"
+                },
+                "real_name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "team": {
+                    "type": "integer"
                 }
             }
         },
@@ -5405,66 +5463,6 @@ var doc = `{
                 },
                 "tel": {
                     "type": "string"
-                }
-            }
-        },
-        "feed.FeedListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/FeedItem"
-                    }
-                }
-            }
-        },
-        "project.UpdateFilePositionRequest": {
-            "type": "object",
-            "properties": {
-                "childrenPositionIndex": {
-                    "type": "integer"
-                },
-                "fatherId": {
-                    "type": "integer"
-                },
-                "fatherType": {
-                    "type": "integer"
-                },
-                "type": {
-                    "type": "integer"
-                }
-            }
-        },
-        "user.User": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "group": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "real_name": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
-                },
-                "team": {
-                    "type": "integer"
                 }
             }
         }

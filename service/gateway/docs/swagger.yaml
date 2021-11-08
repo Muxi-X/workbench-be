@@ -252,7 +252,25 @@ definitions:
       time:
         type: string
       user:
-        $ref: '#/definitions/User'
+        $ref: '#/definitions/FeedUser'
+    type: object
+  FeedListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FeedItem'
+        type: array
+    type: object
+  FeedUser:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   FileChildrenItem:
     properties:
@@ -434,7 +452,7 @@ definitions:
         type: integer
       list:
         items:
-          $ref: '#/definitions/user.User'
+          $ref: '#/definitions/User'
         type: array
     type: object
   LoginRequest:
@@ -546,8 +564,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: object
+      data: {}
       message:
         type: string
     type: object
@@ -622,6 +639,17 @@ definitions:
       title:
         type: string
     type: object
+  UpdateFilePositionRequest:
+    properties:
+      childrenPositionIndex:
+        type: integer
+      fatherId:
+        type: integer
+      fatherType:
+        type: integer
+      type:
+        type: integer
+    type: object
   UpdateFileRequest:
     properties:
       name:
@@ -683,12 +711,22 @@ definitions:
     type: object
   User:
     properties:
-      avatar_url:
+      avatar:
         type: string
+      email:
+        type: string
+      group:
+        type: integer
       id:
         type: integer
       name:
         type: string
+      real_name:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
     type: object
   UserProfile:
     properties:
@@ -710,45 +748,6 @@ definitions:
         type: integer
       tel:
         type: string
-    type: object
-  feed.FeedListResponse:
-    properties:
-      count:
-        type: integer
-      list:
-        items:
-          $ref: '#/definitions/FeedItem'
-        type: array
-    type: object
-  project.UpdateFilePositionRequest:
-    properties:
-      childrenPositionIndex:
-        type: integer
-      fatherId:
-        type: integer
-      fatherType:
-        type: integer
-      type:
-        type: integer
-    type: object
-  user.User:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      group:
-        type: integer
-      id:
-        type: integer
-      name:
-        type: string
-      real_name:
-        type: string
-      role:
-        type: integer
-      team:
-        type: integer
     type: object
 host: work.test.muxi-tech.xyz
 info:
@@ -951,7 +950,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/feed.FeedListResponse'
+            $ref: '#/definitions/FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -993,7 +992,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/feed.FeedListResponse'
+            $ref: '#/definitions/FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1035,7 +1034,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/feed.FeedListResponse'
+            $ref: '#/definitions/FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1692,7 +1691,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/project.UpdateFilePositionRequest'
+          $ref: '#/definitions/UpdateFilePositionRequest'
       - description: 此文件所属项目 id
         in: query
         name: project_id
