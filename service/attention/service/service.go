@@ -47,18 +47,39 @@ func ProjectInit() {
 // AttentionService ... 动态服务
 type AttentionService struct{}
 
-// GetInfoFromProjectService get filter data from project-service
-func GetInfoFromProjectService(id uint32) (*model.Doc, error) {
-	// rsp, err := ProjectClient.GetProjectIdsForUser(context.Background(), &ppb.GetRequest{Id: id})
+// GetDocFromProjectService get doc data from project-service
+func GetDocFromProjectService(id uint32) (*model.File, error) {
 	rsp, err := ProjectClient.GetDocDetail(context.Background(), &ppb.GetFileDetailRequest{Id: id})
 	if err != nil {
 		return nil, err
 	}
 
-	doc := &model.Doc{
+	doc := &model.File{
 		CreatorName: rsp.Creator,
 		Name:        rsp.Title,
 		Id:          rsp.Id,
+		Kind:        0,
+		// ProjectId:   rsp. TODO:project新增一个通过doc获取project rpc
+	}
+	if err != nil {
+		return doc, err
+	}
+	return doc, nil
+}
+
+// GetFileFromProjectService get file data from project-service
+func GetFileFromProjectService(id uint32) (*model.File, error) {
+	// rsp, err := ProjectClient.GetProjectIdsForUser(context.Background(), &ppb.GetRequest{Id: id})
+	rsp, err := ProjectClient.GetFileDetail(context.Background(), &ppb.GetFileDetailRequest{Id: id})
+	if err != nil {
+		return nil, err
+	}
+
+	doc := &model.File{
+		CreatorName: rsp.Creator,
+		Name:        rsp.Name,
+		Id:          rsp.Id,
+		Kind:        1,
 		// ProjectId:   rsp. TODO:project新增一个通过doc获取project rpc
 	}
 	if err != nil {

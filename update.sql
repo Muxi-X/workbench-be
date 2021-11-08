@@ -75,9 +75,10 @@ CREATE TABLE `user2attentions` (
     `doc_id` int(11) DEFAULT NULL,
     `time_day` varchar(20) DEFAULT NULL,
     `time_hm` varchar(20) DEFAULT NULL,
+    `file_kind` int(11) DEFAULT NULL COMMENT "file 的类型，包括 doc 和 file，0-doc 1-file",
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- add creator_id for projects
 ALTER TABLE `projects` ADD COLUMN `creator_id` int(11);
-
+alter table `user2attentions` add column `file_kind` int(11) DEFAULT NULL;

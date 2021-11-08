@@ -17,7 +17,7 @@ import (
 
 // List ... lists attentions.
 // @Summary get attention list api
-// @Description 获取此用户的动态list
+// @Description 获取此用户的关注list
 // @Tags attention
 // @Accept application/json
 // @Produce application/json

@@ -56,5 +56,11 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	// 向取消关注发起请求
+	err = DeleteAttentionsFromAttentionService(req.Id, uint32(constvar.DocCode))
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

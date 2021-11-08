@@ -10,8 +10,9 @@ import (
 func (s *AttentionService) Delete(ctx context.Context, req *pb.PushRequest, res *pb.Response) error {
 
 	attention := &model.AttentionModel{
-		UserId: req.UserId,
-		DocId:  req.DocId,
+		UserId:   req.UserId,
+		FileId:   req.FileId,
+		FileKind: req.FileKind,
 	}
 
 	if err := attention.Delete(); err != nil {

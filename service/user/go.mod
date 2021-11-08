@@ -17,6 +17,6 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/viper v1.7.1
-	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
+	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 	muxi-workbench v0.0.0-00010101000000-000000000000
 )
