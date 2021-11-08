@@ -247,6 +247,15 @@ definitions:
       user:
         $ref: '#/definitions/muxi-workbench-gateway_handler_feed.User'
     type: object
+  FeedListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FeedItem'
+        type: array
+    type: object
   FileChildrenItem:
     properties:
       id:
@@ -539,8 +548,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: object
+      data: {}
       message:
         type: string
     type: object
@@ -614,6 +622,17 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  UpdateFilePositionRequest:
+    properties:
+      childrenPositionIndex:
+        type: integer
+      fatherId:
+        type: integer
+      fatherType:
+        type: integer
+      type:
+        type: integer
     type: object
   UpdateFileRequest:
     properties:
@@ -695,15 +714,6 @@ definitions:
       tel:
         type: string
     type: object
-  feed.FeedListResponse:
-    properties:
-      count:
-        type: integer
-      list:
-        items:
-          $ref: '#/definitions/FeedItem'
-        type: array
-    type: object
   muxi-workbench-gateway_handler_attention.User:
     properties:
       id:
@@ -719,17 +729,6 @@ definitions:
         type: integer
       name:
         type: string
-    type: object
-  project.UpdateFilePositionRequest:
-    properties:
-      childrenPositionIndex:
-        type: integer
-      fatherId:
-        type: integer
-      fatherType:
-        type: integer
-      type:
-        type: integer
     type: object
   user.User:
     properties:
@@ -951,7 +950,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/feed.FeedListResponse'
+            $ref: '#/definitions/FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -993,7 +992,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/feed.FeedListResponse'
+            $ref: '#/definitions/FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1035,7 +1034,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/feed.FeedListResponse'
+            $ref: '#/definitions/FeedListResponse'
         "401":
           description: Unauthorized
           schema:
@@ -1692,7 +1691,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/project.UpdateFilePositionRequest'
+          $ref: '#/definitions/UpdateFilePositionRequest'
       - description: 此文件所属项目 id
         in: query
         name: project_id

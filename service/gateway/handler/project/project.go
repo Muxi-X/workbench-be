@@ -7,7 +7,7 @@ type UpdateFilePositionRequest struct {
 	FatherType            uint32
 	Type                  uint8
 	ChildrenPositionIndex uint32
-}
+} //@name UpdateFilePositionRequest
 
 // DeleteFolderRequest ... 删除文件夹请求，文档文件共用
 type DeleteFolderRequest struct {

@@ -316,7 +316,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/feed.FeedListResponse"
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -379,7 +379,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/feed.FeedListResponse"
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -442,7 +442,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/feed.FeedListResponse"
+                            "$ref": "#/definitions/FeedListResponse"
                         }
                     },
                     "401": {
@@ -1420,7 +1420,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/project.UpdateFilePositionRequest"
+                            "$ref": "#/definitions/UpdateFilePositionRequest"
                         }
                     },
                     {
@@ -4691,6 +4691,20 @@ var doc = `{
                 }
             }
         },
+        "FeedListResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/FeedItem"
+                    }
+                }
+            }
+        },
         "FileChildrenItem": {
             "type": "object",
             "properties": {
@@ -5142,9 +5156,7 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "message": {
                     "type": "string"
                 }
@@ -5256,6 +5268,23 @@ var doc = `{
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "UpdateFilePositionRequest": {
+            "type": "object",
+            "properties": {
+                "childrenPositionIndex": {
+                    "type": "integer"
+                },
+                "fatherId": {
+                    "type": "integer"
+                },
+                "fatherType": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
                 }
             }
         },
@@ -5383,20 +5412,6 @@ var doc = `{
                 }
             }
         },
-        "feed.FeedListResponse": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/FeedItem"
-                    }
-                }
-            }
-        },
         "muxi-workbench-gateway_handler_attention.User": {
             "type": "object",
             "properties": {
@@ -5419,23 +5434,6 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
-                }
-            }
-        },
-        "project.UpdateFilePositionRequest": {
-            "type": "object",
-            "properties": {
-                "childrenPositionIndex": {
-                    "type": "integer"
-                },
-                "fatherId": {
-                    "type": "integer"
-                },
-                "fatherType": {
-                    "type": "integer"
-                },
-                "type": {
-                    "type": "integer"
                 }
             }
         },
