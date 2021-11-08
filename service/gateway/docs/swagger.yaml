@@ -29,7 +29,7 @@ definitions:
       time:
         type: string
       user:
-        $ref: '#/definitions/muxi-workbench-gateway_handler_attention.User'
+        $ref: '#/definitions/AttentionUser'
     type: object
   AttentionListResponse:
     properties:
@@ -39,6 +39,13 @@ definitions:
         items:
           $ref: '#/definitions/AttentionItem'
         type: array
+    type: object
+  AttentionUser:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   Comment:
     properties:
@@ -190,7 +197,7 @@ definitions:
   Doc:
     properties:
       creator:
-        $ref: '#/definitions/muxi-workbench-gateway_handler_attention.User'
+        $ref: '#/definitions/AttentionUser'
       id:
         type: integer
       name:
@@ -245,7 +252,7 @@ definitions:
       time:
         type: string
       user:
-        $ref: '#/definitions/muxi-workbench-gateway_handler_feed.User'
+        $ref: '#/definitions/FeedUser'
     type: object
   FeedListResponse:
     properties:
@@ -255,6 +262,15 @@ definitions:
         items:
           $ref: '#/definitions/FeedItem'
         type: array
+    type: object
+  FeedUser:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   FileChildrenItem:
     properties:
@@ -436,7 +452,7 @@ definitions:
         type: integer
       list:
         items:
-          $ref: '#/definitions/user.User'
+          $ref: '#/definitions/User'
         type: array
     type: object
   LoginRequest:
@@ -693,6 +709,25 @@ definitions:
       new_name:
         type: string
     type: object
+  User:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      real_name:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
+    type: object
   UserProfile:
     properties:
       avatar:
@@ -713,41 +748,6 @@ definitions:
         type: integer
       tel:
         type: string
-    type: object
-  muxi-workbench-gateway_handler_attention.User:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
-  muxi-workbench-gateway_handler_feed.User:
-    properties:
-      avatar_url:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
-  user.User:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      group:
-        type: integer
-      id:
-        type: integer
-      name:
-        type: string
-      real_name:
-        type: string
-      role:
-        type: integer
-      team:
-        type: integer
     type: object
 host: work.test.muxi-tech.xyz
 info:

@@ -1,16 +1,16 @@
 package attention
 
-type User struct {
+type AttentionUser struct {
 	Name string `json:"name"`
 	Id   uint32 `json:"id"`
-} //@name User
+} //@name AttentionUser
 
 type AttentionItem struct {
-	Id   uint32 `json:"id"`
-	Date string `json:"date"`
-	Time string `json:"time"`
-	User *User  `json:"user"`
-	Doc  *Doc   `json:"doc"`
+	Id   uint32         `json:"id"`
+	Date string         `json:"date"`
+	Time string         `json:"time"`
+	User *AttentionUser `json:"user"`
+	Doc  *Doc           `json:"doc"`
 } //@name AttentionItem
 
 type AttentionListResponse struct {
@@ -19,9 +19,9 @@ type AttentionListResponse struct {
 } //@name AttentionListResponse
 
 type Doc struct {
-	Id          uint32 `json:"id"`
-	Name        string `json:"name"`
-	DocCreator  *User  `json:"creator"`
-	ProjectId   uint32 `json:"project_id"`
-	ProjectName string `json:"project_name"`
+	Id          uint32         `json:"id"`
+	Name        string         `json:"name"`
+	DocCreator  *AttentionUser `json:"creator"`
+	ProjectId   uint32         `json:"project_id"`
+	ProjectName string         `json:"project_name"`
 } //@name Doc

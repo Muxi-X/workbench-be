@@ -69,7 +69,7 @@ type User struct {
 	Role     uint32 `json:"role"`
 	Team     uint32 `json:"team"`
 	Group    uint32 `json:"group"`
-}
+} //@name User
 
 // ListResponse 获取 userList 响应
 type ListResponse struct {

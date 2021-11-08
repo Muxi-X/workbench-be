@@ -4352,7 +4352,7 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/muxi-workbench-gateway_handler_attention.User"
+                    "$ref": "#/definitions/AttentionUser"
                 }
             }
         },
@@ -4367,6 +4367,17 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/AttentionItem"
                     }
+                }
+            }
+        },
+        "AttentionUser": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -4603,7 +4614,7 @@ var doc = `{
             "type": "object",
             "properties": {
                 "creator": {
-                    "$ref": "#/definitions/muxi-workbench-gateway_handler_attention.User"
+                    "$ref": "#/definitions/AttentionUser"
                 },
                 "id": {
                     "type": "integer"
@@ -4687,7 +4698,7 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/muxi-workbench-gateway_handler_feed.User"
+                    "$ref": "#/definitions/FeedUser"
                 }
             }
         },
@@ -4702,6 +4713,20 @@ var doc = `{
                     "items": {
                         "$ref": "#/definitions/FeedItem"
                     }
+                }
+            }
+        },
+        "FeedUser": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -4983,7 +5008,7 @@ var doc = `{
                 "list": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/user.User"
+                        "$ref": "#/definitions/User"
                     }
                 }
             }
@@ -5380,6 +5405,35 @@ var doc = `{
                 }
             }
         },
+        "User": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "real_name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "team": {
+                    "type": "integer"
+                }
+            }
+        },
         "UserProfile": {
             "type": "object",
             "properties": {
@@ -5409,60 +5463,6 @@ var doc = `{
                 },
                 "tel": {
                     "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_attention.User": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "muxi-workbench-gateway_handler_feed.User": {
-            "type": "object",
-            "properties": {
-                "avatar_url": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "user.User": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "group": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "real_name": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "integer"
-                },
-                "team": {
-                    "type": "integer"
                 }
             }
         }
