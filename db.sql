@@ -195,16 +195,16 @@ CREATE TABLE `files` (
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
-
-DROP TABLE IF EXISTS `user2files`;
-CREATE TABLE `user2files` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `file_id` int(11) DEFAULT NULL,
-  `file_kind` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
+# user2files to user2attention;
+# DROP TABLE IF EXISTS `user2files`;
+# CREATE TABLE `user2files` (
+#   `id` int(11) NOT NULL AUTO_INCREMENT,
+#   `user_id` int(11) DEFAULT NULL,
+#   `file_id` int(11) DEFAULT NULL,
+#   `file_kind` int(11) DEFAULT NULL,
+#   PRIMARY KEY (`id`)
+# ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+#
 
 -- 文件-文件夹
 DROP TABLE IF EXISTS `foldersforfiles`;

@@ -6,7 +6,7 @@ import (
 	pb "muxi-workbench-attention/proto"
 )
 
-// Detele ... 删除attention
+// Delete ... 删除attention
 func (s *AttentionService) Delete(ctx context.Context, req *pb.PushRequest, res *pb.Response) error {
 
 	attention := &model.AttentionModel{

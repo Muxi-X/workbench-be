@@ -12,7 +12,7 @@ type UserToStatusModel struct {
 	StatusID uint32 `json:"statusId" gorm:"column:status_id;" binding:"required"`
 }
 
-func (c *UserToStatusModel) TableName() string {
+func (u *UserToStatusModel) TableName() string {
 	return "user2status"
 }
 

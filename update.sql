@@ -25,6 +25,8 @@ CREATE TABLE `trashbin` (
 	`name` varchar(255) DEFAULT NULL,
 	`re` tinyint(1) DEFAULT NULL,
 	`expires_at` int(11) unsigned DEFAULT NULL,
+	`create_time` varchar(50) DEFAULT NULL,
+    `delete_time` varchar(50) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `idx_id_type` (`file_id`,`file_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
@@ -60,8 +62,8 @@ ALTER TABLE `projects` ADD `deleted_at` datetime DEFAULT NULL;
 -- Table structure for attentions
 -- ----------------------------
 
-DROP TABLE IF EXISTS `attentions`;
-CREATE TABLE `attentions` (
+DROP TABLE IF EXISTS `user2attentions`;
+CREATE TABLE `user2attentions` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int(11) DEFAULT NULL,
     `doc_id` int(11) DEFAULT NULL,
@@ -69,3 +71,7 @@ CREATE TABLE `attentions` (
     `time_hm` varchar(20) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+
+-- add creator_id for projects
+ALTER TABLE `projects` ADD COLUMN `creator_id` int(11);
+

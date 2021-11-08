@@ -32,7 +32,7 @@ type Doc struct {
 }
 
 func (*AttentionModel) TableName() string {
-	return "attentions"
+	return "user2attentions"
 }
 
 // Create a new attention
@@ -43,6 +43,11 @@ func (a *AttentionModel) Create() error {
 // Delete a being attention
 func (a *AttentionModel) Delete() error {
 	return m.DB.Self.Where("user_id = ? and doc_id = ?", a.UserId, a.DocId).Delete(a).Error
+}
+
+// GetByUserAndDoc ...get attention info by user_id and doc_id
+func (a *AttentionModel) GetByUserAndDoc() error {
+	return m.DB.Self.Where("user_id = ? and doc_id = ?", a.UserId, a.DocId).First(a).Error
 }
 
 // FilterParams provide filter's params.
@@ -58,16 +63,16 @@ func List(lastId, limit uint32, filter *FilterParams) ([]*AttentionDetail, error
 		limit = constvar.DefaultLimit
 	}
 
-	query := m.DB.Self.Table("attentions").Select("attentions.*").Order("attentions.id desc").Limit(limit)
+	query := m.DB.Self.Table("user2attentions").Select("user2attentions.*").Order("user2attentions.id desc").Limit(limit)
 
 	// 查找用户的attention
 	if filter.UserId != 0 {
-		query = query.Where("attentions.user_id = ?", filter.UserId)
+		query = query.Where("user2attentions.user_id = ?", filter.UserId)
 	}
 
 	// 分页
 	if lastId != 0 {
-		query = query.Where("attentions.id < ?", lastId)
+		query = query.Where("user2attentions.id < ?", lastId)
 	}
 
 	if err := query.Scan(&data).Error; err != nil {
