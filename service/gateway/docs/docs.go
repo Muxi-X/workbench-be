@@ -23,9 +23,113 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/attention": {
+            "post": {
+                "description": "添加关注",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attention"
+                ],
+                "summary": "create attention api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create_attention_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FileRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "取消关注",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attention"
+                ],
+                "summary": "delete attention api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "delete_attention_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FileRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
         "/attention/list/{id}": {
             "get": {
-                "description": "获取此用户的动态list",
+                "description": "获取此用户的关注list",
                 "consumes": [
                     "application/json"
                 ],
@@ -69,106 +173,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/AttentionListResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/attention/{id}": {
-            "post": {
-                "description": "创建关注",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "attention"
-                ],
-                "summary": "create attention api",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "doc_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "取消关注",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "attention"
-                ],
-                "summary": "delete attention api",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "doc_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
                         }
                     },
                     "401": {
@@ -4342,8 +4346,8 @@ var doc = `{
                 "date": {
                     "type": "string"
                 },
-                "doc": {
-                    "$ref": "#/definitions/Doc"
+                "file": {
+                    "$ref": "#/definitions/File"
                 },
                 "id": {
                     "type": "integer"
@@ -4610,26 +4614,6 @@ var doc = `{
                 }
             }
         },
-        "Doc": {
-            "type": "object",
-            "properties": {
-                "creator": {
-                    "$ref": "#/definitions/AttentionUser"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "project_id": {
-                    "type": "integer"
-                },
-                "project_name": {
-                    "type": "string"
-                }
-            }
-        },
         "DocComment": {
             "type": "object",
             "properties": {
@@ -4730,6 +4714,29 @@ var doc = `{
                 }
             }
         },
+        "File": {
+            "type": "object",
+            "properties": {
+                "file_creator": {
+                    "$ref": "#/definitions/AttentionUser"
+                },
+                "file_id": {
+                    "type": "integer"
+                },
+                "file_kind": {
+                    "type": "integer"
+                },
+                "file_name": {
+                    "type": "string"
+                },
+                "file_project_id": {
+                    "type": "integer"
+                },
+                "file_project_name": {
+                    "type": "string"
+                }
+            }
+        },
         "FileChildrenItem": {
             "type": "object",
             "properties": {
@@ -4753,6 +4760,17 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "FileRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "integer"
                 }
             }
         },
@@ -5181,7 +5199,9 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {},
+                "data": {
+                    "type": "object"
+                },
                 "message": {
                     "type": "string"
                 }

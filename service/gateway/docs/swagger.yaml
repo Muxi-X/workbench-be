@@ -22,8 +22,8 @@ definitions:
     properties:
       date:
         type: string
-      doc:
-        $ref: '#/definitions/Doc'
+      file:
+        $ref: '#/definitions/File'
       id:
         type: integer
       time:
@@ -194,19 +194,6 @@ definitions:
       title:
         type: string
     type: object
-  Doc:
-    properties:
-      creator:
-        $ref: '#/definitions/AttentionUser'
-      id:
-        type: integer
-      name:
-        type: string
-      project_id:
-        type: integer
-      project_name:
-        type: string
-    type: object
   DocComment:
     properties:
       avatar:
@@ -272,6 +259,21 @@ definitions:
       name:
         type: string
     type: object
+  File:
+    properties:
+      file_creator:
+        $ref: '#/definitions/AttentionUser'
+      file_id:
+        type: integer
+      file_kind:
+        type: integer
+      file_name:
+        type: string
+      file_project_id:
+        type: integer
+      file_project_name:
+        type: string
+    type: object
   FileChildrenItem:
     properties:
       id:
@@ -288,6 +290,13 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  FileRequest:
+    properties:
+      id:
+        type: integer
+      kind:
+        type: integer
     type: object
   GetDocDetailResponse:
     properties:
@@ -564,7 +573,8 @@ definitions:
     properties:
       code:
         type: integer
-      data: {}
+      data:
+        type: object
       message:
         type: string
     type: object
@@ -756,22 +766,23 @@ info:
   title: muxi-workbench-gateway
   version: "1.0"
 paths:
-  /attention/{id}:
+  /attention:
     delete:
       consumes:
       - application/json
       description: 取消关注
       parameters:
-      - description: doc_id
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: token 用户令牌
         in: header
         name: Authorization
         required: true
         type: string
+      - description: delete_attention_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/FileRequest'
       produces:
       - application/json
       responses:
@@ -793,18 +804,19 @@ paths:
     post:
       consumes:
       - application/json
-      description: 创建关注
+      description: 添加关注
       parameters:
-      - description: doc_id
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: token 用户令牌
         in: header
         name: Authorization
         required: true
         type: string
+      - description: create_attention_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/FileRequest'
       produces:
       - application/json
       responses:
@@ -827,7 +839,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 获取此用户的动态list
+      description: 获取此用户的关注list
       parameters:
       - description: user_id
         in: path
