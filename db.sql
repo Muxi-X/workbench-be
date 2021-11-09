@@ -196,7 +196,7 @@ CREATE TABLE `files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- 用户-文件关注表
-#!!! user2files to user2attention;
+-- !! user2files to user2attentions;
 DROP TABLE IF EXISTS `user2files`;
 CREATE TABLE `user2files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

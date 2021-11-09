@@ -59,7 +59,7 @@ func GetDocFromProjectService(id uint32) (*model.File, error) {
 		Name:        rsp.Title,
 		Id:          rsp.Id,
 		Kind:        0,
-		// ProjectId:   rsp. TODO:project新增一个通过doc获取project rpc
+		ProjectName:   rsp.ProjectName,
 	}
 	if err != nil {
 		return doc, err
@@ -80,7 +80,7 @@ func GetFileFromProjectService(id uint32) (*model.File, error) {
 		Name:        rsp.Name,
 		Id:          rsp.Id,
 		Kind:        1,
-		// ProjectId:   rsp. TODO:project新增一个通过doc获取project rpc
+		ProjectName:   rsp.ProjectName,
 	}
 	if err != nil {
 		return doc, err

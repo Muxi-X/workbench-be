@@ -338,6 +338,7 @@ message FileDetail {
   string url = 3;
   string creator = 4;
   string create_time = 5;
+  string project_name = 6;
 }
 
 message GetFileInfoListResponse {
@@ -374,6 +375,7 @@ message DocDetail {
   string create_time = 5;
   string last_editor = 6;
   string last_edit_time = 7;
+  string project_name = 8;
 }
 
 message DocInfo {

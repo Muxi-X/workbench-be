@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"muxi-workbench/pkg/constvar"
 	"github.com/pkg/errors"
 	"time"
 
@@ -11,7 +12,18 @@ import (
 
 // Create ... 新增attention
 func (s *AttentionService) Create(ctx context.Context, req *pb.PushRequest, res *pb.Response) error {
-	// TODO: 判断docId存在
+	// 判断fileId存在
+	if req.FileKind == uint32(constvar.DocCode) {
+		if _, err := GetDocFromProjectService(req.FileId); err != nil {
+			return err
+		}
+	} else if req.FileKind == uint32(constvar.FileCode){
+		if _, err := GetFileFromProjectService(req.FileId); err != nil {
+			return err
+		}
+	} else {
+		errors.New("file_kind wrong : 1 -> doc, 2 -> file")
+	}
 	attention := &model.AttentionModel{
 		UserId:   req.UserId,
 		FileId:   req.FileId,

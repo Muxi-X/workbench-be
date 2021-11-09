@@ -49,6 +49,7 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+	// TODO: 删除文档folder后要删除对应attentions
 
 	return nil
 }

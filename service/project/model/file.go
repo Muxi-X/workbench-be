@@ -12,11 +12,12 @@ import (
 
 // FileDetail ... 文件详情
 type FileDetail struct {
-	ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name       string `json:"name" gorm:"column:realname;" binding:"required"`
-	URL        string `json:"url" gorm:"column:url;" binding:"required"`
+	// ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	// Name       string `json:"name" gorm:"column:realname;" binding:"required"`
+	// URL        string `json:"url" gorm:"column:url;" binding:"required"`
 	Creator    string `json:"creator" gorm:"column:creator;" binding:"required"`
-	CreateTime string `json:"createTime" gorm:"column:create_time;" binding:"required"`
+	// CreateTime string `json:"createTime" gorm:"column:create_time;" binding:"required"`
+	FileModel
 }
 
 // FileInfo ... 文件信息
