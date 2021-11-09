@@ -64,21 +64,10 @@ ALTER TABLE `docs` ADD `last_edit_time` varchar(30) DEFAULT NULL;
 -- 使用 gorm 提供好的软删除
 ALTER TABLE `projects` ADD `deleted_at` datetime DEFAULT NULL;
 
--- ----------------------------
--- Table structure for user2attentions
--- ----------------------------
-
-DROP TABLE IF EXISTS `user2attentions`;
-CREATE TABLE `user2attentions` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `user_id` int(11) DEFAULT NULL,
-    `doc_id` int(11) DEFAULT NULL,
-    `time_day` varchar(20) DEFAULT NULL,
-    `time_hm` varchar(20) DEFAULT NULL,
-    `file_kind` int(11) DEFAULT NULL COMMENT "file 的类型，包括 doc 和 file，0-doc 1-file",
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
-
 -- add creator_id for projects
 ALTER TABLE `projects` ADD COLUMN `creator_id` int(11);
-alter table `user2attentions` add column `file_kind` int(11) DEFAULT NULL;
+
+-- user2file2 -> user2attentions
+rename table `user2files` to `user2attentions`;
+alter table `user2attentions` add column `time_day` varchar(20) DEFAULT NULL;
+alter table `user2attentions` add column `time_hm` varchar(20) DEFAULT NULL;
