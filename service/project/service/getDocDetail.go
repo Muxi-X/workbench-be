@@ -25,7 +25,10 @@ func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetFileDetailRequest
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
+	project, err := model.GetProject(doc.ProjectID)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
 	res.Title = doc.Name
 	res.Id = doc.ID
 	res.Content = doc.Content
@@ -33,5 +36,6 @@ func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetFileDetailRequest
 	res.LastEditor = doc.Editor
 	res.CreateTime = doc.CreateTime
 	res.LastEditTime = doc.LastEditTime
+	res.ProjectName = project.Name
 	return nil
 }

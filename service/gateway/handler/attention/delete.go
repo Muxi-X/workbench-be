@@ -25,7 +25,7 @@ import (
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /attention [delete]
-func Delete(c *gin.Context) { // TODO: 删除文档和文件时要删除对应关注
+func Delete(c *gin.Context) {
 	log.Info("Attention create function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
