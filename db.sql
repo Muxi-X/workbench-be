@@ -195,17 +195,16 @@ CREATE TABLE `files` (
   KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
-
 -- 用户-文件关注表
+#!!! user2files to user2attention;
 DROP TABLE IF EXISTS `user2files`;
 CREATE TABLE `user2files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `file_id` int(11) DEFAULT NULL COMMENT "文件的 id，这里文件包括 doc 和 file",
-  `file_kind` int(11) DEFAULT NULL COMMENT "file 的类型，包括 doc 和 file，0-doc 1-file",
+  `file_kind` int(11) DEFAULT NULL COMMENT "file 的类型，包括 doc 和 file，1-doc 2-file",
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
-
 
 -- 文件-文件夹
 DROP TABLE IF EXISTS `foldersforfiles`;

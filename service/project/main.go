@@ -21,6 +21,7 @@ import (
 
 func init() {
 	s.UserInit()
+	s.AttentionInit()
 }
 
 func main() {

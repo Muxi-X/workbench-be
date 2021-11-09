@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-
 	errno "muxi-workbench-user/errno"
 	"muxi-workbench-user/model"
 	pb "muxi-workbench-user/proto"
@@ -20,7 +19,6 @@ func (s *UserService) GetProfile(ctx context.Context, req *pb.GetRequest, res *p
 		return e.ServerErr(errno.ErrUserNotExisted, "")
 
 	}
-
 	res.Id = user.ID
 	res.Name = user.Name
 	res.RealName = user.RealName

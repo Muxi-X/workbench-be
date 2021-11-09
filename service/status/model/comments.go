@@ -34,8 +34,8 @@ func (c *CommentsModel) TableName() string {
 }
 
 // Create comments
-func (u *CommentsModel) Create() error {
-	return m.DB.Self.Create(&u).Error
+func (c *CommentsModel) Create() error {
+	return m.DB.Self.Create(&c).Error
 }
 
 // ListComments list all comments
@@ -45,7 +45,7 @@ func ListComments(statusID, offset, limit, lastID uint32) ([]*CommentListItem, u
 	}
 
 	commentsList := make([]*CommentListItem, 0)
-
+	// asc
 	query := m.DB.Self.Table("comments").Select("comments.*, users.name, users.avatar").Where("comments.statu_id = ?", statusID).Joins("left join users on users.id = comments.creator").Offset(offset).Limit(limit).Order("comments.id asc")
 
 	if lastID != 0 {

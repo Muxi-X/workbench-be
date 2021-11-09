@@ -32,13 +32,13 @@ type StatusListItem struct {
 	GroupID  uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
 }
 
-func (c *StatusModel) TableName() string {
+func (s *StatusModel) TableName() string {
 	return "status"
 }
 
 // Create status
-func (u *StatusModel) Create() error {
-	return m.DB.Self.Create(&u).Error
+func (s *StatusModel) Create() error {
+	return m.DB.Self.Create(&s).Error
 }
 
 // Delete status
@@ -78,8 +78,8 @@ func DeleteStatus(db *gorm.DB, id, uid uint32) error {
 }
 
 // Update status
-func (u *StatusModel) Update() error {
-	return m.DB.Self.Save(u).Error
+func (s *StatusModel) Update() error {
+	return m.DB.Self.Save(s).Error
 }
 
 // GetStatus get a single status by id

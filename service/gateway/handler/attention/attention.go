@@ -10,18 +10,25 @@ type AttentionItem struct {
 	Date string         `json:"date"`
 	Time string         `json:"time"`
 	User *AttentionUser `json:"user"`
-	Doc  *Doc           `json:"doc"`
+	File *File          `json:"file"`
 } //@name AttentionItem
+
+// FileRequest ... 添加删除关注请求
+type FileRequest struct {
+	Id   uint32 `json:"id"`
+	Kind uint32 `json:"kind"`
+} //@name FileRequest
 
 type AttentionListResponse struct {
 	Count uint32           `json:"count"`
 	List  []*AttentionItem `json:"list"`
 } //@name AttentionListResponse
 
-type Doc struct {
-	Id          uint32         `json:"id"`
-	Name        string         `json:"name"`
-	DocCreator  *AttentionUser `json:"creator"`
-	ProjectId   uint32         `json:"project_id"`
-	ProjectName string         `json:"project_name"`
-} //@name Doc
+type File struct {
+	Id          uint32         `json:"file_id"`
+	Name        string         `json:"file_name"`
+	FileCreator *AttentionUser `json:"file_creator"`
+	ProjectId   uint32         `json:"file_project_id"`
+	ProjectName string         `json:"file_project_name"`
+	Kind        uint32         `json:"file_kind"`
+} //@name File

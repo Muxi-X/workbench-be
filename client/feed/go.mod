@@ -4,10 +4,6 @@ replace muxi-workbench => ../../
 
 replace muxi-workbench-feed => ../../service/feed
 
-replace muxi-workbench-project => ../../service/project
-
-replace muxi-workbench-user => ../../service/user
-
 exclude github.com/micro/go-plugins v1.5.1
 
 go 1.13

@@ -183,8 +183,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	attentionRouter.Use(normalRequired)
 	{
 		attentionRouter.GET("/list/:id", attention.List)
-		attentionRouter.DELETE("/:id", attention.Delete)
-		attentionRouter.POST("/:id", attention.Create)
+		attentionRouter.DELETE("", attention.Delete)
+		attentionRouter.POST("", attention.Create)
 	}
 
 	// The health check handlers

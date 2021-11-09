@@ -20,6 +20,8 @@ CREATE TABLE `user2status` (
 DROP TABLE IF EXISTS `trashbin`;
 CREATE TABLE `trashbin` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`create_time` varchar(50) DEFAULT NULL,
+    `delete_time` varchar(50) DEFAULT NULL,
 	`file_id` int(11) DEFAULT NULL COMMENT "文件的id，包括文件、文档、文件夹、文档夹",
 	`file_type` tinyint(4) DEFAULT NUll COMMENT "文件的类型，1-doc 2-file 3-docFolder 4-fileFolder",
 	`name` varchar(255) DEFAULT NULL COMMENT "文件名",
@@ -62,16 +64,10 @@ ALTER TABLE `docs` ADD `last_edit_time` varchar(30) DEFAULT NULL;
 -- 使用 gorm 提供好的软删除
 ALTER TABLE `projects` ADD `deleted_at` datetime DEFAULT NULL;
 
--- ----------------------------
--- Table structure for attentions
--- ----------------------------
+-- add creator_id for projects
+ALTER TABLE `projects` ADD COLUMN `creator_id` int(11);
 
-DROP TABLE IF EXISTS `attentions`;
-CREATE TABLE `attentions` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `user_id` int(11) DEFAULT NULL,
-    `doc_id` int(11) DEFAULT NULL,
-    `time_day` varchar(20) DEFAULT NULL,
-    `time_hm` varchar(20) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
+-- user2file2 -> user2attentions
+rename table `user2files` to `user2attentions`;
+alter table `user2attentions` add column `time_day` varchar(20) DEFAULT NULL;
+alter table `user2attentions` add column `time_hm` varchar(20) DEFAULT NULL;

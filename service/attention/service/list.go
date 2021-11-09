@@ -6,6 +6,7 @@ import (
 	"muxi-workbench-attention/errno"
 	"muxi-workbench-attention/model"
 	pb "muxi-workbench-attention/proto"
+	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
 )
 
@@ -28,10 +29,17 @@ func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *p
 	}
 
 	for _, a := range attentions {
-		if doc, err := GetInfoFromProjectService(a.Doc.Id); err != nil {
+		var file = &model.File{}
+		if a.Kind == uint32(constvar.DocCode) {
+			file, err = GetDocFromProjectService(a.File.Id)
+		} else if a.Kind == uint32(constvar.FileCode) {
+			file, err = GetFileFromProjectService(a.File.Id)
+		}
+
+		if err != nil {
 			return err
 		} else {
-			a.Doc = *doc
+			a.File = *file
 		}
 	}
 
@@ -58,12 +66,13 @@ func FormatListData(list []*model.AttentionDetail, username string) ([]*pb.Atten
 			User: &pb.User{
 				Name: username,
 			},
-			Doc: &pb.Doc{
-				Name: attention.Doc.Name,
-				DocCreator: &pb.User{
-					Name: attention.Doc.CreatorName,
+			File: &pb.File{
+				Name: attention.File.Name,
+				FileCreator: &pb.User{
+					Name: attention.File.CreatorName,
 				},
-				ProjectName: attention.Doc.ProjectName,
+				Kind:        attention.Kind,
+				ProjectName: attention.File.ProjectName,
 			},
 		}
 		result = append(result, data)

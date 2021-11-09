@@ -9,7 +9,8 @@ service AttentionService {
 }
 message PushRequest {
     uint32 user_id = 1;
-    uint32 doc_id = 2;
+    uint32 file_id = 2;
+    uint32 file_kind = 3;
 }
 
 message Response {}
@@ -30,15 +31,16 @@ message AttentionItem {
     string date = 2; // 日期
     string time = 3; // 时间
     User user = 4;
-    Doc doc = 5;
+    File file = 5;
 }
 
-message Doc {
+message File {
     uint32 id = 1;
     string name = 2;
-    User doc_creator = 3;
+    User file_creator = 3;
     uint32 project_id = 4;
     string project_name = 5;
+    uint32 kind = 6;
 }
 
 message User {

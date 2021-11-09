@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	apb "muxi-workbench-attention/proto"
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
@@ -46,6 +47,12 @@ func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb
 	// 事务
 	if err = model.DeleteFile(m.DB.Self, trashbin, fatherId, isFatherProject); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	// 向取消关注发起请求
+	err = DeleteAttentionsFromAttentionService(req.Id, uint32(constvar.FileCode))
+	if err != nil {
+		return err
 	}
 
 	return nil
