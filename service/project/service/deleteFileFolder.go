@@ -48,5 +48,6 @@ func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, r
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	// TODO: 删除文件folder后要删除对应attentions
 	return nil
 }

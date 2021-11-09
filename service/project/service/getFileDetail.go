@@ -26,11 +26,16 @@ func (s *Service) GetFileDetail(ctx context.Context, req *pb.GetFileDetailReques
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	// 此处为了获取project 改了projectDetail 可能出问题
+	project, err := model.GetProject(file.ProjectID)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
 	res.Id = file.ID
 	res.Url = file.URL
 	res.Creator = file.Creator
 	res.CreateTime = file.CreateTime
 	res.Name = file.Name
-
+	res.ProjectName = project.Name
 	return nil
 }
