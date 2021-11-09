@@ -4,6 +4,10 @@ replace muxi-workbench => ../../
 
 replace muxi-workbench-project => ../../service/project
 
+replace (
+	muxi-workbench-user => ../../service/user
+)
+
 go 1.13
 
 require (
@@ -13,4 +17,5 @@ require (
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	muxi-workbench v0.0.0-00010101000000-000000000000
 	muxi-workbench-project v0.0.0-00010101000000-000000000000
+	muxi-workbench-user v0.0.0-00010101000000-000000000000
 )
