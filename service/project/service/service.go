@@ -62,7 +62,7 @@ func DeleteAttentionsFromAttentionService(id uint32, kind uint32) error {
 		FileId:   id,
 		FileKind: kind,
 	}
-	err := AttentionClient.Delete(context.Background(), req)
+	_, err := AttentionClient.Delete(context.Background(), req)
 	if err != nil {
 		return err
 	}
