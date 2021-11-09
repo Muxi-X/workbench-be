@@ -6,6 +6,8 @@ replace muxi-workbench-project => ../project
 
 replace muxi-workbench-user => ../user
 
+replace muxi-workbench-attention => ../attention
+
 exclude github.com/micro/go-plugins v1.5.1
 
 go 1.13

@@ -4,9 +4,9 @@ replace muxi-workbench => ../../
 
 replace muxi-workbench-project => ../../service/project
 
-replace (
-	muxi-workbench-user => ../../service/user
-)
+replace muxi-workbench-attention => ../../service/attention
+
+replace muxi-workbench-user => ../../service/user
 
 go 1.13
 

@@ -6,12 +6,14 @@ replace muxi-workbench-user => ../user
 
 replace muxi-workbench-attention => ../attention
 
+replace muxi-workbench-project => ./
+
 exclude github.com/micro/go-plugins v1.5.1
 
 go 1.13
 
 require (
-	github.com/golang/protobuf v1.3.3
+	github.com/golang/protobuf v1.3.5
 	github.com/jinzhu/gorm v1.9.15
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-plugins/registry/kubernetes v0.0.0-20200119172437-4fe21aa238fd
@@ -23,6 +25,7 @@ require (
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 	gorm.io/gorm v1.22.2
 	muxi-workbench v0.0.0-00010101000000-000000000000
+	muxi-workbench-attention v0.0.0-00010101000000-000000000000
 	muxi-workbench-user v0.0.0-00010101000000-000000000000
 //muxi-workbench-user v0.0.0-00010101000000-000000000000
 )
