@@ -22,7 +22,7 @@ func (s *FeedService) Push(ctx context.Context, req *pb.PushRequest, res *pb.Res
 
 	feed := &model.FeedModel{
 		UserId:            req.UserId,
-		Username:          username,
+		UserName:          username,
 		UserAvatar:        avatar,
 		Action:            req.Action,
 		SourceKindId:      req.Source.Kind,

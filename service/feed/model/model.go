@@ -7,7 +7,7 @@ import (
 type FeedModel struct {
 	Id                uint32 `json:"id" gorm:"column:id"`
 	UserId            uint32 `json:"user_id" gorm:"column:userid"`
-	Username          string `json:"username" gorm:"column:username"`
+	UserName          string `json:"user_name" gorm:"column:username"`
 	UserAvatar        string `json:"user_avatar" gorm:"column:useravatar"`
 	Action            string `json:"action" gorm:"column:action"`
 	SourceKindId      uint32 `json:"source_kind_id" gorm:"column:source_kindid"`
