@@ -4,7 +4,7 @@ muxi-workbench
 .idea
 *.log
 *.tmp
-*.mod
+#*.mod
 *.sum
 .DS_Store
 config.yaml

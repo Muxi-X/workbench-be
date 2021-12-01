@@ -67,7 +67,7 @@ func FormatListData(list []*model.FeedModel) ([]*pb.FeedItem, error) {
 			Date:        feed.TimeDay,
 			Time:        feed.TimeHm,
 			User: &pb.User{
-				Name:      feed.Username,
+				Name:      feed.UserName,
 				Id:        feed.UserId,
 				AvatarUrl: feed.UserAvatar,
 			},
