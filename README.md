@@ -30,3 +30,10 @@ git tag release-${service_name}-${version}
 git push --tags muxi
 // open ci.muxixyz.com to check build progress
 ```
+
+### deploy subscribe
+
+```shell
+go run main.go -sub # 增加命令行参数 -sub 来运行
+# 实际部署的时候需要改 Dockerfile （暂定）
+```
