@@ -5,6 +5,6 @@ tracing:
   jager: localhost:6831 # opentracing 
 db:  # DB 配置 部署时环境变量覆盖
   name: workbench_test
-  addr: rm-uf6zra36x1613y5r8oo.mysql.rds.aliyuncs.com:3306
+  addr: rm-bp1pkcz9y269h30fm5o.mysql.rds.aliyuncs.com
   username: workbench_test
-  password: muxiworkbench
+  password: Muxistudio304
