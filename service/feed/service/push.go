@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"muxi-workbench-feed/errno"
@@ -19,6 +20,8 @@ func (s *FeedService) Push(ctx context.Context, req *pb.PushRequest, res *pb.Res
 	if err != nil {
 		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 	}
+
+	fmt.Println("====>is here any username?",username)
 
 	feed := &model.FeedModel{
 		UserId:            req.UserId,
