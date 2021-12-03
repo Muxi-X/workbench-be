@@ -39,7 +39,7 @@ func (s *FeedService) Push(ctx context.Context, req *pb.PushRequest, res *pb.Res
 	if err != nil {
 		return e.ServerErr(errno.ErrJsonMarshal, err.Error())
 	}
-	fmt.Println("====>is here any username?",msg)
+	fmt.Println("====>is here any username?",string(msg))
 
 	if err := model.PublishMsg(msg); err != nil {
 		logger.Error("Publish data error")
