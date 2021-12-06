@@ -32,6 +32,9 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 		}
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
 	var list []*pb.Children
 	if item.Children != "" {
 		raw := strings.Split(item.Children, ",")

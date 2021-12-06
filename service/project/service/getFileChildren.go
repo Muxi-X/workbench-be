@@ -24,6 +24,9 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 	}
 
 	item, err := model.GetFileChildrenById(req.Id)
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

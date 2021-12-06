@@ -17,7 +17,8 @@ type FolderForDocInfo struct {
 
 // FolderForDocChildren ... 子文档/夹
 type FolderForDocChildren struct {
-	Children string `json:"children" gorm:"column:children;" binding:"required"`
+	Children  string `json:"children" gorm:"column:children;" binding:"required"`
+	ProjectID uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 }
 
 // FolderForDocModel ... 文档文件夹模型

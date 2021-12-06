@@ -16,7 +16,8 @@ type FolderForFileInfo struct {
 }
 
 type FolderForFileChildren struct {
-	Children string `json:"children" gorm:"column:children;" binding:"required"`
+	Children  string `json:"children" gorm:"column:children;" binding:"required"`
+	ProjectID uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 }
 
 // FolderForFileModel ... 文件文件夹模型
