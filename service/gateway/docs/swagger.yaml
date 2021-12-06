@@ -47,6 +47,19 @@ definitions:
       name:
         type: string
     type: object
+  ChildrenInfo:
+    properties:
+      creat_time:
+        type: string
+      creator_name:
+        type: string
+      name:
+        type: string
+      path:
+        type: string
+      type:
+        type: boolean
+    type: object
   Comment:
     properties:
       avatar:
@@ -321,7 +334,7 @@ definitions:
         type: integer
       file_children:
         items:
-          $ref: '#/definitions/project.ChildrenInfo'
+          $ref: '#/definitions/ChildrenInfo'
         type: array
     type: object
   GetFileDetailResponse:
@@ -756,17 +769,6 @@ definitions:
       team:
         type: integer
       tel:
-        type: string
-    type: object
-  project.ChildrenInfo:
-    properties:
-      creat_time:
-        type: string
-      creator_name:
-        type: string
-      name:
-        type: string
-      path:
         type: string
     type: object
 host: work.test.muxi-tech.xyz

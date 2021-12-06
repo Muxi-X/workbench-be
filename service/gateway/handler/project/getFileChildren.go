@@ -31,16 +31,18 @@ import (
 func GetFileChildren(c *gin.Context) {
 	log.Info("project getFileTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 获取 folderID
 	folderID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
-	// TODO 验证projectId
+
 	// 发送请求
 	getFileTreeResp, err := service.ProjectClient.GetFileChildren(context.Background(), &pbp.GetRequest{
-		Id: uint32(folderID),
+		Id:        uint32(folderID),
+		ProjectId: projectID,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

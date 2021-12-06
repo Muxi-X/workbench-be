@@ -4385,6 +4385,26 @@ var doc = `{
                 }
             }
         },
+        "ChildrenInfo": {
+            "type": "object",
+            "properties": {
+                "creat_time": {
+                    "type": "string"
+                },
+                "creator_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "boolean"
+                }
+            }
+        },
         "Comment": {
             "type": "object",
             "properties": {
@@ -4809,7 +4829,7 @@ var doc = `{
                 "file_children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/project.ChildrenInfo"
+                        "$ref": "#/definitions/ChildrenInfo"
                     }
                 }
             }
@@ -5480,23 +5500,6 @@ var doc = `{
                     "type": "integer"
                 },
                 "tel": {
-                    "type": "string"
-                }
-            }
-        },
-        "project.ChildrenInfo": {
-            "type": "object",
-            "properties": {
-                "creat_time": {
-                    "type": "string"
-                },
-                "creator_name": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "path": {
                     "type": "string"
                 }
             }

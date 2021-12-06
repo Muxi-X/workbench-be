@@ -162,7 +162,7 @@ type ChildrenInfo struct {
 	CreatTime   string `json:"creat_time"`
 	CreatorName string `json:"creator_name"`
 	Path        string `json:"path"`
-}
+} //@name ChildrenInfo
 
 // GetFileChildrenResponse ... 文件文档共用
 type GetFileChildrenResponse struct {

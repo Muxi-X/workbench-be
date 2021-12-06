@@ -31,6 +31,7 @@ import (
 func GetDocChildren(c *gin.Context) {
 	log.Info("project getDocTree function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 获取 folderID
 	folderID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -40,7 +41,8 @@ func GetDocChildren(c *gin.Context) {
 
 	// 发送请求
 	getDocTreeResp, err := service.ProjectClient.GetDocChildren(context.Background(), &pbp.GetRequest{
-		Id: uint32(folderID),
+		Id:        uint32(folderID),
+		ProjectId: projectID,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
