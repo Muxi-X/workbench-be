@@ -155,10 +155,18 @@ type FileChildrenItem struct {
 	Type bool   `json:"type"` // 判断是不是 folder 0->file 1->folder
 } //@name FileChildrenItem
 
+// ChildrenInfo ... 文件文档共用
+type ChildrenInfo struct {
+	Name        string `json:"name"`
+	CreatTime   string `json:"creat_time"`
+	CreatorName string `json:"creator_name"`
+	Path        string `json:"path"`
+}
+
 // GetFileChildrenResponse ... 文件文档共用
 type GetFileChildrenResponse struct {
-	Count        uint32              `json:"count"`
-	FileChildren []*FileChildrenItem `json:"file_children"`
+	Count        uint32          `json:"count"`
+	FileChildren []*ChildrenInfo `json:"file_children"`
 } //@name GetFileChildrenResponse
 
 // UpdateFileChildrenRequest ... 文件文档共用

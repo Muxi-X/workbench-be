@@ -37,7 +37,7 @@ func GetFileChildren(c *gin.Context) {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
-
+	// TODO 验证projectId
 	// 发送请求
 	getFileTreeResp, err := service.ProjectClient.GetFileChildren(context.Background(), &pbp.GetRequest{
 		Id: uint32(folderID),
@@ -48,7 +48,15 @@ func GetFileChildren(c *gin.Context) {
 	}
 
 	// 解析结果
-	list := FormatChildren(getFileTreeResp.Children)
+	var list []*ChildrenInfo
+	for _, child := range getFileTreeResp.List {
+		list = append(list, &ChildrenInfo{
+			Name:        child.Name,
+			CreatTime:   child.CreatTime,
+			CreatorName: child.CreatorName,
+			Path:        child.Path,
+		})
+	}
 
 	SendResponse(c, nil, &GetFileChildrenResponse{
 		Count:        uint32(len(list)),

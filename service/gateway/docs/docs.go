@@ -4809,7 +4809,7 @@ var doc = `{
                 "file_children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/FileChildrenItem"
+                        "$ref": "#/definitions/project.ChildrenInfo"
                     }
                 }
             }
@@ -5199,9 +5199,7 @@ var doc = `{
                 "code": {
                     "type": "integer"
                 },
-                "data": {
-                    "type": "object"
-                },
+                "data": {},
                 "message": {
                     "type": "string"
                 }
@@ -5485,6 +5483,23 @@ var doc = `{
                     "type": "string"
                 }
             }
+        },
+        "project.ChildrenInfo": {
+            "type": "object",
+            "properties": {
+                "creat_time": {
+                    "type": "string"
+                },
+                "creator_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
         }
     },
     "tags": [
@@ -5582,5 +5597,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	swag.Register("swagger", &s{})
 }

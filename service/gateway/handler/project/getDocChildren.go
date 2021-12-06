@@ -48,7 +48,15 @@ func GetDocChildren(c *gin.Context) {
 	}
 
 	// 解析结果
-	list := FormatChildren(getDocTreeResp.Children)
+	var list []*ChildrenInfo
+	for _, child := range getDocTreeResp.List {
+		list = append(list, &ChildrenInfo{
+			Name:        child.Name,
+			CreatTime:   child.CreatTime,
+			CreatorName: child.CreatorName,
+			Path:        child.Path,
+		})
+	}
 
 	// 返回结果
 	SendResponse(c, nil, &GetFileChildrenResponse{
