@@ -29,7 +29,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 	}
 
 	var list []*pb.Children
-	{
+	if item.Children != "" {
 		raw := strings.Split(item.Children, ",")
 		for _, v := range raw {
 			r := strings.Split(v, "-")

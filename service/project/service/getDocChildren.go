@@ -33,7 +33,7 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 	var list []*pb.Children
-	{
+	if item.Children != "" {
 		raw := strings.Split(item.Children, ",")
 		for _, v := range raw {
 			r := strings.Split(v, "-")
