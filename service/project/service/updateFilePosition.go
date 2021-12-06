@@ -108,17 +108,22 @@ func getOldFather(file interface{}, code uint8) (interface{}, uint8, error) {
 func getFileItemByIdAndCode(id uint32, code uint8) (interface{}, error) {
 	var fileItem interface{}
 	var err error
-	if code == constvar.DocCode {
+
+	switch code {
+	case constvar.DocCode:
 		fileItem, err = model.GetDoc(id)
-	} else if code == constvar.FileCode {
+	case constvar.FileCode:
 		fileItem, err = model.GetFile(id)
-	} else if code == constvar.ProjectCode {
+	case constvar.ProjectCode:
 		fileItem, err = model.GetProject(id)
-	} else if code == constvar.DocFolderCode {
+	case constvar.DocFolderCode:
 		fileItem, err = model.GetFolderForDocModel(id)
-	} else {
+	case constvar.FileFolderCode:
 		fileItem, err = model.GetFolderForFileModel(id)
+	default:
+		err = errors.New("wrong type code")
 	}
+
 	return fileItem, err
 }
 

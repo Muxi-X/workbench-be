@@ -25,7 +25,9 @@ func (s *Service) GetFileDetail(ctx context.Context, req *pb.GetFileDetailReques
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
+	if file.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
 	// 此处为了获取project 改了projectDetail 可能出问题
 	project, err := model.GetProject(file.ProjectID)
 	if err != nil {

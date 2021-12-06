@@ -15,6 +15,9 @@ func (s *Service) UpdateDocFolder(ctx context.Context, req *pb.UpdateFolderReque
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
 	item.Name = req.Name
 
 	if err = item.Update(); err != nil {

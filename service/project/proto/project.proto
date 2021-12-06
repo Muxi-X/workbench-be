@@ -73,12 +73,14 @@ message UpdateFilePositionRequest {
   uint32 father_type = 4; // 根据 constvar 的 file code 确定
   uint32 type = 5;
   uint32 children_position_index = 6;
+  uint32 project_id = 7;
 }
 
 // 获取 文档/文件 详情请求
 message GetFileDetailRequest {
   uint32 id = 1;
   uint32 father_id = 2;
+  uint32 project_id = 3;
 }
 
 message DeleteRequest {
@@ -121,6 +123,7 @@ message UpdateFileRequest {
   uint32 id = 1;
   string name = 2;
   string url = 3;
+  uint32 project_id = 4;
 }
 
 message CreateProjectRequest {
@@ -133,6 +136,7 @@ message CreateProjectRequest {
 message UpdateFolderRequest {
   uint32 folder_id = 1;
   string name = 2; // 只提供改名字，移动通过 update children 实现
+  uint32 project_id = 3;
 }
 
 message CreateFolderRequest {
@@ -334,6 +338,7 @@ message UpdateDocRequest {
   string title = 2;
   string content = 3;
   uint32 editor_id = 4;
+  uint32 project_id = 5;
 }
 
 message GetInfoByIdsRequest {

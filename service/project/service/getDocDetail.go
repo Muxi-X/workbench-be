@@ -20,10 +20,13 @@ func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetFileDetailRequest
 	if isDeleted {
 		return e.NotFoundErr(errno.ErrNotFound, "This file has been deleted.")
 	}
-
 	doc, err := model.GetDocDetail(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	if doc.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
 	}
 	project, err := model.GetProject(doc.ProjectID)
 	if err != nil {

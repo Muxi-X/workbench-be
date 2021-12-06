@@ -18,6 +18,10 @@ func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
+
 	item.Name = req.Title
 	item.Content = req.Content
 	item.EditorID = req.EditorId

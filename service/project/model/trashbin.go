@@ -316,9 +316,9 @@ func DeleteFileFolderTrashbin(id uint32, res *[]string) error {
 	return m.DB.Self.Table("folderforfile").Where("id = ?", id).Update("re", "1").Error
 }
 
-// --Remove part
+// --Recover part
 
-// RemoveTrashbin ... 从回收站恢复文件
+// RecoverTrashbin ... 从回收站恢复文件
 // 事务
 func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject bool, fatherId, childrenPositionIndex uint32) error {
 	tx := db.Begin()

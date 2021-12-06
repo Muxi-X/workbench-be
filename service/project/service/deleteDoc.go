@@ -16,7 +16,7 @@ import (
 // DeleteDoc ... 删除文档
 // 插入回收站 同步 redis
 func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.ProjectIDResponse) error {
-	// 找 name 和 creatorId
+	// 获取 name 和 creatorId
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
 		if gorm.IsRecordNotFoundError(err) {

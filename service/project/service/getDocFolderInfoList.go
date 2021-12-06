@@ -20,7 +20,7 @@ func (s *Service) GetDocFolderInfoList(ctx context.Context, req *pb.GetInfoByIds
 	if scope == nil {
 		return e.NotFoundErr(errno.ErrNotFound, "This file has been deleted.")
 	}
-
+	// TODO 判断projectID
 	// 获取文档夹的名字信息
 	list, err := model.GetFolderForDocInfoByIds(scope)
 	if err != nil {
