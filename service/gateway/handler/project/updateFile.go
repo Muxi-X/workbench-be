@@ -34,6 +34,7 @@ func UpdateFile(c *gin.Context) {
 	log.Info("project updateFile function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 获取 fileID
 	fileID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -52,9 +53,10 @@ func UpdateFile(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	updateReq := &pbp.UpdateFileRequest{
-		Id:   uint32(fileID),
-		Name: req.Name,
-		Url:  req.Url,
+		Id:        uint32(fileID),
+		Name:      req.Name,
+		Url:       req.Url,
+		ProjectId: projectID,
 	}
 
 	_, err = service.ProjectClient.UpdateFile(context.Background(), updateReq)

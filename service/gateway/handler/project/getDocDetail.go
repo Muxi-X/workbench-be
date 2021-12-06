@@ -34,6 +34,7 @@ func GetDocDetail(c *gin.Context) {
 	log.Info("project getDocDetail function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	docID, err := strconv.Atoi(c.Param("file_id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
@@ -46,8 +47,9 @@ func GetDocDetail(c *gin.Context) {
 	}
 
 	getDocDetailResp, err := service.ProjectClient.GetDocDetail(context.Background(), &pbp.GetFileDetailRequest{
-		Id:       uint32(docID),
-		FatherId: uint32(fatherID),
+		ProjectId: projectID,
+		Id:        uint32(docID),
+		FatherId:  uint32(fatherID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

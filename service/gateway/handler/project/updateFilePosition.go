@@ -33,6 +33,7 @@ func UpdateFilePosition(c *gin.Context) {
 	log.Info("Project file position update function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 获取 fatherId 和 oldFatherId
 	oldFatherId, err := strconv.Atoi(c.Param("old_father_id"))
 	if err != nil {
@@ -56,6 +57,7 @@ func UpdateFilePosition(c *gin.Context) {
 	// 构造请求
 	// 这里 list 应该是 uint32 表示 uid
 	updateFilePositionReq := &pbp.UpdateFilePositionRequest{
+		ProjectId:             projectID,
 		FileId:                uint32(id),
 		OldFatherId:           uint32(oldFatherId),
 		FatherId:              req.FatherId,

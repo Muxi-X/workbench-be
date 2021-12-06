@@ -34,6 +34,7 @@ func GetFileDetail(c *gin.Context) {
 	log.Info("project getFileDetail function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	fileID, err := strconv.Atoi(c.Param("file_id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
@@ -47,8 +48,9 @@ func GetFileDetail(c *gin.Context) {
 	}
 
 	getFileDetailResp, err := service.ProjectClient.GetFileDetail(context.Background(), &pbp.GetFileDetailRequest{
-		Id:       uint32(fileID),
-		FatherId: uint32(fatherID),
+		ProjectId: projectID,
+		Id:        uint32(fileID),
+		FatherId:  uint32(fatherID),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

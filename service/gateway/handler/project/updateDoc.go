@@ -34,6 +34,7 @@ func UpdateDoc(c *gin.Context) {
 	log.Info("project updateDoc function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 获取 docID
 	docID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -52,10 +53,11 @@ func UpdateDoc(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 
 	updateReq := &pbp.UpdateDocRequest{
-		Id:       uint32(docID),
-		Title:    req.Title,
-		Content:  req.Content,
-		EditorId: userID,
+		Id:        uint32(docID),
+		Title:     req.Title,
+		Content:   req.Content,
+		EditorId:  userID,
+		ProjectId: projectID,
 	}
 
 	resp, err := service.ProjectClient.UpdateDoc(context.Background(), updateReq)

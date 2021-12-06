@@ -42,6 +42,8 @@ func UpdateFileFolder(c *gin.Context) {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 	}
 
+	projectID := c.MustGet("projectID").(uint32)
+
 	// 获取请求体
 	var req UpdateFolderRequest
 	if err := c.Bind(&req); err != nil {
@@ -51,8 +53,9 @@ func UpdateFileFolder(c *gin.Context) {
 
 	// 构造 updateReq 并发送请求
 	updateReq := &pbp.UpdateFolderRequest{
-		FolderId: uint32(folderID),
-		Name:     req.Name,
+		ProjectId: projectID,
+		FolderId:  uint32(folderID),
+		Name:      req.Name,
 	}
 
 	_, err = service.ProjectClient.UpdateFileFolder(context.Background(), updateReq)

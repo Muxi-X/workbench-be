@@ -17,8 +17,10 @@ import (
 
 // UpdateTrashbin ... 用于恢复资源
 // 通过 type 恢复不同资源
+// type： 0-project 1-doc 2-file 3-doc_folder 4-file_folder
+// TODO: 需要加上 project id 限制 ???
 // @Summary update trashbin api
-// @Description 恢复回收站资源
+// @Description 恢复回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)
 // @Tags project
 // @Accept  application/json
 // @Produce  application/json

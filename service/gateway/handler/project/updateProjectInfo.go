@@ -46,7 +46,7 @@ func UpdateProjectInfo(c *gin.Context) {
 
 	// 构造 update 请求
 	updateReq := &pbp.UpdateProjectInfoRequest{
-		Id:    uint32(projectID),
+		Id:    projectID,
 		Name:  req.ProjectName,
 		Intro: req.Intro,
 	}
