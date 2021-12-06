@@ -24,7 +24,6 @@ type DocInfo struct {
 }
 
 // DocModel ... 文档物理模型
-// TODO: 表没有 last_edit_time
 type DocModel struct {
 	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Name         string `json:"name" gorm:"column:filename;" binding:"required"`

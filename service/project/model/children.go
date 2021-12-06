@@ -86,7 +86,7 @@ func AddDocChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositio
 
 		item.DocChildren = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -102,7 +102,7 @@ func AddDocChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositio
 
 		item.Children = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	}
