@@ -44,14 +44,14 @@ service ProjectService {
   rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
   rpc UpdateDocFolder(UpdateFolderRequest) returns (Response) {}
   rpc DeleteDocFolder(DeleteRequest) returns (Response) {}
-  rpc GetDocChildren(GetRequest) returns (Children) {}
+  rpc GetDocChildren(GetRequest) returns (ChildrenList) {}
 
   // 文件夹 crud
   rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
   rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
   rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
   rpc DeleteFileFolder(DeleteRequest) returns (Response) {}
-  rpc GetFileChildren(GetRequest) returns (Children) {}
+  rpc GetFileChildren(GetRequest) returns (ChildrenList) {}
 
   rpc UpdateFilePosition(UpdateFilePositionRequest) returns (Response){}
 }
@@ -296,7 +296,15 @@ message UpdateProjectInfoRequest {
 }
 
 message Children {
-  string children = 1;
+  string name = 1;
+  string creator_name = 2;
+  string creat_time = 3;
+  string path = 4;
+  bool type = 5;
+}
+
+message ChildrenList {
+  repeated Children list = 1;
 }
 
 message CreateFileRequest {

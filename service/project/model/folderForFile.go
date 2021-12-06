@@ -28,7 +28,7 @@ type FolderForFileModel struct {
 	CreatorID  uint32 `json:"creatorID" gorm:"column:create_id;" binding:"required"`
 	ProjectID  uint32 `json:"projectId" gorm:"column:project_id;" binding:"required"`
 	Children   string `json:"children" gorm:"column:children;" binding:"required"`
-	FatherId   uint32 `json:"fahter_id" gorm:"column:father_id;" binding:"required"`
+	FatherId   uint32 `json:"father_id" gorm:"column:father_id;" binding:"required"`
 }
 
 // TableName ... 物理表名
