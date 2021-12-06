@@ -157,6 +157,7 @@ type FileChildrenItem struct {
 
 // ChildrenInfo ... 文件文档共用
 type ChildrenInfo struct {
+	Type        bool   `json:"type"`
 	Name        string `json:"name"`
 	CreatTime   string `json:"creat_time"`
 	CreatorName string `json:"creator_name"`

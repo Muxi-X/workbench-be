@@ -51,6 +51,7 @@ func GetDocChildren(c *gin.Context) {
 	var list []*ChildrenInfo
 	for _, child := range getDocTreeResp.List {
 		list = append(list, &ChildrenInfo{
+			Type:        child.Type,
 			Name:        child.Name,
 			CreatTime:   child.CreatTime,
 			CreatorName: child.CreatorName,
