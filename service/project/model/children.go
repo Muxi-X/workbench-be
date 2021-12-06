@@ -127,7 +127,7 @@ func DeleteDocChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, i
 
 		item.DocChildren = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -143,7 +143,7 @@ func DeleteDocChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, i
 
 		item.Children = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	}
@@ -177,7 +177,7 @@ func AddFileChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositi
 
 		item.FileChildren = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -193,7 +193,7 @@ func AddFileChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositi
 
 		item.Children = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	}
@@ -216,7 +216,7 @@ func DeleteFileChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, 
 
 		item.DocChildren = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	} else {
@@ -232,7 +232,7 @@ func DeleteFileChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, 
 
 		item.Children = newChildren
 
-		if err := tx.Update(item).Error; err != nil {
+		if err := tx.Save(item).Error; err != nil {
 			return err
 		}
 	}
