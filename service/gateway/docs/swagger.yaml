@@ -409,6 +409,8 @@ definitions:
     type: object
   GetResponse:
     properties:
+      avatar:
+        type: string
       content:
         type: string
       like_count:
@@ -421,8 +423,10 @@ definitions:
         type: string
       title:
         type: string
-      userid:
+      user_id:
         type: integer
+      user_name:
+        type: string
     type: object
   GetTrashbinResponse:
     properties:
@@ -2168,16 +2172,12 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: 二进制文件
-        in: formData
-        name: file
+      - description: file_url
+        in: body
+        name: url
         required: true
-        type: file
-      - description: token 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/loadFile.UrlModel'
       produces:
       - application/json
       responses:

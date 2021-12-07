@@ -2087,18 +2087,13 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "file",
-                        "description": "二进制文件",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
+                        "description": "file_url",
+                        "name": "url",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/loadFile.UrlModel"
+                        }
                     }
                 ],
                 "responses": {
@@ -5050,6 +5045,9 @@ var doc = `{
         "GetResponse": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -5068,8 +5066,11 @@ var doc = `{
                 "title": {
                     "type": "string"
                 },
-                "userid": {
+                "user_id": {
                     "type": "integer"
+                },
+                "user_name": {
+                    "type": "string"
                 }
             }
         },
