@@ -1,4 +1,4 @@
-package upload
+package loadFile
 
 import (
 	. "muxi-workbench-gateway/handler"
@@ -15,10 +15,8 @@ type UrlModel struct {
 	Url string `json:"url"`
 }
 
-// TODO FIX upload to change avatar directly.
-
 // Upload
-// @Tags upload
+// @Tags load_file
 // @Summary 上传文件
 // @Description 上传文件 图片，返回url
 // @Param file formData file true "二进制文件"
@@ -28,8 +26,9 @@ type UrlModel struct {
 // @Success 200 {object} UrlModel
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
+// @Router /load_file/upload [post]
 func Upload(c *gin.Context) {
-	log.Info("Upload function called.", zap.String("X-Request-Id", util.GetReqID(c)))
+	log.Info("loadFile Upload function called.", zap.String("X-Request-Id", util.GetReqID(c)))
 
 	file, header, err := c.Request.FormFile("file")
 	if err != nil {

@@ -5505,6 +5505,14 @@ var doc = `{
                     "type": "string"
                 }
             }
+        },
+        "upload.UrlModel": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
         }
     },
     "tags": [

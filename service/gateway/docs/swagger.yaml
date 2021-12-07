@@ -775,6 +775,11 @@ definitions:
       tel:
         type: string
     type: object
+  upload.UrlModel:
+    properties:
+      url:
+        type: string
+    type: object
 host: work.test.muxi-tech.xyz
 info:
   contact: {}
