@@ -1,5 +1,9 @@
 name=status
 
+fmt:
+	go fmt ./...
+vet:
+	go vet ./...
 build:
 	go build -o main
 proto:
@@ -10,4 +14,4 @@ gitea:
 	git push --tags muxi
 tag:
 	git tag release-${name}-${ver}
-push: tag github gitea
+push: vet tag github gitea
