@@ -2,6 +2,7 @@ package router
 
 import (
 	"muxi-workbench-gateway/handler/sd"
+	"muxi-workbench-gateway/handler/upload"
 	"net/http"
 
 	_ "muxi-workbench-gateway/docs"
@@ -184,6 +185,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		attentionRouter.GET("/list/:id", attention.List)
 		attentionRouter.DELETE("", attention.Delete)
 		attentionRouter.POST("", attention.Create)
+	}
+
+	uploadRouter := g.Group("api/v1/upload")
+	uploadRouter.Use(normalRequired)
+	{
+		uploadRouter.POST("", upload.Upload)
 	}
 
 	// The health check handlers

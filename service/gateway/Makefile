@@ -1,5 +1,7 @@
 name=gateway
 
+vet:
+	go vet ./...
 all: gotool
 	@go build -o main -v .
 clean:
@@ -9,19 +11,19 @@ gotool:
 	gofmt -w .
 tidy:
 	go mod tidy
-vet:
-	go vet .
 test:
 	@go test -v -count=1  ./...
 ca:
 	openssl req -new -nodes -x509 -out conf/server.crt -keyout conf/server.key -days 3650 -subj "/C=DE/ST=NRW/L=Earth/O=Random Company/OU=IT/CN=127.0.0.1/emailAddress=xxxxx@qq.com"
+swag:
+	swag init
 github:
 	git push origin && git push --tags origin
 gitea:
 	git push --tags muxi
 tag:
 	git tag release-${name}-${ver}
-push: tag github gitea
+push: vet swag tag github gitea
 
 help:
 	@echo "make - compile the source code with local vendor"

@@ -26,14 +26,19 @@ var (
 	// attention errors
 	ErrAttentionList = &Errno{Code: 20401, Message: "Error occurred while getting attention list."}
 
-	// status errors
-	// ...
-
 	// project errors
 	ErrTrashbinType            = &Errno{Code: 20501, Message: "Invalid trashbin type."}
 	ErrNoProjectId             = &Errno{Code: 20502, Message: "Project service must have projectid in query."}
 	ErrProjectPermissionDenied = &Errno{Code: 20503, Message: "Permission denied or this project has been deleted."}
 
+	// status errors
+	// ...
+
+	// upload errors
+	ErrGetFile    = &Errno{Code: 20701, Message: "Error occurred in getting file from FormFile()"}
+	ErrUploadFile = &Errno{Code: 20702, Message: "Error occurred in uploading file to oss"}
+
 	// team errors
 	// ...
+
 )
