@@ -53,6 +53,8 @@ definitions:
         type: string
       creator_name:
         type: string
+      id:
+        type: integer
       name:
         type: string
       path:
@@ -668,6 +670,8 @@ definitions:
       fatherId:
         type: integer
       fatherType:
+        type: integer
+      id:
         type: integer
       type:
         type: integer
@@ -1689,7 +1693,7 @@ paths:
       summary: get file info list api
       tags:
       - project
-  /folder/children/{old_father_id}/{id}:
+  /folder/children/{old_father_id}:
     put:
       consumes:
       - application/json
@@ -1700,11 +1704,6 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: 此文件 id
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: 此文件移动前的父节点 id
         in: path
         name: old_father_id
@@ -1715,7 +1714,9 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/UpdateFilePositionRequest'
+          items:
+            $ref: '#/definitions/UpdateFilePositionRequest'
+          type: array
       - description: 此文件所属项目 id
         in: query
         name: project_id
@@ -3376,7 +3377,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 获取项目回收站资源
+      description: 获取项目回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)
       parameters:
       - description: token 用户令牌
         in: header
@@ -3462,7 +3463,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 恢复回收站资源
+      description: 恢复回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)
       parameters:
       - description: token 用户令牌
         in: header

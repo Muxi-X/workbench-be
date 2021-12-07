@@ -1383,7 +1383,7 @@ var doc = `{
                 }
             }
         },
-        "/folder/children/{old_father_id}/{id}": {
+        "/folder/children/{old_father_id}": {
             "put": {
                 "description": "移动文件位置",
                 "consumes": [
@@ -1406,13 +1406,6 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "此文件 id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "此文件移动前的父节点 id",
                         "name": "old_father_id",
                         "in": "path",
@@ -1424,7 +1417,10 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/UpdateFilePositionRequest"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/UpdateFilePositionRequest"
+                            }
                         }
                     },
                     {
@@ -3904,7 +3900,7 @@ var doc = `{
         },
         "/trashbin": {
             "get": {
-                "description": "获取项目回收站资源",
+                "description": "获取项目回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)",
                 "consumes": [
                     "application/json"
                 ],
@@ -3967,7 +3963,7 @@ var doc = `{
         },
         "/trashbin/{id}": {
             "put": {
-                "description": "恢复回收站资源",
+                "description": "恢复回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)",
                 "consumes": [
                     "application/json"
                 ],
@@ -4393,6 +4389,9 @@ var doc = `{
                 },
                 "creator_name": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -5344,6 +5343,9 @@ var doc = `{
                     "type": "integer"
                 },
                 "fatherType": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 },
                 "type": {

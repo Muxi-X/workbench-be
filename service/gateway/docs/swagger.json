@@ -1369,7 +1369,7 @@
                 }
             }
         },
-        "/folder/children/{old_father_id}/{id}": {
+        "/folder/children/{old_father_id}": {
             "put": {
                 "description": "移动文件位置",
                 "consumes": [
@@ -1392,13 +1392,6 @@
                     },
                     {
                         "type": "integer",
-                        "description": "此文件 id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "此文件移动前的父节点 id",
                         "name": "old_father_id",
                         "in": "path",
@@ -1410,7 +1403,10 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/UpdateFilePositionRequest"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/UpdateFilePositionRequest"
+                            }
                         }
                     },
                     {
@@ -3890,7 +3886,7 @@
         },
         "/trashbin": {
             "get": {
-                "description": "获取项目回收站资源",
+                "description": "获取项目回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)",
                 "consumes": [
                     "application/json"
                 ],
@@ -3953,7 +3949,7 @@
         },
         "/trashbin/{id}": {
             "put": {
-                "description": "恢复回收站资源",
+                "description": "恢复回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)",
                 "consumes": [
                     "application/json"
                 ],
@@ -4379,6 +4375,9 @@
                 },
                 "creator_name": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -5330,6 +5329,9 @@
                     "type": "integer"
                 },
                 "fatherType": {
+                    "type": "integer"
+                },
+                "id": {
                     "type": "integer"
                 },
                 "type": {

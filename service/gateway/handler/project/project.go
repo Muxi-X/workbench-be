@@ -3,6 +3,7 @@ package project
 import "strings"
 
 type UpdateFilePositionRequest struct {
+	Id                    uint32
 	FatherId              uint32
 	FatherType            uint32
 	Type                  uint8
@@ -157,6 +158,7 @@ type FileChildrenItem struct {
 
 // ChildrenInfo ... 文件文档共用
 type ChildrenInfo struct {
+	Id          uint32 `json:"id"`
 	Type        bool   `json:"type"`
 	Name        string `json:"name"`
 	CreatTime   string `json:"creat_time"`

@@ -53,6 +53,7 @@ func GetFileChildren(c *gin.Context) {
 	var list []*ChildrenInfo
 	for _, child := range getFileTreeResp.List {
 		list = append(list, &ChildrenInfo{
+			Id:          child.Id,
 			Type:        child.Type,
 			Name:        child.Name,
 			CreatTime:   child.CreatTime,

@@ -136,7 +136,6 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		fileRouter.GET("/doc/:id/children/:file_id", project.GetDocDetail)
 		fileRouter.DELETE("/doc/:id", project.DeleteDoc)
 		fileRouter.PUT("/doc/:id", project.UpdateDoc)
-		fileRouter.GET("/docs", project.GetDocInfoList)
 		fileRouter.POST("/doc/:id/comment", project.CreateDocComment)
 		fileRouter.GET("/doc/:id/comments", project.ListDocComment)
 		fileRouter.PUT("/doc/:id/comment/:comment_id", project.UpdateDocComment)
