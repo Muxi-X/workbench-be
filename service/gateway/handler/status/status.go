@@ -31,7 +31,9 @@ type GetResponse struct {
 	Sid       uint32 `json:"sid"`
 	Title     string `json:"title"`
 	Content   string `json:"content"`
-	UserId    uint32 `json:"userid"`
+	UserId    uint32 `json:"user_id"`
+	UserName string `json:"user_name"`
+	Avatar string `json:"avatar"`
 	Time      string `json:"time"`
 	Liked     bool   `json:"liked"`
 	LikeCount uint32 `json:"like_count"`

@@ -1,9 +1,9 @@
 name=gateway
 
-vet:
-	go vet ./...
 all: gotool
 	@go build -o main -v .
+vet:
+	go vet ./...
 clean:
 	rm -f main
 	find . -name "[._]*.s[a-w][a-z]" | xargs -i rm -f {}

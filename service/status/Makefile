@@ -1,11 +1,11 @@
 name=status
 
+build:
+	go build -o main
 fmt:
 	go fmt ./...
 vet:
 	go vet ./...
-build:
-	go build -o main
 proto:
 	protoc --go_out=plugins=micro:. ./proto/status.proto
 github:

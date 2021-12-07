@@ -16,10 +16,9 @@ import (
 // @Summary download file api
 // @Description 通过存储的文件url，返回可用于直接下载的url
 // @Param Authorization header string true "token 用户令牌"
-// @Param file formData file true "二进制文件"
+// @Param url body UrlModel true "file_url"
 // @Accept  application/json
 // @Produce  application/json
-// @Param Authorization header string true "token 用户令牌"
 // @Success 200 {object} UrlModel
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response

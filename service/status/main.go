@@ -19,6 +19,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+func InitRpcClient() {
+	s.UserInit()
+}
+
 func main() {
 
 	// init config
@@ -26,6 +30,7 @@ func main() {
 		panic(err)
 	}
 
+	InitRpcClient()
 	t, io, err := tracer.NewTracer(viper.GetString("local_name"), viper.GetString("tracing.jager"))
 	if err != nil {
 		log.Fatal(err)

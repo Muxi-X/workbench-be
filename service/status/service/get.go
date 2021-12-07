@@ -20,6 +20,8 @@ func (s *StatusService) Get(ctx context.Context, req *pb.GetRequest, res *pb.Get
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
+	userName, avatar, err := GetInfoFromUserService(req.Uid)
+
 	// 获取 liked
 	liked := true
 	err = model.GetStatusLikeRecord(req.Uid, req.Id)
@@ -32,6 +34,8 @@ func (s *StatusService) Get(ctx context.Context, req *pb.GetRequest, res *pb.Get
 	}
 
 	res.Status = &pb.Status{
+		UserName: userName,
+		Avatar: avatar,
 		Id:      status.ID,
 		Title:   status.Title,
 		Content: status.Content,

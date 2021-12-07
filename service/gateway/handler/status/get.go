@@ -60,6 +60,8 @@ func Get(c *gin.Context) {
 		Title:     getResp.Status.Title,
 		Content:   getResp.Status.Content,
 		UserId:    getResp.Status.UserId,
+		UserName: getResp.Status.UserName,
+		Avatar: getResp.Status.Avatar,
 		Time:      getResp.Status.Time,
 		Liked:     getResp.Status.Liked,
 		LikeCount: getResp.Status.Like,
