@@ -775,7 +775,7 @@ definitions:
       tel:
         type: string
     type: object
-  upload.UrlModel:
+  loadFile.UrlModel:
     properties:
       url:
         type: string
@@ -2157,6 +2157,79 @@ paths:
       summary: update file folder's name api
       tags:
       - project
+  /load_file/download:
+    post:
+      consumes:
+      - application/json
+      description: 通过存储的文件url，返回可用于直接下载的url
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 二进制文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/loadFile.UrlModel'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: download file api
+      tags:
+      - load_file
+  /load_file/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传文件 图片，返回url
+      parameters:
+      - description: 二进制文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/loadFile.UrlModel'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: upload file api
+      tags:
+      - load_file
   /project:
     delete:
       consumes:

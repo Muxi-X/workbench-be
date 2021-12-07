@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"strings"
 
@@ -63,15 +64,16 @@ func UploadFile(filename string, id uint32, r io.ReaderAt, dataLen int64) (strin
 	if err != nil {
 		return "", err
 	}
+
 	url := domainName + "/" + objectName
 	return url, nil
 }
 
 func Download(url string) string {
-	// http: //ossworkbench.muxixyz.com/176-1638865252.pdf
 	index := strings.LastIndex(url, "/")
 	key := url[index+1:]
 	domain := url[:index]
+	fmt.Println(key, domain)
 	mac := qbox.NewMac(accessKey, secretKey)
 	deadline := time.Now().Add(time.Second * 3600).Unix() // 1小时有效期
 

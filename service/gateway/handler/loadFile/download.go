@@ -13,7 +13,7 @@ import (
 
 // Download
 // @Tags load_file
-// @Summary 下载文件
+// @Summary download file api
 // @Description 通过存储的文件url，返回可用于直接下载的url
 // @Param Authorization header string true "token 用户令牌"
 // @Param file formData file true "二进制文件"
