@@ -51,6 +51,7 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 					return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 				}
 				list = append(list, &pb.Children{
+					Id:          doc.ID,
 					Type:        false,
 					Name:        doc.Name,
 					CreatorName: doc.Creator,
@@ -67,6 +68,7 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 					return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 				}
 				list = append(list, &pb.Children{
+					Id:          folder.ID,
 					Type:        true,
 					Name:        folder.Name,
 					CreatorName: creatorName,

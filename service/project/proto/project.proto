@@ -301,11 +301,12 @@ message UpdateProjectInfoRequest {
 }
 
 message Children {
-  string name = 1;
-  string creator_name = 2;
+  uint32 id = 1;
+  string name = 2;
   string creat_time = 3;
   string path = 4;
   bool type = 5;
+  string creator_name = 6;
 }
 
 message ChildrenList {

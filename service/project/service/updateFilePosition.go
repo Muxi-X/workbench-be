@@ -32,11 +32,8 @@ func (s *Service) UpdateFilePosition(ctx context.Context, req *pb.UpdateFilePosi
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
-	isFatherProject := false
-	if fatherType == uint8(0) {
-		isFatherProject = true
-	}
+	// req.ProjectId TODO
+	isFatherProject := fatherType == constvar.ProjectCode
 
 	isOldFatherProject := getOldFatherIsProject(fileItem, fileType)
 
@@ -139,7 +136,7 @@ func checkTypeIsValid(reqFileType, reqFatherType uint32) (uint8, uint8, error) {
 
 	checkType := fatherType - fileType
 	if checkType != uint8(2) && checkType > uint8(0) {
-		return uint8(0), uint8(0), errors.New("Father type is conflict to file type")
+		return uint8(0), uint8(0), errors.New("father type is conflict to file type")
 	}
 
 	return fileType, fatherType, nil
@@ -148,7 +145,7 @@ func checkTypeIsValid(reqFileType, reqFatherType uint32) (uint8, uint8, error) {
 func checkFileTypeIsValid(reqType uint32) (uint8, error) {
 	fileType := uint8(reqType)
 	if fileType < constvar.DocCode || fileType > constvar.FileCode {
-		return uint8(0), errors.New("File type must be 1 or 2.")
+		return uint8(0), errors.New("file type must be 1 or 2")
 	}
 	return fileType, nil
 }
@@ -156,7 +153,7 @@ func checkFileTypeIsValid(reqType uint32) (uint8, error) {
 func checkFatherTypeIsValid(reqType uint32) (uint8, error) {
 	fileType := uint8(reqType)
 	if fileType > constvar.ProjectCode || fileType < constvar.DocFolderCode {
-		return uint8(0), errors.New("Father type must be 0, 3 or 4.")
+		return uint8(0), errors.New("father type must be 0, 3 or 4")
 	}
 
 	return fileType, nil

@@ -47,6 +47,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 					return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 				}
 				list = append(list, &pb.Children{
+					Id:          file.ID,
 					Type:        false,
 					Name:        file.Name,
 					CreatorName: file.Creator,
@@ -63,6 +64,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 					return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 				}
 				list = append(list, &pb.Children{
+					Id:          folder.ID,
 					Type:        true,
 					Name:        folder.Name,
 					CreatorName: creatorName,
