@@ -2075,7 +2075,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "load_file"
+                    "loadFile"
                 ],
                 "summary": "download file api",
                 "parameters": [
@@ -2128,7 +2128,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "load_file"
+                    "loadFile"
                 ],
                 "summary": "upload file api",
                 "parameters": [
@@ -5665,6 +5665,10 @@ var doc = `{
         {
             "description": "团队/申请服务",
             "name": "application"
+        },
+        {
+            "description": "文件上传下载服务",
+            "name": "loadFile"
         }
     ]
 }`

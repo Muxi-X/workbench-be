@@ -58,6 +58,8 @@ func init() {
 // @tag.description 团队/邀请服务
 // @tag.name application
 // @tag.description 团队/申请服务
+// @tag.name loadFile
+// @tag.description 文件上传下载服务
 
 func main() {
 	pflag.Parse()

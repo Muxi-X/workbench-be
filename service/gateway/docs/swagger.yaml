@@ -2195,7 +2195,7 @@ paths:
             $ref: '#/definitions/Response'
       summary: download file api
       tags:
-      - load_file
+      - loadFile
   /load_file/upload:
     post:
       consumes:
@@ -2229,7 +2229,7 @@ paths:
             $ref: '#/definitions/Response'
       summary: upload file api
       tags:
-      - load_file
+      - loadFile
   /project:
     delete:
       consumes:
@@ -3745,3 +3745,5 @@ tags:
   name: invitation
 - description: 团队/申请服务
   name: application
+- description: 文件上传下载服务
+  name: loadFile

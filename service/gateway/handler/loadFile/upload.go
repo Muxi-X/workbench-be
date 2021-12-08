@@ -16,7 +16,7 @@ type UrlModel struct {
 }
 
 // Upload
-// @Tags load_file
+// @Tags loadFile
 // @Summary upload file api
 // @Description 上传文件 图片，返回url
 // @Param file formData file true "二进制文件"
