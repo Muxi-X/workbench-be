@@ -36,7 +36,7 @@ func Upload(c *gin.Context) {
 		return
 	}
 	dataLen := header.Size
-	id, _ := c.Get("id")
+	id, _ := c.Get("userID")
 
 	url, err := service.UploadFile(header.Filename, id.(uint32), file, dataLen)
 	if err != nil {

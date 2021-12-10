@@ -43,7 +43,6 @@ func Register(c *gin.Context) {
 	}
 
 	// 注册
-	// TO DO: 判断用户已存在，错误
 	_, err := service.UserClient.Register(context.Background(), registerReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

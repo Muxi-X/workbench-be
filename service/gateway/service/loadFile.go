@@ -18,7 +18,7 @@ var (
 	accessKey, secretKey, bucketName, domainName, upToken string
 )
 
-var initOSS = func() {
+func initOSS() {
 	accessKey = viper.GetString("oss.access_key")
 	secretKey = viper.GetString("oss.secret_key")
 	bucketName = viper.GetString("oss.bucket_name")
