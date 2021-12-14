@@ -253,6 +253,30 @@ type GetProjectIdsForUserResponse struct {
 	Ids []uint32 `json:"ids"`
 } //@name GetProjectIdsForUserResponse
 
+type SearchRequest struct {
+	Type       uint32 `json:"type"`
+	Keyword    string `json:"keyword"`
+	UserId     uint32 `json:"user_id"`
+	LastId     uint32 `json:"last_id"`
+	Offset     uint32 `json:"offset"`
+	Limit      uint32 `json:"limit"`
+	Pagination bool   `json:"pagination"`
+} //@name SearchRequest
+
+type SearchResult struct {
+	Id          uint32 `json:"id"`
+	Title       string `json:"title"`
+	Content     string `json:"content"`
+	UserName    string `json:"user_name"`
+	ProjectName string `json:"project_name"`
+	Time        string `json:"time"`
+} //@name SearchResult
+
+type SearchResponse struct {
+	List  []*SearchResult `json:"list"`
+	Count uint32          `json:"count"`
+} // @name SearchResponse
+
 // 转换 子文件 共用函数
 
 func FormatChildren(strChildren string) []*FileChildrenItem {

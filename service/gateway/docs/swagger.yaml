@@ -594,6 +594,47 @@ definitions:
       message:
         type: string
     type: object
+  SearchRequest:
+    properties:
+      keyword:
+        type: string
+      last_id:
+        type: integer
+      limit:
+        type: integer
+      offset:
+        type: integer
+      pagination:
+        type: boolean
+      type:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  SearchResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/SearchResult'
+        type: array
+    type: object
+  SearchResult:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      project_name:
+        type: string
+      time:
+        type: string
+      title:
+        type: string
+      user_name:
+        type: string
+    type: object
   Source:
     properties:
       id:
@@ -2527,6 +2568,41 @@ paths:
           schema:
             $ref: '#/definitions/Response'
       summary: update project member api
+      tags:
+      - project
+  /project/search:
+    post:
+      consumes:
+      - application/json
+      description: 'search_type: 为0时搜索doc_title and file_title，为1时继续搜索doc_content'
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: search_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SearchResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: searches from title of doc and file or content of doc
       tags:
       - project
   /status:

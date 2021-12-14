@@ -2620,6 +2620,59 @@ var doc = `{
                 }
             }
         },
+        "/project/search": {
+            "post": {
+                "description": "search_type: 为0时搜索doc_title and file_title，为1时继续搜索doc_content",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "searches from title of doc and file or content of doc",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "search_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SearchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/SearchResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
         "/status": {
             "get": {
                 "description": "拉取进度列表",
@@ -5327,6 +5380,69 @@ var doc = `{
                 },
                 "data": {},
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "SearchRequest": {
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "type": "string"
+                },
+                "last_id": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "pagination": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "SearchResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SearchResult"
+                    }
+                }
+            }
+        },
+        "SearchResult": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "project_name": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_name": {
                     "type": "string"
                 }
             }

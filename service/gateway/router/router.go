@@ -97,6 +97,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		projectRouter.GET("/member", normalRequired, projectCheck, project.GetMembers)    // 获取一个 project 的成员
 		projectRouter.PUT("/member", adminRequired, projectCheck, project.UpdateMembers)  // 编辑一个 project 的成员
 		projectRouter.GET("/ids", normalRequired, project.GetProjectIdsForUser)
+		projectRouter.POST("/search", normalRequired, project.Search)
 	}
 
 	folderRouter := g.Group("api/v1/folder")
