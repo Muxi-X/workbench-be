@@ -18,7 +18,7 @@ import (
 
 // DeleteDoc deletes a doc
 // @Summary delete a doc api
-// @Description 新建文件夹
+// @Description 删除doc
 // @Tags project
 // @Accept  application/json
 // @Produce  application/json
@@ -29,7 +29,7 @@ import (
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
-// @Router /file/doc/{id} [post]
+// @Router /file/doc/{id} [delete]
 func DeleteDoc(c *gin.Context) {
 	log.Info("Doc delete function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))

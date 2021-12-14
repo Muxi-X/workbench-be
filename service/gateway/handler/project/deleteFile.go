@@ -48,7 +48,7 @@ func DeleteFile(c *gin.Context) {
 		return
 	}
 
-	// 获取 userid
+	// 获取 userId
 	userID := c.MustGet("userID").(uint32)
 	role := c.MustGet("role").(uint32)
 

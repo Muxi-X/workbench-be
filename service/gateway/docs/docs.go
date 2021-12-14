@@ -590,8 +590,8 @@ var doc = `{
                     }
                 }
             },
-            "post": {
-                "description": "新建文件夹",
+            "delete": {
+                "description": "删除doc",
                 "consumes": [
                     "application/json"
                 ],

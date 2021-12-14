@@ -1120,10 +1120,10 @@ paths:
       tags:
       - project
   /file/doc/{id}:
-    post:
+    delete:
       consumes:
       - application/json
-      description: 新建文件夹
+      description: 删除doc
       parameters:
       - description: token 用户令牌
         in: header
