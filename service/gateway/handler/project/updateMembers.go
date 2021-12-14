@@ -49,11 +49,8 @@ func UpdateMembers(c *gin.Context) {
 	// 构造请求
 	// 这里 list 应该是 uint32 表示 uid
 	updateMemReq := &pbp.UpdateMemberRequest{
-		Id: projectID,
-	}
-
-	for i := 0; i < len(req.UserList); i++ {
-		updateMemReq.List = append(updateMemReq.List, req.UserList[i])
+		Id:   projectID,
+		List: req.UserList,
 	}
 
 	// 发送请求

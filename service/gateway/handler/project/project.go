@@ -55,8 +55,9 @@ type UpdateFileRequest struct {
 } //@name UpdateFileRequest
 
 type CreateProjectRequest struct {
-	Name  string `json:"name"`
-	Intro string `json:"intro"`
+	Name     string   `json:"name"`
+	Intro    string   `json:"intro"`
+	UserList []uint32 `json:"user_list"`
 } //@name CreateProjectRequest
 
 // UpdateFolderRequest ... 修改文档夹名字请求

@@ -15,7 +15,7 @@ import (
 )
 
 // CreateProject creates new project
-// @Summary create a project api
+// @Summary creates a project api
 // @Description 新建项目
 // @Tags project
 // @Accept  application/json
@@ -49,6 +49,18 @@ func CreateProject(c *gin.Context) {
 	resp, err := service.ProjectClient.CreateProject(context.Background(), createProjectReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+	}
+
+	// 创建project时添加成员
+	updateMemReq := &pbp.UpdateMemberRequest{
+		Id:   resp.Id,
+		List: req.UserList,
+	}
+
+	_, err = service.ProjectClient.UpdateMembers(context.Background(), updateMemReq)
+	if err != nil {
+		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
+		return
 	}
 
 	pushReq := &pbf.PushRequest{

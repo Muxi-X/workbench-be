@@ -2288,7 +2288,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "create a project api",
+                "summary": "creates a project api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4644,6 +4644,12 @@ var doc = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "user_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
