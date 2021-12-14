@@ -38,7 +38,7 @@ func DeleteGroup(c *gin.Context) {
 	}
 
 	// 构造 deleteGroup 请求
-	deleteGroupReq := &tpb.DeleteGroupRequest{GroupId: uint32(groupID)}
+	deleteGroupReq := &tpb.GroupRequest{GroupId: uint32(groupID)}
 
 	// 向 DeleteGroup 服务发送请求
 	_, err = service.TeamClient.DeleteGroup(context.Background(), deleteGroupReq)
