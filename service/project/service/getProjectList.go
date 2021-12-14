@@ -19,8 +19,7 @@ func (s *Service) GetProjectList(ctx context.Context, req *pb.GetProjectListRequ
 
 	resList := make([]*pb.ProjectListItem, 0)
 
-	for index := 0; index < len(list); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, &pb.ProjectListItem{
 			Id:   item.ID,
 			Name: item.Name,

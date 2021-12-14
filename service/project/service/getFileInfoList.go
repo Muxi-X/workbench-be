@@ -28,8 +28,7 @@ func (s *Service) GetFileInfoList(ctx context.Context, req *pb.GetInfoByIdsReque
 
 	resList := make([]*pb.FileInfo, 0)
 
-	for index := 0; index < len(list); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, &pb.FileInfo{
 			Id:    item.ID,
 			Title: item.Name,

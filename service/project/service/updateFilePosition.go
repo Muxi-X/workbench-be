@@ -6,7 +6,6 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
-	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
 )
@@ -38,7 +37,7 @@ func (s *Service) UpdateFilePosition(ctx context.Context, req *pb.UpdateFilePosi
 	isOldFatherProject := getOldFatherIsProject(fileItem, fileType)
 
 	// 事务
-	if err = model.UpdateFilePosition(m.DB.Self, fileItem, req.FatherId,
+	if err = model.UpdateFilePosition(fileItem, req.FatherId,
 		req.OldFatherId, fileType, isFatherProject, isOldFatherProject,
 		req.ChildrenPositionIndex); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

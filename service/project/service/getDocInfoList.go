@@ -29,8 +29,7 @@ func (s *Service) GetDocInfoList(ctx context.Context, req *pb.GetInfoByIdsReques
 
 	resList := make([]*pb.DocInfo, 0)
 
-	for index := 0; index < len(list); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, &pb.DocInfo{
 			Id:    item.ID,
 			Title: item.Name,

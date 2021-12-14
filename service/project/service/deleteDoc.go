@@ -5,7 +5,6 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
-	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
 	"time"
@@ -51,16 +50,13 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 	}
 
 	// 事务
-	err = model.DeleteDoc(m.DB.Self, trashbin, fatherId, isFatherProject)
+	err = model.DeleteDoc(trashbin, fatherId, isFatherProject)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
 	// 向取消关注发起请求
 	err = DeleteAttentionsFromAttentionService(req.Id, uint32(constvar.DocCode))
-	if err != nil {
-		return err
-	}
 
-	return nil
+	return err
 }

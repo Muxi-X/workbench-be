@@ -4,7 +4,6 @@ import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 
-	g "github.com/jinzhu/gorm"
 	"gorm.io/gorm"
 )
 
@@ -112,9 +111,9 @@ func GetProjectChildrenById(id uint32) (*ProjectChildren, error) {
 /* --- 移动文件 --- */
 
 // UpdateFilePosition ... 移动文件，事务
-func UpdateFilePosition(db *g.DB, file interface{}, fatherId, oldFatherId uint32,
+func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 	fileType uint8, isFatherProject, isOldFatherProject bool, childrenPositionIndex uint32) error {
-	tx := db.Begin()
+	tx := m.DB.Self.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()

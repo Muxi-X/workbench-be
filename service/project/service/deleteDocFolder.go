@@ -49,7 +49,20 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-	// TODO: 删除文档folder后要删除对应attentions
 
+	// 删除文档folder后删除对应attentions TODO 测试
+
+	// 获取文档夹的信息
+	list, err := model.GetFolderForDocInfoByIds([]uint32{req.Id})
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	for _, doc := range list {
+		err = DeleteAttentionsFromAttentionService(doc.ID, uint32(constvar.DocCode))
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+	}
 	return nil
 }

@@ -6,6 +6,8 @@ replace muxi-workbench-user => ../user
 
 replace muxi-workbench-attention => ../attention
 
+replace muxi-workbench-team => ../team
+
 replace muxi-workbench-project => ./
 
 exclude github.com/micro/go-plugins v1.5.1
@@ -26,5 +28,6 @@ require (
 	gorm.io/gorm v1.22.2
 	muxi-workbench v0.0.0-00010101000000-000000000000
 	muxi-workbench-attention v0.0.0-00010101000000-000000000000
+	muxi-workbench-team v0.0.0-00010101000000-000000000000
 	muxi-workbench-user v0.0.0-00010101000000-000000000000
 )

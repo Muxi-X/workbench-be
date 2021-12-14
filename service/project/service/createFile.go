@@ -7,6 +7,7 @@ import (
 	pb "muxi-workbench-project/proto"
 	m "muxi-workbench/model"
 	e "muxi-workbench/pkg/err"
+	"strings"
 	"time"
 )
 
@@ -14,9 +15,11 @@ import (
 func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res *pb.ProjectIDResponse) error {
 
 	t := time.Now()
+	index := strings.LastIndex(req.Url, "/")
+	hashName := req.Url[index+1:]
 
 	file := model.FileModel{
-		Name:       req.HashName,
+		Name:       hashName,
 		RealName:   req.Name,
 		Re:         false,
 		Top:        false,

@@ -19,8 +19,7 @@ func (s *Service) GetProjectIdsForUser(ctx context.Context, req *pb.GetRequest, 
 
 	resList := make([]uint32, 0)
 
-	for index := 0; index < len(list); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, item.ProjectID)
 	}
 

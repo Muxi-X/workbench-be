@@ -29,8 +29,7 @@ func (s *Service) GetDocFolderInfoList(ctx context.Context, req *pb.GetInfoByIds
 
 	resList := make([]*pb.DocFolderDetail, 0)
 
-	for index := 0; index < len(scope); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, &pb.DocFolderDetail{
 			Id:   item.ID,
 			Name: item.Name,

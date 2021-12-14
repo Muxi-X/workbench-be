@@ -8,6 +8,7 @@ import (
 	"muxi-workbench/pkg/handler"
 
 	apb "muxi-workbench-attention/proto"
+	tpb "muxi-workbench-team/proto"
 	upb "muxi-workbench-user/proto"
 )
 
@@ -19,6 +20,8 @@ var UserClient upb.UserServiceClient
 var UserService micro.Service
 var AttentionClient apb.AttentionServiceClient
 var AttentionService micro.Service
+var TeamClient tpb.TeamServiceClient
+var TeamService micro.Service
 
 func UserInit() {
 	UserService = micro.NewService(micro.Name("workbench.cli.user"),
@@ -46,6 +49,19 @@ func AttentionInit() {
 	AttentionClient = apb.NewAttentionServiceClient("workbench.service.attention", AttentionService.Client())
 }
 
+func TeamInit() {
+	TeamService = micro.NewService(micro.Name("workbench.cli.team"),
+		micro.WrapClient(
+			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
+		),
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
+
+	TeamService.Init()
+
+	TeamClient = tpb.NewTeamServiceClient("workbench.service.team", TeamService.Client())
+}
+
 // GetInfoFromUserService get user's name and avatar from user-service
 func GetInfoFromUserService(id uint32) (string, error) {
 	rsp, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{Id: id})
@@ -68,4 +84,17 @@ func DeleteAttentionsFromAttentionService(id uint32, kind uint32) error {
 	}
 
 	return nil
+}
+
+// GetGroupNameFromTeamService get group name from TeamService by group id
+func GetGroupNameFromTeamService(id uint32) (string, error) {
+	req := &tpb.GroupRequest{
+		GroupId: id,
+	}
+	res, err := TeamClient.GetGroupName(context.Background(), req)
+	if err != nil {
+		return "", err
+	}
+
+	return res.GroupName, nil
 }

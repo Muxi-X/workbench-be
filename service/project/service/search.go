@@ -5,36 +5,53 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
-	m "muxi-workbench/model"
 	e "muxi-workbench/pkg/err"
-	"time"
 )
 
-// CreateDoc ... 创建文档
-// 事务自动更新文件树
-func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *pb.ProjectIDResponse) error {
-	t := time.Now()
-
-	doc := model.DocModel{
-		Name:         req.Title,
-		Content:      req.Content,
-		Re:           false,
-		Top:          false,
-		TeamID:       req.TeamId, // 查询一下用户信息
-		CreateTime:   t.Format("2006-01-02 15:04:05"),
-		ProjectID:    req.ProjectId,
-		EditorID:     req.UserId,
-		LastEditTime: t.Format("2006-01-02 15:04:05"),
-		FatherId:     req.FatherId,
-	}
-
-	// 事务
-	id, err := model.CreateDoc(m.DB.Self, &doc, req.ChildrenPositionIndex)
+// Search ... 搜索文档和文件
+// search_type: 为1时搜索doc_title and file_title，为2时搜索doc_content
+func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.SearchResponse) error {
+	projects, err := model.GetUserToProjectByUser(req.UserId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	res.Id = id
+	projectIDs := make([]uint32, len(projects))
+	for i, project := range projects {
+		projectIDs[i] = project.ProjectID
+	}
+	var list []*model.SearchResult
+
+	if req.Type == 1 { // 在文档文件title中查询关键字
+		titleList, count, err := model.SearchTitle(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+
+		list = append(list, titleList...)
+		res.Count = count
+
+		// } else if req.Type == 2 { // 在文档content中查询关键字
+		// 	contentList, count, err := model.SearchContent(project.ProjectID, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
+		// 	if err != nil {
+		// 		return e.ServerErr(errno.ErrDatabase, err.Error())
+		// 	}
+		//
+		// 	list = append(list, contentList...)
+		// 	res.Count = count
+	}
+
+	for _, item := range list {
+		res.List = append(res.List, &pb.SearchResult{
+			Id: item.Id,
+			// Type:        item.Type,
+			Title:       item.Title,
+			UserName:    item.UserName,
+			Content:     item.Content,
+			ProjectName: item.ProjectName,
+			Time:        item.Time,
+		})
+	}
 
 	return nil
 }

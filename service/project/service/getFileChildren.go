@@ -49,7 +49,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 				list = append(list, &pb.Children{
 					Id:          file.ID,
 					Type:        false,
-					Name:        file.Name,
+					Name:        file.RealName,
 					CreatorName: file.Creator,
 					CreatTime:   file.CreateTime,
 					// TODO Path:        doc.FatherId,根据fatherId一路找上去

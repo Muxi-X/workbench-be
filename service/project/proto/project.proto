@@ -14,6 +14,7 @@ service ProjectService {
   rpc GetProjectIdsForUser(GetRequest) returns (ProjectIdsResponse) {}
   rpc CheckProjectForUser(CheckProjectRequest) returns (CheckProjectResponse) {}
   rpc GetFileOrDocName(GetFileOrDocNameRequest) returns (GetFileOrDocNameResponse) {}
+  rpc Search(SearchRequest) returns (SearchResponse) {}
 
   // 回收站
   rpc GetTrashbin(GetTrashbinRequest) returns (GetTrashbinResponse) {}
@@ -96,7 +97,7 @@ message GetTrashbinRequest {
 
 message Trashbin {
   uint32 id = 1;
-  uint32 type = 2; // 0-projct 1-doc 2-file 3-doc folder 4-file folder
+  uint32 type = 2; // 0-project 1-doc 2-file 3-doc folder 4-file folder
   string name = 3;
   string create_time = 4;
   string delete_time = 5;
@@ -316,12 +317,11 @@ message ChildrenList {
 message CreateFileRequest {
   uint32 project_id = 1;
   string name = 2;
-  string hashName = 3; // 上传到对象存储时生成的唯一 hash 文件名
+  uint32 children_position_index = 3;
   string url = 4;
   uint32 user_id = 5;
   uint32 team_id = 6;
   uint32 father_id = 7;
-  uint32 children_position_index = 9;
 }
 
 message CreateDocRequest {
@@ -411,4 +411,29 @@ message GetFileOrDocNameRequest {
 
 message GetFileOrDocNameResponse {
   string name = 1;
+}
+
+message SearchRequest {
+  uint32 type = 1;
+  string keyword = 2;
+  uint32 user_id = 3;
+  uint32 last_id = 4;
+  uint32 offset = 5;
+  uint32 limit = 6;
+  bool pagination = 7;
+}
+
+message SearchResult {
+  uint32 type = 1;
+  uint32 id = 2;
+  string title = 3;
+  string content = 4;
+  string project_name = 5;
+  string user_name = 6;
+  string time = 7;
+}
+
+message SearchResponse {
+  repeated SearchResult list = 1;
+  uint32 count = 2;
 }

@@ -12,11 +12,7 @@ import (
 
 // FileDetail ... 文件详情
 type FileDetail struct {
-	// ID         uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	// Name       string `json:"name" gorm:"column:realname;" binding:"required"`
-	// URL        string `json:"url" gorm:"column:url;" binding:"required"`
-	Creator    string `json:"creator" gorm:"column:creator;" binding:"required"`
-	// CreateTime string `json:"createTime" gorm:"column:create_time;" binding:"required"`
+	Creator string `json:"creator" gorm:"column:creator;" binding:"required"`
 	FileModel
 }
 
@@ -139,3 +135,9 @@ func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherP
 
 	return tx.Commit().Error
 }
+
+// func SearchFileTitle (projectID uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, error) {
+// 	var record []*SearchResult
+// 	err := m.DB.Self.Table("files").Where("project_id = ? AND filename like ?", projectID, keyword).Select("name").Find(record).Error
+// 	return record, err
+// }

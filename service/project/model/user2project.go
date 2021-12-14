@@ -65,7 +65,7 @@ func GetUserToProjectByUser(id uint32) ([]*UserToProjectModel, error) {
 	return list, d.Error
 }
 
-// GetUserListByProject ... 获取一个项目的 id 列表
+// GetUserListByProject ... 获取一个项目的 user_id 列表
 func GetUserListByProject(id uint32) ([]*UserID, error) {
 	list := make([]*UserID, 0)
 	d := m.DB.Self.Table("user2projects").Where("project_id=?", id).Select("user_id").Order("user_id asc").Scan(&list)
