@@ -9,7 +9,9 @@ import (
 	"muxi-workbench-gateway/pkg/errno"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
+	"muxi-workbench-project/model"
 	pbp "muxi-workbench-project/proto"
+	"muxi-workbench/pkg/constvar"
 	"strconv"
 )
 
@@ -42,13 +44,21 @@ func GetProjectInfo(c *gin.Context) {
 
 	// 解析结果
 	fileList := FormatChildren(getProInfoResp.FileChildren)
-	for _, file := range fileList {
-		// 发送请求获取name
+	for i, file := range fileList {
 		id, _ := strconv.Atoi(file.Id)
+		// 发送请求获取name
 		if file.Type { // file folder
+			isDeleted, err := model.AdjustSelfIfExist(uint32(id), constvar.FileFolderCode)
+			if err != nil {
+				SendError(c, errno.ErrDatabase, nil, err.Error(), GetLine())
+				return
+			}
+			if isDeleted { // 存在 redis 返回 1, 说明被删
+				fileList = append(fileList[:i], fileList[i+1:]...) // 删除中间1个元素
+			}
 			getFileNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
 				Id:   uint32(id),
-				Type: 3,
+				Type: uint32(constvar.FileFolderCode),
 			})
 			if err != nil {
 				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -56,9 +66,17 @@ func GetProjectInfo(c *gin.Context) {
 			}
 			file.Name = getFileNameResp.Name
 		} else {
+			isDeleted, err := model.AdjustSelfIfExist(uint32(id), constvar.FileCode)
+			if err != nil {
+				SendError(c, errno.ErrDatabase, nil, err.Error(), GetLine())
+				return
+			}
+			if isDeleted { // 存在 redis 返回 1, 说明被删
+				fileList = append(fileList[:i], fileList[i+1:]...)
+			}
 			getFileNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
 				Id:   uint32(id),
-				Type: 1,
+				Type: uint32(constvar.FileCode),
 			})
 			if err != nil {
 				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -69,13 +87,21 @@ func GetProjectInfo(c *gin.Context) {
 	}
 
 	docList := FormatChildren(getProInfoResp.DocChildren)
-	for _, doc := range docList {
+	for i, doc := range docList {
 		// 发送请求获取name
 		id, _ := strconv.Atoi(doc.Id)
 		if doc.Type { // doc folder
+			isDeleted, err := model.AdjustSelfIfExist(uint32(id), constvar.DocFolderCode)
+			if err != nil {
+				SendError(c, errno.ErrDatabase, nil, err.Error(), GetLine())
+				return
+			}
+			if isDeleted { // 存在 redis 返回 1, 说明被删
+				fileList = append(fileList[:i], fileList[i+1:]...) // 删除中间1个元素
+			}
 			getDocNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
 				Id:   uint32(id),
-				Type: 4,
+				Type: uint32(constvar.DocFolderCode),
 			})
 			if err != nil {
 				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -83,9 +109,17 @@ func GetProjectInfo(c *gin.Context) {
 			}
 			doc.Name = getDocNameResp.Name
 		} else {
+			isDeleted, err := model.AdjustSelfIfExist(uint32(id), constvar.DocCode)
+			if err != nil {
+				SendError(c, errno.ErrDatabase, nil, err.Error(), GetLine())
+				return
+			}
+			if isDeleted { // 存在 redis 返回 1, 说明被删
+				fileList = append(fileList[:i], fileList[i+1:]...) // 删除中间1个元素
+			}
 			getDocNameResp, err := service.ProjectClient.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
 				Id:   uint32(id),
-				Type: 2,
+				Type: uint32(constvar.DocCode),
 			})
 			if err != nil {
 				SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

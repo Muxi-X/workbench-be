@@ -260,7 +260,7 @@ func FormatChildren(strChildren string) []*FileChildrenItem {
 	raw := strings.Split(strChildren, ",")
 	for _, v := range raw {
 		r := strings.Split(v, "-")
-		if r[1] == "0" {
+		if r[1] == "0" { // TODO
 			list = append(list, &FileChildrenItem{
 				Id:   r[0],
 				Type: false,
