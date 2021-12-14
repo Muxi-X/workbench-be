@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
+	m "github.com/Muxi-X/workbench-be/model"
 	"log"
-
 	mm "muxi-workbench-project/model"
+
+	// mm "muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
 	s "muxi-workbench-project/service"
 	"muxi-workbench/config"
 	logger "muxi-workbench/log"
 	"muxi-workbench/model"
-	m "muxi-workbench/model"
+	// m "muxi-workbench/model"
 	"muxi-workbench/pkg/handler"
 	tracer "muxi-workbench/pkg/tracer"
 
@@ -47,49 +49,49 @@ func main() {
 	// init db
 	model.DB.Init()
 	defer model.DB.Close()
-	{
-		pIDs := []uint32{2}
-		var record []*mm.SearchResult
-		query := m.DB.Self.
-			Raw("SELECT d.id, filename, create_time, u.name, content, p.name project_name FROM docs d "+
-				"LEFT JOIN users u ON u.id = d.editor_id "+
-				"LEFT JOIN projects p ON p.id = project_id "+
-				"WHERE project_id in (?) AND (d.filename like ? OR d.content like ?) "+
-				"UNION ALL SELECT f.id, filename, create_time, u.name, url, p.name project_name FROM files f "+
-				"LEFT JOIN users u ON u.id = f.creator_id "+
-				"LEFT JOIN projects p ON p.id = project_id "+
-				"WHERE project_id in (?) AND f.filename like ?", pIDs, "%1%", "%1%", pIDs, "%1%")
-		if err := query.Scan(&record).Error; err != nil {
-			panic(err)
-		}
-		// db := m.DB.Self
-		// db.Raw("? UNION ?",
-		// 	db.Raw("SELECT d.id, filename, create_time, u.name, content, p.name project_name FROM docs d "+
-		// 		"LEFT JOIN users u ON u.id = d.editor_id "+
-		// 		"LEFT JOIN projects p ON p.id = project_id "+
-		// 		"WHERE project_id in (?) AND d.filename like ? ", pIDs, "%1%"),
-		// 	db.Raw("SELECT f.id, filename, create_time, u.name, url, p.name project_name FROM files f "+
-		// 		"LEFT JOIN users u ON u.id = f.creator_id "+
-		// 		"LEFT JOIN projects p ON p.id = project_id "+
-		// 		"WHERE project_id in (?) AND f.filename like ?", pIDs, "%1%"),
-		// ).Scan(&record)
-
-		fmt.Printf("%+v\n", record[0])
-		fmt.Println()
-		fmt.Println()
-		fmt.Println()
-		fmt.Printf("%+v\n", record[1])
-		// for _, r := range record {
-		// if r.Content != "" {
-		// 	fmt.Println(i)
-		// 	continue
-		// } else {
-		// 	r.Type = 2
-		// }
-		// 	fmt.Printf("%+v\n", r)
-
-		return
-	}
+	// {
+	// 	pIDs := []uint32{2}
+	// 	var record []*mm.SearchResult
+	// 	query := m.DB.Self.
+	// 		Raw("SELECT d.id, filename, create_time, u.name, content, p.name project_name FROM docs d "+
+	// 			"LEFT JOIN users u ON u.id = d.editor_id "+
+	// 			"LEFT JOIN projects p ON p.id = project_id "+
+	// 			"WHERE project_id in (?) AND (d.filename like ? OR d.content like ?) "+
+	// 			"UNION ALL SELECT f.id, filename, create_time, u.name, url, p.name project_name FROM files f "+
+	// 			"LEFT JOIN users u ON u.id = f.creator_id "+
+	// 			"LEFT JOIN projects p ON p.id = project_id "+
+	// 			"WHERE project_id in (?) AND f.filename like ?", pIDs, "%1%", "%1%", pIDs, "%1%")
+	// 	if err := query.Scan(&record).Error; err != nil {
+	// 		panic(err)
+	// 	}
+	// 	// db := m.DB.Self
+	// 	// db.Raw("? UNION ?",
+	// 	// 	db.Raw("SELECT d.id, filename, create_time, u.name, content, p.name project_name FROM docs d "+
+	// 	// 		"LEFT JOIN users u ON u.id = d.editor_id "+
+	// 	// 		"LEFT JOIN projects p ON p.id = project_id "+
+	// 	// 		"WHERE project_id in (?) AND d.filename like ? ", pIDs, "%1%"),
+	// 	// 	db.Raw("SELECT f.id, filename, create_time, u.name, url, p.name project_name FROM files f "+
+	// 	// 		"LEFT JOIN users u ON u.id = f.creator_id "+
+	// 	// 		"LEFT JOIN projects p ON p.id = project_id "+
+	// 	// 		"WHERE project_id in (?) AND f.filename like ?", pIDs, "%1%"),
+	// 	// ).Scan(&record)
+	//
+	// 	fmt.Printf("%+v\n", record[0])
+	// 	fmt.Println()
+	// 	fmt.Println()
+	// 	fmt.Println()
+	// 	fmt.Printf("%+v\n", record[1])
+	// 	// for _, r := range record {
+	// 	// if r.Content != "" {
+	// 	// 	fmt.Println(i)
+	// 	// 	continue
+	// 	// } else {
+	// 	// 	r.Type = 2
+	// 	// }
+	// 	// 	fmt.Printf("%+v\n", r)
+	//
+	// 	return
+	// }
 	// init redis
 	model.RedisDB.Init()
 	defer model.RedisDB.Close()
