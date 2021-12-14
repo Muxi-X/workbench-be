@@ -26,6 +26,10 @@ func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb
 		}
 	}
 
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
+
 	// 获取 fatherId
 	isFatherProject := false
 	var fatherId uint32

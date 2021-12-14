@@ -14,7 +14,7 @@ import (
 
 // DeleteDoc ... 删除文档
 // 插入回收站 同步 redis
-func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.ProjectIDResponse) error {
+func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.Response) error {
 	// 获取 name 和 creatorId
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
@@ -29,6 +29,10 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 		if req.Role <= constvar.Normal {
 			return e.BadRequestErr(errno.ErrPermissionDenied, "")
 		}
+	}
+
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
 	}
 
 	// 获取 fatherId

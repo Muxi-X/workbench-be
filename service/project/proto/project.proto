@@ -31,7 +31,7 @@ service ProjectService {
   // 文档相关
   rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
   rpc UpdateDoc(UpdateDocRequest ) returns (ProjectIDResponse) {}
-  rpc DeleteDoc(DeleteRequest) returns (ProjectIDResponse) {}
+  rpc DeleteDoc(DeleteRequest) returns (Response) {}
   rpc GetDocDetail(GetFileDetailRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   // 文档的评论
@@ -88,6 +88,7 @@ message DeleteRequest {
   uint32 id = 1;
   uint32 user_id = 2;
   uint32 role = 3;
+  uint32 project_id = 4;
 }
 
 message GetTrashbinRequest {

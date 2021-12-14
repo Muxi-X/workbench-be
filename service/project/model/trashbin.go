@@ -210,10 +210,10 @@ func TidyTrashbin(db *gorm.DB) error {
 	}
 
 	// 同步 redis
-	if err := m.SRemToRedis(constvar.Trashbin, res); err != nil {
-		tx.Rollback()
-		return err
-	}
+	// if err := m.SRemToRedis(constvar.Trashbin, res); err != nil {
+	// 	tx.Rollback()
+	// 	return err
+	// }
 
 	// 删除 trashbin 记录
 	if err = DeleteTrashbinRecord(); err != nil {
