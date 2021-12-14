@@ -10,14 +10,14 @@ import (
 )
 
 // DeleteGroup … 删除组别
-func (ts *TeamService) DeleteGroup(ctx context.Context, req *pb.DeleteGroupRequest, res *pb.Response) error {
-	// 获取usersid
-	usersid, err := GetUsersIdByGroupid(req.GroupId)
+func (ts *TeamService) DeleteGroup(ctx context.Context, req *pb.GroupRequest, res *pb.Response) error {
+	// 获取usersId
+	usersId, err := GetUsersIdByGroupId(req.GroupId)
 	if err != nil {
 		return e.ServerErr(errno.ErrClient, err.Error())
 	}
 
-	if err := UpdateUsersGroupIDOrTeamID(usersid, model.NOGROUP, model.GROUP); err != nil {
+	if err := UpdateUsersGroupIDOrTeamID(usersId, model.NOGROUP, model.GROUP); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

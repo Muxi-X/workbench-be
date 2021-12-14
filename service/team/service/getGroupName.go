@@ -9,18 +9,13 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// CreateApplication …… 生成申请
-func (ts *TeamService) CreateApplication(ctx context.Context, req *pb.ApplicationRequest, res *pb.Response) error {
-	apply := &model.ApplyModel{
-		UserID: req.UserId,
-	}
+// GetGroupName …… 根据groupID获取groupName
+func (ts *TeamService) GetGroupName(ctx context.Context, req *pb.GroupRequest, res *pb.GroupNameResponse) error {
 
-	if err := apply.Check(); err != nil {
+	group, err := model.GetGroup(req.GroupId)
+	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
-	if err := apply.Create(); err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
+	res.GroupName = group.Name
 	return nil
 }

@@ -5,10 +5,11 @@ package team;
 service TeamService {
     // 组别
     rpc CreateGroup(CreateGroupRequest) returns (Response) {}
-    rpc DeleteGroup(DeleteGroupRequest) returns (Response) {}
+    rpc DeleteGroup(GroupRequest) returns (Response) {}
     rpc UpdateGroupInfo(UpdateGroupInfoRequest) returns (Response) {}
     rpc GetGroupList(GroupListRequest) returns (GroupListResponse) {}
     rpc GetMemberList(MemberListRequest) returns (MemberListResponse) {}
+    rpc GetGroupName(GroupRequest) returns (GroupNameResponse) {}
     rpc UpdateMembersForGroup(UpdateMembersRequest) returns (Response) {}
 
     // 团队
@@ -31,8 +32,12 @@ message CreateGroupRequest {
     repeated uint32 user_list = 2;
 }
 
-message DeleteGroupRequest {
+message GroupRequest {
     uint32 group_id = 1;
+}
+
+message GroupNameResponse {
+    string group_name = 1;
 }
 
 message UpdateGroupInfoRequest {

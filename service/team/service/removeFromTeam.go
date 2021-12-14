@@ -2,10 +2,11 @@ package service
 
 import (
 	"context"
-
+	"errors"
 	"muxi-workbench-team/errno"
 	"muxi-workbench-team/model"
 	pb "muxi-workbench-team/proto"
+	upb "muxi-workbench-user/proto"
 	e "muxi-workbench/pkg/err"
 )
 
@@ -19,6 +20,16 @@ func (ts *TeamService) Remove(ctx context.Context, req *pb.RemoveRequest, res *p
 
 // RemoveFromTeam remove from team
 func RemoveFromTeam(teamID uint32, usersID []uint32) error {
+	for _, id := range usersID {
+		info, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{Id: id})
+		if err != nil {
+			return err
+		}
+		if info.Team != teamID {
+			return errors.New("被移除成员中存在teamID与管理员teamID不符的情况")
+		}
+	}
+
 	if err := UpdateUsersGroupIDOrTeamID(usersID, 0, model.TEAM); err != nil {
 		return err
 	}

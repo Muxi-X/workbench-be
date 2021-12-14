@@ -18,8 +18,7 @@ func (ts *TeamService) GetGroupList(ctx context.Context, req *pb.GroupListReques
 
 	resList := make([]*pb.GroupItem, 0)
 
-	for index := 0; index < len(list); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, &pb.GroupItem{
 			Id:        item.ID,
 			Name:      item.Name,

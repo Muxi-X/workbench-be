@@ -33,6 +33,7 @@ require (
 	github.com/juju/ratelimit v1.0.1 // indirect
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-plugins v2.0.1+incompatible
+	github.com/micro/go-plugins/wrapper/trace/opentracing v0.0.0-20200119172437-4fe21aa238fd
 	github.com/micro/micro v1.16.0 // indirect
 	github.com/minio/highwayhash v1.0.0 // indirect
 	github.com/nats-io/stan.go v0.5.0 // indirect

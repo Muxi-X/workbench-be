@@ -28,7 +28,7 @@ func (ts *TeamService) GetApplications(ctx context.Context, req *pb.ApplicationL
 		resList = append(resList, &pb.ApplyUserItem{
 			Id:    item.ID,
 			Name:  item.Name,
-			Email: item.Eamil,
+			Email: item.Email,
 		})
 	}
 

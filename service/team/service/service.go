@@ -26,8 +26,8 @@ func UpdateUsersGroupIDOrTeamID(usersID []uint32, value uint32, kind uint32) err
 	return nil
 }
 
-// GetUsersIdByGroupid get users' infos by groupid
-func GetUsersIdByGroupid(groupID uint32) ([]uint32, error) {
+// GetUsersIdByGroupId get users' infos by group_id
+func GetUsersIdByGroupId(groupID uint32) ([]uint32, error) {
 	rsp, err := UserClient.List(context.Background(), &upb.ListRequest{
 		LastId: 0,
 		Offset: 0,
@@ -46,7 +46,7 @@ func GetUsersIdByGroupid(groupID uint32) ([]uint32, error) {
 	return users, nil
 }
 
-// GetUsersIdByTeamId get users' infos by teamid
+// GetUsersIdByTeamId get users' infos by teamId
 func GetUsersIdByTeamId(teamID uint32) ([]uint32, error) {
 	rsp, err := UserClient.List(context.Background(), &upb.ListRequest{
 		LastId: 0,
@@ -113,20 +113,20 @@ func GetMemberInfo(groupID uint32, limit uint32, offset uint32, pagination bool)
 func GetUsersByApplys(applys []*model.ApplyModel, count uint64) ([]*model.ApplyUserItem, uint64, error) {
 	userIDs := GetUsersIDByApplys(applys)
 
-	applyuserList := make([]*model.ApplyUserItem, 0)
+	applyUserList := make([]*model.ApplyUserItem, 0)
 
 	rsp, err := UserClient.GetInfo(context.Background(), &upb.GetInfoRequest{Ids: userIDs})
 	if err != nil {
-		return applyuserList, 0, err
+		return applyUserList, 0, err
 	}
 
 	for _, item := range rsp.List {
-		applyuserList = append(applyuserList, &model.ApplyUserItem{
+		applyUserList = append(applyUserList, &model.ApplyUserItem{
 			Name:  item.Name,
 			ID:    item.Id,
 			Email: "",
 		})
 	}
 
-	return applyuserList, count, nil
+	return applyUserList, count, nil
 }

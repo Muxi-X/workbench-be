@@ -24,8 +24,8 @@ const (
 )
 
 const (
-	TEAM    = 1 //对象:团队
-	GROUP   = 2 //对象:组别
+	TEAM    = 1 // 对象:团队
+	GROUP   = 2 // 对象:组别
 	NOGROUP = 0
 	NOTEAM  = 0
 )
@@ -66,7 +66,7 @@ func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel, uin
 		limit = constvar.DefaultLimit
 	}
 
-	grouplist := make([]*GroupModel, 0)
+	groupList := make([]*GroupModel, 0)
 
 	query := m.DB.Self.Table("groups")
 
@@ -74,10 +74,10 @@ func ListGroup(offset uint32, limit uint32, pagination bool) ([]*GroupModel, uin
 		query = query.Offset(offset).Limit(limit)
 	}
 
-	if err := query.Scan(&grouplist).Error; err != nil {
+	if err := query.Scan(&groupList).Error; err != nil {
 		return nil, 0, nil
 	}
 
-	count := len(grouplist)
-	return grouplist, uint64(count), nil
+	count := len(groupList)
+	return groupList, uint64(count), nil
 }
