@@ -16,9 +16,9 @@ import (
 )
 
 // CreateFile creates a new file
-// 调用 createfile 和 feed push
+// 调用 createFile 和 feed push
 // 更新：同步 gateway 和 project
-// @Summary create a new file api
+// @Summary creates a new file api
 // @Description 通过父节点 id，和插入节点位置确定新建文件的位置。
 // @Tags project
 // @Accept  application/json
@@ -50,7 +50,6 @@ func CreateFile(c *gin.Context) {
 	createFileReq := &pbp.CreateFileRequest{
 		ProjectId:             projectID,
 		Name:                  req.FileName,
-		HashName:              req.HashName,
 		Url:                   req.Url,
 		UserId:                userID,
 		TeamId:                teamID,

@@ -50,7 +50,6 @@ func UpdateFilePosition(c *gin.Context) {
 	// 每个文件移动发送一次请求
 	for _, r := range req {
 		// 构造请求
-		// 这里 list 应该是 uint32 表示 uid
 		updateFilePositionReq := &pbp.UpdateFilePositionRequest{
 			ProjectId:             projectID,
 			FileId:                r.Id,

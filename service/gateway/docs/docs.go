@@ -1080,7 +1080,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "create a new file api",
+                "summary": "creates a new file api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4592,13 +4592,7 @@ var doc = `{
                 "father_id": {
                     "type": "integer"
                 },
-                "file_id": {
-                    "type": "integer"
-                },
                 "file_name": {
-                    "type": "string"
-                },
-                "hash_name": {
                     "type": "string"
                 },
                 "url": {

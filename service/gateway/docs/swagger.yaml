@@ -117,11 +117,7 @@ definitions:
         type: integer
       father_id:
         type: integer
-      file_id:
-        type: integer
       file_name:
-        type: string
-      hash_name:
         type: string
       url:
         type: string
@@ -1527,7 +1523,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: create a new file api
+      summary: creates a new file api
       tags:
       - project
   /file/file/{id}:

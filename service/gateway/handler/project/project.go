@@ -185,9 +185,7 @@ type UpdateProjectChildrenRequest struct {
 
 // CreateFileRequest ... 新建文件请求
 type CreateFileRequest struct {
-	FileID                uint32 `json:"file_id"`
 	FileName              string `json:"file_name"`
-	HashName              string `json:"hash_name"`
 	Url                   string `json:"url"`
 	FatherId              uint32 `json:"father_id"`
 	ChildrenPositionIndex uint32 `json:"children_position_index"`
