@@ -4709,9 +4709,6 @@ var doc = `{
             "properties": {
                 "file_name": {
                     "type": "string"
-                },
-                "project_id": {
-                    "type": "integer"
                 }
             }
         },

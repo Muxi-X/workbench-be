@@ -52,11 +52,13 @@ func DeleteFile(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 	role := c.MustGet("role").(uint32)
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 请求
 	_, err = service.ProjectClient.DeleteFile(context.Background(), &pbp.DeleteRequest{
-		Id:     uint32(fileID),
-		UserId: userID,
-		Role:   role,
+		Id:        uint32(fileID),
+		UserId:    userID,
+		Role:      role,
+		ProjectId: projectID,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -73,7 +75,7 @@ func DeleteFile(c *gin.Context) {
 			Kind:        4,
 			Id:          uint32(fileID), // 暂时从前端获取
 			Name:        req.FileName,
-			ProjectId:   req.ProjectId,
+			ProjectId:   projectID,
 			ProjectName: "",
 		},
 	}

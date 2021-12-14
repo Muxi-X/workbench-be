@@ -201,8 +201,7 @@ type GetFileDetailResponse struct {
 
 // DeleteFileRequest ... 删除文件请求
 type DeleteFileRequest struct {
-	FileName  string `json:"file_name"`
-	ProjectId uint32 `json:"project_id"`
+	FileName string `json:"file_name"`
 } //@name DeleteFileRequest
 
 // CreateDocRequest ... 创建文档请求
