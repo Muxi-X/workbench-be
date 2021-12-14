@@ -9,7 +9,7 @@ import (
 )
 
 // Search ... 搜索文档和文件
-// search_type: 为1时搜索doc_title and file_title，为2时搜索doc_content
+// search_type: 为0时搜索doc_title and file_title，为1时搜索doc_content
 func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.SearchResponse) error {
 	projects, err := model.GetUserToProjectByUser(req.UserId)
 	if err != nil {
@@ -22,7 +22,7 @@ func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.Sea
 	}
 	var list []*model.SearchResult
 
-	if req.Type == 1 { // 在文档文件title中查询关键字
+	if req.Type == 0 { // 在文档文件title中查询关键字
 		titleList, count, err := model.SearchTitle(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
 		if err != nil {
 			return e.ServerErr(errno.ErrDatabase, err.Error())
@@ -31,20 +31,19 @@ func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.Sea
 		list = append(list, titleList...)
 		res.Count = count
 
-		// } else if req.Type == 2 { // 在文档content中查询关键字
-		// 	contentList, count, err := model.SearchContent(project.ProjectID, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
-		// 	if err != nil {
-		// 		return e.ServerErr(errno.ErrDatabase, err.Error())
-		// 	}
-		//
-		// 	list = append(list, contentList...)
-		// 	res.Count = count
+	} else if req.Type == 1 { // 在文档content和title中查询关键字
+		contentList, count, err := model.SearchContent(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+
+		list = append(list, contentList...)
+		res.Count = count
 	}
 
 	for _, item := range list {
 		res.List = append(res.List, &pb.SearchResult{
-			Id: item.Id,
-			// Type:        item.Type,
+			Id:          item.Id,
 			Title:       item.Title,
 			UserName:    item.UserName,
 			Content:     item.Content,
