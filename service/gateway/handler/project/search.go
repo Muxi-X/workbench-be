@@ -13,7 +13,7 @@ import (
 )
 
 // Search
-// @Summary searches from title of doc and file or content of doc
+// @Summary searches from title of doc and file or content of doc api
 // @Description search_type: 为0时搜索doc_title and file_title，为1时继续搜索doc_content
 // @Tags project
 // @Accept  application/json
@@ -40,7 +40,6 @@ func Search(c *gin.Context) {
 		Type:       req.Type,
 		Keyword:    req.Keyword,
 		UserId:     userID,
-		LastId:     req.LastId,
 		Offset:     req.Offset,
 		Limit:      req.Limit,
 		Pagination: req.Pagination,

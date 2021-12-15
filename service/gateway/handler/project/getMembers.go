@@ -33,7 +33,7 @@ import (
 func GetMembers(c *gin.Context) {
 	log.Info("Project getMembers function call.", zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 要从 query param 获取 lastid limit page pagination
+	// 要从 query param 获取 lastId limit page pagination
 
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {

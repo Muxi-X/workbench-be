@@ -257,7 +257,6 @@ type SearchRequest struct {
 	Type       uint32 `json:"type"`
 	Keyword    string `json:"keyword"`
 	UserId     uint32 `json:"user_id"`
-	LastId     uint32 `json:"last_id"`
 	Offset     uint32 `json:"offset"`
 	Limit      uint32 `json:"limit"`
 	Pagination bool   `json:"pagination"`
