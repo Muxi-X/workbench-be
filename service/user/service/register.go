@@ -35,12 +35,9 @@ func RegisterUser(info *RegisterInfo) error {
 		Name:   name,
 		Email:  info.Email,
 		Role:   constvar.AuthLevelNormal,
-		TeamID: 1, // TODO 后期删除
+		TeamID: 0, // 默认无team
 	}
-	if err := user.Create(); err != nil {
-		return err
-	}
-	return nil
+	return user.Create()
 }
 
 // Register ... 注册

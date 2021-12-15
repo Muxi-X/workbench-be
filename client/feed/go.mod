@@ -8,6 +8,8 @@ replace muxi-workbench-project => ../../service/project
 
 replace muxi-workbench-user => ../../service/user
 
+replace muxi-workbench-team => ../../service/team
+
 replace muxi-workbench-attention => ../../service/attention
 
 exclude github.com/micro/go-plugins v1.5.1

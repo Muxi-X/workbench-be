@@ -30,7 +30,7 @@ func (u *UserModel) Create() error {
 	return m.DB.Self.Create(u).Error
 }
 
-// Save save user.
+// Save ... save user.
 func (u *UserModel) Save() error {
 	return m.DB.Self.Save(u).Error
 }

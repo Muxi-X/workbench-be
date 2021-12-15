@@ -49,10 +49,10 @@ func main() {
 	// 	log.Fatal("Could not greet: %v", err)
 	// }
 	// fmt.Println(resp)
-	getFileNameResp, err := pb.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
-		Id:   uint32(id),
-		Type: 1,
-	})
+	// getFileNameResp, err := pb.GetFileOrDocName(context.Background(), &pbp.GetFileOrDocNameRequest{
+	// 	Id:   uint32(id),
+	// 	Type: 1,
+	// })
 
 	// getDocDetail
 	// TODO: 测试删除能否获取

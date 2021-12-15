@@ -14,4 +14,4 @@ gitea:
 	git push --tags muxi
 tag:
 	git tag release-${name}-${ver}
-push: vet tag github gitea
+push: vet tag gitea github

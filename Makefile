@@ -8,4 +8,4 @@ gitea:
 	git push --tags muxi
 tag:
 	git tag release-${name}-${ver}
-push: tag github gitea
+push: tag gitea github

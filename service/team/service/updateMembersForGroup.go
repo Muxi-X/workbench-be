@@ -24,6 +24,6 @@ func (ts *TeamService) UpdateMembersForGroup(ctx context.Context, req *pb.Update
 	if err := UpdateUsersGroupIDOrTeamID(req.UserList, req.GroupId, model.GROUP); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
+	// TODO: 在groups里同步人数
 	return nil
 }

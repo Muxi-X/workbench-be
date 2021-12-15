@@ -96,7 +96,7 @@ type DocComment struct {
 // DocCommentListResponse ... 获取文档评论响应
 type DocCommentListResponse struct {
 	Count       uint32       `json:"count"`
-	CommentList []DocComment `json:"commentlist"`
+	CommentList []DocComment `json:"comment_list"`
 } //@name DocCommentListResponse
 
 // GetProjectInfoResponse ... 获取项目详情响应
@@ -280,10 +280,13 @@ type SearchResponse struct {
 
 func FormatChildren(strChildren string) []*FileChildrenItem {
 	var list []*FileChildrenItem
+	if strChildren == "" {
+		return list
+	}
 	raw := strings.Split(strChildren, ",")
 	for _, v := range raw {
 		r := strings.Split(v, "-")
-		if r[1] == "0" { // TODO
+		if r[1] == "0" {
 			list = append(list, &FileChildrenItem{
 				Id:   r[0],
 				Type: false,

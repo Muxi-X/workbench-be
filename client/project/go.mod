@@ -8,6 +8,8 @@ replace muxi-workbench-attention => ../../service/attention
 
 replace muxi-workbench-user => ../../service/user
 
+replace muxi-workbench-team => ../../service/team
+
 go 1.13
 
 require (
