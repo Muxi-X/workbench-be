@@ -34,7 +34,7 @@ type HandleFatherIdSet struct {
 	FatherId uint32
 }
 
-// Update ... 更新文件
+// UpdateFatherId ... 更新文件
 func UpdateFatherId(id, fatherId uint32, table string) error {
 	return DB.Self.Table(table).Where("id = ?", id).Update("father_id", fatherId).Error
 }
