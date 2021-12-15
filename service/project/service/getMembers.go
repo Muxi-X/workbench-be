@@ -19,15 +19,11 @@ func (s *Service) GetMembers(ctx context.Context, req *pb.GetMemberListRequest, 
 	resList := make([]*pb.MembersListItem, 0)
 
 	for _, item := range list {
-		groupName, err := GetGroupNameFromTeamService(item.GroupID)
-		if err != nil {
-			return e.ServerErr(errno.ErrDatabase, err.Error())
-		}
 		resList = append(resList, &pb.MembersListItem{
 			Id:        item.ID,
 			Name:      item.Name,
 			Avatar:    item.Avatar,
-			GroupName: groupName,
+			GroupName: item.GroupName,
 			Role:      item.Role,
 		})
 	}

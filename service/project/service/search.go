@@ -23,7 +23,7 @@ func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.Sea
 	var list []*model.SearchResult
 
 	if req.Type == 0 { // 在文档文件title中查询关键字
-		titleList, count, err := model.SearchTitle(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
+		titleList, count, err := model.SearchTitle(projectIDs, req.Keyword, req.Offset, req.Limit, req.Pagination)
 		if err != nil {
 			return e.ServerErr(errno.ErrDatabase, err.Error())
 		}
@@ -32,7 +32,7 @@ func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.Sea
 		res.Count = count
 
 	} else if req.Type == 1 { // 在文档content和title中查询关键字
-		contentList, count, err := model.SearchContent(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
+		contentList, count, err := model.SearchContent(projectIDs, req.Keyword, req.Offset, req.Limit, req.Pagination)
 		if err != nil {
 			return e.ServerErr(errno.ErrDatabase, err.Error())
 		}

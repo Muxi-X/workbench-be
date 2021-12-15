@@ -16,7 +16,7 @@ type SearchResult struct {
 	Time        string `json:"time" gorm:"column:create_time"`
 }
 
-func SearchTitle(projectIDs []uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, uint32, error) {
+func SearchTitle(projectIDs []uint32, keyword string, offset, limit uint32, pagination bool) ([]*SearchResult, uint32, error) {
 	var count uint32
 	var record []*SearchResult
 	key := "%" + keyword + "%"
@@ -35,10 +35,6 @@ func SearchTitle(projectIDs []uint32, keyword string, offset, limit, lastID uint
 			limit = constvar.DefaultLimit
 		}
 		query = query.Offset(offset).Limit(limit)
-
-		// if lastID != 0 {
-		// 	query = query.Where("projects.id < ?", lastID) // TODO
-		// }
 	}
 
 	err := query.Scan(&record).Count(&count).Error
@@ -46,7 +42,7 @@ func SearchTitle(projectIDs []uint32, keyword string, offset, limit, lastID uint
 	return record, count, err
 }
 
-func SearchContent(projectIDs []uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, uint32, error) {
+func SearchContent(projectIDs []uint32, keyword string, offset, limit uint32, pagination bool) ([]*SearchResult, uint32, error) {
 	var count uint32
 	var record []*SearchResult
 	key := "%" + keyword + "%"
@@ -65,10 +61,6 @@ func SearchContent(projectIDs []uint32, keyword string, offset, limit, lastID ui
 			limit = constvar.DefaultLimit
 		}
 		query = query.Offset(offset).Limit(limit)
-
-		// if lastID != 0 {
-		// 	query = query.Where("projects.id < ?", lastID) // TODO
-		// }
 	}
 
 	err := query.Scan(&record).Count(&count).Error

@@ -418,10 +418,9 @@ message SearchRequest {
   uint32 type = 1;
   string keyword = 2;
   uint32 user_id = 3;
-  uint32 last_id = 4;
+  bool pagination = 4;
   uint32 offset = 5;
   uint32 limit = 6;
-  bool pagination = 7;
 }
 
 message SearchResult {

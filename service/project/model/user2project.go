@@ -51,11 +51,12 @@ func GetProjectUserCount(id uint32) (uint32, error) {
 
 // MemberListItem ... 项目成员列表项
 type MemberListItem struct {
-	ID      uint32 `json:"id" gorm:"column:user_id;not null" binding:"required"`
-	Name    string `json:"name" gorm:"column:name;" binding:"required"`
-	Avatar  string `json:"avatar" gorm:"column:avatar;" binding:"required"`
-	GroupID uint32 `json:"groupName" gorm:"column:group_id;" binding:"required"`
-	Role    uint32 `json:"role" gorm:"column:role;" binding:"required"`
+	ID        uint32 `json:"id" gorm:"column:user_id;not null" binding:"required"`
+	Name      string `json:"name" gorm:"column:name;" binding:"required"`
+	Avatar    string `json:"avatar" gorm:"column:avatar;" binding:"required"`
+	GroupID   uint32 `json:"group_id" gorm:"column:group_id;" binding:"required"`
+	GroupName string `json:"group_name" gorm:"column:group_name;" binding:"required"`
+	Role      uint32 `json:"role" gorm:"column:role;" binding:"required"`
 }
 
 // GetUserToProjectByUser ... 根据用户 id 获取项目-成员关系
@@ -115,7 +116,10 @@ func GetProjectMemberList(projectID, offset, limit, lastID uint32, pagination bo
 
 	list := make([]*MemberListItem, 0)
 
-	query := m.DB.Self.Table("user2projects").Where("user2projects.project_id = ?", projectID).Select("user2projects.*, users.name, users.avatar, users.role, users.group_id").Joins("left join users on user2projects.user_id = users.id").Order("users.id")
+	query := m.DB.Self.Table("user2projects").Where("user2projects.project_id = ?", projectID).Select("user2projects.*, users.name, users.avatar, users.role, users.group_id, groups.name group_name").
+		Joins("left join users on user2projects.user_id = users.id").
+		Joins("left join groups on groups.id = users.group_id").
+		Order("users.id")
 
 	if pagination {
 		if limit == 0 {

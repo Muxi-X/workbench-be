@@ -77,7 +77,7 @@ func ListTrashbin(offset, limit uint32) ([]*TrashbinListItem, error) {
 
 	trashbinList := make([]*TrashbinListItem, 0)
 
-	query := m.DB.Self.Table("trashbin").Select("file_id,file_type,name").Where("re = 0").Offset(offset).Limit(limit).Order("id desc")
+	query := m.DB.Self.Table("trashbin").Where("re = 0").Offset(offset).Limit(limit).Order("id desc")
 
 	if err := query.Scan(&trashbinList).Error; err != nil {
 		return trashbinList, err
