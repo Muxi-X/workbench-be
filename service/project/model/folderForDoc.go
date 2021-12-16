@@ -57,7 +57,7 @@ func (u *FolderForDocModel) Update() error {
 // GetFolderForDocModel ... 获取文档文件夹
 func GetFolderForDocModel(id uint32) (*FolderForDocDetail, error) {
 	s := &FolderForDocDetail{}
-	d := m.DB.Self.Select("foldersformds.*, c.name as creator").Joins("left join users c on c.id = foldersformds.creator_id").Where("id = ? AND re = 0", id).First(&s)
+	d := m.DB.Self.Select("foldersformds.*, u.name as creator").Joins("left join users u on u.id = foldersformds.creator_id").Where("u.id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 
