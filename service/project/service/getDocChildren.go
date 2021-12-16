@@ -46,10 +46,6 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 				if err != nil {
 					return e.ServerErr(errno.ErrDatabase, err.Error())
 				}
-				doc.Creator, err = GetInfoFromUserService(doc.CreatorID)
-				if err != nil {
-					return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
-				}
 				list = append(list, &pb.Children{
 					Id:          doc.ID,
 					Type:        false,
@@ -63,15 +59,11 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 				if err != nil {
 					return e.ServerErr(errno.ErrDatabase, err.Error())
 				}
-				creatorName, err := GetInfoFromUserService(folder.CreatorID)
-				if err != nil {
-					return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
-				}
 				list = append(list, &pb.Children{
 					Id:          folder.ID,
 					Type:        true,
 					Name:        folder.Name,
-					CreatorName: creatorName,
+					CreatorName: folder.Creator,
 					CreatTime:   folder.CreateTime,
 					// TODO Path:        doc.FatherId,根据fatherId一路找上去
 				})

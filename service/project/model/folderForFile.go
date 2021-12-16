@@ -9,6 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+// FolderForFileDetail ... 文件文件夹详情
+type FolderForFileDetail struct {
+	Creator string `json:"creator" gorm:"column:creator;not null" binding:"required"`
+	FolderForFileModel
+}
+
 // FolderForFileInfo ... 文件文件夹信息
 type FolderForFileInfo struct {
 	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
@@ -48,8 +54,8 @@ func (u *FolderForFileModel) Update() error {
 }
 
 // GetFolderForFileModel ... 获取文件文件夹
-func GetFolderForFileModel(id uint32) (*FolderForFileModel, error) {
-	s := &FolderForFileModel{}
+func GetFolderForFileModel(id uint32) (*FolderForFileDetail, error) {
+	s := &FolderForFileDetail{}
 	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }

@@ -15,6 +15,7 @@ func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *
 	t := time.Now()
 
 	doc := model.DocModel{
+		CreatorID:    req.UserId,
 		Name:         req.Title,
 		Content:      req.Content,
 		Re:           false,

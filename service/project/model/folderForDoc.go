@@ -9,6 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+// FolderForDocDetail ... 文档文件夹详情
+type FolderForDocDetail struct {
+	Creator string `json:"creator" gorm:"column:creator;not null" binding:"required"`
+	FolderForDocModel
+}
+
 // FolderForDocInfo ... 文档文件夹信息
 type FolderForDocInfo struct {
 	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
@@ -49,9 +55,9 @@ func (u *FolderForDocModel) Update() error {
 }
 
 // GetFolderForDocModel ... 获取文档文件夹
-func GetFolderForDocModel(id uint32) (*FolderForDocModel, error) {
-	s := &FolderForDocModel{}
-	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
+func GetFolderForDocModel(id uint32) (*FolderForDocDetail, error) {
+	s := &FolderForDocDetail{}
+	d := m.DB.Self.Select("foldersformds.*, c.name as creator").Joins("left join users c on c.id = foldersformds.creator_id").Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 
@@ -65,7 +71,7 @@ func GetFolderForDocInfoByIds(ids []uint32) ([]*FolderForDocInfo, error) {
 // GetDocChildrenById ... 获取子文档/夹
 func GetDocChildrenById(id uint32) (*FolderForDocChildren, error) {
 	s := &FolderForDocChildren{}
-	d := m.DB.Self.Table("foldersformds").Select("children").Where("id = ? AND re = 0", id).Find(&s)
+	d := m.DB.Self.Table("foldersformds").Where("id = ? AND re = 0", id).Find(&s)
 	return s, d.Error
 }
 

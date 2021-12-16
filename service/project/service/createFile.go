@@ -19,6 +19,7 @@ func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res
 	hashName := req.Url[index+1:]
 
 	file := model.FileModel{
+		CreatorID:  req.UserId,
 		Name:       hashName,
 		RealName:   req.Name,
 		Re:         false,
