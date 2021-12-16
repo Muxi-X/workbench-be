@@ -53,10 +53,17 @@ func (u *FolderForFileModel) Update() error {
 	return m.DB.Self.Save(u).Error
 }
 
-// GetFolderForFileModel ... 获取文件文件夹
-func GetFolderForFileModel(id uint32) (*FolderForFileDetail, error) {
+// GetFolderForFileDetail ... 获取文件文件夹详情
+func GetFolderForFileDetail(id uint32) (*FolderForFileDetail, error) {
 	s := &FolderForFileDetail{}
 	d := m.DB.Self.Select("foldersforfiles.*, u.name as creator").Joins("left join users u on u.id = foldersforfiles.create_id").Where("foldersforfiles.id = ? AND re = 0", id).First(&s)
+	return s, d.Error
+}
+
+// GetFolderForFileModel ... 获取文件文件夹
+func GetFolderForFileModel(id uint32) (*FolderForFileModel, error) {
+	s := &FolderForFileModel{}
+	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
 }
 

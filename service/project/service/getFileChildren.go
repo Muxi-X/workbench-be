@@ -51,7 +51,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 					// TODO Path:        doc.FatherId,根据fatherId一路找上去
 				})
 			} else {
-				folder, err := model.GetFolderForFileModel(uint32(id))
+				folder, err := model.GetFolderForFileDetail(uint32(id))
 				if err != nil {
 					return e.ServerErr(errno.ErrDatabase, err.Error())
 				}

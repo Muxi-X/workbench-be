@@ -73,8 +73,9 @@ func GetInfoFromUserService(id uint32) (string, error) {
 }
 
 // DeleteAttentionsFromAttentionService delete linked-attentions when file was deleted from attention-service
-func DeleteAttentionsFromAttentionService(id uint32, kind uint32) error {
+func DeleteAttentionsFromAttentionService(id uint32, kind, userID uint32) error {
 	req := &apb.PushRequest{
+		UserId:   userID,
 		FileId:   id,
 		FileKind: kind,
 	}

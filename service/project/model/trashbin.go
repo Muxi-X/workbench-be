@@ -111,9 +111,11 @@ func GetDocChildFolder(id uint32, res *[]string) error {
 
 	// 并入结果集
 	*res = append(*res, fmt.Sprintf("%d-%d", id, constvar.DocFolderCode))
-
 	children := docFolder.Children
 	raw := strings.Split(children, ",")
+	if len(raw) <= 1 {
+		return nil
+	}
 	for _, v := range raw {
 		r := strings.Split(v, "-")
 		if r[1] == "1" {

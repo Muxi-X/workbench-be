@@ -59,7 +59,7 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 	}
 
 	for _, doc := range list {
-		err = DeleteAttentionsFromAttentionService(doc.ID, uint32(constvar.DocCode))
+		err = DeleteAttentionsFromAttentionService(doc.ID, uint32(constvar.DocCode), req.UserId)
 		if err != nil {
 			return e.ServerErr(errno.ErrDatabase, err.Error())
 		}

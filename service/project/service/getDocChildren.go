@@ -55,7 +55,7 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 					// TODO Path:        doc.FatherId,根据fatherId一路找上去
 				})
 			} else {
-				folder, err := model.GetFolderForDocModel(uint32(id))
+				folder, err := model.GetFolderForDocDetail(uint32(id))
 				if err != nil {
 					return e.ServerErr(errno.ErrDatabase, err.Error())
 				}

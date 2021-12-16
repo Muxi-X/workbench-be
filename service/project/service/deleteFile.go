@@ -54,7 +54,7 @@ func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb
 	}
 
 	// 向取消关注发起请求
-	err = DeleteAttentionsFromAttentionService(req.Id, uint32(constvar.FileCode))
+	err = DeleteAttentionsFromAttentionService(req.Id, uint32(constvar.FileCode), req.UserId)
 	if err != nil {
 		return err
 	}
