@@ -124,7 +124,7 @@ func DeleteFileFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isF
 	t := time.Now().Unix()
 	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
 
-	if err := trashbin.Create(); err != nil {
+	if err := tx.Create(trashbin).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

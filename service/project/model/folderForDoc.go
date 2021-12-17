@@ -126,7 +126,7 @@ func DeleteDocFolder(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFa
 	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
 
 	// 插入回收站
-	if err := trashbin.Create(); err != nil {
+	if err := tx.Create(trashbin).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
