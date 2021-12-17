@@ -36,7 +36,7 @@ func AddChildren(children string, id, childrenPositionIndex, isFolder uint32) (s
 	} else if count+1 == int(childrenPositionIndex) { // 插在结尾
 		children = fmt.Sprintf("%s,%d-%d", children, id, isFolder)
 	} else {
-		return "", errors.New("Invalid children position index.")
+		return "", errors.New("invalid children position index")
 	}
 
 	return children, nil
@@ -53,7 +53,7 @@ func DeleteChildren(children string, id uint32, isFolder uint8) (string, error) 
 	if nextIndex == -1 { // 找不到，说明当前文件是最后的文件
 		children = children[:index]
 	} else { // 找到了，说明是中间的文件
-		children = children[:index] + children[nextIndex:]
+		children = children[:index] + children[index+nextIndex+1:]
 	}
 
 	return children, nil

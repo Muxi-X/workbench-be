@@ -25,7 +25,7 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param id path int true "file_id"
-// @Param object body DeleteFolderRequest true "delete_trashbin_request"
+// @Param object body DeleteTrashbinRequest true "delete_trashbin_request"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response

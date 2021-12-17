@@ -13,7 +13,7 @@ import (
 
 type UrlModel struct {
 	Url string `json:"url"`
-}
+} // @name UrlModel
 
 // Upload
 // @Tags loadFile
@@ -35,6 +35,7 @@ func Upload(c *gin.Context) {
 		SendError(c, errno.ErrGetFile, nil, err.Error(), GetLine())
 		return
 	}
+
 	dataLen := header.Size
 	id, _ := c.Get("userID")
 
@@ -43,5 +44,8 @@ func Upload(c *gin.Context) {
 		SendError(c, errno.ErrUploadFile, nil, err.Error(), GetLine())
 		return
 	}
-	SendResponse(c, nil, UrlModel{Url: url})
+
+	SendResponse(c, nil, &UrlModel{
+		Url: url,
+	})
 }

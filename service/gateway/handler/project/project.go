@@ -8,22 +8,22 @@ type UpdateFilePositionRequest struct {
 	FatherType            uint32
 	Type                  uint8
 	ChildrenPositionIndex uint32
-} //@name UpdateFilePositionRequest
+} // @name UpdateFilePositionRequest
 
 // DeleteFolderRequest ... 删除文件夹请求，文档文件共用
 type DeleteFolderRequest struct {
 	Id uint32 `json:"id"`
-} //@name DeleteFolderRequest
+} // @name DeleteFolderRequest
 
 // DeleteDocCommentRequest ... 删除文档评论请求
 type DeleteDocCommentRequest struct {
 	ProjectId uint32 `json:"project_id"`
-} //@name DeleteDocCommentRequest
+} // @name DeleteDocCommentRequest
 
 // DeleteTrashbinRequest ... 删除回收站请求
 type DeleteTrashbinRequest struct {
 	Type uint32 `json:"type"`
-} //@name DeleteTrashbinRequest
+} // @name DeleteTrashbinRequest
 
 // RemoveTrashbinRequest ... 恢复回收站文件请求
 type RemoveTrashbinRequest struct {
@@ -31,57 +31,57 @@ type RemoveTrashbinRequest struct {
 	FatherId              uint32 `json:"fatherId"`
 	ChildrenPositionIndex uint32 `json:"children_position_index"`
 	IsFatherProject       bool   `json:"is_father_project"`
-} //@name RemoveTrashbinRequest
+} // @name RemoveTrashbinRequest
 
-// Trashbin
+// Trashbin ... 回收站
 type Trashbin struct {
 	Id         uint32 `json:"id"`
 	Type       uint32 `json:"type"`
 	Name       string `json:"name"`
 	DeleteTime string `json:"delete_time"`
 	CreateTime string `json:"create_time"`
-} //@name Trashbin
+} // @name Trashbin
 
 // GetTrashbinResponse ... 获取回收站资源响应
 type GetTrashbinResponse struct {
 	Count uint32      `json:"count"`
 	List  []*Trashbin `json:"list"`
-} //@name GetTrashbinResponse
+} // @name GetTrashbinResponse
 
 // UpdateFileRequest ... 修改文件请求
 type UpdateFileRequest struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
-} //@name UpdateFileRequest
+} // @name UpdateFileRequest
 
 type CreateProjectRequest struct {
 	Name     string   `json:"name"`
 	Intro    string   `json:"intro"`
 	UserList []uint32 `json:"user_list"`
-} //@name CreateProjectRequest
+} // @name CreateProjectRequest
 
 // UpdateFolderRequest ... 修改文档夹名字请求
 type UpdateFolderRequest struct {
 	Name string `json:"name"`
-} //@name UpdateFolderRequest
+} // @name UpdateFolderRequest
 
 // CreateFolderRequest ... 新建文件夹请求(文档夹和文件夹共用)
 type CreateFolderRequest struct {
 	FatherId              uint32 `json:"father_id"`
 	Name                  string `json:"name"`
 	ChildrenPositionIndex uint32 `json:"children_position_index"`
-} //@name CreateFolderRequest
+} // @name CreateFolderRequest
 
 // CreateDocCommentRequest ... 创建文档评论请求
 type CreateDocCommentRequest struct {
 	Content string `json:"content"`
-} //@name CreateDocCommentRequest
+} // @name CreateDocCommentRequest
 
 // UpdateDocCommentRequest ... 修改文档评论请求
 type UpdateDocCommentRequest struct {
 	Content   string `json:"content"`
 	ProjectId uint32 `json:"project_id"`
-} //@name UpdateDocCommentRequest
+} // @name UpdateDocCommentRequest
 
 // DocComment
 type DocComment struct {
@@ -91,13 +91,13 @@ type DocComment struct {
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
 	Content  string `json:"content"`
-} //@name DocComment
+} // @name DocComment
 
 // DocCommentListResponse ... 获取文档评论响应
 type DocCommentListResponse struct {
 	Count       uint32       `json:"count"`
 	CommentList []DocComment `json:"comment_list"`
-} //@name DocCommentListResponse
+} // @name DocCommentListResponse
 
 // GetProjectInfoResponse ... 获取项目详情响应
 type GetProjectInfoResponse struct {
@@ -109,20 +109,20 @@ type GetProjectInfoResponse struct {
 	FileChildren []*FileChildrenItem `json:"file_children"`
 	Time         string              `json:"time"`
 	CreatorName  string              `json:"creator_name"`
-} //@name GetProjectInfoResponse
+} // @name GetProjectInfoResponse
 
 // ProjectRequest ... 修改项目详情请求
 type ProjectUpdateRequest struct {
 	ProjectName string `json:"project_name"`
 	Intro       string `json:"intro"`
-} //@name ProjectUpdateRequest
+} // @name ProjectUpdateRequest
 
 // ProjectListItem
 type ProjectListItem struct {
 	Id   uint32 `json:"id"`
 	Name string `json:"name"`
 	Logo string `json:"logo"`
-} //@name ProjectListItem
+} // @name ProjectListItem
 
 // MemberListItem
 type MemberListItem struct {
@@ -131,31 +131,31 @@ type MemberListItem struct {
 	Avatar    string `json:"avatar"`
 	GroupName string `json:"group_name"`
 	Role      uint32 `json:"role"`
-} //@name MemberListItem
+} // @name MemberListItem
 
 // GetMemberResponse ... 获取项目成员响应
 type GetMemberResponse struct {
 	Count uint32            `json:"count"`
 	List  []*MemberListItem `json:"list"`
-} //@name GetMemberResponse
+} // @name GetMemberResponse
 
 // UpdateMemberRequest ... 修改项目成员
 type UpdateMemberRequest struct {
 	UserList []uint32 `json:"user_list"` // users' ids
-} //@name UpdateMemberRequest
+} // @name UpdateMemberRequest
 
 // GetProjectListResponse ... 获取项目列表请求
 type GetProjectListResponse struct {
 	Count uint32             `json:"count"`
 	List  []*ProjectListItem `json:"list"`
-} //@name GetProjectListResponse
+} // @name GetProjectListResponse
 
 // FileChildrenItem ... 文件树 包括和文件 文档
 type FileChildrenItem struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
 	Type bool   `json:"type"` // 判断是不是 folder 0->file 1->folder
-} //@name FileChildrenItem
+} // @name FileChildrenItem
 
 // ChildrenInfo ... 文件文档共用
 type ChildrenInfo struct {
@@ -165,13 +165,13 @@ type ChildrenInfo struct {
 	CreatTime   string `json:"creat_time"`
 	CreatorName string `json:"creator_name"`
 	Path        string `json:"path"`
-} //@name ChildrenInfo
+} // @name ChildrenInfo
 
 // GetFileChildrenResponse ... 文件文档共用
 type GetFileChildrenResponse struct {
 	Count        uint32          `json:"count"`
 	FileChildren []*ChildrenInfo `json:"file_children"`
-} //@name GetFileChildrenResponse
+} // @name GetFileChildrenResponse
 
 // UpdateFileChildrenRequest ... 文件文档共用
 type UpdateFileChildrenRequest struct {
@@ -190,7 +190,7 @@ type CreateFileRequest struct {
 	Url                   string `json:"url"`
 	FatherId              uint32 `json:"father_id"`
 	ChildrenPositionIndex uint32 `json:"children_position_index"`
-} //@name CreateFileRequest
+} // @name CreateFileRequest
 
 // GetFileDetailResponse ... 获取文件详情响应
 type GetFileDetailResponse struct {
@@ -198,12 +198,12 @@ type GetFileDetailResponse struct {
 	Url        string `json:"url"`
 	Creator    string `json:"creator"`
 	CreateTime string `json:"create_time"`
-} //@name GetFileDetailResponse
+} // @name GetFileDetailResponse
 
 // DeleteFileRequest ... 删除文件请求
 type DeleteFileRequest struct {
 	FileName string `json:"file_name"`
-} //@name DeleteFileRequest
+} // @name DeleteFileRequest
 
 // CreateDocRequest ... 创建文档请求
 type CreateDocRequest struct {
@@ -212,7 +212,7 @@ type CreateDocRequest struct {
 	DocName               string `json:"doc_name"`
 	FatherID              uint32 `json:"father_id"`               // 父节点 id
 	ChildrenPositionIndex uint32 `json:"children_position_index"` // 子节点的位置
-} //@name CreateDocRequest
+} // @name CreateDocRequest
 
 // GetDocDetailResponse ... 获取文档详情请求
 type GetDocDetailResponse struct {
@@ -223,35 +223,35 @@ type GetDocDetailResponse struct {
 	CreateTime   string `json:"create_time"`
 	LastEditor   string `json:"last_editor"`
 	LastEditTime string `json:"last_edit_time"`
-} //@name GetDocDetailResponse
+} // @name GetDocDetailResponse
 
 // 可能 feed 有用
 type DeleteDocRequest struct {
 	DocName string `json:"doc_name"`
-} //@name DeleteDocRequest
+} // @name DeleteDocRequest
 
 // UpdateDocRequest ... 修改文档请求
 type UpdateDocRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-} //@name UpdateDocRequest
+} // @name UpdateDocRequest
 
 // FileInfoItem
 type FileInfoItem struct {
 	Id   uint32 `json:"id"`
 	Name string `json:"name"`
-} //@name FileInfoItem
+} // @name FileInfoItem
 
 // GetFileInfoListResponse ... 获取文件信息，包括文件 文档 文件夹
 type GetFileInfoListResponse struct {
 	Count uint32          `json:"count"`
 	List  []*FileInfoItem `json:"list"`
-} //@name GetFileInfoListResponse
+} // @name GetFileInfoListResponse
 
 // GetProjectIdsForUserResponse ... 获取成员的所有项目响应
 type GetProjectIdsForUserResponse struct {
 	Ids []uint32 `json:"ids"`
-} //@name GetProjectIdsForUserResponse
+} // @name GetProjectIdsForUserResponse
 
 type SearchRequest struct {
 	Type       uint32 `json:"type"`
@@ -260,7 +260,7 @@ type SearchRequest struct {
 	Offset     uint32 `json:"offset"`
 	Limit      uint32 `json:"limit"`
 	Pagination bool   `json:"pagination"`
-} //@name SearchRequest
+} // @name SearchRequest
 
 type SearchResult struct {
 	Id          uint32 `json:"id"`
@@ -269,7 +269,7 @@ type SearchResult struct {
 	UserName    string `json:"user_name"`
 	ProjectName string `json:"project_name"`
 	Time        string `json:"time"`
-} //@name SearchResult
+} // @name SearchResult
 
 type SearchResponse struct {
 	List  []*SearchResult `json:"list"`

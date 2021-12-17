@@ -23,7 +23,7 @@ type TrashbinModel struct {
 	CreateTime string `json:"create_time" gorm:"column:create_time;" binding:"required"`
 }
 
-// TrashbinListItem
+// TrashbinListItem ...
 type TrashbinListItem struct {
 	FileId     uint32 `json:"file_id" gorm:"column:file_id;" binding:"required"`
 	FileType   uint8  `json:"file_type" gorm:"column:file_type;" binding:"required"`
@@ -42,7 +42,7 @@ func (u *TrashbinModel) Create() error {
 
 // DeleteTrashbin ... 用户删除回收站的文件,修改 re 字段使对用户不可见
 func DeleteTrashbin(fileId uint32, fileType uint8) error {
-	return m.DB.Self.Table("trashbin").Where("file_id AND file_type= ?", fileId, fileType).Update("re", "1").Error
+	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ?", fileId, fileType).Update("re", "1").Error
 }
 
 // DeleteTrashbinRecord 删除记录

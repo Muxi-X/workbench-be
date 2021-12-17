@@ -3,13 +3,13 @@ package status
 // LikeRequest 点赞进度请求
 type LikeRequest struct {
 	Liked bool `json:"liked"`
-} //@name LikeRequest
+} // @name LikeRequest
 
 // CreateRequest 创建进度请求
 type CreateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-} //@name CreateRequest
+} // @name CreateRequest
 
 type Comment struct {
 	Cid      uint32 `json:"cid"`
@@ -18,13 +18,13 @@ type Comment struct {
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
 	Content  string `json:"content"`
-} //@name Comment
+} // @name Comment
 
 // CommentListResponse 评论列表响应
 type CommentListResponse struct {
 	Count       uint32    `json:"count"`
 	CommentList []Comment `json:"commentlist"`
-} //@name CommentListResponse
+} // @name CommentListResponse
 
 // GetResponse 获得进度实体响应
 type GetResponse struct {
@@ -32,23 +32,23 @@ type GetResponse struct {
 	Title     string `json:"title"`
 	Content   string `json:"content"`
 	UserId    uint32 `json:"user_id"`
-	UserName string `json:"user_name"`
-	Avatar string `json:"avatar"`
+	UserName  string `json:"user_name"`
+	Avatar    string `json:"avatar"`
 	Time      string `json:"time"`
 	Liked     bool   `json:"liked"`
 	LikeCount uint32 `json:"like_count"`
-} //@name GetResponse
+} // @name GetResponse
 
 // UpdateRequest 编辑进度请求
 type UpdateRequest struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
-} //@name UpdateRequest
+} // @name UpdateRequest
 
 // DeleteRequest 删除进度请求
 type DeleteRequest struct {
 	Title string `json:"title"`
-} //@name DeleteRequest
+} // @name DeleteRequest
 
 type Status struct {
 	Id           uint32 `json:"id"`
@@ -60,21 +60,21 @@ type Status struct {
 	Avatar       string `json:"avatar"`
 	Username     string `json:"username"`
 	Liked        bool   `json:"liked"`
-} //@name Status
+} // @name Status
 
 // StatusListResponse 获取进度列表响应
 type StatusListResponse struct {
 	Count  uint32   `json:"count"`
 	Status []Status `json:"stauts"`
-} //@name StatusListResponse
+} // @name StatusListResponse
 
 // CreateCommentRequest 创建评论请求
 type CreateCommentRequest struct {
 	Content string `json:"content"`
-} //@name CreateCommentRequest
+} // @name CreateCommentRequest
 
 // DeleteCommentRequest 删除评论请求
 type DeleteCommentRequest struct {
 	Title    string `json:"title"`
 	StatusId uint32 `json:"status_id"`
-} //@name DeleteCommentRequest
+} // @name DeleteCommentRequest
