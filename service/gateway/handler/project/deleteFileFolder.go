@@ -21,7 +21,6 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param object body DeleteFolderRequest true "delete_folder_request"
 // @Param id path int true "file_folder_id"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} handler.Response
@@ -35,13 +34,6 @@ func DeleteFileFolder(c *gin.Context) {
 	folderId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
-		return
-	}
-
-	// 获取请求
-	var req DeleteFolderRequest
-	if err := c.Bind(&req); err != nil {
-		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
