@@ -1700,15 +1700,6 @@
                         "required": true
                     },
                     {
-                        "description": "delete_folder_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DeleteFolderRequest"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "doc_folder_id",
                         "name": "id",
@@ -2006,15 +1997,6 @@
                         "required": true
                     },
                     {
-                        "description": "delete_folder_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DeleteFolderRequest"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "file_folder_id",
                         "name": "id",
@@ -2078,7 +2060,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/loadFile.UrlModel"
+                            "$ref": "#/definitions/UrlModel"
                         }
                     }
                 ],
@@ -2086,7 +2068,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/loadFile.UrlModel"
+                            "$ref": "#/definitions/UrlModel"
                         }
                     },
                     "401": {
@@ -2137,7 +2119,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/loadFile.UrlModel"
+                            "$ref": "#/definitions/UrlModel"
                         }
                     },
                     "401": {
@@ -2618,7 +2600,7 @@
                 "tags": [
                     "project"
                 ],
-                "summary": "searches from title of doc and file or content of doc",
+                "summary": "searches from title of doc and file or content of doc api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4203,7 +4185,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/DeleteFolderRequest"
+                            "$ref": "#/definitions/DeleteTrashbinRequest"
                         }
                     },
                     {
@@ -4773,6 +4755,14 @@
                 }
             }
         },
+        "DeleteTrashbinRequest": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
         "DocComment": {
             "type": "object",
             "properties": {
@@ -4799,7 +4789,7 @@
         "DocCommentListResponse": {
             "type": "object",
             "properties": {
-                "commentlist": {
+                "comment_list": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/DocComment"
@@ -5376,9 +5366,6 @@
                 "keyword": {
                     "type": "string"
                 },
-                "last_id": {
-                    "type": "integer"
-                },
                 "limit": {
                     "type": "integer"
                 },
@@ -5654,6 +5641,14 @@
                 }
             }
         },
+        "UrlModel": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "User": {
             "type": "object",
             "properties": {
@@ -5711,14 +5706,6 @@
                     "type": "integer"
                 },
                 "tel": {
-                    "type": "string"
-                }
-            }
-        },
-        "loadFile.UrlModel": {
-            "type": "object",
-            "properties": {
-                "url": {
                     "type": "string"
                 }
             }
