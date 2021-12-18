@@ -14,7 +14,7 @@ import (
 // 删除回收站表 同步删除 redis 恢复文件树
 func (s *Service) UpdateTrashbin(ctx context.Context, req *pb.RemoveTrashbinRequest, res *pb.Response) error {
 	if err := model.RecoverTrashbin(m.DB.Self, req.Id, uint8(req.Type),
-		req.IsFatherProject, req.FatherId, req.ChildrenPositionIndex); err != nil {
+		req.IsFatherProject, req.FatherId, req.ChildrenPositionIndex, req.ProjectId); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

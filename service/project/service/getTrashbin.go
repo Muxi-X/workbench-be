@@ -13,7 +13,7 @@ import (
 func (s *Service) GetTrashbin(ctx context.Context, req *pb.GetTrashbinRequest, res *pb.GetTrashbinResponse) error {
 	var item []*pb.Trashbin
 
-	list, err := model.ListTrashbin(req.Offset, req.Limit)
+	list, err := model.ListTrashbin(req.Offset, req.Limit, req.ProjectId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

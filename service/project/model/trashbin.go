@@ -21,6 +21,7 @@ type TrashbinModel struct {
 	ExpiresAt  int64  `json:"expires_at" gorm:"column:expires_at;" binding:"required"`
 	DeleteTime string `json:"delete_time" gorm:"column:delete_time;" binding:"required"`
 	CreateTime string `json:"create_time" gorm:"column:create_time;" binding:"required"`
+	ProjectID  uint32 `json:"project_id" gorm:"column:project_id;" binding:"required"`
 }
 
 // TrashbinListItem ...
@@ -41,8 +42,8 @@ func (u *TrashbinModel) Create() error {
 }
 
 // DeleteTrashbin ... 用户删除回收站的文件,修改 re 字段使对用户不可见
-func DeleteTrashbin(fileId uint32, fileType uint8) error {
-	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ?", fileId, fileType).Update("re", "1").Error
+func DeleteTrashbin(fileId uint32, fileType uint8, projectId uint32) error {
+	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ? AND project_id = ? ", fileId, fileType, projectId).Update("re", "1").Error
 }
 
 // DeleteTrashbinRecord 删除记录
@@ -51,9 +52,9 @@ func DeleteTrashbinRecord() error {
 	return m.DB.Self.Table("trashbin").Where("re = 1 or expires_at <= ?", t).Delete(&TrashbinModel{}).Error
 }
 
-// DeleteTrashbinRecordById ... 用户恢复文件调用
-func DeleteTrashbinRecordById(id uint32, fileType uint8) error {
-	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ?", id, fileType).Delete(&TrashbinModel{}).Error
+// DeleteTrashbinRecordByIdAndProjectId ... 用户恢复文件调用
+func DeleteTrashbinRecordByIdAndProjectId(id uint32, fileType uint8, projectId uint32) error {
+	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ? AND project_id", id, fileType, projectId).Delete(&TrashbinModel{}).Error
 }
 
 // GetTrashbinDeletedAndExpired ... 获取需要删除的文件列表
@@ -70,14 +71,14 @@ func GetTrashbinDeletedAndExpired() ([]*TrashbinListItem, error) {
 
 // ListTrashbin list trashbin
 // 用户调用查看
-func ListTrashbin(offset, limit uint32) ([]*TrashbinListItem, error) {
+func ListTrashbin(offset, limit, projectId uint32) ([]*TrashbinListItem, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
 
 	trashbinList := make([]*TrashbinListItem, 0)
 
-	query := m.DB.Self.Table("trashbin").Where("re = 0").Offset(offset).Limit(limit).Order("id desc")
+	query := m.DB.Self.Table("trashbin").Where("re = 0  AND project_id = ?", projectId).Offset(offset).Limit(limit).Order("id desc")
 
 	if err := query.Scan(&trashbinList).Error; err != nil {
 		return trashbinList, err
@@ -322,7 +323,7 @@ func DeleteFileFolderTrashbin(id uint32, res *[]string) error {
 
 // RecoverTrashbin ... 从回收站恢复文件
 // 事务
-func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject bool, fatherId, childrenPositionIndex uint32) error {
+func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject bool, fatherId, childrenPositionIndex, projectID uint32) error {
 	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -331,7 +332,7 @@ func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject
 	}()
 
 	// 删除回收站记录
-	if err := DeleteTrashbinRecordById(fileId, fileType); err != nil {
+	if err := DeleteTrashbinRecordByIdAndProjectId(fileId, fileType, projectID); err != nil {
 		tx.Rollback()
 		return err
 	}

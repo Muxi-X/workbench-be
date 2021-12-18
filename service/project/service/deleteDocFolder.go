@@ -42,6 +42,7 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 		Name:       item.Name,
 		DeleteTime: time.Now().Format("2006-01-02 15:04:05"),
 		CreateTime: item.CreateTime,
+		ProjectID:  req.ProjectId,
 	}
 
 	// 事务
