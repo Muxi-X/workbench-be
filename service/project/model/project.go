@@ -21,6 +21,20 @@ type ProjectModel struct {
 	CreatorId    uint32         `json:"creator_id" gorm:"column:creator_id;"`
 }
 
+type ProjectDetail struct {
+	ID           uint32         `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name         string         `json:"name" gorm:"column:name;" binding:"required"`
+	Intro        string         `json:"intro" gorm:"column:intro;" binding:"required"`
+	Time         string         `json:"time" gorm:"column:time;" binding:"required"`
+	Count        uint32         `json:"count" gorm:"column:count;" binding:"required"`
+	TeamID       uint32         `json:"teamId" gorm:"column:team_id;" binding:"required"`
+	FileChildren string         `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
+	DocChildren  string         `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
+	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;" binding:"required"`
+	CreatorId    uint32         `json:"creator_id" gorm:"column:creator_id;"`
+	CreatorName  string         `json:"creator_name" gorm:"column:creator_name"`
+}
+
 // ProjectListItem ProjectList service item
 type ProjectListItem struct {
 	ID   uint32 `json:"id" gorm:"column:project_id;not null" binding:"required"`
@@ -72,6 +86,13 @@ func (u *ProjectModel) Update() error {
 func GetProject(id uint32) (*ProjectModel, error) {
 	s := &ProjectModel{}
 	d := m.DB.Self.Where("id = ?", id).First(&s)
+	return s, d.Error
+}
+
+// GetProjectDetail ... 获取项目详情
+func GetProjectDetail(id uint32) (*ProjectDetail, error) {
+	s := &ProjectDetail{}
+	d := m.DB.Self.Table("projects").Where("projects.id = ?", id).Select("projects.*, users.name creator_name").Joins("left join users on users.id = creator_id").First(&s)
 	return s, d.Error
 }
 

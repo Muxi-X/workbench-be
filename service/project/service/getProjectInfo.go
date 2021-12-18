@@ -11,7 +11,7 @@ import (
 // GetProjectInfo ... 获取项目信息
 // 新增获取其子节点
 func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *pb.ProjectInfo) error {
-	project, err := model.GetProject(req.Id)
+	project, err := model.GetProjectDetail(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
@@ -19,14 +19,6 @@ func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *p
 	count, err := model.GetProjectUserCount(req.Id)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
-	creatorName := ""
-
-	if project.CreatorId != 0 {
-		creatorName, err = GetInfoFromUserService(project.CreatorId)
-		if err != nil {
-			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
-		}
 	}
 
 	res.Id = project.ID
@@ -36,7 +28,7 @@ func (s *Service) GetProjectInfo(ctx context.Context, req *pb.GetRequest, res *p
 	res.DocChildren = project.DocChildren
 	res.FileChildren = project.FileChildren
 	res.Time = project.Time
-	res.CreatorName = creatorName
+	res.CreatorName = project.CreatorName
 
 	return nil
 }

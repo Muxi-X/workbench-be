@@ -22,9 +22,7 @@ import (
 )
 
 func init() {
-	s.UserInit()
 	s.AttentionInit()
-	s.TeamInit()
 }
 
 func main() {

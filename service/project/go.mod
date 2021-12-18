@@ -25,7 +25,7 @@ require (
 	github.com/swaggo/swag v1.7.4
 	go.uber.org/zap v1.16.0
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
-	gorm.io/gorm v1.22.2
+	gorm.io/gorm v1.22.4
 	muxi-workbench v0.0.0-00010101000000-000000000000
 	muxi-workbench-attention v0.0.0-00010101000000-000000000000
 	muxi-workbench-team v0.0.0-00010101000000-000000000000
