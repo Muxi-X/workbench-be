@@ -118,6 +118,7 @@ message ApplicationListRequest {
     uint32 offset = 1;
     uint32 limit = 2;
     bool pagination = 3;
+    uint32 user_id = 4;
 }
 
 message ApplicationListResponse {
@@ -127,6 +128,7 @@ message ApplicationListResponse {
 
 message ApplicationRequest {
     uint32 user_id = 1;
+    uint32 team_id = 2;
 }
 
 message DeleteApplicationRequest {

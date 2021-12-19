@@ -11,7 +11,12 @@ import (
 
 // GetApplications …… 列举申请
 func (ts *TeamService) GetApplications(ctx context.Context, req *pb.ApplicationListRequest, res *pb.ApplicationListResponse) error {
-	applys, count, err := model.ListApplys(req.Offset, req.Limit, req.Pagination)
+	teamID, err := GetTeamIdByUserId(req.UserId)
+	if err != nil {
+		return e.ServerErr(errno.ErrClient, err.Error())
+	}
+
+	applys, count, err := model.ListApplys(req.Offset, req.Limit, req.Pagination, teamID)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
@@ -23,8 +28,7 @@ func (ts *TeamService) GetApplications(ctx context.Context, req *pb.ApplicationL
 
 	resList := make([]*pb.ApplyUserItem, 0)
 
-	for index := 0; index < len(userList); index++ {
-		item := userList[index]
+	for _, item := range userList {
 		resList = append(resList, &pb.ApplyUserItem{
 			Id:    item.ID,
 			Name:  item.Name,
@@ -36,7 +40,6 @@ func (ts *TeamService) GetApplications(ctx context.Context, req *pb.ApplicationL
 	res.List = resList
 
 	return nil
-
 }
 
 // GetUsersIDByApplys get usersID from applys

@@ -11,6 +11,7 @@ import (
 type ApplyModel struct {
 	ID     uint32 `json:"id" gorm:"column:id;not null"`
 	UserID uint32 `json:"user_id" gorm:"column:user_id;"`
+	TeamID uint32 `json:"team_id" gorm:"team_id"`
 }
 
 type ApplyUserItem struct {
@@ -49,23 +50,23 @@ func DeleteApply(applyList []uint32) error {
 }
 
 // ListApplys list all applys
-func ListApplys(offset uint32, limit uint32, pagination bool) ([]*ApplyModel, uint64, error) {
+func ListApplys(offset uint32, limit uint32, pagination bool, teamID uint32) ([]*ApplyModel, uint64, error) {
 	if limit == 0 {
 		limit = constvar.DefaultLimit
 	}
 
-	applicationlist := make([]*ApplyModel, 0)
+	applicationList := make([]*ApplyModel, 0)
 
-	query := m.DB.Self.Table("applys").Select("id, user_id")
+	query := m.DB.Self.Table("applys").Select("id, user_id").Where("team_id = ?", teamID)
 
 	if pagination {
 		query = query.Offset(offset).Limit(limit)
 	}
 
-	if err := query.Scan(&applicationlist).Error; err != nil {
+	if err := query.Scan(&applicationList).Error; err != nil {
 		return nil, 0, nil
 	}
 
-	count := len(applicationlist)
-	return applicationlist, uint64(count), nil
+	count := len(applicationList)
+	return applicationList, uint64(count), nil
 }

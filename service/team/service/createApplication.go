@@ -13,6 +13,7 @@ import (
 func (ts *TeamService) CreateApplication(ctx context.Context, req *pb.ApplicationRequest, res *pb.Response) error {
 	apply := &model.ApplyModel{
 		UserID: req.UserId,
+		TeamID: req.TeamId,
 	}
 
 	if err := apply.Check(); err != nil {

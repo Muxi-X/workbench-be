@@ -4,10 +4,32 @@ import (
 	"context"
 	"muxi-workbench-team/model"
 	upb "muxi-workbench-user/proto"
+	"muxi-workbench/pkg/handler"
+
+	"github.com/micro/go-micro"
+	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
+	"github.com/opentracing/opentracing-go"
 )
 
 // TeamService … 团队服务
 type TeamService struct {
+}
+
+var UserService micro.Service
+var UserClient upb.UserServiceClient
+
+// UserInit init user service
+func UserInit() {
+	UserService = micro.NewService(micro.Name("workbench.cli.user"),
+		micro.WrapClient(
+			opentracingWrapper.NewClientWrapper(opentracing.GlobalTracer()),
+		),
+		micro.WrapCall(handler.ClientErrorHandlerWrapper()),
+	)
+
+	UserService.Init()
+
+	UserClient = upb.NewUserServiceClient("workbench.service.user", UserService.Client())
 }
 
 // Init other service
@@ -63,6 +85,15 @@ func GetUsersIdByTeamId(teamID uint32) ([]uint32, error) {
 		users = append(users, item.Id)
 	}
 	return users, nil
+}
+
+// GetTeamIdByUserId get user's team by UserId
+func GetTeamIdByUserId(userID uint32) (uint32, error) {
+	user, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{
+		Id: userID,
+	})
+
+	return user.Team, err
 }
 
 // GetMemberInfo list all members of a group
