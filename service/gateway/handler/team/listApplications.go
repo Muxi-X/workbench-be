@@ -32,18 +32,15 @@ func GetApplications(c *gin.Context) {
 	log.Info("Applications list function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	var limit int
-	var page int
-	var err error
 	pagination := true
 
-	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("page", "-1"))
+	page, err := strconv.Atoi(c.DefaultQuery("page", "-1"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
@@ -52,11 +49,14 @@ func GetApplications(c *gin.Context) {
 		pagination = false
 	}
 
+	userID := c.MustGet("userID").(uint32)
+
 	// 构造 ApplicationList 请求
 	ApplicationListReq := &tpb.ApplicationListRequest{
 		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
 		Pagination: pagination,
+		UserId:     userID,
 	}
 
 	// 向 GetApplications 服务发送请求
@@ -66,15 +66,5 @@ func GetApplications(c *gin.Context) {
 		return
 	}
 
-	var resp ApplicationListResponse
-	for _, item := range listResp.List {
-		resp.ApplyList = append(resp.ApplyList, ApplyUserItem{
-			ID:    item.Id,
-			Name:  item.Name,
-			Email: item.Email,
-		})
-	}
-	resp.Count = listResp.Count
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, listResp)
 }

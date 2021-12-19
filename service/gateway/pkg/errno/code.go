@@ -28,7 +28,7 @@ var (
 
 	// project errors
 	ErrTrashbinType            = &Errno{Code: 20501, Message: "Invalid trashbin type."}
-	ErrNoProjectId             = &Errno{Code: 20502, Message: "Project service must have projectid in query."}
+	ErrNoProjectId             = &Errno{Code: 20502, Message: "Project service must have project_id in query."}
 	ErrProjectPermissionDenied = &Errno{Code: 20503, Message: "Permission denied or this project has been deleted."}
 
 	// status errors

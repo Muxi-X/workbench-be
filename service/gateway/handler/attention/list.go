@@ -26,6 +26,7 @@ import (
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Success 200 {object} AttentionListResponse
+// @Success 200 {object} attention.AttentionListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /attention/list/{id} [get]
@@ -63,34 +64,6 @@ func List(c *gin.Context) {
 		SendError(c, errno.ErrAttentionList, nil, err.Error(), GetLine())
 		return
 	}
-
-	// var list []*AttentionItem
-	// for _, item := range listResp.List {
-	// 	list = append(list, &AttentionItem{
-	// 		Id:   item.Id,
-	// 		Date: item.Date,
-	// 		Time: item.Time,
-	// 		User: &AttentionUser{
-	// 			Name:      item.User.Name,
-	// 			Id:        item.User.Id,
-	// 		},
-	// 		Doc:  &Doc{
-	// 			Id:          item.Doc.Id,
-	// 			Name:        item.Doc.Name,
-	// 			DocCreator: &AttentionUser{
-	// 				Name: item.Doc.DocCreator.Name,
-	// 				Id:   item.Doc.DocCreator.Id,
-	// 			},
-	// 			ProjectId:   item.Doc.ProjectId,
-	// 			ProjectName: item.Doc.ProjectName,
-	// 		},
-	// 	})
-	// }
-	//
-	// SendResponse(c, nil, AttentionListResponse{
-	// 	Count: listResp.Count,
-	// 	List:  list,
-	// })
 
 	SendResponse(c, nil, listResp)
 }

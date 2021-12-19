@@ -67,16 +67,5 @@ func GetGroupList(c *gin.Context) {
 		return
 	}
 
-	// 构造返回 response
-	var resp GroupListResponse
-	for _, item := range listResp.List {
-		resp.Groups = append(resp.Groups, Group{
-			ID:        item.Id,
-			Name:      item.Name,
-			UserCount: item.UserCount,
-		})
-	}
-	resp.Count = listResp.Count
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, listResp)
 }

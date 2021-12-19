@@ -66,31 +66,5 @@ func List(c *gin.Context) {
 		return
 	}
 
-	var list []*FeedItem
-	for _, item := range listResp.List {
-		list = append(list, &FeedItem{
-			Id:          item.Id,
-			Action:      item.Action,
-			ShowDivider: item.ShowDivider,
-			Date:        item.Date,
-			Time:        item.Time,
-			FeedUser: &FeedUser{
-				Name:      item.User.Name,
-				Id:        item.User.Id,
-				AvatarUrl: item.User.AvatarUrl,
-			},
-			Source: &Source{
-				Kind:        item.Source.Kind,
-				Id:          item.Source.Id,
-				Name:        item.Source.Name,
-				ProjectId:   item.Source.ProjectId,
-				ProjectName: item.Source.ProjectName,
-			},
-		})
-	}
-
-	SendResponse(c, nil, FeedListResponse{
-		Count: listResp.Count,
-		List:  list,
-	})
+	SendResponse(c, nil, listResp)
 }

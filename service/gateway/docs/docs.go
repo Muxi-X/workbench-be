@@ -4742,6 +4742,9 @@ var doc = `{
             "properties": {
                 "doc_name": {
                     "type": "string"
+                },
+                "project_name": {
+                    "type": "string"
                 }
             }
         },
@@ -4749,6 +4752,9 @@ var doc = `{
             "type": "object",
             "properties": {
                 "file_name": {
+                    "type": "string"
+                },
+                "project_name": {
                     "type": "string"
                 }
             }

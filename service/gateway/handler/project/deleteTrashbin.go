@@ -17,7 +17,6 @@ import (
 
 // DeleteTrashbin ... 删除垃圾资源 传不同的 type 删不一样的资源
 // type： 0-project 1-doc 2-file 3-doc folder 4-file folder
-// TODO: 服务逻辑上有问题，需要增加 project id 限定
 // @Summary delete a trashbin api
 // @Description 删除回收站内文件,其中 type：0-project 1-doc 2-file 3-doc folder 4-file folder
 // @Tags project
@@ -48,10 +47,12 @@ func DeleteTrashbin(c *gin.Context) {
 		return
 	}
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 发送请求
 	_, err = service.ProjectClient.DeleteTrashbin(context.Background(), &pbp.DeleteTrashbinRequest{
-		Id:   uint32(id),
-		Type: req.Type,
+		Id:        uint32(id),
+		Type:      req.Type,
+		ProjectId: projectID,
 	})
 	if err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())

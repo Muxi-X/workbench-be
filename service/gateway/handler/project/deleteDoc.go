@@ -42,7 +42,7 @@ func DeleteDoc(c *gin.Context) {
 	}
 
 	// 获取请求
-	var req DeleteDocRequest
+	var req DeleteDocRequest // 感觉有点奇怪
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -75,7 +75,7 @@ func DeleteDoc(c *gin.Context) {
 			Id:          uint32(docID),
 			Name:        req.DocName,
 			ProjectId:   projectID,
-			ProjectName: "",
+			ProjectName: req.ProjectName,
 		},
 	}
 

@@ -191,10 +191,14 @@ definitions:
     properties:
       doc_name:
         type: string
+      project_name:
+        type: string
     type: object
   DeleteFileRequest:
     properties:
       file_name:
+        type: string
+      project_name:
         type: string
     type: object
   DeleteFolderRequest:

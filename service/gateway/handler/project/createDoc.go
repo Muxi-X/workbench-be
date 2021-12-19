@@ -44,7 +44,7 @@ func CreateDoc(c *gin.Context) {
 	// 获取 userid
 	userID := c.MustGet("userID").(uint32)
 	teamID := c.MustGet("teamID").(uint32)
-	// 获取 projectid
+	// 获取 projectID
 	projectID := c.MustGet("projectID").(uint32)
 
 	createDocReq := &pbp.CreateDocRequest{

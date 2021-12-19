@@ -41,10 +41,12 @@ func DeleteFileFolder(c *gin.Context) {
 	userID := c.MustGet("userID").(uint32)
 	role := c.MustGet("role").(uint32)
 
+	projectID := c.MustGet("projectID").(uint32)
 	deleteDocFolderReq := &pbp.DeleteRequest{
-		Id:     uint32(folderId),
-		UserId: userID,
-		Role:   role,
+		Id:        uint32(folderId),
+		UserId:    userID,
+		Role:      role,
+		ProjectId: projectID,
 	}
 
 	_, err = service.ProjectClient.DeleteFileFolder(context.Background(), deleteDocFolderReq)

@@ -15,14 +15,15 @@ import (
 	"go.uber.org/zap"
 )
 
-// List ... 获取 userlist
+// List ... 获取 userList
 // @Summary get user_list api
-// @Description 通过 group 和 team 获取 userlist
+// @Description 通过 group 和 team 获取 user_list
 // @Tags user
 // @Accept  application/json
 // @Produce  application/json
 // @Param limit query int false "limit"
 // @Param page query int false "page"
+// @Param last_id query int false "last_id"
 // @Param Authorization header string true "token 用户令牌"
 // @Param object body ListRequest true "get_user_list_request"
 // @Success 200 {object} ListResponse
@@ -53,7 +54,7 @@ func List(c *gin.Context) {
 		return
 	}
 
-	lastId, err := strconv.Atoi(c.DefaultQuery("lastid", "0"))
+	lastId, err := strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
@@ -75,20 +76,5 @@ func List(c *gin.Context) {
 		return
 	}
 
-	// 构造返回 response
-	var resp = &ListResponse{Count: listResp.Count}
-	for _, item := range listResp.List {
-		resp.List = append(resp.List, User{
-			Id:       item.Id,
-			Name:     item.Name,
-			RealName: item.RealName,
-			Avatar:   item.Avatar,
-			Email:    item.Email,
-			Role:     item.Role,
-			Team:     item.Team,
-			Group:    item.Group,
-		})
-	}
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, listResp)
 }

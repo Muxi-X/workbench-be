@@ -17,7 +17,6 @@ import (
 
 // GetTrashbin ... 获取回收站文件
 // type： 0-project 1-doc 2-file 3-doc_folder 4-file_folder
-// TODO: 需要加上 project id 限制
 // @Summary get project trashbin api
 // @Description 获取项目回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)
 // @Tags project
@@ -49,10 +48,12 @@ func GetTrashbin(c *gin.Context) {
 		return
 	}
 
+	projectID := c.MustGet("projectID").(uint32)
 	// 发送请求
 	getTrashbinResp, err := service.ProjectClient.GetTrashbin(context.Background(), &pbp.GetTrashbinRequest{
-		Offset: uint32(limit * page),
-		Limit:  uint32(limit),
+		Offset:    uint32(limit * page),
+		Limit:     uint32(limit),
+		ProjectId: projectID,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

@@ -202,7 +202,8 @@ type GetFileDetailResponse struct {
 
 // DeleteFileRequest ... 删除文件请求
 type DeleteFileRequest struct {
-	FileName string `json:"file_name"`
+	FileName    string `json:"file_name"`
+	ProjectName string `json:"project_name"`
 } // @name DeleteFileRequest
 
 // CreateDocRequest ... 创建文档请求
@@ -227,7 +228,8 @@ type GetDocDetailResponse struct {
 
 // 可能 feed 有用
 type DeleteDocRequest struct {
-	DocName string `json:"doc_name"`
+	DocName     string `json:"doc_name"`
+	ProjectName string `json:"project_name"`
 } // @name DeleteDocRequest
 
 // UpdateDocRequest ... 修改文档请求

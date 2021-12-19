@@ -38,55 +38,48 @@ func List(c *gin.Context) {
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	var teamID uint32
-	var team int
-	var uid int
-	var group int
-	var limit int
-	var lastID int
-	var page int
-	var err error
 
-	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastID, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
+	lastID, err := strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 gid
-	group, err = strconv.Atoi(c.DefaultQuery("group", "0"))
+	group, err := strconv.Atoi(c.DefaultQuery("group", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 uid
-	uid, err = strconv.Atoi(c.DefaultQuery("uid", "0"))
+	uid, err := strconv.Atoi(c.DefaultQuery("uid", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取是否筛选 team
-	team, err = strconv.Atoi(c.DefaultQuery("team", "0"))
+	team, err := strconv.Atoi(c.DefaultQuery("team", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	if team == 1 {
-		// 还要获取用户 teamid
+	if team != 0 { // 好像是如果要筛选的话，就只能看见自己team的
+		// 还要获取用户 teamId
 		teamID = c.MustGet("teamID").(uint32)
 	}
 
@@ -109,21 +102,5 @@ func List(c *gin.Context) {
 		return
 	}
 
-	var resp StatusListResponse
-	for _, item := range listResp.List {
-		resp.Status = append(resp.Status, Status{
-			Id:           item.Id,
-			Title:        item.Title,
-			Content:      item.Content,
-			Time:         item.Time,
-			CommentCount: item.Comment,
-			LikeCount:    item.Like,
-			Avatar:       item.Avatar,
-			Username:     item.UserName,
-			Liked:        item.Liked,
-		})
-	}
-	resp.Count = listResp.Count
-
-	SendResponse(c, nil, resp)
+	SendResponse(c, nil, listResp)
 }

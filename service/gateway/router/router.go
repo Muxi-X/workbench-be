@@ -176,7 +176,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 		// application
 		teamRouter.POST("/application", normalRequired, team.CreateApplication)
-		teamRouter.GET("/application", adminRequired, team.GetApplications)
+		teamRouter.GET("/application/list", adminRequired, team.GetApplications)
 		teamRouter.DELETE("/application", adminRequired, team.DeleteApplication)
 	}
 

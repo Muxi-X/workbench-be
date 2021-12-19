@@ -76,7 +76,7 @@ func DeleteFile(c *gin.Context) {
 			Id:          uint32(fileID), // 暂时从前端获取
 			Name:        req.FileName,
 			ProjectId:   projectID,
-			ProjectName: "",
+			ProjectName: req.ProjectName,
 		},
 	}
 

@@ -4728,6 +4728,9 @@
             "properties": {
                 "doc_name": {
                     "type": "string"
+                },
+                "project_name": {
+                    "type": "string"
                 }
             }
         },
@@ -4735,6 +4738,9 @@
             "type": "object",
             "properties": {
                 "file_name": {
+                    "type": "string"
+                },
+                "project_name": {
                     "type": "string"
                 }
             }

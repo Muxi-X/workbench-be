@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ProjectMiddleware ... 检查用户是否有 projectid 权限
+// ProjectMiddleware ... 检查用户是否有 projectId 权限
 func ProjectMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		projectID, err := strconv.Atoi(c.DefaultQuery("project_id", "-1"))
