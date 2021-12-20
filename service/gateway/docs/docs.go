@@ -4287,7 +4287,7 @@ var doc = `{
         },
         "/user/list": {
             "get": {
-                "description": "通过 group 和 team 获取 userlist",
+                "description": "通过 group 和 team 获取 user_list",
                 "consumes": [
                     "application/json"
                 ],
@@ -4309,6 +4309,12 @@ var doc = `{
                         "type": "integer",
                         "description": "page",
                         "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
                         "in": "query"
                     },
                     {

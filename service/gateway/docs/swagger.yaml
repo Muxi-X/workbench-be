@@ -3690,7 +3690,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 通过 group 和 team 获取 userlist
+      description: 通过 group 和 team 获取 user_list
       parameters:
       - description: limit
         in: query
@@ -3699,6 +3699,10 @@ paths:
       - description: page
         in: query
         name: page
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
         type: integer
       - description: token 用户令牌
         in: header
