@@ -66,7 +66,7 @@ func ListDocComment(c *gin.Context) {
 		return
 	}
 
-	// 构造 listcomment 请求并发送
+	// 构造 listComment 请求并发送
 	listComReq := &pbp.ListDocCommentRequest{
 		DocId:  uint32(docID),
 		Offset: uint32(page * limit),

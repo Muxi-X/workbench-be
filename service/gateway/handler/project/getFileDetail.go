@@ -24,7 +24,7 @@ import (
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param file_id path int true "file_id"
-// @Param id path int true "fahter_id"
+// @Param id path int true "father_id"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} GetFileDetailResponse
 // @Failure 401 {object} handler.Response

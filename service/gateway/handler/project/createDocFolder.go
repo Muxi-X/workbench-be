@@ -14,8 +14,8 @@ import (
 )
 
 // CreateDocFolder ... 建立文档夹
-// 更新：删除 fatherType，类型根据 father_id 判定，新增 childrenpositionindex
-// @Summary create a doc folder api
+// 更新：删除 fatherType，类型根据 father_id 判定，新增 childrenPositionIndex
+// @Summary creates a doc folder api
 // @Description 新建文档夹
 // @Tags project
 // @Accept  application/json

@@ -50,8 +50,11 @@ func GetDocInfoList(c *gin.Context) {
 		ids = append(ids, uint32(id))
 	}
 
+	projectID := c.MustGet("projectID").(uint32)
+
 	resp, err := service.ProjectClient.GetDocInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
-		List: ids,
+		ProjectId: projectID,
+		List:      ids,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

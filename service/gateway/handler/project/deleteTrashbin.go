@@ -17,7 +17,7 @@ import (
 
 // DeleteTrashbin ... 删除垃圾资源 传不同的 type 删不一样的资源
 // type： 0-project 1-doc 2-file 3-doc folder 4-file folder
-// @Summary delete a trashbin api
+// @Summary deletes a trashbin api
 // @Description 删除回收站内文件,其中 type：0-project 1-doc 2-file 3-doc folder 4-file folder
 // @Tags project
 // @Accept  application/json

@@ -18,7 +18,7 @@ import (
 // DeleteProject deletes a project
 // 要求要超管权限
 // 需要 delete project 和 feed push
-// @Summary delete a project api
+// @Summary deletes a project api
 // @Description 删除项目
 // @Tags project
 // @Accept  application/json
