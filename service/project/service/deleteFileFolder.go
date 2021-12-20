@@ -49,6 +49,17 @@ func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, r
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	// TODO: 删除文件folder后要删除对应attentions
+	// 获取文件夹的file列表
+	files, err := GetFilesByChildren(item.Children)
+	if err != nil {
+		return e.ServerErr(errno.ErrDatabase, err.Error())
+	}
+
+	for _, file := range files {
+		err = DeleteAttentionsFromAttentionService(file.ID, uint32(constvar.FileCode), req.UserId)
+		if err != nil {
+			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+		}
+	}
 	return nil
 }

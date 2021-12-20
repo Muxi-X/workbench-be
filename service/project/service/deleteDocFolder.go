@@ -8,6 +8,8 @@ import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -51,19 +53,51 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	// 删除文档folder后删除对应attentions TODO 测试
-
-	// 获取文档夹的信息
-	list, err := model.GetFolderForDocInfoByIds([]uint32{req.Id})
+	// 获取文档夹的doc列表
+	docs, err := GetDocsByChildren(item.Children)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	for _, doc := range list {
+	for _, doc := range docs {
 		err = DeleteAttentionsFromAttentionService(doc.ID, uint32(constvar.DocCode), req.UserId)
 		if err != nil {
-			return e.ServerErr(errno.ErrDatabase, err.Error())
+			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
 		}
 	}
 	return nil
+}
+
+func GetDocsByChildren(children string) ([]*model.DocDetail, error) {
+	var docs []*model.DocDetail
+	raw := strings.Split(children, ",")
+	for _, v := range raw {
+		r := strings.Split(v, "-")
+		id, _ := strconv.Atoi(r[0])
+		if r[1] == "0" {
+			doc, err := model.GetDocDetail(uint32(id))
+			if err != nil {
+				return docs, e.ServerErr(errno.ErrDatabase, err.Error())
+			}
+			docs = append(docs, doc)
+		}
+	}
+	return docs, nil
+}
+
+func GetFilesByChildren(children string) ([]*model.FileDetail, error) {
+	var files []*model.FileDetail
+	raw := strings.Split(children, ",")
+	for _, v := range raw {
+		r := strings.Split(v, "-")
+		id, _ := strconv.Atoi(r[0])
+		if r[1] == "0" {
+			file, err := model.GetFileDetail(uint32(id))
+			if err != nil {
+				return files, e.ServerErr(errno.ErrDatabase, err.Error())
+			}
+			files = append(files, file)
+		}
+	}
+	return files, nil
 }

@@ -188,17 +188,17 @@ func TidyTrashbin(db *gorm.DB) error {
 	for _, v := range deletedList {
 		// 修改原表 re 字段 和 获取子文件
 		switch v.FileType {
-		case 1:
+		case constvar.DocCode:
 			err = DeleteDocTrashbin(v.FileId)
 			// 单独并入结果集
 			res = append(res, fmt.Sprintf("%d-%d", v.FileId, constvar.DocCode))
-		case 2:
+		case constvar.FileCode:
 			err = DeleteFileTrashbin(v.FileId)
 			// 单独并入结果集
 			res = append(res, fmt.Sprintf("%d-%d", v.FileId, constvar.FileCode))
-		case 3:
+		case constvar.DocFolderCode:
 			err = DeleteDocFolderTrashbin(v.FileId, &res)
-		case 4:
+		case constvar.FileFolderCode:
 			err = DeleteFileFolderTrashbin(v.FileId, &res)
 		}
 

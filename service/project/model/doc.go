@@ -148,33 +148,3 @@ func DeleteDoc(trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) e
 
 	return tx.Commit().Error
 }
-
-//
-// func SearchDocTitle(projectID uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, uint32, error) {
-// 	var count uint32
-// 	var record []*SearchResult
-// 	key := "%" + keyword + "%"
-//
-// 	query := m.DB.Self.Table("docs").Where("docs.project_id = ? AND docs.filename like ?", projectID, key).Select("user2projects.*, projects.name").Joins("left join projects on user2projects.project_id = projects.id").Order("projects.id")
-//
-// 	if pagination {
-// 		if limit == 0 {
-// 			limit = constvar.DefaultLimit
-// 		}
-// 		query = query.Offset(offset).Limit(limit)
-//
-// 		if lastID != 0 {
-// 			query = query.Where("projects.id < ?", lastID)
-// 		}
-// 	}
-//
-// 	err := query.Scan(&record).Count(&count).Error
-//
-// 	return record, count, err
-// }
-
-// func SearchDocContent(projectID uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, error) {
-// 	var record []*SearchResult
-// 	err := m.DB.Self.Table("docs").Where("project_id = ? AND content like ?", projectID, keyword).Select("name").Find(record).Error
-// 	return record, err
-// }

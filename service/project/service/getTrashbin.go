@@ -9,7 +9,6 @@ import (
 )
 
 // GetTrashbin ... 获取回收站资源
-// TODO: 回收站是项目的回收站，每个回收站只能获取到对应 project 的资源
 func (s *Service) GetTrashbin(ctx context.Context, req *pb.GetTrashbinRequest, res *pb.GetTrashbinResponse) error {
 	var item []*pb.Trashbin
 
