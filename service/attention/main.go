@@ -19,11 +19,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-func init() {
-	s.UserInit()
-	s.ProjectInit()
-}
-
 func main() {
 
 	err := config.Init("./conf/config.yaml", "WORKBENCH_ATTENTION")

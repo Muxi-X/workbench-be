@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-
 	"muxi-workbench-attention/errno"
 	"muxi-workbench-attention/model"
 	pb "muxi-workbench-attention/proto"
@@ -12,11 +11,6 @@ import (
 
 // List ... attention列表
 func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *pb.AttentionListResponse) error {
-	// get username by userId from user-service
-	userName, err := GetInfoFromUserService(req.UserId)
-	if err != nil {
-		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
-	}
 
 	// 筛选条件
 	var filter = &model.FilterParams{
@@ -31,10 +25,11 @@ func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *p
 	for _, a := range attentions {
 		var file = &model.File{}
 		if a.Kind == uint32(constvar.DocCode) {
-			file, err = GetDocFromProjectService(a.File.Id)
+			file, err = model.GetDocDetail(a.File.Id)
 		} else if a.Kind == uint32(constvar.FileCode) {
-			file, err = GetFileFromProjectService(a.File.Id)
+			file, err = model.GetFileDetail(a.File.Id)
 		}
+		file.Kind = a.Kind
 
 		if err != nil {
 			return err
@@ -44,7 +39,7 @@ func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *p
 	}
 
 	// 数据格式化
-	list, err := FormatListData(attentions, userName)
+	list, err := FormatListData(attentions)
 	if err != nil {
 		return e.ServerErr(errno.ErrFormatList, err.Error())
 	}
@@ -55,19 +50,20 @@ func (s *AttentionService) List(ctx context.Context, req *pb.ListRequest, res *p
 	return nil
 }
 
-func FormatListData(list []*model.AttentionDetail, username string) ([]*pb.AttentionItem, error) {
+func FormatListData(list []*model.AttentionDetail) ([]*pb.AttentionItem, error) {
 	var result []*pb.AttentionItem
 
 	for _, attention := range list {
 		data := &pb.AttentionItem{
 			Date: attention.TimeDay,
 			Time: attention.TimeHm,
-
 			User: &pb.User{
-				Name: username,
+				Name: attention.UserName,
 			},
 			File: &pb.File{
-				Name: attention.File.Name,
+				Id:        attention.File.Id,
+				ProjectId: attention.ProjectId,
+				Name:      attention.File.Name,
 				FileCreator: &pb.User{
 					Name: attention.File.CreatorName,
 				},
