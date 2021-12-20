@@ -17,8 +17,9 @@ type FolderForFileDetail struct {
 
 // FolderForFileInfo ... 文件文件夹信息
 type FolderForFileInfo struct {
-	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name string `json:"name" gorm:"column:filename;" binding:"required"`
+	ID        uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name      string `json:"name" gorm:"column:filename;" binding:"required"`
+	ProjectID uint32 `json:"project_id" gorm:"column:project_id;" binding:"required"`
 }
 
 type FolderForFileChildren struct {

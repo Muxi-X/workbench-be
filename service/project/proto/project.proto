@@ -349,6 +349,7 @@ message UpdateDocRequest {
 message GetInfoByIdsRequest {
   repeated uint32 list = 1;
   uint32 father_id = 2;
+  uint32 project_id = 3;
 }
 
 message FileDetail {

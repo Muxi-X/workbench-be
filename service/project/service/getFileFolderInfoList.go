@@ -29,8 +29,10 @@ func (s *Service) GetFileFolderInfoList(ctx context.Context, req *pb.GetInfoById
 
 	resList := make([]*pb.FileFolderDetail, 0)
 
-	for index := 0; index < len(scope); index++ {
-		item := list[index]
+	for _, item := range list {
+		if item.ProjectID != req.ProjectId {
+			return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+		}
 		resList = append(resList, &pb.FileFolderDetail{
 			Id:   item.ID,
 			Name: item.Name,

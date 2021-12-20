@@ -29,6 +29,9 @@ func (s *Service) GetFileInfoList(ctx context.Context, req *pb.GetInfoByIdsReque
 	resList := make([]*pb.FileInfo, 0)
 
 	for _, item := range list {
+		if item.ProjectID != req.ProjectId {
+			return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+		}
 		resList = append(resList, &pb.FileInfo{
 			Id:    item.ID,
 			Title: item.Name,

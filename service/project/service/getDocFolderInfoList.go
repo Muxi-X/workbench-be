@@ -20,7 +20,7 @@ func (s *Service) GetDocFolderInfoList(ctx context.Context, req *pb.GetInfoByIds
 	if scope == nil {
 		return e.NotFoundErr(errno.ErrNotFound, "This file has been deleted.")
 	}
-	// TODO 判断projectID
+
 	// 获取文档夹的名字信息
 	list, err := model.GetFolderForDocInfoByIds(scope)
 	if err != nil {
@@ -30,6 +30,9 @@ func (s *Service) GetDocFolderInfoList(ctx context.Context, req *pb.GetInfoByIds
 	resList := make([]*pb.DocFolderDetail, 0)
 
 	for _, item := range list {
+		if item.ProjectID != req.ProjectId {
+			return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+		}
 		resList = append(resList, &pb.DocFolderDetail{
 			Id:   item.ID,
 			Name: item.Name,

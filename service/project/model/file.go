@@ -18,8 +18,9 @@ type FileDetail struct {
 
 // FileInfo ... 文件信息
 type FileInfo struct {
-	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name string `json:"name" gorm:"column:realname;" binding:"required"`
+	ID        uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name      string `json:"name" gorm:"column:realname;" binding:"required"`
+	ProjectID uint32 `json:"project_id" gorm:"column:project_id;" binding:"required"`
 }
 
 // FileModel ... 文件物理模型

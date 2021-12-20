@@ -17,8 +17,9 @@ type FolderForDocDetail struct {
 
 // FolderForDocInfo ... 文档文件夹信息
 type FolderForDocInfo struct {
-	ID   uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name string `json:"name" gorm:"column:name;" binding:"required"`
+	ID        uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	Name      string `json:"name" gorm:"column:name;" binding:"required"`
+	ProjectID uint32 `json:"project_id" gorm:"column:project_id;" binding:"required"`
 }
 
 // FolderForDocChildren ... 子文档/夹
