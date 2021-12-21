@@ -28,6 +28,10 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 		}
 	}
 
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
+
 	// 获取 fatherId
 	isFatherProject := false
 	var fatherId uint32
@@ -69,6 +73,9 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 }
 
 func GetDocsByChildren(children string) ([]*model.DocDetail, error) {
+	if len(children) == 0 {
+		return nil, nil
+	}
 	var docs []*model.DocDetail
 	raw := strings.Split(children, ",")
 	for _, v := range raw {
@@ -83,21 +90,4 @@ func GetDocsByChildren(children string) ([]*model.DocDetail, error) {
 		}
 	}
 	return docs, nil
-}
-
-func GetFilesByChildren(children string) ([]*model.FileDetail, error) {
-	var files []*model.FileDetail
-	raw := strings.Split(children, ",")
-	for _, v := range raw {
-		r := strings.Split(v, "-")
-		id, _ := strconv.Atoi(r[0])
-		if r[1] == "0" {
-			file, err := model.GetFileDetail(uint32(id))
-			if err != nil {
-				return files, e.ServerErr(errno.ErrDatabase, err.Error())
-			}
-			files = append(files, file)
-		}
-	}
-	return files, nil
 }

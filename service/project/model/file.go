@@ -136,9 +136,3 @@ func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherP
 
 	return tx.Commit().Error
 }
-
-// func SearchFileTitle (projectID uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, error) {
-// 	var record []*SearchResult
-// 	err := m.DB.Self.Table("files").Where("project_id = ? AND filename like ?", projectID, keyword).Select("name").Find(record).Error
-// 	return record, err
-// }

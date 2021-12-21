@@ -8,6 +8,8 @@ import (
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,6 +25,10 @@ func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, r
 		if req.Role <= constvar.Normal {
 			return e.BadRequestErr(errno.ErrPermissionDenied, "")
 		}
+	}
+
+	if item.ProjectID != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
 	}
 
 	// 获取 fatherId
@@ -62,4 +68,24 @@ func (s *Service) DeleteFileFolder(ctx context.Context, req *pb.DeleteRequest, r
 		}
 	}
 	return nil
+}
+
+func GetFilesByChildren(children string) ([]*model.FileDetail, error) {
+	if len(children) == 0 {
+		return nil, nil
+	}
+	var files []*model.FileDetail
+	raw := strings.Split(children, ",")
+	for _, v := range raw {
+		r := strings.Split(v, "-")
+		id, _ := strconv.Atoi(r[0])
+		if r[1] == "0" {
+			file, err := model.GetFileDetail(uint32(id))
+			if err != nil {
+				return files, e.ServerErr(errno.ErrDatabase, err.Error())
+			}
+			files = append(files, file)
+		}
+	}
+	return files, nil
 }

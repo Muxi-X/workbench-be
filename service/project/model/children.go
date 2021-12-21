@@ -52,7 +52,7 @@ func DeleteChildren(children string, id uint32, isFolder uint8) (string, error) 
 	nextIndex := strings.Index(children[index:], ",")
 	if nextIndex == -1 { // 找不到，说明当前文件是最后的文件
 		children = children[:index]
-		if children[len(children)-1] == ',' { // 去掉末尾逗号
+		if len(children) > 0 && children[len(children)-1] == ',' { // 去掉末尾逗号
 			children = children[:len(children)-1]
 		}
 	} else { // 找到了，说明是中间的文件
