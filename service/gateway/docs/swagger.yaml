@@ -1274,7 +1274,7 @@ paths:
         name: file_id
         required: true
         type: integer
-      - description: fahter_id
+      - description: father_id
         in: path
         name: id
         required: true
@@ -1681,7 +1681,7 @@ paths:
         name: file_id
         required: true
         type: integer
-      - description: fahter_id
+      - description: father_id
         in: path
         name: id
         required: true
@@ -1909,7 +1909,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: create a doc folder api
+      summary: creates a doc folder api
       tags:
       - project
   /folder/docfolder/{id}:
@@ -2301,7 +2301,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: delete a project api
+      summary: deletes a project api
       tags:
       - project
     get:
@@ -3604,7 +3604,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: delete a trashbin api
+      summary: deletes a trashbin api
       tags:
       - project
     put:

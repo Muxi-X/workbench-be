@@ -28,6 +28,7 @@ func AddChildren(children string, id, childrenPositionIndex, isFolder uint32) (s
 
 		if count == int(childrenPositionIndex) {
 			index = k + 1 // index+1 取逗号后一位，即下一个文件的开头
+			break
 		}
 	}
 

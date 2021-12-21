@@ -31,7 +31,7 @@ import (
 // @Failure 500 {object} handler.Response
 // @Router /trashbin/{id} [delete]
 func DeleteTrashbin(c *gin.Context) {
-	log.Info("project deleteTrashbin funcation call.",
+	log.Info("project deleteTrashbin function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	// 获取 ID

@@ -672,7 +672,7 @@
                     },
                     {
                         "type": "integer",
-                        "description": "fahter_id",
+                        "description": "father_id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1276,7 +1276,7 @@
                     },
                     {
                         "type": "integer",
-                        "description": "fahter_id",
+                        "description": "father_id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1565,7 +1565,7 @@
                 "tags": [
                     "project"
                 ],
-                "summary": "create a doc folder api",
+                "summary": "creates a doc folder api",
                 "parameters": [
                     {
                         "type": "string",
@@ -2307,7 +2307,7 @@
                 "tags": [
                     "project"
                 ],
-                "summary": "delete a project api",
+                "summary": "deletes a project api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4163,7 +4163,7 @@
                 "tags": [
                     "project"
                 ],
-                "summary": "delete a trashbin api",
+                "summary": "deletes a trashbin api",
                 "parameters": [
                     {
                         "type": "string",

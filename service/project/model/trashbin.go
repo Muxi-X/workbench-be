@@ -54,7 +54,7 @@ func DeleteTrashbinRecord() error {
 
 // DeleteTrashbinRecordByIdAndProjectId ... 用户恢复文件调用
 func DeleteTrashbinRecordByIdAndProjectId(id uint32, fileType uint8, projectId uint32) error {
-	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ? AND project_id", id, fileType, projectId).Delete(&TrashbinModel{}).Error
+	return m.DB.Self.Table("trashbin").Where("file_id = ? AND file_type = ? AND project_id = ?", id, fileType, projectId).Delete(&TrashbinModel{}).Error
 }
 
 // GetTrashbinDeletedAndExpired ... 获取需要删除的文件列表

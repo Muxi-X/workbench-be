@@ -686,7 +686,7 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "fahter_id",
+                        "description": "father_id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1290,7 +1290,7 @@ var doc = `{
                     },
                     {
                         "type": "integer",
-                        "description": "fahter_id",
+                        "description": "father_id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1579,7 +1579,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "create a doc folder api",
+                "summary": "creates a doc folder api",
                 "parameters": [
                     {
                         "type": "string",
@@ -2321,7 +2321,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "delete a project api",
+                "summary": "deletes a project api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4177,7 +4177,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "delete a trashbin api",
+                "summary": "deletes a trashbin api",
                 "parameters": [
                     {
                         "type": "string",
