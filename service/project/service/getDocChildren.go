@@ -37,6 +37,8 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 	}
 	var list []*pb.Children
 	if item.Children != "" {
+		path := GetPath(req.Id, constvar.DocFolderCode)
+
 		raw := strings.Split(item.Children, ",")
 		for _, v := range raw {
 			r := strings.Split(v, "-")
@@ -46,13 +48,14 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 				if err != nil {
 					return e.ServerErr(errno.ErrDatabase, err.Error())
 				}
+
 				list = append(list, &pb.Children{
 					Id:          doc.ID,
 					Type:        false,
 					Name:        doc.Name,
 					CreatorName: doc.Creator,
 					CreatTime:   doc.CreateTime,
-					// TODO Path:        doc.FatherId,根据fatherId一路找上去
+					Path:        path,
 				})
 			} else {
 				folder, err := model.GetFolderForDocDetail(uint32(id))
@@ -65,7 +68,7 @@ func (s *Service) GetDocChildren(ctx context.Context, req *pb.GetRequest, res *p
 					Name:        folder.Name,
 					CreatorName: folder.Creator,
 					CreatTime:   folder.CreateTime,
-					// TODO Path:        doc.FatherId,根据fatherId一路找上去
+					Path:        path,
 				})
 			}
 		}

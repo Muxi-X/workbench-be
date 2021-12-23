@@ -5,6 +5,8 @@ import (
 	"github.com/micro/go-micro"
 	opentracingWrapper "github.com/micro/go-plugins/wrapper/trace/opentracing"
 	"github.com/opentracing/opentracing-go"
+	"muxi-workbench-project/model"
+	"muxi-workbench/pkg/constvar"
 	"muxi-workbench/pkg/handler"
 
 	apb "muxi-workbench-attention/proto"
@@ -43,4 +45,37 @@ func DeleteAttentionsFromAttentionService(id uint32, kind, userID uint32) error 
 	}
 
 	return nil
+}
+
+func GetPath(id uint32, code uint8) string {
+	path := ""
+
+	var f func()
+	f = func() { // 闭包实现递归获取path
+		if code == constvar.DocFolderCode {
+			folder, _ := model.GetFolderForDocDetail(id)
+			path = folder.Name + "/" + path
+			if folder.FatherId != 0 {
+				id = folder.FatherId
+				f()
+			} else {
+				id = folder.ProjectID
+			}
+		} else if code == constvar.FileFolderCode {
+			folder, _ := model.GetFolderForFileDetail(id)
+			path = folder.Name + "/" + path
+			if folder.FatherId != 0 {
+				id = folder.FatherId
+				f()
+			} else {
+				id = folder.ProjectID
+			}
+		}
+	}
+
+	f()
+
+	project, _ := model.GetProject(id)
+	path = project.Name + "/" + path
+	return path
 }

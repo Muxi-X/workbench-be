@@ -33,6 +33,8 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 
 	var list []*pb.Children
 	if item.Children != "" {
+		path := GetPath(req.Id, constvar.FileFolderCode)
+
 		raw := strings.Split(item.Children, ",")
 		for _, v := range raw {
 			r := strings.Split(v, "-")
@@ -48,7 +50,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 					Name:        file.RealName,
 					CreatorName: file.Creator,
 					CreatTime:   file.CreateTime,
-					// TODO Path:        doc.FatherId,根据fatherId一路找上去
+					Path:        path,
 				})
 			} else {
 				folder, err := model.GetFolderForFileDetail(uint32(id))
@@ -61,7 +63,7 @@ func (s *Service) GetFileChildren(ctx context.Context, req *pb.GetRequest, res *
 					Name:        folder.Name,
 					CreatorName: folder.Creator,
 					CreatTime:   folder.CreateTime,
-					// TODO Path:        doc.FatherId,根据fatherId一路找上去
+					Path:        path,
 				})
 			}
 		}
