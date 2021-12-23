@@ -27,11 +27,15 @@ func (s *Service) UpdateFilePosition(ctx context.Context, req *pb.UpdateFilePosi
 	}
 
 	// 用 fileType 和 fileId 找到目标文件
-	fileItem, err := getFileItemByIdAndCode(req.FileId, fileType)
+	fileItem, projectId, err := getFileItemByIdAndCode(req.FileId, fileType)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-	// req.ProjectId TODO
+
+	if projectId != req.ProjectId {
+		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
+	}
+
 	isFatherProject := fatherType == constvar.ProjectCode
 
 	isOldFatherProject := getOldFatherIsProject(fileItem, fileType)
@@ -101,26 +105,31 @@ func getOldFather(file interface{}, code uint8) (interface{}, uint8, error) {
 	return fileItem, oldFatherType, err
 }
 
-func getFileItemByIdAndCode(id uint32, code uint8) (interface{}, error) {
+func getFileItemByIdAndCode(id uint32, code uint8) (interface{}, uint32, error) {
 	var fileItem interface{}
 	var err error
-
+	var projectId uint32
 	switch code {
-	case constvar.DocCode:
-		fileItem, err = model.GetDoc(id)
-	case constvar.FileCode:
-		fileItem, err = model.GetFile(id)
 	case constvar.ProjectCode:
 		fileItem, err = model.GetProject(id)
+		projectId = fileItem.(model.ProjectModel).ID
+	case constvar.DocCode:
+		fileItem, err = model.GetDoc(id)
+		projectId = fileItem.(model.DocModel).ProjectID
+	case constvar.FileCode:
+		fileItem, err = model.GetFile(id)
+		projectId = fileItem.(model.FileModel).ProjectID
 	case constvar.DocFolderCode:
 		fileItem, err = model.GetFolderForDocModel(id)
+		projectId = fileItem.(model.FolderForDocModel).ProjectID
 	case constvar.FileFolderCode:
 		fileItem, err = model.GetFolderForFileModel(id)
+		projectId = fileItem.(model.FolderForFileModel).ProjectID
 	default:
 		err = errors.New("wrong type code")
 	}
 
-	return fileItem, err
+	return fileItem, projectId, err
 }
 
 func checkTypeIsValid(reqFileType, reqFatherType uint32) (uint8, uint8, error) {
