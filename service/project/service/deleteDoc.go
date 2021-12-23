@@ -38,7 +38,7 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 	// 获取 fatherId
 	isFatherProject := false
 	var fatherId uint32
-	if item.FatherId == 0 { // fatherId 为 0 则是 project
+	if item.FatherId == 0 { // fatherId 为 0 则将 fatherId 设为 projectId
 		isFatherProject = true
 		fatherId = item.ProjectID
 	} else {
@@ -62,6 +62,9 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 
 	// 向取消关注发起请求
 	err = DeleteAttentionsFromAttentionService(req.Id, uint32(constvar.DocCode), req.UserId)
+	if err != nil {
+		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+	}
 
-	return err
+	return nil
 }
