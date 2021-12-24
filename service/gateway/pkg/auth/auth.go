@@ -13,9 +13,9 @@ import (
 
 var (
 	// ErrMissingHeader means the `Authorization` header was empty.
-	ErrMissingHeader = errors.New("The length of the `Authorization` header is zero.")
+	ErrMissingHeader = errors.New("the length of the `Authorization` header is zero")
 	// ErrTokenInvalid means the token is invalid.
-	ErrTokenInvalid = errors.New("The token is invalid.")
+	ErrTokenInvalid = errors.New("the token is invalid")
 )
 
 // Context is the context of the JSON web token.

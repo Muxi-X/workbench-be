@@ -44,7 +44,7 @@ func writeString(s1 string, s2 string, itemType string) string {
 func writeItem(tree *model.FileTreeNode) (string, []model.FileTreeNode) {
 	var fileChildren string
 	fileFolderItem := make([]model.FileTreeNode, 0) // 返回给下个函数 , fileChildren 中的文件夹部分
-	for _, v := range tree.Children {               // TODO
+	for _, v := range tree.Children {
 		if v.Folder {
 			fileChildren = writeString(fileChildren, v.Id, "1") // 取出第一层，剩下的层数在 []children 字段里
 			fileFolderItem = append(fileFolderItem, v)

@@ -55,7 +55,6 @@ func main() {
 	// })
 
 	// getDocDetail
-	// TODO: 测试删除能否获取
 	// req := &pb.GetFileDetailRequest{
 	// 	Id:       uint32(173),
 	// 	FatherId: uint32(3),

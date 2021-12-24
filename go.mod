@@ -24,5 +24,6 @@ require (
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	go.uber.org/zap v1.16.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gorm.io/gorm v1.22.4 // indirect
 	muxi-workbench v0.0.0-00010101000000-000000000000
 )

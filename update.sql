@@ -27,6 +27,7 @@ CREATE TABLE `trashbin` (
 	`name` varchar(255) DEFAULT NULL COMMENT "文件名",
 	`re` tinyint(1) DEFAULT NULL COMMENT "标记回收站内文件是否被删除 0-未删除 1-删除 删除文件只需将 re 置 1",
 	`expires_at` int(11) unsigned DEFAULT NULL COMMENT "过期时间，由定时任务使用，过期将自动删除",
+    `project_id` int(11) DEFAULT NULL COMMENT "此trashbin所属的项目 id",
 	PRIMARY KEY (`id`),
 	UNIQUE KEY `idx_id_type` (`file_id`,`file_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
@@ -71,3 +72,7 @@ ALTER TABLE `projects` ADD COLUMN `creator_id` int(11);
 rename table `user2files` to `user2attentions`;
 alter table `user2attentions` add column `time_day` varchar(20) DEFAULT NULL;
 alter table `user2attentions` add column `time_hm` varchar(20) DEFAULT NULL;
+
+-- add team_id for applys
+alter table `applys` ADD COLUMN `team_id` int(11) DEFAULT NULL;
+
