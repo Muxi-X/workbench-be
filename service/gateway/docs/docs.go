@@ -1032,7 +1032,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1347,7 +1350,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1533,7 +1539,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1830,7 +1839,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1876,7 +1888,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "create a doc folder api",
+                "summary": "create a file folder api",
                 "parameters": [
                     {
                         "type": "string",

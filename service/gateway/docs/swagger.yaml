@@ -1510,9 +1510,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -1722,9 +1724,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -1847,9 +1851,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -2047,9 +2053,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -2109,7 +2117,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: create a doc folder api
+      summary: create a file folder api
       tags:
       - project
   /folder/filefolder/{id}:
