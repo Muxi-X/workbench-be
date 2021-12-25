@@ -8,13 +8,14 @@ import (
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
+	"muxi-workbench/pkg/constvar"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 // CreateFileFolder ... 建立文件夹
-// @Summary create a doc folder api
+// @Summary create a file folder api
 // @Description 新建文件夹
 // @Tags project
 // @Accept  application/json
@@ -45,9 +46,10 @@ func CreateFileFolder(c *gin.Context) {
 		ProjectId:             projectID,
 		FatherId:              req.FatherId,
 		ChildrenPositionIndex: req.ChildrenPositionIndex,
+		TypeId:                uint32(constvar.FileFolderCode),
 	}
 
-	_, err := service.ProjectClient.CreateFileFolder(context.Background(), createFileFolderReq)
+	_, err := service.ProjectClient.CreateFolder(context.Background(), createFileFolderReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

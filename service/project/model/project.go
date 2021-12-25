@@ -156,13 +156,13 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			tx.Rollback()
 			return err
 		}
-		if err := AddDocChildren(tx, isFatherProject, fatherId,
+		if err := AddChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, doc); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteDocChildren(tx, isOldFatherProject, oldFatherId, doc.ID,
-			constvar.NotFolderCode); err != nil {
+		if err := DeleteChildren(tx, isOldFatherProject, oldFatherId, doc.ID,
+			constvar.DocCode); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -173,13 +173,13 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			tx.Rollback()
 			return err
 		}
-		if err := AddFileChildren(tx, isFatherProject, fatherId,
+		if err := AddChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, file); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteFileChildren(tx, isOldFatherProject, oldFatherId, file.ID,
-			constvar.NotFolderCode); err != nil {
+		if err := DeleteChildren(tx, isOldFatherProject, oldFatherId, file.ID,
+			constvar.FileCode); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -190,13 +190,13 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			tx.Rollback()
 			return err
 		}
-		if err := AddDocChildren(tx, isFatherProject, fatherId,
+		if err := AddChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, folder); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteDocChildren(tx, isOldFatherProject, oldFatherId, folder.ID,
-			constvar.IsFolderCode); err != nil {
+		if err := DeleteChildren(tx, isOldFatherProject, oldFatherId, folder.ID,
+			constvar.DocCode); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -207,13 +207,13 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			tx.Rollback()
 			return err
 		}
-		if err := AddFileChildren(tx, isFatherProject, fatherId,
+		if err := AddChildren(tx, isFatherProject, fatherId,
 			childrenPositionIndex, folder); err != nil {
 			tx.Rollback()
 			return err
 		}
-		if err := DeleteFileChildren(tx, isOldFatherProject, oldFatherId, folder.ID,
-			constvar.IsFolderCode); err != nil {
+		if err := DeleteChildren(tx, isOldFatherProject, oldFatherId, folder.ID,
+			constvar.FileCode); err != nil {
 			tx.Rollback()
 			return err
 		}

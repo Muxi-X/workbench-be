@@ -48,28 +48,27 @@ func DeleteAttentionsFromAttentionService(id uint32, kind, userID uint32) error 
 }
 
 func GetPath(id uint32, code uint8) string {
-	path := ""
+	var getDetail func(uint32) (*model.FolderDetail, error)
 
+	switch code {
+	case constvar.DocFolderCode:
+		getDetail = model.GetFolderForDocDetail
+	case constvar.FileFolderCode:
+		getDetail = model.GetFolderForFileDetail
+	default:
+		return "/"
+	}
+
+	path := ""
 	var f func()
 	f = func() { // 闭包实现递归获取path
-		if code == constvar.DocFolderCode {
-			folder, _ := model.GetFolderForDocDetail(id)
-			path = folder.Name + "/" + path
-			if folder.FatherId != 0 {
-				id = folder.FatherId
-				f()
-			} else {
-				id = folder.ProjectID
-			}
-		} else if code == constvar.FileFolderCode {
-			folder, _ := model.GetFolderForFileDetail(id)
-			path = folder.Name + "/" + path
-			if folder.FatherId != 0 {
-				id = folder.FatherId
-				f()
-			} else {
-				id = folder.ProjectID
-			}
+		folder, _ := getDetail(id)
+		path = folder.Name + "/" + path
+		if folder.FatherId != 0 {
+			id = folder.FatherId
+			f()
+		} else {
+			id = folder.ProjectID
 		}
 	}
 

@@ -1,13 +1,8 @@
 package model
 
 import (
-	"fmt"
-	m "muxi-workbench/model"
-	"muxi-workbench/pkg/constvar"
-	"time"
-
 	"github.com/jinzhu/gorm"
-	"github.com/spf13/viper"
+	m "muxi-workbench/model"
 )
 
 // FileDetail ... 文件详情
@@ -89,7 +84,7 @@ func CreateFile(db *gorm.DB, file *FileModel, childrenPositionIndex uint32) (uin
 		fatherId = file.ProjectID
 	}
 
-	if err := AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, file); err != nil {
+	if err := AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, file); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
@@ -101,38 +96,4 @@ func GetFile(id uint32) (*FileModel, error) {
 	s := &FileModel{}
 	d := m.DB.Self.Where("id = ? AND re = 0", id).First(&s)
 	return s, d.Error
-}
-
-func DeleteFile(db *gorm.DB, trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
-	tx := db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	// 获取时间
-	day := viper.GetInt("trashbin.expired")
-	t := time.Now().Unix()
-	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
-
-	if err := tx.Create(trashbin).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// 同步 redis
-	// 不需要找子文件夹
-	if err := m.SAddToRedis(constvar.Trashbin,
-		fmt.Sprintf("%d-%d", trashbin.FileId, constvar.FileCode)); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if err := DeleteFileChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	return tx.Commit().Error
 }

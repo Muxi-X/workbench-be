@@ -5,7 +5,6 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
-	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
 	"strconv"
@@ -52,8 +51,7 @@ func (s *Service) DeleteDocFolder(ctx context.Context, req *pb.DeleteRequest, re
 	}
 
 	// 事务
-	err = model.DeleteDocFolder(m.DB.Self, trashbin, fatherId, isFatherProject)
-	if err != nil {
+	if err = trashbin.DeleteChildren(fatherId, isFatherProject); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

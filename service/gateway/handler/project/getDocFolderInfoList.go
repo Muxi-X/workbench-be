@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"muxi-workbench/pkg/constvar"
 	"strconv"
 
 	. "muxi-workbench-gateway/handler"
@@ -22,7 +23,7 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param ids query int true "folder_ids 是一个数组"
+// @Param ids query []int true "folder_ids 是一个数组"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} GetFileInfoListResponse
 // @Failure 401 {object} handler.Response
@@ -52,9 +53,10 @@ func GetDocFolderInfoList(c *gin.Context) {
 
 	projectID := c.MustGet("projectID").(uint32)
 
-	resp, err := service.ProjectClient.GetDocFolderInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
+	resp, err := service.ProjectClient.GetFolderInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
 		ProjectId: projectID,
 		List:      ids,
+		TypeId:    uint32(constvar.DocFolderCode),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

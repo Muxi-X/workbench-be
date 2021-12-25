@@ -21,7 +21,8 @@ func (s *Service) UpdateFileFolder(ctx context.Context, req *pb.UpdateFolderRequ
 
 	item.Name = req.Name
 
-	if err = item.Update(); err != nil {
+	fileFolder := model.FolderForFileModel{FolderModel: *item}
+	if err = fileFolder.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

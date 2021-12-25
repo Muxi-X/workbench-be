@@ -41,15 +41,15 @@ service ProjectService {
   rpc DeleteDocComment(DeleteDocCommentRequest) returns (Response) {}
 
   // 文档夹 crud
-  rpc CreateDocFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
-  rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
+  rpc CreateFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
+  rpc GetFolderInfoList(GetInfoByIdsRequest) returns (GetFolderListResponse) {}
   rpc UpdateDocFolder(UpdateFolderRequest) returns (Response) {}
   rpc DeleteDocFolder(DeleteRequest) returns (Response) {}
   rpc GetDocChildren(GetRequest) returns (ChildrenList) {}
 
   // 文件夹 crud
-  rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
-  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
+//  rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
+//  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
   rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
   rpc DeleteFileFolder(DeleteRequest) returns (Response) {}
   rpc GetFileChildren(GetRequest) returns (ChildrenList) {}
@@ -150,6 +150,7 @@ message CreateFolderRequest {
   uint32 project_id = 4;
   uint32 creator_id = 5;
   uint32 children_position_index = 6;
+  uint32 type_id = 7;
 }
 
 message DeleteDocCommentRequest {
@@ -350,6 +351,7 @@ message GetInfoByIdsRequest {
   repeated uint32 list = 1;
   uint32 father_id = 2;
   uint32 project_id = 3;
+  uint32 type_id = 4;
 }
 
 message FileDetail {
@@ -369,22 +371,13 @@ message GetDocInfoListResponse {
   repeated DocInfo list = 1;
 }
 
-message GetFileFolderListResponse {
-  repeated FileFolderDetail list = 1;
-}
-
-message GetDocFolderListResponse {
-  repeated DocFolderDetail list = 1;
+message GetFolderListResponse {
+  repeated FolderInfo list = 1;
 }
 
 message FileInfo {
   uint32 id = 1;
   string title = 2;
-}
-
-message FileFolderDetail {
-  uint32 id = 1;
-  string name = 2;
 }
 
 message DocDetail {
@@ -404,7 +397,7 @@ message DocInfo {
 }
 
 
-message DocFolderDetail {
+message FolderInfo {
   uint32 id = 1;
   string name = 2;
 }

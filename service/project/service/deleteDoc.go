@@ -55,8 +55,7 @@ func (s *Service) DeleteDoc(ctx context.Context, req *pb.DeleteRequest, res *pb.
 	}
 
 	// 事务
-	err = model.DeleteDoc(trashbin, fatherId, isFatherProject)
-	if err != nil {
+	if err = trashbin.DeleteChildren(fatherId, isFatherProject); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

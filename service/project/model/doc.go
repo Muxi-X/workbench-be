@@ -1,12 +1,7 @@
 package model
 
 import (
-	"fmt"
 	m "muxi-workbench/model"
-	"muxi-workbench/pkg/constvar"
-	"time"
-
-	"github.com/spf13/viper"
 )
 
 // DocDetail ... 文档详情
@@ -105,47 +100,10 @@ func CreateDoc(doc *DocModel, childrenPositionIndex uint32) (uint32, error) {
 		fatherId = doc.ProjectID
 	}
 
-	if err := AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
+	if err := AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
 
 	return doc.ID, tx.Commit().Error
-}
-
-// DeleteDoc ... 插入回收站 同步 redis
-// 先查表找到 childrenPositionIndex
-func DeleteDoc(trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
-	tx := m.DB.Self.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	// 获取时间
-	day := viper.GetInt("trashbin.expired")
-	t := time.Now().Unix()
-	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
-
-	// 插入回收站
-	if err := tx.Create(trashbin).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// 同步 redis
-	// 不需要找子文件夹
-	if err := m.SAddToRedis(constvar.Trashbin,
-		fmt.Sprintf("%d-%d", trashbin.FileId, constvar.DocCode)); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if err := DeleteDocChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	return tx.Commit().Error
 }

@@ -48,9 +48,9 @@ func SynchronizeTrashbinToRedis() error {
 		case constvar.FileCode:
 			res = append(res, fmt.Sprintf("%d-%d", v.FileId, constvar.FileCode))
 		case constvar.DocFolderCode:
-			err = model.GetDocChildFolder(v.FileId, &res)
+			err = model.GetChildFolder(v.FileId, &res, constvar.DocCode)
 		case constvar.FileFolderCode:
-			err = model.GetFileChildFolder(v.FileId, &res)
+			err = model.GetChildFolder(v.FileId, &res, constvar.FileCode)
 		}
 
 		if err != nil {
