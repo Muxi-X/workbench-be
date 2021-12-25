@@ -47,6 +47,20 @@ func (f *FolderModel) Create(typeId uint8) error {
 	}
 }
 
+func (f *FolderModel) Update(typeId uint8) error {
+	if typeId == constvar.DocFolderCode {
+		folder := FolderForDocModel{
+			FolderModel: *f,
+		}
+		return folder.Update()
+	} else {
+		folder := FolderForFileModel{
+			FolderModel: *f,
+		}
+		return folder.Update()
+	}
+}
+
 // CreateFolder ... 事务
 func CreateFolder(folder FolderModel, childrenPositionIndex uint32, typeId uint8) (uint32, error) {
 	tx := m.DB.Self.Begin()

@@ -54,7 +54,7 @@ func UpdateDoc(c *gin.Context) {
 
 	updateReq := &pbp.UpdateDocRequest{
 		Id:        uint32(docID),
-		Title:     req.Title,
+		Name:      req.Title,
 		Content:   req.Content,
 		EditorId:  userID,
 		ProjectId: projectID,

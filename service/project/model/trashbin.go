@@ -103,42 +103,8 @@ func GetAllTrashbin() ([]*TrashbinListItem, error) {
 
 // --Get childFolder part
 
-// func GetDocChildFolder(id uint32, res *[]string) error {
-// 	// 先查询子树
-// 	docFolder := &FolderForDocModel{}
-// 	d := m.DB.Self.Where("id = ?", id).First(&docFolder)
-// 	if d.Error != nil {
-// 		return d.Error
-// 	}
-//
-// 	// 并入结果集
-// 	*res = append(*res, fmt.Sprintf("%d-%d", id, constvar.DocFolderCode))
-// 	children := docFolder.Children
-// 	raw := strings.Split(children, ",")
-// 	if len(raw) <= 1 {
-// 		return nil
-// 	}
-// 	for _, v := range raw {
-// 		r := strings.Split(v, "-")
-// 		if r[1] == "1" {
-// 			// 调用自身
-// 			childId, err := strconv.Atoi(r[0])
-// 			if err != nil {
-// 				return err
-// 			}
-// 			err = GetDocChildFolder(uint32(childId), res)
-// 			if err != nil {
-// 				return err
-// 			}
-// 		}
-// 	}
-//
-// 	return nil
-// }
-
 func GetChildFolder(id uint32, res *[]string, typeId uint8) error {
 	// 先查询子树
-	// var children string
 	folder := &FolderModel{}
 	var err error
 	if typeId == constvar.DocCode {
@@ -174,37 +140,6 @@ func GetChildFolder(id uint32, res *[]string, typeId uint8) error {
 
 	return nil
 }
-
-// func GetFileChildFolder(id uint32, res *[]string) error {
-// 	// 先查询子树
-// 	fileFolder := &FolderForFileModel{}
-// 	d := m.DB.Self.Where("id = ?", id).First(&fileFolder)
-// 	if d.Error != nil {
-// 		return d.Error
-// 	}
-//
-// 	// 并入结果集
-// 	*res = append(*res, fmt.Sprintf("%d-%d", id, constvar.FileFolderCode))
-//
-// 	children := fileFolder.Children
-// 	raw := strings.Split(children, ",")
-// 	for _, v := range raw {
-// 		r := strings.Split(v, "-")
-// 		if r[1] == "1" {
-// 			// 调用自身
-// 			childId, err := strconv.Atoi(r[0])
-// 			if err != nil {
-// 				return err
-// 			}
-// 			err = GetFileChildFolder(uint32(childId), res)
-// 			if err != nil {
-// 				return err
-// 			}
-// 		}
-// 	}
-//
-// 	return nil
-// }
 
 // --Goroutine part
 
@@ -315,7 +250,7 @@ func DeleteDocFolderTrashbin(id uint32, res *[]string) error {
 		}
 	}
 
-	return m.DB.Self.Table("folderformds").Where("id = ?", id).Update("re", "1").Error
+	return m.DB.Self.Table("foldersformds").Where("id = ?", id).Update("re", "1").Error
 }
 
 func DeleteFileFolderTrashbin(id uint32, res *[]string) error {
@@ -356,7 +291,7 @@ func DeleteFileFolderTrashbin(id uint32, res *[]string) error {
 		}
 	}
 
-	return m.DB.Self.Table("folderforfile").Where("id = ?", id).Update("re", "1").Error
+	return m.DB.Self.Table("foldersforfiles").Where("id = ?", id).Update("re", "1").Error
 }
 
 // --Recover part

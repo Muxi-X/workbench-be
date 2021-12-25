@@ -59,7 +59,7 @@ func GetProjectList(c *gin.Context) {
 	// 构造请求
 	getProListReq := &pbp.GetProjectListRequest{
 		UserId: userID,
-		Lastid: uint32(lastId),
+		LastId: uint32(lastId),
 		Offset: uint32(limit * page),
 		Limit:  uint32(limit),
 	}

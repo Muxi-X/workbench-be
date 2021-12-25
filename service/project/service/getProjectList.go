@@ -12,7 +12,7 @@ import (
 // GetProjectList ... 获取项目信息
 func (s *Service) GetProjectList(ctx context.Context, req *pb.GetProjectListRequest, res *pb.ProjectListResponse) error {
 
-	list, _, err := model.ListProject(req.UserId, req.Offset, req.Limit, req.Lastid, req.Pagination)
+	list, _, err := model.ListProject(req.UserId, req.Offset, req.Limit, req.LastId, req.Pagination)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

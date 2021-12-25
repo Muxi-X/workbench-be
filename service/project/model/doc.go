@@ -4,20 +4,6 @@ import (
 	m "muxi-workbench/model"
 )
 
-// DocDetail ... 文档详情
-type DocDetail struct {
-	Creator string `json:"creator" gorm:"column:creator;not null" binding:"required"`
-	Editor  string `json:"editor" gorm:"column:editor;" binding:"required"`
-	DocModel
-}
-
-// DocInfo ... 文档信息
-type DocInfo struct {
-	ID        uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name      string `json:"name" gorm:"column:filename;" binding:"required"`
-	ProjectID uint32 `json:"project_id" gorm:"column:project_id;" binding:"required"`
-}
-
 // DocModel ... 文档物理模型
 type DocModel struct {
 	ID           uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
@@ -58,23 +44,22 @@ func GetDoc(id uint32) (*DocModel, error) {
 }
 
 // GetDocInfo ... 获取文档信息
-func GetDocInfo(id uint32) (*DocInfo, error) {
-	info := &DocInfo{}
+func GetDocInfo(id uint32) (*FileInfo, error) {
+	info := &FileInfo{}
 	d := m.DB.Self.Table("docs").Select("id,name").Where("id = ? AND re = 0", id).Scan(&info)
 	return info, d.Error
 }
 
 // GetDocInfoByIds ... 获取文档信息列表
-func GetDocInfoByIds(ids []uint32) ([]*DocInfo, error) {
-	s := make([]*DocInfo, 0)
+func GetDocInfoByIds(ids []uint32) ([]*FileInfo, error) {
+	s := make([]*FileInfo, 0)
 	d := m.DB.Self.Table("docs").Where("id IN (?) AND re = 0", ids).Find(&s)
 	return s, d.Error
 }
 
 // GetDocDetail ... 获取文档详情
-func GetDocDetail(id uint32) (*DocDetail, error) {
-	s := &DocDetail{}
-	// multiple left join
+func GetDocDetail(id uint32) (*FileDetail, error) {
+	s := &FileDetail{}
 	d := m.DB.Self.Table("docs").Where("docs.id = ? AND re = 0", id).Select("docs.*, c.name as creator, e.name as editor").Joins("left join users c on c.id = docs.creator_id").Joins("left join users e on e.id = docs.editor_id").First(&s)
 	return s, d.Error
 }

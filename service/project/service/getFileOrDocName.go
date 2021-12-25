@@ -17,7 +17,7 @@ func (s *Service) GetFileOrDocName(ctx context.Context, req *pb.GetFileOrDocName
 		if err != nil {
 			return e.NotFoundErr(errno.ErrDatabase, err.Error())
 		}
-		res.Name = file.RealName
+		res.Name = file.Name
 	case uint32(constvar.DocCode):
 		doc, err := model.GetDocDetail(req.Id)
 		if err != nil {

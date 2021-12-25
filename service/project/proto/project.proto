@@ -40,19 +40,13 @@ service ProjectService {
   rpc UpdateDocComment(UpdateDocCommentRequest) returns (Response) {}
   rpc DeleteDocComment(DeleteDocCommentRequest) returns (Response) {}
 
-  // 文档夹 crud
+  // Folder crud
   rpc CreateFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
   rpc GetFolderInfoList(GetInfoByIdsRequest) returns (GetFolderListResponse) {}
-  rpc UpdateDocFolder(UpdateFolderRequest) returns (Response) {}
-  rpc DeleteDocFolder(DeleteRequest) returns (Response) {}
-  rpc GetDocChildren(GetRequest) returns (ChildrenList) {}
+  rpc UpdateFolder(UpdateFolderRequest) returns (Response) {}
+  rpc DeleteFolder(DeleteRequest) returns (Response) {}
+  rpc GetFolderChildren(GetRequest) returns (ChildrenList) {}
 
-  // 文件夹 crud
-//  rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
-//  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
-  rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
-  rpc DeleteFileFolder(DeleteRequest) returns (Response) {}
-  rpc GetFileChildren(GetRequest) returns (ChildrenList) {}
 
   rpc UpdateFilePosition(UpdateFilePositionRequest) returns (Response){}
 }
@@ -89,6 +83,7 @@ message DeleteRequest {
   uint32 user_id = 2;
   uint32 role = 3;
   uint32 project_id = 4;
+  uint32 type_id = 5;
 }
 
 message GetTrashbinRequest {
@@ -142,6 +137,7 @@ message UpdateFolderRequest {
   uint32 folder_id = 1;
   string name = 2; // 只提供改名字，移动通过 update children 实现
   uint32 project_id = 3;
+  uint32 type_id = 4;
 }
 
 message CreateFolderRequest {
@@ -200,7 +196,7 @@ message ProjectIdsResponse {
 
 message GetProjectListRequest {
   uint32 user_id = 1;
-  uint32 lastid = 2;
+  uint32 last_id = 2;
   uint32 offset = 3;
   uint32 limit = 4;
   bool pagination = 5;
@@ -208,7 +204,7 @@ message GetProjectListRequest {
 
 message GetMemberListRequest {
   uint32 project_id = 1;
-  uint32 lastid = 2;
+  uint32 last_id = 2;
   uint32 offset = 3;
   uint32 limit = 4;
   bool pagination = 5;
@@ -221,6 +217,7 @@ message ProjectListResponse {
 message GetRequest {
   uint32 id = 1;
   uint32 project_id = 2;
+  uint32 type_id = 3;
 }
 
 message GetInfoRequest {
@@ -341,7 +338,7 @@ message CreateDocRequest {
 
 message UpdateDocRequest {
   uint32 id = 1;
-  string title = 2;
+  string name = 2;
   string content = 3;
   uint32 editor_id = 4;
   uint32 project_id = 5;

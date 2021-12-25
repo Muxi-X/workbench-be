@@ -28,6 +28,7 @@ func (s *Service) GetDocDetail(ctx context.Context, req *pb.GetFileDetailRequest
 	if doc.ProjectID != req.ProjectId {
 		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
 	}
+
 	project, err := model.GetProject(doc.ProjectID)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

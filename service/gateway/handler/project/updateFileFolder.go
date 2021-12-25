@@ -10,6 +10,7 @@ import (
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
+	"muxi-workbench/pkg/constvar"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -56,9 +57,10 @@ func UpdateFileFolder(c *gin.Context) {
 		ProjectId: projectID,
 		FolderId:  uint32(folderID),
 		Name:      req.Name,
+		TypeId:    uint32(constvar.FileFolderCode),
 	}
 
-	_, err = service.ProjectClient.UpdateFileFolder(context.Background(), updateReq)
+	_, err = service.ProjectClient.UpdateFolder(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
