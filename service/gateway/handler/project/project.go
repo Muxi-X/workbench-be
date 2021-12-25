@@ -208,9 +208,8 @@ type DeleteFileRequest struct {
 
 // CreateDocRequest ... 创建文档请求
 type CreateDocRequest struct {
-	Title                 string `json:"title"`
-	Content               string `json:"content"`
 	DocName               string `json:"doc_name"`
+	Content               string `json:"content"`
 	FatherID              uint32 `json:"father_id"`               // 父节点 id
 	ChildrenPositionIndex uint32 `json:"children_position_index"` // 子节点的位置
 } // @name CreateDocRequest

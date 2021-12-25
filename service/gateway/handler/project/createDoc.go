@@ -48,7 +48,7 @@ func CreateDoc(c *gin.Context) {
 	projectID := c.MustGet("projectID").(uint32)
 
 	createDocReq := &pbp.CreateDocRequest{
-		Title:                 req.Title,
+		Title:                 req.DocName,
 		Content:               req.Content,
 		ProjectId:             projectID,
 		UserId:                userID,
