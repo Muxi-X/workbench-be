@@ -10,6 +10,7 @@ import (
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
+	"muxi-workbench/pkg/constvar"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -40,9 +41,10 @@ func GetDocChildren(c *gin.Context) {
 	}
 
 	// 发送请求
-	getDocTreeResp, err := service.ProjectClient.GetDocChildren(context.Background(), &pbp.GetRequest{
+	getDocTreeResp, err := service.ProjectClient.GetFolderChildren(context.Background(), &pbp.GetRequest{
 		Id:        uint32(folderID),
 		ProjectId: projectID,
+		TypeId:    uint32(constvar.DocFolderCode),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

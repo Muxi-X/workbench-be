@@ -462,7 +462,7 @@
                 "tags": [
                     "project"
                 ],
-                "summary": "create a new doc api",
+                "summary": "creates a new doc api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4604,9 +4604,6 @@
                 "father_id": {
                     "description": "父节点 id",
                     "type": "integer"
-                },
-                "title": {
-                    "type": "string"
                 }
             }
         },

@@ -12,7 +12,7 @@ import (
 // GetFileDetail ... 获取文件详情
 func (s *Service) GetFileDetail(ctx context.Context, req *pb.GetFileDetailRequest, res *pb.FileDetail) error {
 	// 判断自己 id 和父 id 是否被删
-	isDeleted, err := model.AdjustSelfAndFatherIfExist(req.Id, req.FatherId, constvar.FileCode, constvar.FileFolderCode)
+	isDeleted, err := model.AdjustSelfAndFatherIfExist(req.Id, req.FatherId, uint8(req.TypeId), uint8(req.TypeId)+2)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
@@ -20,24 +20,36 @@ func (s *Service) GetFileDetail(ctx context.Context, req *pb.GetFileDetailReques
 		return e.NotFoundErr(errno.ErrNotFound, "This file has been deleted.")
 	}
 
-	// ok
-	file, err := model.GetFileDetail(req.Id)
+	var file *model.FileDetail
+	if uint8(req.TypeId) == constvar.DocCode {
+		file, err = model.GetDocDetail(req.Id)
+	} else if uint8(req.TypeId) == constvar.FileCode {
+		file, err = model.GetFileDetail(req.Id)
+	} else {
+		return e.BadRequestErr(errno.ErrBind, "wrong type_id")
+	}
+
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 	if file.ProjectID != req.ProjectId {
 		return e.ServerErr(errno.ErrPermissionDenied, "project_id mismatch")
 	}
-	// 此处为了获取project 改了projectDetail 可能出问题
-	project, err := model.GetProject(file.ProjectID)
+
+	projectName, err := model.GetProjectName(file.ProjectID)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
+
 	res.Id = file.ID
 	res.Url = file.URL
 	res.Creator = file.Creator
 	res.CreateTime = file.CreateTime
 	res.Name = file.Name
-	res.ProjectName = project.Name
+	res.Content = file.Content
+	res.LastEditTime = file.LastEditTime
+	res.Editor = file.Editor
+	res.ProjectName = projectName
+
 	return nil
 }

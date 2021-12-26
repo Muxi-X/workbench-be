@@ -16,8 +16,7 @@ import (
 )
 
 // CreateDoc creates a new doc
-// 更新：前端不用传 fatherType 根据 fatherId 是否为 0 来判断
-// @Summary create a new doc api
+// @Summary creates a new doc api
 // @Description 通过父节点 id，和插入节点位置确定新建文档的位置。
 // @Tags project
 // @Accept  application/json

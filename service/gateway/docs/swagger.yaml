@@ -108,8 +108,6 @@ definitions:
       father_id:
         description: 父节点 id
         type: integer
-      title:
-        type: string
     type: object
   CreateFileRequest:
     properties:
@@ -1166,7 +1164,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: create a new doc api
+      summary: creates a new doc api
       tags:
       - project
   /file/doc/{id}:

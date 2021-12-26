@@ -476,7 +476,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "create a new doc api",
+                "summary": "creates a new doc api",
                 "parameters": [
                     {
                         "type": "string",
@@ -4618,9 +4618,6 @@ var doc = `{
                 "father_id": {
                     "description": "父节点 id",
                     "type": "integer"
-                },
-                "title": {
-                    "type": "string"
                 }
             }
         },

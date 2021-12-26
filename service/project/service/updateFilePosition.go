@@ -101,6 +101,8 @@ func getOldFather(file interface{}, code uint8) (interface{}, uint8, error) {
 			oldFatherType = constvar.ProjectCode
 			fileItem, err = model.GetProject(file.FatherId)
 		}
+	default:
+		err = errors.New("wrong type_id")
 	}
 	return fileItem, oldFatherType, err
 }

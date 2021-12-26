@@ -6,10 +6,8 @@ import (
 )
 
 type SearchResult struct {
-	Id uint32 `json:"id"`
-	// Type        uint32 `json:"type"`
-	Title string `json:"title" gorm:"column:filename;not null"`
-	// Url         string `json:"url"`
+	Id          uint32 `json:"id"`
+	Title       string `json:"title" gorm:"column:filename;not null"`
 	UserName    string `json:"user_name" gorm:"column:name;not null"`
 	Content     string `json:"content"`
 	ProjectName string `json:"project_name" gorm:"column:project_name;not null"`

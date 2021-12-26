@@ -8,6 +8,7 @@ import (
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
+	"muxi-workbench/pkg/constvar"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -47,9 +48,10 @@ func DeleteFileFolder(c *gin.Context) {
 		UserId:    userID,
 		Role:      role,
 		ProjectId: projectID,
+		TypeId:    uint32(constvar.FileFolderCode),
 	}
 
-	_, err = service.ProjectClient.DeleteFileFolder(context.Background(), deleteDocFolderReq)
+	_, err = service.ProjectClient.DeleteFolder(context.Background(), deleteDocFolderReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

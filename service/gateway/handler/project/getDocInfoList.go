@@ -22,7 +22,7 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param ids query int true "folder_ids 是一个数组"
+// @Param ids query []int true "folder_ids 是一个数组"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} GetFileInfoListResponse
 // @Failure 401 {object} handler.Response

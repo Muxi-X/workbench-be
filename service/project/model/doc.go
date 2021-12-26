@@ -1,27 +1,8 @@
 package model
 
 import (
-	"fmt"
 	m "muxi-workbench/model"
-	"muxi-workbench/pkg/constvar"
-	"time"
-
-	"github.com/spf13/viper"
 )
-
-// DocDetail ... 文档详情
-type DocDetail struct {
-	Creator string `json:"creator" gorm:"column:creator;not null" binding:"required"`
-	Editor  string `json:"editor" gorm:"column:editor;" binding:"required"`
-	DocModel
-}
-
-// DocInfo ... 文档信息
-type DocInfo struct {
-	ID        uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
-	Name      string `json:"name" gorm:"column:filename;" binding:"required"`
-	ProjectID uint32 `json:"project_id" gorm:"column:project_id;" binding:"required"`
-}
 
 // DocModel ... 文档物理模型
 type DocModel struct {
@@ -62,23 +43,22 @@ func GetDoc(id uint32) (*DocModel, error) {
 }
 
 // GetDocInfo ... 获取文档信息
-func GetDocInfo(id uint32) (*DocInfo, error) {
-	info := &DocInfo{}
+func GetDocInfo(id uint32) (*FileInfo, error) {
+	info := &FileInfo{}
 	d := m.DB.Self.Table("docs").Select("id,name").Where("id = ? AND re = 0", id).Scan(&info)
 	return info, d.Error
 }
 
 // GetDocInfoByIds ... 获取文档信息列表
-func GetDocInfoByIds(ids []uint32) ([]*DocInfo, error) {
-	s := make([]*DocInfo, 0)
+func GetDocInfoByIds(ids []uint32) ([]*FileInfo, error) {
+	s := make([]*FileInfo, 0)
 	d := m.DB.Self.Table("docs").Where("id IN (?) AND re = 0", ids).Find(&s)
 	return s, d.Error
 }
 
 // GetDocDetail ... 获取文档详情
-func GetDocDetail(id uint32) (*DocDetail, error) {
-	s := &DocDetail{}
-	// multiple left join
+func GetDocDetail(id uint32) (*FileDetail, error) {
+	s := &FileDetail{}
 	d := m.DB.Self.Table("docs").Where("docs.id = ? AND re = 0", id).Select("docs.*, c.name as creator, e.name as editor").Joins("left join users c on c.id = docs.creator_id").Joins("left join users e on e.id = docs.editor_id").First(&s)
 	return s, d.Error
 }
@@ -104,47 +84,10 @@ func CreateDoc(doc *DocModel, childrenPositionIndex uint32) (uint32, error) {
 		fatherId = doc.ProjectID
 	}
 
-	if err := AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
+	if err := AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, doc); err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}
 
 	return doc.ID, tx.Commit().Error
-}
-
-// DeleteDoc ... 插入回收站 同步 redis
-// 先查表找到 childrenPositionIndex
-func DeleteDoc(trashbin *TrashbinModel, fatherId uint32, isFatherProject bool) error {
-	tx := m.DB.Self.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	// 获取时间
-	day := viper.GetInt("trashbin.expired")
-	t := time.Now().Unix()
-	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
-
-	// 插入回收站
-	if err := tx.Create(trashbin).Error; err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	// 同步 redis
-	// 不需要找子文件夹
-	if err := m.SAddToRedis(constvar.Trashbin,
-		fmt.Sprintf("%d-%d", trashbin.FileId, constvar.DocCode)); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if err := DeleteDocChildren(tx, isFatherProject, fatherId, trashbin.FileId, constvar.NotFolderCode); err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	return tx.Commit().Error
 }

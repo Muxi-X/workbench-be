@@ -1,7 +1,9 @@
 package model
 
 import (
+	"errors"
 	"fmt"
+	"github.com/spf13/viper"
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 	"strconv"
@@ -33,12 +35,12 @@ type TrashbinListItem struct {
 	CreateTime string `json:"create_time" gorm:"column:create_time;" binding:"required"`
 }
 
-func (u *TrashbinModel) TableName() string {
+func (trashbin *TrashbinModel) TableName() string {
 	return "trashbin"
 }
 
-func (u *TrashbinModel) Create() error {
-	return m.DB.Self.Create(&u).Error
+func (trashbin *TrashbinModel) Create() error {
+	return m.DB.Self.Create(&trashbin).Error
 }
 
 // DeleteTrashbin ... 用户删除回收站的文件,修改 re 字段使对用户不可见
@@ -102,17 +104,24 @@ func GetAllTrashbin() ([]*TrashbinListItem, error) {
 
 // --Get childFolder part
 
-func GetDocChildFolder(id uint32, res *[]string) error {
+func GetChildFolder(id uint32, res *[]string, typeId uint8) error {
 	// 先查询子树
-	docFolder := &FolderForDocModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&docFolder)
-	if d.Error != nil {
-		return d.Error
+	folder := &FolderModel{}
+	var err error
+	if typeId == constvar.DocCode {
+		err = m.DB.Self.Table("foldersformds").Where("id = ?", id).First(&folder).Error
+	} else if typeId == constvar.FileCode {
+		err = m.DB.Self.Table("foldersforfiles").Where("id = ?", id).First(&folder).Error
+	} else {
+		return errors.New("wrong type_id")
 	}
+	if err != nil {
+		return err
+	}
+	children := folder.Children
 
 	// 并入结果集
-	*res = append(*res, fmt.Sprintf("%d-%d", id, constvar.DocFolderCode))
-	children := docFolder.Children
+	*res = append(*res, fmt.Sprintf("%d-%d", id, typeId))
 	raw := strings.Split(children, ",")
 	if len(raw) <= 1 {
 		return nil
@@ -125,38 +134,7 @@ func GetDocChildFolder(id uint32, res *[]string) error {
 			if err != nil {
 				return err
 			}
-			err = GetDocChildFolder(uint32(childId), res)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
-func GetFileChildFolder(id uint32, res *[]string) error {
-	// 先查询子树
-	fileFolder := &FolderForFileModel{}
-	d := m.DB.Self.Where("id = ?", id).First(&fileFolder)
-	if d.Error != nil {
-		return d.Error
-	}
-
-	// 并入结果集
-	*res = append(*res, fmt.Sprintf("%d-%d", id, constvar.FileFolderCode))
-
-	children := fileFolder.Children
-	raw := strings.Split(children, ",")
-	for _, v := range raw {
-		r := strings.Split(v, "-")
-		if r[1] == "1" {
-			// 调用自身
-			childId, err := strconv.Atoi(r[0])
-			if err != nil {
-				return err
-			}
-			err = GetFileChildFolder(uint32(childId), res)
+			err = GetChildFolder(uint32(childId), res, typeId)
 			if err != nil {
 				return err
 			}
@@ -200,6 +178,8 @@ func TidyTrashbin(db *gorm.DB) error {
 			err = DeleteDocFolderTrashbin(v.FileId, &res)
 		case constvar.FileFolderCode:
 			err = DeleteFileFolderTrashbin(v.FileId, &res)
+		default:
+			err = errors.New("wrong type_id")
 		}
 
 		if err != nil {
@@ -275,7 +255,7 @@ func DeleteDocFolderTrashbin(id uint32, res *[]string) error {
 		}
 	}
 
-	return m.DB.Self.Table("folderformds").Where("id = ?", id).Update("re", "1").Error
+	return m.DB.Self.Table("foldersformds").Where("id = ?", id).Update("re", "1").Error
 }
 
 func DeleteFileFolderTrashbin(id uint32, res *[]string) error {
@@ -316,7 +296,7 @@ func DeleteFileFolderTrashbin(id uint32, res *[]string) error {
 		}
 	}
 
-	return m.DB.Self.Table("folderforfile").Where("id = ?", id).Update("re", "1").Error
+	return m.DB.Self.Table("foldersforfiles").Where("id = ?", id).Update("re", "1").Error
 }
 
 // --Recover part
@@ -347,9 +327,9 @@ func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject
 	case constvar.FileCode:
 		res = append(res, fmt.Sprintf("%d-%d", fileId, constvar.FileCode))
 	case constvar.DocFolderCode:
-		err = GetDocChildFolder(fileId, &res)
+		err = GetChildFolder(fileId, &res, fileType)
 	case constvar.FileFolderCode:
-		err = GetFileChildFolder(fileId, &res)
+		err = GetChildFolder(fileId, &res, fileType)
 	}
 
 	if err != nil {
@@ -369,13 +349,19 @@ func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject
 	// 分类 project doc file docfolder filefolder
 	switch fileType {
 	case constvar.DocCode:
-		err = AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &DocModel{ID: fileId})
+		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &DocModel{ID: fileId})
 	case constvar.FileCode:
-		err = AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FileModel{ID: fileId})
+		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FileModel{ID: fileId})
 	case constvar.DocFolderCode:
-		err = AddDocChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForDocModel{ID: fileId})
+		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForDocModel{FolderModel: FolderModel{
+			ID: fileId,
+		}})
 	case constvar.FileFolderCode:
-		err = AddFileChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForFileModel{ID: fileId})
+		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForFileModel{FolderModel: FolderModel{
+			ID: fileId,
+		}})
+	default:
+		err = errors.New("wrong type_id")
 	}
 
 	if err != nil {
@@ -443,4 +429,56 @@ func AdjustFileListIfExist(list []uint32, fatherId uint32, code, fatherCode uint
 	}
 
 	return scope, nil
+}
+
+func (trashbin *TrashbinModel) DeleteChildren(fatherId uint32, isFatherProject bool) error {
+	tx := m.DB.Self.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// 获取时间
+	day := viper.GetInt("trashbin.expired")
+	t := time.Now().Unix()
+	trashbin.ExpiresAt = t + int64(time.Hour*24*time.Duration(day))
+
+	if err := tx.Create(trashbin).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	typeId := trashbin.FileType
+	if trashbin.FileType >= 3 { // folder
+		// 获取子文件，同步 redis
+		typeId -= 2
+		var res []string
+		if err := GetChildFolder(trashbin.FileId, &res, typeId); err != nil {
+			tx.Rollback()
+			return err
+		}
+		if len(res) != 0 {
+			if err := m.SAddToRedis(constvar.Trashbin, res); err != nil {
+				tx.Rollback()
+				return err
+			}
+		}
+	} else {
+		// 同步 redis
+		// 不需要找子文件夹
+		if err := m.SAddToRedis(constvar.Trashbin,
+			fmt.Sprintf("%d-%d", trashbin.FileId, typeId)); err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// 修改文件树
+	if err := DeleteChildren(tx, isFatherProject, fatherId, trashbin.FileId, typeId); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }

@@ -32,7 +32,6 @@ service ProjectService {
   rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
   rpc UpdateDoc(UpdateDocRequest ) returns (ProjectIDResponse) {}
   rpc DeleteDoc(DeleteRequest) returns (Response) {}
-  rpc GetDocDetail(GetFileDetailRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   // 文档的评论
   rpc CreateDocComment(CreateDocCommentRequest) returns (Response) {}
@@ -40,19 +39,13 @@ service ProjectService {
   rpc UpdateDocComment(UpdateDocCommentRequest) returns (Response) {}
   rpc DeleteDocComment(DeleteDocCommentRequest) returns (Response) {}
 
-  // 文档夹 crud
-  rpc CreateDocFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
-  rpc GetDocFolderInfoList(GetInfoByIdsRequest) returns (GetDocFolderListResponse) {}
-  rpc UpdateDocFolder(UpdateFolderRequest) returns (Response) {}
-  rpc DeleteDocFolder(DeleteRequest) returns (Response) {}
-  rpc GetDocChildren(GetRequest) returns (ChildrenList) {}
+  // Folder crud
+  rpc CreateFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
+  rpc GetFolderInfoList(GetInfoByIdsRequest) returns (GetFolderListResponse) {}
+  rpc UpdateFolder(UpdateFolderRequest) returns (Response) {}
+  rpc DeleteFolder(DeleteRequest) returns (Response) {}
+  rpc GetFolderChildren(GetRequest) returns (ChildrenList) {}
 
-  // 文件夹 crud
-  rpc CreateFileFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
-  rpc GetFileFolderInfoList(GetInfoByIdsRequest) returns (GetFileFolderListResponse) {}
-  rpc UpdateFileFolder(UpdateFolderRequest) returns (Response) {}
-  rpc DeleteFileFolder(DeleteRequest) returns (Response) {}
-  rpc GetFileChildren(GetRequest) returns (ChildrenList) {}
 
   rpc UpdateFilePosition(UpdateFilePositionRequest) returns (Response){}
 }
@@ -82,6 +75,7 @@ message GetFileDetailRequest {
   uint32 id = 1;
   uint32 father_id = 2;
   uint32 project_id = 3;
+  uint32 type_id = 4;
 }
 
 message DeleteRequest {
@@ -89,6 +83,7 @@ message DeleteRequest {
   uint32 user_id = 2;
   uint32 role = 3;
   uint32 project_id = 4;
+  uint32 type_id = 5;
 }
 
 message GetTrashbinRequest {
@@ -142,6 +137,7 @@ message UpdateFolderRequest {
   uint32 folder_id = 1;
   string name = 2; // 只提供改名字，移动通过 update children 实现
   uint32 project_id = 3;
+  uint32 type_id = 4;
 }
 
 message CreateFolderRequest {
@@ -150,6 +146,7 @@ message CreateFolderRequest {
   uint32 project_id = 4;
   uint32 creator_id = 5;
   uint32 children_position_index = 6;
+  uint32 type_id = 7;
 }
 
 message DeleteDocCommentRequest {
@@ -199,7 +196,7 @@ message ProjectIdsResponse {
 
 message GetProjectListRequest {
   uint32 user_id = 1;
-  uint32 lastid = 2;
+  uint32 last_id = 2;
   uint32 offset = 3;
   uint32 limit = 4;
   bool pagination = 5;
@@ -207,7 +204,7 @@ message GetProjectListRequest {
 
 message GetMemberListRequest {
   uint32 project_id = 1;
-  uint32 lastid = 2;
+  uint32 last_id = 2;
   uint32 offset = 3;
   uint32 limit = 4;
   bool pagination = 5;
@@ -220,6 +217,7 @@ message ProjectListResponse {
 message GetRequest {
   uint32 id = 1;
   uint32 project_id = 2;
+  uint32 type_id = 3;
 }
 
 message GetInfoRequest {
@@ -340,7 +338,7 @@ message CreateDocRequest {
 
 message UpdateDocRequest {
   uint32 id = 1;
-  string title = 2;
+  string name = 2;
   string content = 3;
   uint32 editor_id = 4;
   uint32 project_id = 5;
@@ -350,6 +348,7 @@ message GetInfoByIdsRequest {
   repeated uint32 list = 1;
   uint32 father_id = 2;
   uint32 project_id = 3;
+  uint32 type_id = 4;
 }
 
 message FileDetail {
@@ -359,6 +358,9 @@ message FileDetail {
   string creator = 4;
   string create_time = 5;
   string project_name = 6;
+  string editor = 7;
+  string content = 8;
+  string last_edit_time = 9;
 }
 
 message GetFileInfoListResponse {
@@ -369,22 +371,13 @@ message GetDocInfoListResponse {
   repeated DocInfo list = 1;
 }
 
-message GetFileFolderListResponse {
-  repeated FileFolderDetail list = 1;
-}
-
-message GetDocFolderListResponse {
-  repeated DocFolderDetail list = 1;
+message GetFolderListResponse {
+  repeated FolderInfo list = 1;
 }
 
 message FileInfo {
   uint32 id = 1;
   string title = 2;
-}
-
-message FileFolderDetail {
-  uint32 id = 1;
-  string name = 2;
 }
 
 message DocDetail {
@@ -404,7 +397,7 @@ message DocInfo {
 }
 
 
-message DocFolderDetail {
+message FolderInfo {
   uint32 id = 1;
   string name = 2;
 }

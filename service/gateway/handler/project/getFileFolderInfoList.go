@@ -4,15 +4,15 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"muxi-workbench/pkg/constvar"
 )
 
 // GetFileFolderInfoList ... 获取文件夹列表
@@ -22,7 +22,7 @@ import (
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param ids query int true "folder_ids 是一个数组"
+// @Param ids query []int true "folder_ids 是一个数组"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} GetFileInfoListResponse
 // @Failure 401 {object} handler.Response
@@ -52,9 +52,10 @@ func GetFileFolderInfoList(c *gin.Context) {
 
 	projectID := c.MustGet("projectID").(uint32)
 
-	resp, err := service.ProjectClient.GetFileFolderInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
+	resp, err := service.ProjectClient.GetFolderInfoList(context.Background(), &pbp.GetInfoByIdsRequest{
 		ProjectId: projectID,
 		List:      ids,
+		TypeId:    uint32(constvar.FileFolderCode),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

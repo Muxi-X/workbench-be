@@ -59,7 +59,7 @@ func GetMembers(c *gin.Context) {
 	// 构造请求
 	getMembersRequest := &pbp.GetMemberListRequest{
 		ProjectId: projectID,
-		Lastid:    uint32(lastId),
+		LastId:    uint32(lastId),
 		Offset:    uint32(page * limit),
 		Limit:     uint32(limit),
 	}

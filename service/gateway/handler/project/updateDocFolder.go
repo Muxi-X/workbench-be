@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"muxi-workbench/pkg/constvar"
 	"strconv"
 
 	. "muxi-workbench-gateway/handler"
@@ -56,9 +57,10 @@ func UpdateDocFolder(c *gin.Context) {
 		ProjectId: projectID,
 		FolderId:  uint32(folderID),
 		Name:      req.Name,
+		TypeId:    uint32(constvar.DocFolderCode),
 	}
 
-	_, err = service.ProjectClient.UpdateDocFolder(context.Background(), updateReq)
+	_, err = service.ProjectClient.UpdateFolder(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return

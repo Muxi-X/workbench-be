@@ -4,15 +4,15 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
 	"muxi-workbench-gateway/pkg/errno"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
 	pbp "muxi-workbench-project/proto"
-
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"muxi-workbench/pkg/constvar"
 )
 
 // GetFileChildren ... 获取某个文件夹下的文件树
@@ -40,9 +40,10 @@ func GetFileChildren(c *gin.Context) {
 	}
 
 	// 发送请求
-	getFileTreeResp, err := service.ProjectClient.GetFileChildren(context.Background(), &pbp.GetRequest{
+	getFileTreeResp, err := service.ProjectClient.GetFolderChildren(context.Background(), &pbp.GetRequest{
 		Id:        uint32(folderID),
 		ProjectId: projectID,
+		TypeId:    uint32(constvar.FileFolderCode),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
