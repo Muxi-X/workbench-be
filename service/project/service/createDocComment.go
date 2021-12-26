@@ -13,7 +13,7 @@ import (
 func (s *Service) CreateDocComment(ctx context.Context, req *pb.CreateDocCommentRequest, res *pb.Response) error {
 	t := time.Now()
 
-	comment := &model.CommentsModel{
+	comment := &model.CommentModel{
 		Creator: req.UserId,
 		Kind:    1,
 		Content: req.Content,

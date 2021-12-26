@@ -5,7 +5,7 @@ import (
 	"muxi-workbench/pkg/constvar"
 )
 
-type CommentsModel struct {
+type CommentModel struct {
 	ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
 	Kind     uint32 `json:"kind" gorm:"column:kind;" binding:"required"` // 0 是进度，1 是文档或者文件
 	Content  string `json:"content" gorm:"column:content;" binding:"required"`
@@ -25,23 +25,23 @@ type CommentListItem struct {
 	UserName string `json:"username" gorm:"column:name;" binding:"required"`
 }
 
-func (c *CommentsModel) TableName() string {
+func (c *CommentModel) TableName() string {
 	return "comments"
 }
 
 // Create comments
-func (u *CommentsModel) Create() error {
+func (u *CommentModel) Create() error {
 	return m.DB.Self.Create(&u).Error
 }
 
 // Update comment
-func (u *CommentsModel) Update() error {
+func (u *CommentModel) Update() error {
 	return m.DB.Self.Save(u).Error
 }
 
 // delete comment
 func DeleteComment(id, uid uint32) error {
-	s := &CommentsModel{}
+	s := &CommentModel{}
 	s.ID = id
 	d := m.DB.Self.Where("creator = ?", uid).Delete(s)
 	return d.Error
@@ -70,8 +70,8 @@ func ListDocComments(docID, offset, limit, lastID uint32) ([]*CommentListItem, u
 	return commentsList, count, nil
 }
 
-func GetCommentModelById(id uint32) (*CommentsModel, error) {
-	s := &CommentsModel{}
+func GetCommentModelById(id uint32) (*CommentModel, error) {
+	s := &CommentModel{}
 	d := m.DB.Self.Where("id = ?", id).First(s)
 	return s, d.Error
 }
