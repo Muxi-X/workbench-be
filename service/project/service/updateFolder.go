@@ -9,14 +9,16 @@ import (
 	e "muxi-workbench/pkg/err"
 )
 
-// UpdateFolder ... 修改文档夹，改名
+// UpdateFolder ... 修改folder，改名
 func (s *Service) UpdateFolder(ctx context.Context, req *pb.UpdateFolderRequest, res *pb.Response) error {
 	var item *model.FolderModel
 	var err error
-	if uint8(req.TypeId) == constvar.DocCode {
+	if uint8(req.TypeId) == constvar.DocFolderCode {
 		item, err = model.GetFolderForDocModel(req.FolderId)
 	} else if uint8(req.TypeId) == constvar.FileFolderCode {
 		item, err = model.GetFolderForFileModel(req.FolderId)
+	} else {
+		return e.BadRequestErr(errno.ErrBind, "wrong type_id")
 	}
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

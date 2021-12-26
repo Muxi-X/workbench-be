@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"github.com/spf13/viper"
 	m "muxi-workbench/model"
@@ -111,6 +112,8 @@ func GetChildFolder(id uint32, res *[]string, typeId uint8) error {
 		err = m.DB.Self.Table("foldersformds").Where("id = ?", id).First(&folder).Error
 	} else if typeId == constvar.FileCode {
 		err = m.DB.Self.Table("foldersforfiles").Where("id = ?", id).First(&folder).Error
+	} else {
+		return errors.New("wrong type_id")
 	}
 	if err != nil {
 		return err
@@ -175,6 +178,8 @@ func TidyTrashbin(db *gorm.DB) error {
 			err = DeleteDocFolderTrashbin(v.FileId, &res)
 		case constvar.FileFolderCode:
 			err = DeleteFileFolderTrashbin(v.FileId, &res)
+		default:
+			err = errors.New("wrong type_id")
 		}
 
 		if err != nil {
@@ -355,6 +360,8 @@ func RecoverTrashbin(db *gorm.DB, fileId uint32, fileType uint8, isFatherProject
 		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForFileModel{FolderModel: FolderModel{
 			ID: fileId,
 		}})
+	default:
+		err = errors.New("wrong type_id")
 	}
 
 	if err != nil {

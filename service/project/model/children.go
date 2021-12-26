@@ -15,7 +15,11 @@ import (
 // addChildren ... 返回新 children
 func addChildren(children string, id, childrenPositionIndex, isFolder uint32) (string, error) {
 	if childrenPositionIndex == 0 { // 插在开头
-		children = fmt.Sprintf("%d-%d,%s", id, isFolder, children)
+		if children != "" {
+			children = fmt.Sprintf("%d-%d,%s", id, isFolder, children)
+		} else {
+			children = fmt.Sprintf("%d-%d", id, isFolder)
+		}
 		return children, nil
 	}
 
@@ -81,7 +85,10 @@ func DeleteChildren(tx *gorm.DB, isFatherProject bool, fatherId, id uint32, type
 		getFolderModel = GetFolderForDocModel
 	case constvar.FileFolderCode:
 		getFolderModel = GetFolderForFileModel
+	default:
+		return errors.New("wrong type_id")
 	}
+
 	if isFatherProject {
 		// 查询结果，解析 children 再更新
 		item, err := GetProject(fatherId)
@@ -138,18 +145,24 @@ func AddChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositionIn
 	switch obj.(type) {
 	case *DocModel:
 		id = obj.(*DocModel).ID
-		code = 1
+		code = constvar.DocCode
+		getFolderModel = GetFolderForDocModel
 	case *FileModel:
 		id = obj.(*FileModel).ID
-		code = 2
+		code = constvar.FileCode
+		getFolderModel = GetFolderForFileModel
 	case *FolderForDocModel:
 		id = obj.(*FolderForDocModel).ID
+		code = constvar.DocFolderCode
 		getFolderModel = GetFolderForDocModel
 		isFolder = uint32(1)
 	case *FolderForFileModel:
 		id = obj.(*FolderForFileModel).ID
+		code = constvar.FileFolderCode
 		getFolderModel = GetFolderForFileModel
 		isFolder = uint32(1)
+	default:
+		return errors.New("wrong type_id")
 	}
 
 	if isFatherProject {
@@ -158,14 +171,14 @@ func AddChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositionIn
 		if err != nil {
 			return err
 		}
-		if code == 1 {
+		if code == constvar.DocCode || code == constvar.DocFolderCode {
 			newChildren, err := addChildren(item.DocChildren, id, childrenPositionIndex, isFolder)
 			if err != nil {
 				return err
 			}
 
 			item.DocChildren = newChildren
-		} else if code == 2 {
+		} else if code == constvar.FileCode || code == constvar.FileFolderCode {
 			newChildren, err := addChildren(item.FileChildren, id, childrenPositionIndex, isFolder)
 			if err != nil {
 				return err
@@ -189,9 +202,15 @@ func AddChildren(tx *gorm.DB, isFatherProject bool, fatherId, childrenPositionIn
 
 		item.Children = newChildren
 
-		if err := tx.Save(item).Error; err != nil {
+		if code == constvar.DocCode || code == constvar.DocFolderCode {
+			err = tx.Table("foldersformds").Save(item).Error
+		} else if code == constvar.FileCode || code == constvar.FileFolderCode {
+			err = tx.Table("foldersforfiles").Save(item).Error
+		}
+		if err != nil {
 			return err
 		}
+
 	}
 
 	return nil

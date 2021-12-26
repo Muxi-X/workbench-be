@@ -27,6 +27,8 @@ func (s *Service) GetFolderInfoList(ctx context.Context, req *pb.GetInfoByIdsReq
 		f = model.GetFolderForDocInfoByIds
 	} else if uint8(req.TypeId) == constvar.FileFolderCode {
 		f = model.GetFolderForFileInfoByIds
+	} else {
+		return e.BadRequestErr(errno.ErrBind, "wrong type_id")
 	}
 
 	list, err := f(scope)

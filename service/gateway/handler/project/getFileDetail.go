@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"muxi-workbench/pkg/constvar"
 	"strconv"
 
 	. "muxi-workbench-gateway/handler"
@@ -51,6 +52,7 @@ func GetFileDetail(c *gin.Context) {
 		ProjectId: projectID,
 		Id:        uint32(fileID),
 		FatherId:  uint32(fatherID),
+		TypeId:    uint32(constvar.FileCode),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())

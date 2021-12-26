@@ -24,7 +24,6 @@ func (s *Service) CreateFile(ctx context.Context, req *pb.CreateFileRequest, res
 		RealName:   req.Name,
 		Re:         false,
 		Top:        false,
-		TeamID:     req.TeamId, // 查询一下用户信息，user 服务 rpc
 		CreateTime: t.Format("2006-01-02 15:04:05"),
 		ProjectID:  req.ProjectId,
 		URL:        req.Url,

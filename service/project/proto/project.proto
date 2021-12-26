@@ -32,7 +32,6 @@ service ProjectService {
   rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
   rpc UpdateDoc(UpdateDocRequest ) returns (ProjectIDResponse) {}
   rpc DeleteDoc(DeleteRequest) returns (Response) {}
-  rpc GetDocDetail(GetFileDetailRequest) returns (DocDetail) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
   // 文档的评论
   rpc CreateDocComment(CreateDocCommentRequest) returns (Response) {}
@@ -76,6 +75,7 @@ message GetFileDetailRequest {
   uint32 id = 1;
   uint32 father_id = 2;
   uint32 project_id = 3;
+  uint32 type_id = 4;
 }
 
 message DeleteRequest {
@@ -358,6 +358,9 @@ message FileDetail {
   string creator = 4;
   string create_time = 5;
   string project_name = 6;
+  string editor = 7;
+  string content = 8;
+  string last_edit_time = 9;
 }
 
 message GetFileInfoListResponse {

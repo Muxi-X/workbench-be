@@ -1,0 +1,3828 @@
+basePath: /api/v1
+definitions:
+  ApplicationListResponse:
+    properties:
+      apply_list:
+        items:
+          $ref: '#/definitions/ApplyUserItem'
+        type: array
+      count:
+        type: integer
+    type: object
+  ApplyUserItem:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  AttentionItem:
+    properties:
+      date:
+        type: string
+      file:
+        $ref: '#/definitions/File'
+      id:
+        type: integer
+      time:
+        type: string
+      user:
+        $ref: '#/definitions/AttentionUser'
+    type: object
+  AttentionListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/AttentionItem'
+        type: array
+    type: object
+  AttentionUser:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  ChildrenInfo:
+    properties:
+      creat_time:
+        type: string
+      creator_name:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      path:
+        type: string
+      type:
+        type: boolean
+    type: object
+  Comment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
+  CommentListResponse:
+    properties:
+      commentlist:
+        items:
+          $ref: '#/definitions/Comment'
+        type: array
+      count:
+        type: integer
+    type: object
+  CreateCommentRequest:
+    properties:
+      content:
+        type: string
+    type: object
+  CreateDocCommentRequest:
+    properties:
+      content:
+        type: string
+    type: object
+  CreateDocRequest:
+    properties:
+      children_position_index:
+        description: 子节点的位置
+        type: integer
+      content:
+        type: string
+      doc_name:
+        type: string
+      father_id:
+        description: 父节点 id
+        type: integer
+    type: object
+  CreateFileRequest:
+    properties:
+      children_position_index:
+        type: integer
+      father_id:
+        type: integer
+      file_name:
+        type: string
+      url:
+        type: string
+    type: object
+  CreateFolderRequest:
+    properties:
+      children_position_index:
+        type: integer
+      father_id:
+        type: integer
+      name:
+        type: string
+    type: object
+  CreateGroupRequest:
+    properties:
+      group_name:
+        type: string
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  CreateInvitationResponse:
+    properties:
+      hash:
+        type: string
+    type: object
+  CreateProjectRequest:
+    properties:
+      intro:
+        type: string
+      name:
+        type: string
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  CreateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  CreateTeamRequest:
+    properties:
+      team_name:
+        type: string
+    type: object
+  DeleteApplicationRequest:
+    properties:
+      application_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  DeleteCommentRequest:
+    properties:
+      status_id:
+        type: integer
+      title:
+        type: string
+    type: object
+  DeleteDocCommentRequest:
+    properties:
+      project_id:
+        type: integer
+    type: object
+  DeleteDocRequest:
+    properties:
+      doc_name:
+        type: string
+      project_name:
+        type: string
+    type: object
+  DeleteFileRequest:
+    properties:
+      file_name:
+        type: string
+      project_name:
+        type: string
+    type: object
+  DeleteFolderRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  DeleteRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  DeleteTrashbinRequest:
+    properties:
+      type:
+        type: integer
+    type: object
+  DocComment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
+  DocCommentListResponse:
+    properties:
+      comment_list:
+        items:
+          $ref: '#/definitions/DocComment'
+        type: array
+      count:
+        type: integer
+    type: object
+  DropTeamRequest:
+    properties:
+      team_id:
+        type: integer
+    type: object
+  FeedItem:
+    properties:
+      action:
+        type: string
+      date:
+        type: string
+      id:
+        type: integer
+      show_divider:
+        description: 分割线
+        type: boolean
+      source:
+        $ref: '#/definitions/Source'
+      time:
+        type: string
+      user:
+        $ref: '#/definitions/FeedUser'
+    type: object
+  FeedListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FeedItem'
+        type: array
+    type: object
+  FeedUser:
+    properties:
+      avatar_url:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  File:
+    properties:
+      file_creator:
+        $ref: '#/definitions/AttentionUser'
+      file_id:
+        type: integer
+      file_kind:
+        type: integer
+      file_name:
+        type: string
+      file_project_id:
+        type: integer
+      file_project_name:
+        type: string
+    type: object
+  FileChildrenItem:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      type:
+        description: 判断是不是 folder 0->file 1->folder
+        type: boolean
+    type: object
+  FileInfoItem:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  FileRequest:
+    properties:
+      id:
+        type: integer
+      kind:
+        type: integer
+    type: object
+  GetDocDetailResponse:
+    properties:
+      content:
+        type: string
+      create_time:
+        type: string
+      creator:
+        type: string
+      doc_id:
+        type: integer
+      last_edit_time:
+        type: string
+      last_editor:
+        type: string
+      title:
+        type: string
+    type: object
+  GetFileChildrenResponse:
+    properties:
+      count:
+        type: integer
+      file_children:
+        items:
+          $ref: '#/definitions/ChildrenInfo'
+        type: array
+    type: object
+  GetFileDetailResponse:
+    properties:
+      create_time:
+        type: string
+      creator:
+        type: string
+      file_id:
+        type: integer
+      url:
+        type: string
+    type: object
+  GetFileInfoListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/FileInfoItem'
+        type: array
+    type: object
+  GetMemberResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/MemberListItem'
+        type: array
+    type: object
+  GetProjectIdsForUserResponse:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    type: object
+  GetProjectInfoResponse:
+    properties:
+      creator_name:
+        type: string
+      doc_children:
+        items:
+          $ref: '#/definitions/FileChildrenItem'
+        type: array
+      file_children:
+        items:
+          $ref: '#/definitions/FileChildrenItem'
+        type: array
+      intro:
+        type: string
+      project_id:
+        type: integer
+      project_name:
+        type: string
+      time:
+        type: string
+      user_count:
+        type: integer
+    type: object
+  GetProjectListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/ProjectListItem'
+        type: array
+    type: object
+  GetResponse:
+    properties:
+      avatar:
+        type: string
+      content:
+        type: string
+      like_count:
+        type: integer
+      liked:
+        type: boolean
+      sid:
+        type: integer
+      time:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+      user_name:
+        type: string
+    type: object
+  GetTrashbinResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/Trashbin'
+        type: array
+    type: object
+  Group:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      user_count:
+        type: integer
+    type: object
+  GroupListResponse:
+    properties:
+      count:
+        type: integer
+      groups:
+        items:
+          $ref: '#/definitions/Group'
+        type: array
+    type: object
+  JoinRequest:
+    properties:
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  LikeRequest:
+    properties:
+      liked:
+        type: boolean
+    type: object
+  ListRequest:
+    properties:
+      group:
+        type: integer
+      team:
+        type: integer
+    type: object
+  ListResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/User'
+        type: array
+    type: object
+  LoginRequest:
+    properties:
+      oauth_code:
+        type: string
+    type: object
+  LoginResponse:
+    properties:
+      redirect_url:
+        type: string
+      token:
+        type: string
+    type: object
+  Member:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group_id:
+        type: integer
+      group_name:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        type: integer
+      team_id:
+        type: integer
+    type: object
+  MemberListItem:
+    properties:
+      avatar:
+        type: string
+      group_name:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        type: integer
+    type: object
+  MemberListResponse:
+    properties:
+      count:
+        type: integer
+      members:
+        items:
+          $ref: '#/definitions/Member'
+        type: array
+    type: object
+  ParseInvitationResponse:
+    properties:
+      team_id:
+        type: integer
+    type: object
+  ProjectListItem:
+    properties:
+      id:
+        type: integer
+      logo:
+        type: string
+      name:
+        type: string
+    type: object
+  ProjectUpdateRequest:
+    properties:
+      intro:
+        type: string
+      project_name:
+        type: string
+    type: object
+  RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  RemoveRequest:
+    properties:
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  RemoveTrashbinRequest:
+    properties:
+      children_position_index:
+        type: integer
+      fatherId:
+        type: integer
+      is_father_project:
+        type: boolean
+      type:
+        type: integer
+    type: object
+  Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  SearchRequest:
+    properties:
+      keyword:
+        type: string
+      limit:
+        type: integer
+      offset:
+        type: integer
+      pagination:
+        type: boolean
+      type:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  SearchResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/SearchResult'
+        type: array
+    type: object
+  SearchResult:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      project_name:
+        type: string
+      time:
+        type: string
+      title:
+        type: string
+      user_name:
+        type: string
+    type: object
+  Source:
+    properties:
+      id:
+        type: integer
+      kind:
+        description: 类型，1 -> 团队，2 -> 项目，3 -> 文档，4 -> 文件，6 -> 进度（5 不使用）
+        type: integer
+      name:
+        type: string
+      project_id:
+        type: integer
+      project_name:
+        type: string
+    type: object
+  Status:
+    properties:
+      avatar:
+        type: string
+      comment_count:
+        type: integer
+      content:
+        type: string
+      id:
+        type: integer
+      like_count:
+        type: integer
+      liked:
+        type: boolean
+      time:
+        type: string
+      title:
+        type: string
+      username:
+        type: string
+    type: object
+  StatusListResponse:
+    properties:
+      count:
+        type: integer
+      stauts:
+        items:
+          $ref: '#/definitions/Status'
+        type: array
+    type: object
+  Trashbin:
+    properties:
+      create_time:
+        type: string
+      delete_time:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      type:
+        type: integer
+    type: object
+  UpdateDocCommentRequest:
+    properties:
+      content:
+        type: string
+      project_id:
+        type: integer
+    type: object
+  UpdateDocRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  UpdateFilePositionRequest:
+    properties:
+      childrenPositionIndex:
+        type: integer
+      fatherId:
+        type: integer
+      fatherType:
+        type: integer
+      id:
+        type: integer
+      type:
+        type: integer
+    type: object
+  UpdateFileRequest:
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  UpdateFolderRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  UpdateGroupInfoRequest:
+    properties:
+      new_group_name:
+        type: string
+    type: object
+  UpdateInfoRequest:
+    properties:
+      avatar_url:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      real_name:
+        type: string
+    type: object
+  UpdateMemberRequest:
+    properties:
+      user_list:
+        description: users' ids
+        items:
+          type: integer
+        type: array
+    type: object
+  UpdateMembersRequest:
+    properties:
+      group_id:
+        type: integer
+      user_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  UpdateRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  UpdateTeamInfoRequest:
+    properties:
+      new_name:
+        type: string
+    type: object
+  UrlModel:
+    properties:
+      url:
+        type: string
+    type: object
+  User:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      real_name:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
+    type: object
+  UserProfile:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      group:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      real_name:
+        type: string
+      role:
+        type: integer
+      team:
+        type: integer
+      tel:
+        type: string
+    type: object
+host: work.test.muxi-tech.xyz
+info:
+  contact: {}
+  description: The gateway of muxi-workbench
+  title: muxi-workbench-gateway
+  version: "1.0"
+paths:
+  /attention:
+    delete:
+      consumes:
+      - application/json
+      description: 取消关注
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_attention_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/FileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete attention api
+      tags:
+      - attention
+    post:
+      consumes:
+      - application/json
+      description: 添加关注
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_attention_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/FileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create attention api
+      tags:
+      - attention
+  /attention/list/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的关注list
+      parameters:
+      - description: user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/AttentionListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get attention list api
+      tags:
+      - attention
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login the workbench
+      parameters:
+      - description: login_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: login api
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: register user
+      parameters:
+      - description: register_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: register api
+      tags:
+      - auth
+  /feed/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FeedListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get feed list api
+      tags:
+      - feed
+  /feed/list/group/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某一组的动态list，0 代表不筛选，1->产品，2->前端，3->后端，4->安卓，5->设计
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FeedListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get feed group_list by group_id api
+      tags:
+      - feed
+  /feed/list/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取此用户的动态list
+      parameters:
+      - description: filtered_user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FeedListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list feeds filtered by user_id api
+      tags:
+      - feed
+  /file/doc:
+    post:
+      consumes:
+      - application/json
+      description: 通过父节点 id，和插入节点位置确定新建文档的位置。
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_doc_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDocRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: creates a new doc api
+      tags:
+      - project
+  /file/doc/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除doc
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_doc_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteDocRequest'
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete a doc api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改文档
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update_doc_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateDocRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update doc info api
+      tags:
+      - project
+  /file/doc/{id}/children/{file_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某个文档的详情
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: doc_id
+        in: path
+        name: file_id
+        required: true
+        type: integer
+      - description: father_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetDocDetailResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get doc detail api
+      tags:
+      - project
+  /file/doc/{id}/comment:
+    post:
+      consumes:
+      - application/json
+      description: 新建文档评论
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_doc_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateDocCommentRequest'
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create a doc comment api
+      tags:
+      - project
+  /file/doc/{id}/comment/{comment_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除文档的评论
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_doc_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteDocCommentRequest'
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: comment_id
+        in: path
+        name: comment_id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete a doc comment api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改文档评论
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: comment_id
+        in: path
+        name: comment_id
+        required: true
+        type: integer
+      - description: update_doc_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateDocCommentRequest'
+      - description: 此文档所属项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update doc comment api
+      tags:
+      - project
+  /file/doc/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: 获取文档评论列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: doc_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DocCommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list doc comments api
+      tags:
+      - project
+  /file/docs:
+    get:
+      consumes:
+      - application/json
+      description: 获取文档列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: folder_ids 是一个数组
+        in: query
+        items:
+          type: integer
+        name: ids
+        required: true
+        type: array
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileInfoListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get doc info list api
+      tags:
+      - project
+  /file/file:
+    post:
+      consumes:
+      - application/json
+      description: 通过父节点 id，和插入节点位置确定新建文件的位置。
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_file_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateFileRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: creates a new file api
+      tags:
+      - project
+  /file/file/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除文件
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_file_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteFileRequest'
+      - description: file_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete a file api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改文件
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 此文件 id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update_file_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateFileRequest'
+      - description: 此文件所属项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update file api
+      tags:
+      - project
+  /file/file/{id}/children/{file_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某个文件的详情
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: file_id
+        in: path
+        name: file_id
+        required: true
+        type: integer
+      - description: father_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileDetailResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get file detail api
+      tags:
+      - project
+  /file/files:
+    get:
+      consumes:
+      - application/json
+      description: 获取文件列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: folder_ids 是一个数组
+        in: query
+        items:
+          type: integer
+        name: ids
+        required: true
+        type: array
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileInfoListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get file info list api
+      tags:
+      - project
+  /folder/children/{old_father_id}:
+    put:
+      consumes:
+      - application/json
+      description: 移动文件位置
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 此文件移动前的父节点 id
+        in: path
+        name: old_father_id
+        required: true
+        type: integer
+      - description: update_file_position_request
+        in: body
+        name: object
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/UpdateFilePositionRequest'
+          type: array
+      - description: 此文件所属项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update file position api
+      tags:
+      - project
+  /folder/doc_children/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某个文档夹下的节点(文档或文档夹)
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: doc_folder_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileChildrenResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get doc children api
+      tags:
+      - project
+  /folder/docfolder:
+    get:
+      consumes:
+      - application/json
+      description: 获取文档夹列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: folder_ids 是一个数组
+        in: query
+        items:
+          type: integer
+        name: ids
+        required: true
+        type: array
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileInfoListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get doc folder info list api
+      tags:
+      - project
+    post:
+      consumes:
+      - application/json
+      description: 新建文档夹
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_folder_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateFolderRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: creates a doc folder api
+      tags:
+      - project
+  /folder/docfolder/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除文档文件夹
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: doc_folder_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete a doc folder api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改文档夹名字
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 文档夹 id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update_folder_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateFolderRequest'
+      - description: 此文档夹所属项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update doc folder's name api
+      tags:
+      - project
+  /folder/file_children/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取某个文件夹下的节点(文件或文件夹)
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: file_folder_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileChildrenResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get file children api
+      tags:
+      - project
+  /folder/filefolder:
+    get:
+      consumes:
+      - application/json
+      description: 获取文件夹列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: folder_ids 是一个数组
+        in: query
+        items:
+          type: integer
+        name: ids
+        required: true
+        type: array
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetFileInfoListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get file folder info list api
+      tags:
+      - project
+    post:
+      consumes:
+      - application/json
+      description: 新建文件夹
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_folder_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateFolderRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create a file folder api
+      tags:
+      - project
+  /folder/filefolder/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除文件文件夹
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: file_folder_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete a file folder api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改文件夹名字
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 此文件夹 id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update_folder_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateFolderRequest'
+      - description: 此文件夹所属项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update file folder's name api
+      tags:
+      - project
+  /load_file/download:
+    post:
+      consumes:
+      - application/json
+      description: 通过存储的文件url，返回可用于直接下载的url
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: file_url
+        in: body
+        name: url
+        required: true
+        schema:
+          $ref: '#/definitions/UrlModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UrlModel'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: download file api
+      tags:
+      - loadFile
+  /load_file/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: 上传文件 图片，返回url
+      parameters:
+      - description: 二进制文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UrlModel'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: upload file api
+      tags:
+      - loadFile
+  /project:
+    delete:
+      consumes:
+      - application/json
+      description: 删除项目
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_folder_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteFolderRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: deletes a project api
+      tags:
+      - project
+    get:
+      consumes:
+      - application/json
+      description: 获取项目的详情
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetProjectInfoResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get project info api
+      tags:
+      - project
+    post:
+      consumes:
+      - application/json
+      description: 新建项目
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_project_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateProjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: creates a project api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改项目详情
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/ProjectUpdateRequest'
+      - description: 项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update project info api
+      tags:
+      - project
+  /project/ids:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户的所有项目
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetProjectIdsForUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get project ids for user api
+      tags:
+      - project
+  /project/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取项目列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetProjectListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get project list api
+      tags:
+      - project
+  /project/member:
+    get:
+      consumes:
+      - application/json
+      description: 获取项目成员
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetMemberResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get file info list api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改项目成员
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_member_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMemberRequest'
+      - description: 项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update project member api
+      tags:
+      - project
+  /project/search:
+    post:
+      consumes:
+      - application/json
+      description: 'search_type: 为0时搜索doc_title and file_title，为1时继续搜索doc_content'
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: search_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/SearchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/SearchResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: searches from title of doc and file or content of doc api
+      tags:
+      - project
+  /status:
+    get:
+      consumes:
+      - application/json
+      description: 拉取进度列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: group
+        in: query
+        name: group
+        type: integer
+      - description: uid
+        in: query
+        name: uid
+        type: integer
+      - description: team
+        in: query
+        name: team
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/StatusListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list status api
+      tags:
+      - status
+    post:
+      consumes:
+      - application/json
+      description: 创建 status
+      parameters:
+      - description: create_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateRequest'
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create status api
+      tags:
+      - status
+  /status/comment/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 通过 status_id 和 status_title 删除 status_comment
+      parameters:
+      - description: comment_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete comment api
+      tags:
+      - status
+    post:
+      consumes:
+      - application/json
+      description: 创建评论
+      parameters:
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: create_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateCommentRequest'
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create comment api
+      tags:
+      - status
+  /status/detail/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 通过 status_id 和 title 删除 status
+      parameters:
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete status api
+      tags:
+      - status
+    get:
+      consumes:
+      - application/json
+      description: 获取进度实体
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get status api
+      tags:
+      - status
+    put:
+      consumes:
+      - application/json
+      description: 编辑进度
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update status api
+      tags:
+      - status
+  /status/detail/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: 通过 status_id 获取 comment_list
+      parameters:
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get comments list api
+      tags:
+      - status
+  /status/like/{id}:
+    put:
+      consumes:
+      - application/json
+      description: 给进度点赞
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: status_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: like_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/LikeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: like status api
+      tags:
+      - status
+  /team:
+    delete:
+      consumes:
+      - application/json
+      description: 删除 team
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: drop_team_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DropTeamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: drop team api
+      tags:
+      - team
+    post:
+      consumes:
+      - application/json
+      description: 创建 team
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_team_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTeamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create team api
+      tags:
+      - team
+    put:
+      consumes:
+      - application/json
+      description: 更新团队信息
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_team_info_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTeamInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update team info api
+      tags:
+      - team
+  /team/application:
+    delete:
+      consumes:
+      - application/json
+      description: 批量删除 applications
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_application_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteApplicationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete applications api
+      tags:
+      - application
+    post:
+      consumes:
+      - application/json
+      description: 创建 application
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create application api
+      tags:
+      - application
+  /team/application/list:
+    get:
+      consumes:
+      - application/json
+      description: 拉取 application 列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ApplicationListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list application api
+      tags:
+      - application
+  /team/group:
+    get:
+      consumes:
+      - application/json
+      description: 拉取 group 列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GroupListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list group api
+      tags:
+      - group
+    post:
+      consumes:
+      - application/json
+      description: 创建 group
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_group_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/CreateGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create group api
+      tags:
+      - group
+  /team/group/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除 group
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete group api
+      tags:
+      - group
+    put:
+      consumes:
+      - application/json
+      description: 更新组别信息
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_group_info_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateGroupInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update group info api
+      tags:
+      - group
+  /team/group/members:
+    put:
+      consumes:
+      - application/json
+      description: 更新组别成员
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_members_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateMembersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update members of group api
+      tags:
+      - group
+  /team/group/members/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据 groupID 拉取 members 列表 (0 -> all)
+      parameters:
+      - description: group_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page 从 0 开始计数， 如果传入非负数或者不传值则不分页
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/MemberListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list members api
+      tags:
+      - group
+  /team/invitation:
+    get:
+      consumes:
+      - application/json
+      description: 创建 invitation
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: ' expired 以秒为单位， 默认为 3600 秒'
+        in: query
+        name: expired
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CreateInvitationResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create invitation api
+      tags:
+      - invitation
+  /team/invitation/{hash}:
+    get:
+      consumes:
+      - application/json
+      description: 解析 invitation
+      parameters:
+      - description: hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ParseInvitationResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: parse invitation api
+      tags:
+      - invitation
+  /team/member:
+    delete:
+      consumes:
+      - application/json
+      description: 移除成员
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: remove_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/RemoveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: remove api
+      tags:
+      - team
+    post:
+      consumes:
+      - application/json
+      description: 加入 team
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: join_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/JoinRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: join team api
+      tags:
+      - team
+  /trashbin:
+    get:
+      consumes:
+      - application/json
+      description: 获取项目回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetTrashbinResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get project trashbin api
+      tags:
+      - project
+  /trashbin/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除回收站内文件,其中 type：0-project 1-doc 2-file 3-doc folder 4-file folder
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: file_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: delete_trashbin_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/DeleteTrashbinRequest'
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: deletes a trashbin api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 恢复回收站资源(type：0-project 1-doc 2-file 3-doc_folder 4-file_folder)
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 回收站中文件的 id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: remove_trashbin_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/RemoveTrashbinRequest'
+      - description: 此回收站对应的项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update trashbin api
+      tags:
+      - project
+  /user:
+    put:
+      consumes:
+      - application/json
+      description: 修改用户个人信息
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: update_info_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update info api
+      tags:
+      - user
+  /user/list:
+    get:
+      consumes:
+      - application/json
+      description: 通过 group 和 team 获取 user_list
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: get_user_list_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/ListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get user_list api
+      tags:
+      - user
+  /user/myprofile:
+    get:
+      consumes:
+      - application/json
+      description: 获取 my 完整 user 信息
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserProfile'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get my_profile api
+      tags:
+      - user
+  /user/profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 通过 userId 获取完整 user 信息
+      parameters:
+      - description: user_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserProfile'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: get user_profile api
+      tags:
+      - user
+swagger: "2.0"
+tags:
+- description: 动态服务
+  name: feed
+- description: 关注服务
+  name: attention
+- description: 进度服务
+  name: status
+- description: 用户服务
+  name: user
+- description: 认证服务
+  name: auth
+- description: 项目服务
+  name: project
+- description: 团队服务
+  name: team
+- description: 团队/组服务
+  name: group
+- description: 团队/邀请服务
+  name: invitation
+- description: 团队/申请服务
+  name: application
+- description: 文件上传下载服务
+  name: loadFile

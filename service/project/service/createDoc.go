@@ -20,7 +20,6 @@ func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *
 		Content:      req.Content,
 		Re:           false,
 		Top:          false,
-		TeamID:       req.TeamId, // 查询一下用户信息
 		CreateTime:   t.Format("2006-01-02 15:04:05"),
 		ProjectID:    req.ProjectId,
 		EditorID:     req.UserId,

@@ -1,10 +1,10 @@
 package model
 
 import (
+	"errors"
+	"gorm.io/gorm"
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
-
-	"gorm.io/gorm"
 )
 
 // ProjectModel project table's structure
@@ -27,11 +27,9 @@ type ProjectDetail struct {
 	Intro        string         `json:"intro" gorm:"column:intro;" binding:"required"`
 	Time         string         `json:"time" gorm:"column:time;" binding:"required"`
 	Count        uint32         `json:"count" gorm:"column:count;" binding:"required"`
-	TeamID       uint32         `json:"teamId" gorm:"column:team_id;" binding:"required"`
 	FileChildren string         `json:"fileChildren" gorm:"column:file_children;" binding:"required"`
 	DocChildren  string         `json:"docChildren" gorm:"column:doc_children;" binding:"required"`
 	DeletedAt    gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at;" binding:"required"`
-	CreatorId    uint32         `json:"creator_id" gorm:"column:creator_id;"`
 	CreatorName  string         `json:"creator_name" gorm:"column:creator_name"`
 }
 
@@ -157,7 +155,7 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			return err
 		}
 		if err := AddChildren(tx, isFatherProject, fatherId,
-			childrenPositionIndex, doc); err != nil {
+			childrenPositionIndex, &doc); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -174,7 +172,7 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			return err
 		}
 		if err := AddChildren(tx, isFatherProject, fatherId,
-			childrenPositionIndex, file); err != nil {
+			childrenPositionIndex, &file); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -191,7 +189,7 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			return err
 		}
 		if err := AddChildren(tx, isFatherProject, fatherId,
-			childrenPositionIndex, folder); err != nil {
+			childrenPositionIndex, &folder); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -208,7 +206,7 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			return err
 		}
 		if err := AddChildren(tx, isFatherProject, fatherId,
-			childrenPositionIndex, folder); err != nil {
+			childrenPositionIndex, &folder); err != nil {
 			tx.Rollback()
 			return err
 		}
@@ -217,6 +215,9 @@ func UpdateFilePosition(file interface{}, fatherId, oldFatherId uint32,
 			tx.Rollback()
 			return err
 		}
+	default:
+		tx.Rollback()
+		return errors.New("wrong type_id")
 	}
 
 	return tx.Commit().Error

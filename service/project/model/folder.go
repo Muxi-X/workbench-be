@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 )
@@ -39,11 +40,13 @@ func (f *FolderModel) Create(typeId uint8) error {
 			FolderModel: *f,
 		}
 		return folder.Create()
-	} else {
+	} else if typeId == constvar.FileFolderCode {
 		folder := FolderForFileModel{
 			FolderModel: *f,
 		}
 		return folder.Create()
+	} else {
+		return errors.New("wrong type_id")
 	}
 }
 
@@ -53,11 +56,13 @@ func (f *FolderModel) Update(typeId uint8) error {
 			FolderModel: *f,
 		}
 		return folder.Update()
-	} else {
+	} else if typeId == constvar.FileFolderCode {
 		folder := FolderForFileModel{
 			FolderModel: *f,
 		}
 		return folder.Update()
+	} else {
+		return errors.New("wrong type_id")
 	}
 }
 
@@ -83,7 +88,20 @@ func CreateFolder(folder FolderModel, childrenPositionIndex uint32, typeId uint8
 		fatherId = folder.ProjectID
 	}
 
-	if err := AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
+	var err error
+	if typeId == constvar.DocFolderCode {
+		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForDocModel{
+			FolderModel: folder,
+		})
+	} else if typeId == constvar.FileFolderCode {
+		err = AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, &FolderForFileModel{
+			FolderModel: folder,
+		})
+	} else {
+		err = errors.New("wrong type_id")
+	}
+
+	if err != nil {
 		tx.Rollback()
 		return uint32(0), err
 	}

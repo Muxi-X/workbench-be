@@ -2,6 +2,7 @@ package project
 
 import (
 	"context"
+	"muxi-workbench/pkg/constvar"
 	"strconv"
 
 	. "muxi-workbench-gateway/handler"
@@ -46,10 +47,11 @@ func GetDocDetail(c *gin.Context) {
 		return
 	}
 
-	getDocDetailResp, err := service.ProjectClient.GetDocDetail(context.Background(), &pbp.GetFileDetailRequest{
+	getDocDetailResp, err := service.ProjectClient.GetFileDetail(context.Background(), &pbp.GetFileDetailRequest{
 		ProjectId: projectID,
 		Id:        uint32(docID),
 		FatherId:  uint32(fatherID),
+		TypeId:    uint32(constvar.DocCode),
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -59,11 +61,11 @@ func GetDocDetail(c *gin.Context) {
 	// 构造返回结果
 	resp := GetDocDetailResponse{
 		Id:           getDocDetailResp.Id,
-		Title:        getDocDetailResp.Title,
+		Title:        getDocDetailResp.Name,
 		Content:      getDocDetailResp.Content,
 		Creator:      getDocDetailResp.Creator,
 		CreateTime:   getDocDetailResp.CreateTime,
-		LastEditor:   getDocDetailResp.LastEditor,
+		LastEditor:   getDocDetailResp.Editor,
 		LastEditTime: getDocDetailResp.LastEditTime,
 	}
 

@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	m "muxi-workbench/model"
 )
 
@@ -51,34 +50,4 @@ func GetFileChildrenById(id uint32) (*FolderChildren, error) {
 	s := &FolderChildren{}
 	d := m.DB.Self.Table("foldersforfiles").Where("id = ? AND re = 0", id).Find(&s)
 	return s, d.Error
-}
-
-// CreateFileFolder ... 事务
-func CreateFileFolder(db *gorm.DB, folder *FolderForFileModel, childrenPositionIndex uint32) (uint32, error) {
-	tx := db.Begin()
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		}
-	}()
-
-	if err := folder.Create(); err != nil {
-		tx.Rollback()
-		return uint32(0), err
-	}
-
-	// 获取 fatherId
-	fatherId := folder.FatherId
-	isFatherProject := false
-	if folder.FatherId == 0 {
-		isFatherProject = true
-		fatherId = folder.ProjectID
-	}
-
-	if err := AddChildren(tx, isFatherProject, fatherId, childrenPositionIndex, folder); err != nil {
-		tx.Rollback()
-		return uint32(0), err
-	}
-
-	return folder.ID, tx.Commit().Error
 }

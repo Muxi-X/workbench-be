@@ -35,6 +35,8 @@ func (s *Service) GetFolderChildren(ctx context.Context, req *pb.GetRequest, res
 		item, err = model.GetFileChildrenById(req.Id)
 		getDetail = model.GetFileDetail
 		getFolderDetail = model.GetFolderForFileDetail
+	} else {
+		return e.BadRequestErr(errno.ErrBind, "wrong type_id")
 	}
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

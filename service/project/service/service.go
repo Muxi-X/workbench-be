@@ -74,7 +74,7 @@ func GetPath(id uint32, code uint8) string {
 
 	f()
 
-	project, _ := model.GetProject(id)
-	path = project.Name + "/" + path
+	name, _ := model.GetProjectName(id)
+	path = name + "/" + path
 	return path
 }

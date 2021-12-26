@@ -21,6 +21,8 @@ func (s *Service) DeleteFolder(ctx context.Context, req *pb.DeleteRequest, res *
 		item, err = model.GetFolderForDocModel(req.Id)
 	} else if uint8(req.TypeId) == constvar.FileFolderCode {
 		item, err = model.GetFolderForFileModel(req.Id)
+	} else {
+		return e.BadRequestErr(errno.ErrBind, "wrong type_id")
 	}
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())

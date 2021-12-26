@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"muxi-workbench-project/model"
 	"muxi-workbench/log"
@@ -51,6 +52,8 @@ func SynchronizeTrashbinToRedis() error {
 			err = model.GetChildFolder(v.FileId, &res, constvar.DocCode)
 		case constvar.FileFolderCode:
 			err = model.GetChildFolder(v.FileId, &res, constvar.FileCode)
+		default:
+			err = errors.New("wrong type_id")
 		}
 
 		if err != nil {
