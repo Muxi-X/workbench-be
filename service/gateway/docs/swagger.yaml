@@ -402,6 +402,11 @@ definitions:
       liked:
         type: boolean
     type: object
+  ListCommentRequest:
+    properties:
+      type_id:
+        type: integer
+    type: object
   ListRequest:
     properties:
       group:
@@ -631,8 +636,6 @@ definitions:
     properties:
       content:
         type: string
-      project_id:
-        type: integer
       type_id:
         type: integer
     type: object
@@ -766,6 +769,10 @@ definitions:
         type: string
       content:
         type: string
+      id:
+        type: integer
+      kind:
+        type: integer
       time:
         type: string
       uid:
@@ -1283,7 +1290,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 获取文档/文件评论列表
+      description: 一次获取文档/文件一二级评论列表，kind 为 1代表二级评论，一级评论在前，count为一级评论数
       parameters:
       - description: token 用户令牌
         in: header
@@ -1307,6 +1314,12 @@ paths:
         in: query
         name: page
         type: integer
+      - description: list_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/ListCommentRequest'
       - description: project_id
         in: query
         name: project_id

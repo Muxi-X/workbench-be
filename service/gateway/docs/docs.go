@@ -679,7 +679,7 @@ var doc = `{
         },
         "/file/comments/{id}": {
             "get": {
-                "description": "获取文档/文件评论列表",
+                "description": "一次获取文档/文件一二级评论列表，kind 为 1代表二级评论，一级评论在前，count为一级评论数",
                 "consumes": [
                     "application/json"
                 ],
@@ -722,6 +722,15 @@ var doc = `{
                         "description": "page",
                         "name": "page",
                         "in": "query"
+                    },
+                    {
+                        "description": "list_comment_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ListCommentRequest"
+                        }
                     },
                     {
                         "type": "integer",
@@ -5087,6 +5096,14 @@ var doc = `{
                 }
             }
         },
+        "ListCommentRequest": {
+            "type": "object",
+            "properties": {
+                "type_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "ListRequest": {
             "type": "object",
             "properties": {
@@ -5439,9 +5456,6 @@ var doc = `{
                 "content": {
                     "type": "string"
                 },
-                "project_id": {
-                    "type": "integer"
-                },
                 "type_id": {
                     "type": "integer"
                 }
@@ -5647,6 +5661,12 @@ var doc = `{
                 },
                 "content": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "integer"
                 },
                 "time": {
                     "type": "string"
