@@ -464,6 +464,295 @@ var doc = `{
                 }
             }
         },
+        "/file/comment/{id}": {
+            "post": {
+                "description": "新建文档/文件评论",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "create a doc or file comment api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "create_comment_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.CreateCommentRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "target_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "project_id",
+                        "name": "project_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/file/comment/{id}/{comment_id}": {
+            "put": {
+                "description": "修改文档/文件评论",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "update doc or file comment api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "target_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "comment_id",
+                        "name": "comment_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update_comment_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UpdateCommentRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "此文档/文件所属项目 id",
+                        "name": "project_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除文档/文件的评论",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "delete a doc or file comment api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "delete_comment_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.DeleteCommentRequest"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "target_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "comment_id",
+                        "name": "comment_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "project_id",
+                        "name": "project_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/file/comments/{id}": {
+            "get": {
+                "description": "获取文档/文件评论列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "project"
+                ],
+                "summary": "list doc or file comments api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "target_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "project_id",
+                        "name": "project_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
         "/file/doc": {
             "post": {
                 "description": "通过父节点 id，和插入节点位置确定新建文档的位置。",
@@ -721,295 +1010,6 @@ var doc = `{
                 }
             }
         },
-        "/file/doc/{id}/comment": {
-            "post": {
-                "description": "新建文档评论",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "project"
-                ],
-                "summary": "create a doc comment api",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "create_doc_comment_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/CreateDocCommentRequest"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "doc_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "project_id",
-                        "name": "project_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/file/doc/{id}/comment/{comment_id}": {
-            "put": {
-                "description": "修改文档评论",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "project"
-                ],
-                "summary": "update doc comment api",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "doc_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "comment_id",
-                        "name": "comment_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "update_doc_comment_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/UpdateDocCommentRequest"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "此文档所属项目 id",
-                        "name": "project_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "删除文档的评论",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "project"
-                ],
-                "summary": "delete a doc comment api",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "delete_doc_comment_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DeleteDocCommentRequest"
-                        }
-                    },
-                    {
-                        "type": "integer",
-                        "description": "doc_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "comment_id",
-                        "name": "comment_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "project_id",
-                        "name": "project_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/file/doc/{id}/comments": {
-            "get": {
-                "description": "获取文档评论列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "project"
-                ],
-                "summary": "list doc comments api",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "doc_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "last_id",
-                        "name": "last_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "project_id",
-                        "name": "project_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/DocCommentListResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            }
-        },
         "/file/docs": {
             "get": {
                 "description": "获取文档列表",
@@ -1032,7 +1032,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1347,7 +1350,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1533,7 +1539,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1830,7 +1839,10 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "type": "integer",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
                         "description": "folder_ids 是一个数组",
                         "name": "ids",
                         "in": "query",
@@ -1876,7 +1888,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "create a doc folder api",
+                "summary": "create a file folder api",
                 "parameters": [
                     {
                         "type": "string",
@@ -2813,7 +2825,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/CreateCommentRequest"
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CreateCommentRequest"
                         }
                     },
                     {
@@ -2878,7 +2890,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/DeleteCommentRequest"
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.DeleteCommentRequest"
                         }
                     }
                 ],
@@ -3122,7 +3134,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/CommentListResponse"
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
                         }
                     },
                     "401": {
@@ -4549,59 +4561,6 @@ var doc = `{
                 }
             }
         },
-        "Comment": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "cid": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "uid": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "CommentListResponse": {
-            "type": "object",
-            "properties": {
-                "commentlist": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Comment"
-                    }
-                },
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "CreateCommentRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                }
-            }
-        },
-        "CreateDocCommentRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                }
-            }
-        },
         "CreateDocRequest": {
             "type": "object",
             "properties": {
@@ -4721,25 +4680,6 @@ var doc = `{
                 }
             }
         },
-        "DeleteCommentRequest": {
-            "type": "object",
-            "properties": {
-                "status_id": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "DeleteDocCommentRequest": {
-            "type": "object",
-            "properties": {
-                "project_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "DeleteDocRequest": {
             "type": "object",
             "properties": {
@@ -4782,43 +4722,6 @@ var doc = `{
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "integer"
-                }
-            }
-        },
-        "DocComment": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "cid": {
-                    "type": "integer"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "uid": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "DocCommentListResponse": {
-            "type": "object",
-            "properties": {
-                "comment_list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/DocComment"
-                    }
-                },
-                "count": {
                     "type": "integer"
                 }
             }
@@ -5530,13 +5433,16 @@ var doc = `{
                 }
             }
         },
-        "UpdateDocCommentRequest": {
+        "UpdateCommentRequest": {
             "type": "object",
             "properties": {
                 "content": {
                     "type": "string"
                 },
                 "project_id": {
+                    "type": "integer"
+                },
+                "type_id": {
                     "type": "integer"
                 }
             }
@@ -5729,6 +5635,123 @@ var doc = `{
                     "type": "integer"
                 },
                 "tel": {
+                    "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_project.Comment": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_project.CommentListResponse": {
+            "type": "object",
+            "properties": {
+                "comment_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/muxi-workbench-gateway_handler_project.Comment"
+                    }
+                },
+                "count": {
+                    "description": "一级评论数",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "评论总数",
+                    "type": "integer"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_project.CreateCommentRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_project.DeleteCommentRequest": {
+            "type": "object",
+            "properties": {
+                "project_id": {
+                    "type": "integer"
+                },
+                "type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.Comment": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "cid": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.CommentListResponse": {
+            "type": "object",
+            "properties": {
+                "commentlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/muxi-workbench-gateway_handler_status.Comment"
+                    }
+                },
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.CreateCommentRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.DeleteCommentRequest": {
+            "type": "object",
+            "properties": {
+                "status_id": {
+                    "type": "integer"
+                },
+                "title": {
                     "type": "string"
                 }
             }

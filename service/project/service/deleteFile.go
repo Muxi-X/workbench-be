@@ -21,7 +21,7 @@ func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb
 	// 权限判定
 	if item.CreatorID != req.UserId {
 		if req.Role <= constvar.Normal {
-			return e.BadRequestErr(errno.ErrPermissionDenied, "")
+			return e.BadRequestErr(errno.ErrPermissionDenied, "the normal user cannot delete file not created by yourself")
 		}
 	}
 

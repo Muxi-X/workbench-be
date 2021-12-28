@@ -18,6 +18,12 @@ type CommentsModel struct {
 	DocID    uint32 `json:"docId" gorm:"column:doc_id;"`
 	FileID   uint32 `json:"fileId" gorm:"column:file_id;"`
 	StatusID uint32 `json:"statusId" gorm:"column:statu_id;"`
+	// ID       uint32 `json:"id" gorm:"column:id;not null" binding:"required"`
+	// Kind     uint32 `json:"kind" gorm:"column:kind;" binding:"required"` // 0 是一级，1 是二级
+	// Content  string `json:"content" gorm:"column:content;" binding:"required"`
+	// Time     string `json:"time" gorm:"column:time;" binding:"required"`
+	// Creator  uint32 `json:"creator" gorm:"column:creator;" binding:"required"`
+	// TargetID uint32 `json:"target_id" gorm:"column:target_id;" binding:"required"`
 }
 
 type CommentListItem struct {

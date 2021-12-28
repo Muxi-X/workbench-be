@@ -15,23 +15,23 @@ import (
 	"go.uber.org/zap"
 )
 
-// DeleteDocComment ... 删除文档评论
-// @Summary delete a doc comment api
-// @Description 删除文档的评论
+// DeleteComment ... 删除文档/文件评论
+// @Summary delete a doc or file comment api
+// @Description 删除文档/文件的评论
 // @Tags project
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
-// @Param object body DeleteDocCommentRequest true "delete_doc_comment_request"
-// @Param id path int true "doc_id"
+// @Param object body DeleteCommentRequest true "delete_comment_request"
+// @Param id path int true "target_id"
 // @Param comment_id path int true "comment_id"
 // @Param project_id query int true "project_id"
 // @Success 200 {object} handler.Response
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
-// @Router /file/doc/{id}/comment/{comment_id} [delete]
-func DeleteDocComment(c *gin.Context) {
-	log.Info("project deleteDocComment function call.",
+// @Router /file/comment/{id}/{comment_id} [delete]
+func DeleteComment(c *gin.Context) {
+	log.Info("project deleteComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
 	commentId, err := strconv.Atoi(c.Param("comment_id"))
@@ -40,13 +40,13 @@ func DeleteDocComment(c *gin.Context) {
 		return
 	}
 
-	docId, err := strconv.Atoi(c.Param("id"))
+	targetId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
-	var req DeleteDocCommentRequest
+	var req DeleteCommentRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
@@ -54,12 +54,13 @@ func DeleteDocComment(c *gin.Context) {
 
 	userID := c.MustGet("userID").(uint32)
 
-	deleteDocCommentReq := &pbp.DeleteDocCommentRequest{
+	deleteDocCommentReq := &pbp.DeleteCommentRequest{
+		TypeId:    req.TypeId,
 		UserId:    userID,
 		CommentId: uint32(commentId),
 	}
 
-	_, err = service.ProjectClient.DeleteDocComment(context.Background(), deleteDocCommentReq)
+	_, err = service.ProjectClient.DeleteComment(context.Background(), deleteDocCommentReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -70,8 +71,8 @@ func DeleteDocComment(c *gin.Context) {
 		Action: "取消评论",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3,
-			Id:          uint32(docId),
+			Kind:        3, // TODO
+			Id:          uint32(targetId),
 			Name:        "",
 			ProjectId:   req.ProjectId,
 			ProjectName: "",

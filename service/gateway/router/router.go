@@ -138,10 +138,11 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		fileRouter.GET("/doc/:id/children/:file_id", project.GetDocDetail)
 		fileRouter.DELETE("/doc/:id", project.DeleteDoc)
 		fileRouter.PUT("/doc/:id", project.UpdateDoc)
-		fileRouter.POST("/doc/:id/comment", project.CreateDocComment)
-		fileRouter.GET("/doc/:id/comments", project.ListDocComment)
-		fileRouter.PUT("/doc/:id/comment/:comment_id", project.UpdateDocComment)
-		fileRouter.DELETE("/doc/:id/comment/:comment_id", project.DeleteDocComment)
+		// 评论
+		fileRouter.POST("/comment/:id", project.CreateComment)
+		fileRouter.GET("/comment/:id", project.ListComment)
+		fileRouter.PUT("/comment/:id/:comment_id", project.UpdateComment)
+		fileRouter.DELETE("/comment/:id/:comment_id", project.DeleteComment)
 	}
 
 	// 回收站 read delete recover

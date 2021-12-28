@@ -15,11 +15,6 @@ type DeleteFolderRequest struct {
 	Id uint32 `json:"id"`
 } // @name DeleteFolderRequest
 
-// DeleteDocCommentRequest ... 删除文档评论请求
-type DeleteDocCommentRequest struct {
-	ProjectId uint32 `json:"project_id"`
-} // @name DeleteDocCommentRequest
-
 // DeleteTrashbinRequest ... 删除回收站请求
 type DeleteTrashbinRequest struct {
 	Type uint32 `json:"type"`
@@ -72,32 +67,45 @@ type CreateFolderRequest struct {
 	ChildrenPositionIndex uint32 `json:"children_position_index"`
 } // @name CreateFolderRequest
 
-// CreateDocCommentRequest ... 创建文档评论请求
-type CreateDocCommentRequest struct {
-	Content string `json:"content"`
-} // @name CreateDocCommentRequest
-
-// UpdateDocCommentRequest ... 修改文档评论请求
-type UpdateDocCommentRequest struct {
-	Content   string `json:"content"`
-	ProjectId uint32 `json:"project_id"`
-} // @name UpdateDocCommentRequest
-
-// DocComment
-type DocComment struct {
-	Cid      uint32 `json:"cid"`
+type Comment struct {
+	Id       uint32 `json:"id"`
 	Uid      uint32 `json:"uid"`
-	Username string `json:"username"`
+	UserName string `json:"user_name"`
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
 	Content  string `json:"content"`
-} // @name DocComment
+	Kind     uint32 `json:"kind"`
+} // @name Comment
 
-// DocCommentListResponse ... 获取文档评论响应
-type DocCommentListResponse struct {
-	Count       uint32       `json:"count"`
-	CommentList []DocComment `json:"comment_list"`
-} // @name DocCommentListResponse
+// CreateCommentRequest ... 创建文档/文件评论请求
+type CreateCommentRequest struct {
+	Content string `json:"content"`
+	TypeId  uint32 `json:"type_id"`
+} // @name CreateCommentRequest
+
+// ListCommentRequest ... 获取文档/文件评论列表请求
+type ListCommentRequest struct {
+	TypeId uint32 `json:"type_id"`
+} // @name ListCommentRequest
+
+// UpdateCommentRequest ... 修改文档/文件评论请求
+type UpdateCommentRequest struct {
+	Content string `json:"content"`
+	TypeId  uint32 `json:"type_id"`
+} // @name UpdateCommentRequest
+
+// DeleteCommentRequest ... 删除文档/文件评论请求
+type DeleteCommentRequest struct {
+	ProjectId uint32 `json:"project_id"`
+	TypeId    uint32 `json:"type_id"`
+} // @name DeleteCommentRequest
+
+// CommentListResponse ... 获取文档/文件评论响应
+type CommentListResponse struct {
+	Total       uint32    `json:"total"` // 评论总数
+	Count       uint32    `json:"count"` // 一级评论数
+	CommentList []Comment `json:"comment_list"`
+} // @name CommentListResponse
 
 // GetProjectInfoResponse ... 获取项目详情响应
 type GetProjectInfoResponse struct {
@@ -111,7 +119,7 @@ type GetProjectInfoResponse struct {
 	CreatorName  string              `json:"creator_name"`
 } // @name GetProjectInfoResponse
 
-// ProjectRequest ... 修改项目详情请求
+// ProjectUpdateRequest ... 修改项目详情请求
 type ProjectUpdateRequest struct {
 	ProjectName string `json:"project_name"`
 	Intro       string `json:"intro"`
@@ -150,7 +158,7 @@ type GetProjectListResponse struct {
 	List  []*ProjectListItem `json:"list"`
 } // @name GetProjectListResponse
 
-// FileChildrenItem ... 文件树 包括和文件 文档
+// FileChildrenItem ... 文件/文档文件树
 type FileChildrenItem struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`

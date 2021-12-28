@@ -31,7 +31,7 @@ func (s *Service) DeleteFolder(ctx context.Context, req *pb.DeleteRequest, res *
 	// 权限判定
 	if item.CreatorID != req.UserId {
 		if req.Role <= constvar.Normal {
-			return e.BadRequestErr(errno.ErrPermissionDenied, "")
+			return e.BadRequestErr(errno.ErrPermissionDenied, "the normal user cannot delete folder not created by yourself")
 		}
 	}
 

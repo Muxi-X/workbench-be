@@ -62,40 +62,6 @@ definitions:
       type:
         type: boolean
     type: object
-  Comment:
-    properties:
-      avatar:
-        type: string
-      cid:
-        type: integer
-      content:
-        type: string
-      time:
-        type: string
-      uid:
-        type: integer
-      username:
-        type: string
-    type: object
-  CommentListResponse:
-    properties:
-      commentlist:
-        items:
-          $ref: '#/definitions/Comment'
-        type: array
-      count:
-        type: integer
-    type: object
-  CreateCommentRequest:
-    properties:
-      content:
-        type: string
-    type: object
-  CreateDocCommentRequest:
-    properties:
-      content:
-        type: string
-    type: object
   CreateDocRequest:
     properties:
       children_position_index:
@@ -173,18 +139,6 @@ definitions:
           type: integer
         type: array
     type: object
-  DeleteCommentRequest:
-    properties:
-      status_id:
-        type: integer
-      title:
-        type: string
-    type: object
-  DeleteDocCommentRequest:
-    properties:
-      project_id:
-        type: integer
-    type: object
   DeleteDocRequest:
     properties:
       doc_name:
@@ -212,30 +166,6 @@ definitions:
   DeleteTrashbinRequest:
     properties:
       type:
-        type: integer
-    type: object
-  DocComment:
-    properties:
-      avatar:
-        type: string
-      cid:
-        type: integer
-      content:
-        type: string
-      time:
-        type: string
-      uid:
-        type: integer
-      username:
-        type: string
-    type: object
-  DocCommentListResponse:
-    properties:
-      comment_list:
-        items:
-          $ref: '#/definitions/DocComment'
-        type: array
-      count:
         type: integer
     type: object
   DropTeamRequest:
@@ -697,11 +627,13 @@ definitions:
       type:
         type: integer
     type: object
-  UpdateDocCommentRequest:
+  UpdateCommentRequest:
     properties:
       content:
         type: string
       project_id:
+        type: integer
+      type_id:
         type: integer
     type: object
   UpdateDocRequest:
@@ -826,6 +758,82 @@ definitions:
       team:
         type: integer
       tel:
+        type: string
+    type: object
+  muxi-workbench-gateway_handler_project.Comment:
+    properties:
+      avatar:
+        type: string
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      user_name:
+        type: string
+    type: object
+  muxi-workbench-gateway_handler_project.CommentListResponse:
+    properties:
+      comment_list:
+        items:
+          $ref: '#/definitions/muxi-workbench-gateway_handler_project.Comment'
+        type: array
+      count:
+        description: 一级评论数
+        type: integer
+      total:
+        description: 评论总数
+        type: integer
+    type: object
+  muxi-workbench-gateway_handler_project.CreateCommentRequest:
+    properties:
+      content:
+        type: string
+      type_id:
+        type: integer
+    type: object
+  muxi-workbench-gateway_handler_project.DeleteCommentRequest:
+    properties:
+      project_id:
+        type: integer
+      type_id:
+        type: integer
+    type: object
+  muxi-workbench-gateway_handler_status.Comment:
+    properties:
+      avatar:
+        type: string
+      cid:
+        type: integer
+      content:
+        type: string
+      time:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+    type: object
+  muxi-workbench-gateway_handler_status.CommentListResponse:
+    properties:
+      commentlist:
+        items:
+          $ref: '#/definitions/muxi-workbench-gateway_handler_status.Comment'
+        type: array
+      count:
+        type: integer
+    type: object
+  muxi-workbench-gateway_handler_status.CreateCommentRequest:
+    properties:
+      content:
+        type: string
+    type: object
+  muxi-workbench-gateway_handler_status.DeleteCommentRequest:
+    properties:
+      status_id:
+        type: integer
+      title:
         type: string
     type: object
 host: work.test.muxi-tech.xyz
@@ -1127,6 +1135,201 @@ paths:
       summary: list feeds filtered by user_id api
       tags:
       - feed
+  /file/comment/{id}:
+    post:
+      consumes:
+      - application/json
+      description: 新建文档/文件评论
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: create_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/muxi-workbench-gateway_handler_project.CreateCommentRequest'
+      - description: target_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: create a doc or file comment api
+      tags:
+      - project
+  /file/comment/{id}/{comment_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除文档/文件的评论
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: delete_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/muxi-workbench-gateway_handler_project.DeleteCommentRequest'
+      - description: target_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: comment_id
+        in: path
+        name: comment_id
+        required: true
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: delete a doc or file comment api
+      tags:
+      - project
+    put:
+      consumes:
+      - application/json
+      description: 修改文档/文件评论
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: target_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: comment_id
+        in: path
+        name: comment_id
+        required: true
+        type: integer
+      - description: update_comment_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCommentRequest'
+      - description: 此文档/文件所属项目 id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: update doc or file comment api
+      tags:
+      - project
+  /file/comments/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取文档/文件评论列表
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: target_id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: project_id
+        in: query
+        name: project_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/muxi-workbench-gateway_handler_project.CommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: list doc or file comments api
+      tags:
+      - project
   /file/doc:
     post:
       consumes:
@@ -1300,201 +1503,6 @@ paths:
       summary: get doc detail api
       tags:
       - project
-  /file/doc/{id}/comment:
-    post:
-      consumes:
-      - application/json
-      description: 新建文档评论
-      parameters:
-      - description: token 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: create_doc_comment_request
-        in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/CreateDocCommentRequest'
-      - description: doc_id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: project_id
-        in: query
-        name: project_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/Response'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Response'
-      summary: create a doc comment api
-      tags:
-      - project
-  /file/doc/{id}/comment/{comment_id}:
-    delete:
-      consumes:
-      - application/json
-      description: 删除文档的评论
-      parameters:
-      - description: token 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: delete_doc_comment_request
-        in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/DeleteDocCommentRequest'
-      - description: doc_id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: comment_id
-        in: path
-        name: comment_id
-        required: true
-        type: integer
-      - description: project_id
-        in: query
-        name: project_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/Response'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Response'
-      summary: delete a doc comment api
-      tags:
-      - project
-    put:
-      consumes:
-      - application/json
-      description: 修改文档评论
-      parameters:
-      - description: token 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: doc_id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: comment_id
-        in: path
-        name: comment_id
-        required: true
-        type: integer
-      - description: update_doc_comment_request
-        in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/UpdateDocCommentRequest'
-      - description: 此文档所属项目 id
-        in: query
-        name: project_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/Response'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Response'
-      summary: update doc comment api
-      tags:
-      - project
-  /file/doc/{id}/comments:
-    get:
-      consumes:
-      - application/json
-      description: 获取文档评论列表
-      parameters:
-      - description: token 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      - description: doc_id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: limit
-        in: query
-        name: limit
-        type: integer
-      - description: last_id
-        in: query
-        name: last_id
-        type: integer
-      - description: page
-        in: query
-        name: page
-        type: integer
-      - description: project_id
-        in: query
-        name: project_id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/DocCommentListResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Response'
-      summary: list doc comments api
-      tags:
-      - project
   /file/docs:
     get:
       consumes:
@@ -1508,9 +1516,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -1720,9 +1730,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -1845,9 +1857,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -2045,9 +2059,11 @@ paths:
         type: string
       - description: folder_ids 是一个数组
         in: query
+        items:
+          type: integer
         name: ids
         required: true
-        type: integer
+        type: array
       - description: project_id
         in: query
         name: project_id
@@ -2107,7 +2123,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: create a doc folder api
+      summary: create a file folder api
       tags:
       - project
   /folder/filefolder/{id}:
@@ -2706,7 +2722,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/DeleteCommentRequest'
+          $ref: '#/definitions/muxi-workbench-gateway_handler_status.DeleteCommentRequest'
       produces:
       - application/json
       responses:
@@ -2740,7 +2756,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/CreateCommentRequest'
+          $ref: '#/definitions/muxi-workbench-gateway_handler_status.CreateCommentRequest'
       - description: token 用户令牌
         in: header
         name: Authorization
@@ -2910,7 +2926,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/CommentListResponse'
+            $ref: '#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse'
         "401":
           description: Unauthorized
           schema:
