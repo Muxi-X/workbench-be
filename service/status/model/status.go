@@ -1,8 +1,6 @@
 package model
 
 import (
-	"strconv"
-
 	m "muxi-workbench/model"
 	"muxi-workbench/pkg/constvar"
 
@@ -57,19 +55,19 @@ func DeleteStatus(db *gorm.DB, id, uid uint32) error {
 	// 删除 status
 	status := &StatusModel{}
 	status.ID = id
-	if err := tx.Where("user_id=?", strconv.Itoa(int(uid))).Delete(&status).Error; err != nil {
+	if err := tx.Where("user_id = ?", uid).Delete(&status).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	// 删除 comment
-	if err := tx.Where("statu_id=?", strconv.Itoa(int(id))).Delete(&CommentsModel{}).Error; err != nil {
+	// 软删除 一级comment
+	if err := tx.Table("comments_status").Where("statu_id = ? AND kind = 0", id).Update("re", 1).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	// 删除 user2status
-	if err := tx.Where("status_id=?", strconv.Itoa(int(id))).Delete(&UserToStatusModel{}).Error; err != nil {
+	if err := tx.Where("status_id = ?", id).Delete(&UserToStatusModel{}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

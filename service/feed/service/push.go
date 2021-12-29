@@ -15,9 +15,18 @@ import (
 // Push ... 异步新增feed
 func (s *FeedService) Push(ctx context.Context, req *pb.PushRequest, res *pb.Response) error {
 	// get username and avatar by userId from user-service
-	username, avatar, err := GetInfoFromUserService(req.UserId)
+	username, avatar, err := getInfoFromUserService(req.UserId)
 	if err != nil {
 		return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+	}
+
+	var projectName string
+	if req.Source.ProjectId != 0 {
+		projectName, err = getProjectNameFromProjectService(req.Source.ProjectId)
+
+		if err != nil {
+			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())
+		}
 	}
 
 	feed := &model.FeedModel{
@@ -28,7 +37,7 @@ func (s *FeedService) Push(ctx context.Context, req *pb.PushRequest, res *pb.Res
 		SourceKindId:      req.Source.Kind,
 		SourceObjectName:  req.Source.Name,
 		SourceObjectId:    req.Source.Id,
-		SourceProjectName: req.Source.ProjectName,
+		SourceProjectName: projectName,
 		SourceProjectId:   req.Source.ProjectId,
 		TimeDay:           time.Now().Format("2006/01/02"),
 		TimeHm:            time.Now().Format("15:04"),

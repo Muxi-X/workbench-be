@@ -96,8 +96,7 @@ type UpdateCommentRequest struct {
 
 // DeleteCommentRequest ... 删除文档/文件评论请求
 type DeleteCommentRequest struct {
-	ProjectId uint32 `json:"project_id"`
-	TypeId    uint32 `json:"type_id"`
+	TypeId uint32 `json:"type_id"`
 } // @name DeleteCommentRequest
 
 // CommentListResponse ... 获取文档/文件评论响应
@@ -233,10 +232,8 @@ type GetDocDetailResponse struct {
 	LastEditTime string `json:"last_edit_time"`
 } // @name GetDocDetailResponse
 
-// 可能 feed 有用
 type DeleteDocRequest struct {
-	DocName     string `json:"doc_name"`
-	ProjectName string `json:"project_name"`
+	DocName string `json:"doc_name"`
 } // @name DeleteDocRequest
 
 // UpdateDocRequest ... 修改文档请求

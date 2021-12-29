@@ -67,11 +67,10 @@ func CreateProject(c *gin.Context) {
 		Action: "创建",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        2,
-			Id:          uint32(0),
-			Name:        "",
-			ProjectId:   resp.Id,
-			ProjectName: req.Name,
+			Kind:      2,
+			Id:        resp.Id,
+			Name:      "",
+			ProjectId: resp.Id,
 		},
 	}
 

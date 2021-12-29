@@ -11,7 +11,7 @@ import (
 )
 
 // UpdateDoc ... 更新文档
-func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *pb.ProjectIDResponse) error {
+func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *pb.Response) error {
 
 	item, err := model.GetDoc(req.Id)
 	if err != nil {
@@ -32,8 +32,6 @@ func (s *Service) UpdateDoc(ctx context.Context, req *pb.UpdateDocRequest, res *
 	if err := item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
-	res.Id = item.ProjectID
 
 	return nil
 }

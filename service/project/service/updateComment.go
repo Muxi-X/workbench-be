@@ -19,7 +19,7 @@ func (s *Service) UpdateComment(ctx context.Context, req *pb.UpdateCommentReques
 
 	// 权限判定
 	if !comment.Verify(req.UserId) {
-		return e.BadRequestErr(errno.ErrPermissionDenied, "cannot delete comment not created by yourself")
+		return e.BadRequestErr(errno.ErrPermissionDenied, "cannot update comment not created by yourself")
 	}
 
 	if err := comment.Update(req.Content); err != nil {

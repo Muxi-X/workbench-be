@@ -10,7 +10,7 @@ import (
 )
 
 // CreateProject ... 建立项目
-func (s *Service) CreateProject(ctx context.Context, req *pb.CreateProjectRequest, res *pb.ProjectIDResponse) error {
+func (s *Service) CreateProject(ctx context.Context, req *pb.CreateProjectRequest, res *pb.IdResponse) error {
 	t := time.Now()
 
 	project := &model.ProjectModel{

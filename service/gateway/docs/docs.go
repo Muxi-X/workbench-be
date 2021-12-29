@@ -572,7 +572,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/UpdateCommentRequest"
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.UpdateCommentRequest"
                         }
                     },
                     {
@@ -689,7 +689,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "list doc or file comments api",
+                "summary": "list doc(1) or file(2) comments api",
                 "parameters": [
                     {
                         "type": "string",
@@ -2808,6 +2808,131 @@ var doc = `{
             }
         },
         "/status/comment/{id}": {
+            "get": {
+                "description": "通过 status_id 一次获取其一二级评论列表，kind 为 1代表二级评论，一级评论在前，count为一级评论数",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "status"
+                ],
+                "summary": "get comments list api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "status_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "修改评论",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "status"
+                ],
+                "summary": "update comment api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "comment_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "update_comment_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.UpdateCommentRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "创建评论",
                 "consumes": [
@@ -3075,75 +3200,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/status/detail/{id}/comments": {
-            "get": {
-                "description": "通过 status_id 获取 comment_list",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "status"
-                ],
-                "summary": "get comments list api",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "status_id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "token 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "last_id",
-                        "name": "last_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.CommentListResponse"
                         }
                     },
                     "401": {
@@ -4694,9 +4750,6 @@ var doc = `{
             "properties": {
                 "doc_name": {
                     "type": "string"
-                },
-                "project_name": {
-                    "type": "string"
                 }
             }
         },
@@ -5450,17 +5503,6 @@ var doc = `{
                 }
             }
         },
-        "UpdateCommentRequest": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "type_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "UpdateDocRequest": {
             "type": "object",
             "properties": {
@@ -5712,8 +5754,16 @@ var doc = `{
         "muxi-workbench-gateway_handler_project.DeleteCommentRequest": {
             "type": "object",
             "properties": {
-                "project_id": {
+                "type_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_project.UpdateCommentRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
                 },
                 "type_id": {
                     "type": "integer"
@@ -5726,11 +5776,14 @@ var doc = `{
                 "avatar": {
                     "type": "string"
                 },
-                "cid": {
-                    "type": "integer"
-                },
                 "content": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "kind": {
+                    "type": "integer"
                 },
                 "time": {
                     "type": "string"
@@ -5746,13 +5799,18 @@ var doc = `{
         "muxi-workbench-gateway_handler_status.CommentListResponse": {
             "type": "object",
             "properties": {
-                "commentlist": {
+                "comment_list": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/muxi-workbench-gateway_handler_status.Comment"
                     }
                 },
                 "count": {
+                    "description": "一级评论数",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "评论总数",
                     "type": "integer"
                 }
             }
@@ -5762,17 +5820,34 @@ var doc = `{
             "properties": {
                 "content": {
                     "type": "string"
+                },
+                "kind": {
+                    "type": "integer"
                 }
             }
         },
         "muxi-workbench-gateway_handler_status.DeleteCommentRequest": {
             "type": "object",
             "properties": {
-                "status_id": {
+                "kind": {
                     "type": "integer"
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.UpdateCommentRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "kind": {
+                    "type": "integer"
+                },
+                "status_id": {
+                    "type": "integer"
                 }
             }
         }

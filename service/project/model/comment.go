@@ -4,7 +4,7 @@ type Commenter interface {
 	TableName() string
 	Create(model CommentModel) error
 	Update(string) error
-	Delete(uint32, uint32) error
+	Delete(uint32) error
 	GetModelById(uint32) error
 	Verify(uint32) bool
 	List(targetID, offset, limit, lastID uint32) ([]*CommentListItem, uint64, error)

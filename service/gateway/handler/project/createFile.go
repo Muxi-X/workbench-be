@@ -69,11 +69,10 @@ func CreateFile(c *gin.Context) {
 		Action: "创建",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        4,
-			Id:          resp.Id, // 应该从接口获取
-			Name:        req.FileName,
-			ProjectId:   projectID,
-			ProjectName: "",
+			Kind:      4,
+			Id:        resp.Id, // 应该从接口获取
+			Name:      req.FileName,
+			ProjectId: projectID,
 		},
 	}
 

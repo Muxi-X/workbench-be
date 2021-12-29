@@ -12,18 +12,20 @@ type CreateRequest struct {
 } // @name CreateRequest
 
 type Comment struct {
-	Cid      uint32 `json:"cid"`
+	Id       uint32 `json:"id"`
 	Uid      uint32 `json:"uid"`
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
 	Time     string `json:"time"`
 	Content  string `json:"content"`
+	Kind     uint32 `json:"kind"`
 } // @name Comment
 
 // CommentListResponse 评论列表响应
 type CommentListResponse struct {
-	Count       uint32    `json:"count"`
-	CommentList []Comment `json:"commentlist"`
+	Total       uint32    `json:"total"` // 评论总数
+	Count       uint32    `json:"count"` // 一级评论数
+	CommentList []Comment `json:"comment_list"`
 } // @name CommentListResponse
 
 // GetResponse 获得进度实体响应
@@ -71,10 +73,18 @@ type StatusListResponse struct {
 // CreateCommentRequest 创建评论请求
 type CreateCommentRequest struct {
 	Content string `json:"content"`
+	Kind    uint32 `json:"kind"`
 } // @name CreateCommentRequest
+
+// UpdateCommentRequest ... 修改评论请求
+type UpdateCommentRequest struct {
+	Content  string `json:"content"`
+	Kind     uint32 `json:"kind"`
+	StatusId uint32 `json:"status_id"`
+} // @name UpdateCommentRequest
 
 // DeleteCommentRequest 删除评论请求
 type DeleteCommentRequest struct {
-	Title    string `json:"title"`
-	StatusId uint32 `json:"status_id"`
+	Title string `json:"title"`
+	Kind  uint32 `json:"kind"`
 } // @name DeleteCommentRequest

@@ -26,7 +26,6 @@ import (
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Success 200 {object} AttentionListResponse
-// @Success 200 {object} attention.AttentionListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
 // @Router /attention/list/{id} [get]

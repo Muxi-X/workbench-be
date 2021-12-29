@@ -2,7 +2,6 @@ package project
 
 import (
 	"context"
-	"fmt"
 	pbf "muxi-workbench-feed/proto"
 	. "muxi-workbench-gateway/handler"
 	"muxi-workbench-gateway/log"
@@ -67,21 +66,19 @@ func CreateComment(c *gin.Context) {
 		Action: "评论",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3,
-			Id:          uint32(targetId),
-			Name:        "", // TODO
-			ProjectId:   projectID,
-			ProjectName: "",
+			Kind:      3,
+			Id:        uint32(targetId),
+			Name:      "", // TODO
+			ProjectId: projectID,
 		},
 	}
 
 	// 向 feed 发送请求
-	// _, err = service.FeedClient.Push(context.Background(), pushReq)
+	_, err = service.FeedClient.Push(context.Background(), pushReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
 	}
-	fmt.Println(pushReq)
 
 	SendResponse(c, errno.OK, nil)
 }

@@ -60,7 +60,7 @@ func UpdateDoc(c *gin.Context) {
 		ProjectId: projectID,
 	}
 
-	resp, err := service.ProjectClient.UpdateDoc(context.Background(), updateReq)
+	_, err = service.ProjectClient.UpdateDoc(context.Background(), updateReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -73,11 +73,10 @@ func UpdateDoc(c *gin.Context) {
 		Action: "编辑",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3,
-			Id:          uint32(docID),
-			Name:        req.Title,
-			ProjectId:   resp.Id,
-			ProjectName: "",
+			Kind:      3,
+			Id:        uint32(docID),
+			Name:      req.Title,
+			ProjectId: projectID,
 		},
 	}
 

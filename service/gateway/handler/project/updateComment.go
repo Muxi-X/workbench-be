@@ -76,11 +76,10 @@ func UpdateComment(c *gin.Context) {
 		Action: "编辑",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3, // TODO
-			Id:          uint32(targetId),
-			Name:        "",
-			ProjectId:   projectID,
-			ProjectName: "",
+			Kind:      3, // TODO
+			Id:        uint32(targetId),
+			Name:      "",
+			ProjectId: projectID,
 		},
 	}
 

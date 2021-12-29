@@ -12,17 +12,19 @@ import (
 
 // DeleteComment ... 删除评论
 func (s *StatusService) DeleteComment(ctx context.Context, req *pb.DeleteCommentRequest, res *pb.Response) error {
-	status, err := model.GetStatus(req.StatusId)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
+
+	if req.Kind == 0 {
+		// 事务
+		err := model.DeleteStatusComment(m.DB.Self, req.CommentId, req.UserId)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+	} else {
+		var comment model.CommentModel
+		if err := comment.Create(m.DB.Self); err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
 	}
 
-	status.Comment = status.Comment - 1
-
-	// 事务
-	err = model.DeleteStatusComment(m.DB.Self, req.CommentId, req.UserId, status)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
-	}
 	return nil
 }

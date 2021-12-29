@@ -65,11 +65,10 @@ func UpdateProjectInfo(c *gin.Context) {
 		Action: "编辑",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        2,
-			Id:          uint32(projectID),
-			Name:        "",
-			ProjectId:   uint32(projectID),
-			ProjectName: "",
+			Kind:      2,
+			Id:        projectID,
+			Name:      "",
+			ProjectId: projectID,
 		},
 	}
 

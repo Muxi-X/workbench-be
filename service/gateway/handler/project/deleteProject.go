@@ -56,11 +56,10 @@ func DeleteProject(c *gin.Context) {
 		Action: "删除",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        2,
-			Id:          projectID,
-			Name:        "",
-			ProjectId:   uint32(0),
-			ProjectName: "",
+			Kind:      2,
+			Id:        projectID,
+			Name:      "",
+			ProjectId: 0,
 		},
 	}
 

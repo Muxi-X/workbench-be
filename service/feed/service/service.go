@@ -55,12 +55,22 @@ func GetFilterFromProjectService(id uint32) ([]uint32, error) {
 	return rsp.List, nil
 }
 
-// GetInfoFromUserService get user's name and avatar from user-service
-func GetInfoFromUserService(id uint32) (string, string, error) {
+// getInfoFromUserService get user's name and avatar from user-service
+func getInfoFromUserService(id uint32) (string, string, error) {
 	rsp, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{Id: id})
 	if err != nil {
 		return "", "", err
 	}
 
 	return rsp.Name, rsp.Avatar, nil
+}
+
+// getProjectNameFromProjectService get project's name from project-service
+func getProjectNameFromProjectService(id uint32) (string, error) {
+	rsp, err := ProjectClient.GetProjectInfo(context.Background(), &ppb.GetRequest{Id: id})
+	if err != nil {
+		return "", err
+	}
+
+	return rsp.Name, nil
 }

@@ -35,10 +35,8 @@ func DeleteComment(c *gin.Context) {
 	log.Info("Status delete function call",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 cid
-	var cid int
-	var err error
-	cid, err = strconv.Atoi(c.Param("id"))
+	// 获取 commentId
+	commentId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
@@ -52,13 +50,13 @@ func DeleteComment(c *gin.Context) {
 	}
 
 	// 获取 userid
-	id := c.MustGet("userID").(uint32)
+	userID := c.MustGet("userID").(uint32)
 
 	// 调用 Status 服务删除评论
 	_, err = service.StatusClient.DeleteComment(context.Background(), &pbs.DeleteCommentRequest{
-		UserId:    id,
-		CommentId: uint32(cid),
-		StatusId:  req.StatusId,
+		UserId:    userID,
+		CommentId: uint32(commentId),
+		Kind:      req.Kind,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -68,13 +66,12 @@ func DeleteComment(c *gin.Context) {
 	// 构造 push 请求
 	pushReq := &pbf.PushRequest{
 		Action: "取消评论",
-		UserId: id,
+		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        6,
-			Id:          uint32(cid),
-			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
+			Kind:      6,
+			Id:        uint32(commentId),
+			Name:      req.Title,
+			ProjectId: 0,
 		},
 	}
 

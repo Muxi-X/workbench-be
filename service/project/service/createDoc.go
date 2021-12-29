@@ -11,7 +11,7 @@ import (
 
 // CreateDoc ... 创建文档
 // 事务自动更新文件树
-func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *pb.ProjectIDResponse) error {
+func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *pb.IdResponse) error {
 	t := time.Now()
 
 	doc := model.DocModel{

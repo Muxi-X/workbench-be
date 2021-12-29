@@ -4,7 +4,7 @@ package project;
 
 service ProjectService {
   // 项目相关
-  rpc CreateProject(CreateProjectRequest) returns (ProjectIDResponse) {}
+  rpc CreateProject(CreateProjectRequest) returns (IdResponse) {}
   rpc GetProjectList(GetProjectListRequest) returns (ProjectListResponse) {}
   rpc GetProjectInfo(GetRequest) returns (ProjectInfo) {}
   rpc UpdateProjectInfo(UpdateProjectInfoRequest) returns (Response) {}
@@ -22,15 +22,15 @@ service ProjectService {
   rpc DeleteTrashbin(DeleteTrashbinRequest) returns (Response) {}
 
   // 文件相关
-  rpc CreateFile(CreateFileRequest) returns (ProjectIDResponse) {}
-  rpc UpdateFile(UpdateFileRequest) returns (ProjectIDResponse) {}
+  rpc CreateFile(CreateFileRequest) returns (IdResponse) {}
+  rpc UpdateFile(UpdateFileRequest) returns (Response) {}
   rpc DeleteFile(DeleteRequest) returns (Response) {}
   rpc GetFileDetail(GetFileDetailRequest) returns (FileDetail) {}
   rpc GetFileInfoList(GetInfoByIdsRequest) returns (GetFileInfoListResponse) {}
 
   // 文档相关
-  rpc CreateDoc(CreateDocRequest) returns (ProjectIDResponse) {}
-  rpc UpdateDoc(UpdateDocRequest ) returns (ProjectIDResponse) {}
+  rpc CreateDoc(CreateDocRequest) returns (IdResponse) {}
+  rpc UpdateDoc(UpdateDocRequest ) returns (Response) {}
   rpc DeleteDoc(DeleteRequest) returns (Response) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
 
@@ -41,7 +41,7 @@ service ProjectService {
   rpc GetCommentList(GetCommentRequest) returns (CommentListResponse) {}
 
   // Folder crud
-  rpc CreateFolder(CreateFolderRequest) returns (ProjectIDResponse) {}
+  rpc CreateFolder(CreateFolderRequest) returns (IdResponse) {}
   rpc GetFolderInfoList(GetInfoByIdsRequest) returns (GetFolderListResponse) {}
   rpc UpdateFolder(UpdateFolderRequest) returns (Response) {}
   rpc DeleteFolder(DeleteRequest) returns (Response) {}
@@ -193,7 +193,7 @@ message GetCommentRequest {
   uint32 type_id = 5;
 }
 
-message ProjectIDResponse {
+message IdResponse {
   uint32 id = 1;
 }
 

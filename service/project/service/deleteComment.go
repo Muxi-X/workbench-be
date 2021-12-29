@@ -19,7 +19,7 @@ func (s *Service) DeleteComment(ctx context.Context, req *pb.DeleteCommentReques
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 
-	if err := comment.Delete(req.CommentId, req.UserId); err != nil {
+	if err := comment.Delete(req.UserId); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
 

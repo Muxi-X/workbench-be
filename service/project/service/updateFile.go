@@ -10,7 +10,7 @@ import (
 )
 
 // UpdateFile ... 更新文件
-func (s *Service) UpdateFile(ctx context.Context, req *pb.UpdateFileRequest, res *pb.ProjectIDResponse) error {
+func (s *Service) UpdateFile(ctx context.Context, req *pb.UpdateFileRequest, res *pb.Response) error {
 
 	item, err := model.GetFile(req.Id)
 	if err != nil {
@@ -27,8 +27,6 @@ func (s *Service) UpdateFile(ctx context.Context, req *pb.UpdateFileRequest, res
 	if err := item.Update(); err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}
-
-	res.Id = item.ProjectID
 
 	return nil
 }

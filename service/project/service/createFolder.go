@@ -10,7 +10,7 @@ import (
 )
 
 // CreateFolder ... 建立folder
-func (s *Service) CreateFolder(ctx context.Context, req *pb.CreateFolderRequest, res *pb.ProjectIDResponse) error {
+func (s *Service) CreateFolder(ctx context.Context, req *pb.CreateFolderRequest, res *pb.IdResponse) error {
 	t := time.Now()
 
 	folder := &model.FolderModel{

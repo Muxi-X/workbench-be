@@ -18,8 +18,7 @@ func (s *StatusService) ListComment(ctx context.Context, req *pb.CommentListRequ
 
 	resList := make([]*pb.Comment, 0)
 
-	for index := 0; index < len(list); index++ {
-		item := list[index]
+	for _, item := range list {
 		resList = append(resList, &pb.Comment{
 			Id:       item.ID,
 			Content:  item.Content,
@@ -27,6 +26,7 @@ func (s *StatusService) ListComment(ctx context.Context, req *pb.CommentListRequ
 			Avatar:   item.Avatar,
 			UserName: item.UserName,
 			UserId:   item.Creator,
+			Kind:     item.Kind,
 		})
 	}
 

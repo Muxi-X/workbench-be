@@ -69,11 +69,10 @@ func CreateDoc(c *gin.Context) {
 		Action: "创建",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3,
-			Id:          resp.Id,
-			Name:        req.DocName,
-			ProjectId:   projectID,
-			ProjectName: "",
+			Kind:      3,
+			Id:        resp.Id,
+			Name:      req.DocName,
+			ProjectId: projectID,
 		},
 	}
 

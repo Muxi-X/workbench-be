@@ -15,7 +15,7 @@ import (
 )
 
 // ListComment ... 获取文档/文件评论列表
-// @Summary list doc or file comments api
+// @Summary list doc(1) or file(2) comments api
 // @Description 一次获取文档/文件一二级评论列表，kind 为 1代表二级评论，一级评论在前，count为一级评论数
 // @Tags project
 // @Accept  application/json
@@ -74,7 +74,7 @@ func ListComment(c *gin.Context) {
 		Offset:   uint32(page * limit),
 		Limit:    uint32(limit),
 		LastId:   uint32(lastId),
-		TypeId:   1,
+		TypeId:   req.TypeId,
 	}
 
 	listComResp, err := service.ProjectClient.GetCommentList(context.Background(), listComReq)

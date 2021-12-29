@@ -82,8 +82,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		statusRouter.GET("", status.List)
 		statusRouter.PUT("/like/:id", status.Like)
 		statusRouter.POST("/comment/:id", status.CreateComment)
+		statusRouter.PUT("/comment/:id", status.UpdateComment)
 		statusRouter.DELETE("/comment/:id", status.DeleteComment)
-		statusRouter.GET("/detail/:id/comments", status.CommentList)
+		statusRouter.GET("/comment/:id", status.CommentList)
 	}
 
 	// project

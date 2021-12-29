@@ -74,11 +74,10 @@ func Update(c *gin.Context) {
 		Action: "编辑",
 		UserId: id,
 		Source: &pbf.Source{
-			Kind:        6,
-			Id:          uint32(sid),
-			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
+			Kind:      6,
+			Id:        uint32(sid),
+			Name:      req.Title,
+			ProjectId: 0,
 		},
 	}
 

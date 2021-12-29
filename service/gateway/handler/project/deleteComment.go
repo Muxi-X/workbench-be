@@ -66,16 +66,16 @@ func DeleteComment(c *gin.Context) {
 		return
 	}
 
+	projectID := c.MustGet("projectID").(uint32)
 	// feed
 	pushReq := &pbf.PushRequest{
 		Action: "取消评论",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3, // TODO
-			Id:          uint32(targetId),
-			Name:        "",
-			ProjectId:   req.ProjectId,
-			ProjectName: "",
+			Kind:      3, // TODO
+			Id:        uint32(targetId),
+			Name:      "",
+			ProjectId: projectID,
 		},
 	}
 

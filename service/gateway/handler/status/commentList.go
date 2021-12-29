@@ -18,7 +18,7 @@ import (
 
 // CommentList ... 获取评论
 // @Summary get comments list api
-// @Description 通过 status_id 获取 comment_list
+// @Description 通过 status_id 一次获取其一二级评论列表，kind 为 1代表二级评论，一级评论在前，count为一级评论数
 // @Tags status
 // @Accept  application/json
 // @Produce  application/json
@@ -30,44 +30,38 @@ import (
 // @Success 200 {object} CommentListResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
-// @Router /status/detail/{id}/comments [get]
+// @Router /status/comment/{id} [get]
 func CommentList(c *gin.Context) {
 	log.Info("Status commentList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 从 Query Param 中获取 lastId 和 limit
-	var limit int
-	var lastId int
-	var sid int
-	var page int
-	var err error
-
-	sid, err = strconv.Atoi(c.Param("id"))
+	sid, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
 	}
 
-	limit, err = strconv.Atoi(c.DefaultQuery("limit", "20"))
+	// 从 Query Param 中获取 lastId 和 limit
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	lastId, err = strconv.Atoi(c.DefaultQuery("last_id", "0"))
+	lastId, err := strconv.Atoi(c.DefaultQuery("last_id", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
 	// 获取 page
-	page, err = strconv.Atoi(c.DefaultQuery("page", "0"))
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrQuery, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 构造 listcomment 请求并发送
+	// 构造 listComment 请求并发送
 	listComReq := &pbs.CommentListRequest{
 		StatusId: uint32(sid),
 		Offset:   uint32(page * limit),
@@ -83,17 +77,19 @@ func CommentList(c *gin.Context) {
 
 	// 构造返回 response
 	resp := CommentListResponse{
+		Total: uint32(len(listComResp.List)),
 		Count: listComResp.Count,
 	}
 
 	for _, item := range listComResp.List {
 		resp.CommentList = append(resp.CommentList, Comment{
-			Cid:      item.Id,
+			Id:       item.Id,
 			Uid:      item.UserId,
 			Username: item.UserName,
 			Avatar:   item.Avatar,
 			Time:     item.Time,
 			Content:  item.Content,
+			Kind:     item.Kind,
 		})
 	}
 

@@ -61,11 +61,10 @@ func Create(c *gin.Context) {
 		Action: "创建",
 		UserId: userId,
 		Source: &pbf.Source{
-			Kind:        6,
-			Id:          createResp.Id,
-			Name:        req.Title,
-			ProjectId:   0,
-			ProjectName: "",
+			Kind:      6,
+			Id:        createResp.Id,
+			Name:      req.Title,
+			ProjectId: 0,
 		},
 	}
 

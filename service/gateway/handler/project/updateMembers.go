@@ -67,11 +67,10 @@ func UpdateMembers(c *gin.Context) {
 		Action: "加入",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        2,
-			Id:          projectID,
-			Name:        "",
-			ProjectId:   projectID,
-			ProjectName: "",
+			Kind:      2,
+			Id:        projectID,
+			Name:      "",
+			ProjectId: 0,
 		},
 	}
 

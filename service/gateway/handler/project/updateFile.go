@@ -72,11 +72,10 @@ func UpdateFile(c *gin.Context) {
 		Action: "编辑",
 		UserId: userID,
 		Source: &pbf.Source{
-			Kind:        3,
-			Id:          uint32(fileID),
-			Name:        req.Name,
-			ProjectId:   uint32(0),
-			ProjectName: "",
+			Kind:      3,
+			Id:        uint32(fileID),
+			Name:      req.Name,
+			ProjectId: uint32(0),
 		},
 	}
 

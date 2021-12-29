@@ -35,8 +35,8 @@ func CreateComment(c *gin.Context) {
 	log.Info("Status createComment function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 statusId
-	statusId, err := strconv.Atoi(c.Param("id"))
+	// 获取 targetId
+	targetId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())
 		return
@@ -54,8 +54,9 @@ func CreateComment(c *gin.Context) {
 
 	_, err = service.StatusClient.CreateComment(context.Background(), &pbs.CreateCommentRequest{
 		UserId:   userId,
-		StatusId: uint32(statusId),
+		TargetId: uint32(targetId),
 		Content:  req.Content,
+		Kind:     req.Kind,
 	})
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -64,10 +65,10 @@ func CreateComment(c *gin.Context) {
 
 	// 要通过 statusId 获取 status 的 title
 	getReq := &pbs.GetRequest{
-		Id: uint32(statusId),
+		Id: uint32(3), // TODO wrong id
 	}
 
-	// TO DO: 需要获取创建的 comment id
+	// TODO: 需要获取创建的 comment id
 	getResp, err := service.StatusClient.Get(context.Background(), getReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
@@ -79,11 +80,10 @@ func CreateComment(c *gin.Context) {
 		Action: "评论",
 		UserId: userId,
 		Source: &pbf.Source{
-			Kind:        6,
-			Id:          uint32(statusId), // 暂时从前端获取
-			Name:        getResp.Status.Title,
-			ProjectId:   0,
-			ProjectName: "",
+			Kind:      6,
+			Id:        uint32(targetId), // 暂时从前端获取
+			Name:      getResp.Status.Title,
+			ProjectId: 0,
 		},
 	}
 
