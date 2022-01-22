@@ -30,6 +30,13 @@ type StatusListItem struct {
 	GroupID  uint32 `json:"groupId" gorm:"column:group_id;" binding:"required"`
 }
 
+// FilterParams provide filter's params.
+type FilterParams struct {
+	UserName string
+	GroupId  uint32
+	Key      string
+}
+
 func (s *StatusModel) TableName() string {
 	return "status"
 }

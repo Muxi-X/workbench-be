@@ -42,7 +42,7 @@ func (d *DocCommentModel) List(docID, offset, limit, lastID uint32) ([]*CommentL
 
 	commentsList := make([]*CommentListItem, 0)
 
-	query := m.DB.Self.Table("comments_docs").Select("comments_docs.*, users.name, users.avatar").Where("target_id = ? AND kind = 0 AND re = 0", docID).Joins("left join users on users.id = comments_docs.creator").Offset(offset).Limit(limit).Order("comments_docs.id asc")
+	query := m.DB.Self.Table("comments_docs").Select("comments_docs.*, users.name, users.avatar").Where("target_id = ? AND kind = 0 AND re = 0", docID).Joins("LEFT JOIN users ON users.id = comments_docs.creator").Offset(offset).Limit(limit).Order("comments_docs.id ASC")
 
 	if lastID != 0 {
 		query = query.Where("comments_docs.id < ?", lastID)
@@ -56,7 +56,7 @@ func (d *DocCommentModel) List(docID, offset, limit, lastID uint32) ([]*CommentL
 	for i := 0; uint64(i) < count; i++ {
 		comment := commentsList[i]
 		commentsLevel2 := make([]*CommentListItem, 0)
-		m.DB.Self.Table("comments_docs").Select("comments_docs.*, users.name, users.avatar").Where("target_id = ? AND kind = 1 AND re = 0", comment.ID).Joins("left join users on users.id = comments_docs.creator").Order("comments_docs.id asc").Scan(&commentsLevel2)
+		m.DB.Self.Table("comments_docs").Select("comments_docs.*, users.name, users.avatar").Where("target_id = ? AND kind = 1 AND re = 0", comment.ID).Joins("LEFT JOIN users ON users.id = comments_docs.creator").Order("comments_docs.id ASC").Scan(&commentsLevel2)
 		commentsList = append(commentsList, commentsLevel2...)
 	}
 

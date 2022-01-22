@@ -33,8 +33,7 @@ func GetProjectList(c *gin.Context) {
 	log.Info("project getProjectList function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
 
-	// 获取 lastId page limit pagination
-
+	// 获取 lastId page limit
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "20"))
 	if err != nil {
 		SendBadRequest(c, errno.ErrPathParam, nil, err.Error(), GetLine())

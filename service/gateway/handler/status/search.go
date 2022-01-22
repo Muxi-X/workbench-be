@@ -1,4 +1,4 @@
-package project
+package status
 
 import (
 	"context"
@@ -9,25 +9,25 @@ import (
 	"muxi-workbench-gateway/pkg/errno"
 	"muxi-workbench-gateway/service"
 	"muxi-workbench-gateway/util"
-	pbp "muxi-workbench-project/proto"
+	pbs "muxi-workbench-status/proto"
 	"strconv"
 )
 
-// Search ... 文档，文件分别进行搜索，文档是全文 + 标题搜索，文件是标题。可以是全局的（用户所在的所有项目）或者针对某个项目。
-// @Summary searches from title and content of doc or title of file api
-// @Description search_type: 为0时搜索doc，为1时搜索file（project_id为0时，搜索该用户所有项目）
-// @Tags project
+// Search ... 全文 + 标题搜索 可以对组别和用户做筛选。
+// @Summary searches from title and content of status api
+// @Description group_id为0时，搜索所有进度
+// @Tags status
 // @Accept  application/json
 // @Produce  application/json
 // @Param Authorization header string true "token 用户令牌"
 // @Param limit query int false "limit"
 // @Param last_id query int false "last_id"
 // @Param page query int false "page"
-// @Param object body SearchProjectRequest true "search_project_request"
+// @Param object body SearchStatusRequest true "search_status_request"
 // @Success 200 {object} SearchResponse
 // @Failure 401 {object} handler.Response
 // @Failure 500 {object} handler.Response
-// @Router /project/search [post]
+// @Router /status/search [post]
 func Search(c *gin.Context) {
 	log.Info("project search function call.",
 		zap.String("X-Request-Id", util.GetReqID(c)))
@@ -51,26 +51,25 @@ func Search(c *gin.Context) {
 		return
 	}
 
-	var req SearchProjectRequest
+	var req SearchStatusRequest
 	if err := c.Bind(&req); err != nil {
 		SendBadRequest(c, errno.ErrBind, nil, err.Error(), GetLine())
 		return
 	}
 
-	// 获取 userid
-	userID := c.MustGet("userID").(uint32)
-
-	searchReq := &pbp.SearchRequest{
-		Type:      req.Type,
-		Keyword:   req.Keyword,
-		UserId:    userID,
-		LastId:    uint32(lastId),
-		Offset:    uint32(limit * page),
-		Limit:     uint32(limit),
-		ProjectId: req.ProjectID,
+	searchReq := &pbs.SearchRequest{
+		Keyword:  req.Keyword,
+		UserName: req.UserName,
+		Offset:   uint32(limit * page),
+		LastId:   uint32(lastId),
+		Limit:    uint32(limit),
+		GroupId:  req.GroupID,
+	}
+	if page != 0 {
+		searchReq.Pagination = true
 	}
 
-	resp, err := service.ProjectClient.Search(context.Background(), searchReq)
+	resp, err := service.StatusClient.Search(context.Background(), searchReq)
 	if err != nil {
 		SendError(c, errno.InternalServerError, nil, err.Error(), GetLine())
 		return
@@ -79,12 +78,11 @@ func Search(c *gin.Context) {
 	var list []*SearchResult
 	for _, v := range resp.List {
 		list = append(list, &SearchResult{
-			Id:          v.Id,
-			Title:       v.Title,
-			Content:     v.Content,
-			UserName:    v.UserName,
-			ProjectName: v.ProjectName,
-			Time:        v.Time,
+			Id:       v.Id,
+			Title:    v.Title,
+			Content:  v.Content,
+			UserName: v.UserName,
+			Time:     v.Time,
 		})
 	}
 

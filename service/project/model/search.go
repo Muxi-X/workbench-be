@@ -7,6 +7,7 @@ import (
 
 type SearchResult struct {
 	Id          uint32 `json:"id"`
+	Type        uint8  `json:"type"`
 	Title       string `json:"title" gorm:"column:filename;not null"`
 	UserName    string `json:"user_name" gorm:"column:name;not null"`
 	Content     string `json:"content"`
@@ -14,25 +15,28 @@ type SearchResult struct {
 	Time        string `json:"time" gorm:"column:create_time"`
 }
 
-func SearchTitle(projectIDs []uint32, keyword string, offset, limit uint32, pagination bool) ([]*SearchResult, uint32, error) {
+func SearchDoc(projectIDs []uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, uint32, error) {
 	var count uint32
 	var record []*SearchResult
 	key := "%" + keyword + "%"
-	query := m.DB.Self.
-		Raw("SELECT d.id, filename, create_time, u.name, content, p.name project_name FROM docs d "+
-			"LEFT JOIN users u ON u.id = d.editor_id "+
-			"LEFT JOIN projects p ON p.id = project_id "+
-			"WHERE project_id in (?) AND d.filename like ? "+
-			"UNION ALL SELECT f.id, filename, create_time, u.name, url, p.name project_name FROM files f "+
-			"LEFT JOIN users u ON u.id = f.creator_id "+
-			"LEFT JOIN projects p ON p.id = project_id "+
-			"WHERE project_id in (?) AND f.filename like ? ", projectIDs, key, projectIDs, key)
+	query := m.DB.Self.Table("docs").Select("docs.id, filename, create_time, u.name, content, p.name project_name").
+		Joins("LEFT JOIN users u ON u.id = docs.editor_id").
+		Joins("LEFT JOIN projects p ON p.id = project_id").
+		Where("project_id IN (?) AND (filename LIKE ? OR content LIKE ?)", projectIDs, key, key)
 
 	if pagination {
 		if limit == 0 {
 			limit = constvar.DefaultLimit
 		}
 		query = query.Offset(offset).Limit(limit)
+
+		if lastID != 0 {
+			query = query.Where("docs.id < ?", lastID)
+		}
+	}
+
+	for _, r := range record {
+		r.Type = constvar.DocCode
 	}
 
 	err := query.Scan(&record).Count(&count).Error
@@ -40,25 +44,28 @@ func SearchTitle(projectIDs []uint32, keyword string, offset, limit uint32, pagi
 	return record, count, err
 }
 
-func SearchContent(projectIDs []uint32, keyword string, offset, limit uint32, pagination bool) ([]*SearchResult, uint32, error) {
+func SearchFile(projectIDs []uint32, keyword string, offset, limit, lastID uint32, pagination bool) ([]*SearchResult, uint32, error) {
 	var count uint32
 	var record []*SearchResult
 	key := "%" + keyword + "%"
-	query := m.DB.Self.
-		Raw("SELECT d.id, filename, create_time, u.name, content, p.name project_name FROM docs d "+
-			"LEFT JOIN users u ON u.id = d.editor_id "+
-			"LEFT JOIN projects p ON p.id = project_id "+
-			"WHERE project_id in (?) AND d.filename like ? "+
-			"UNION ALL SELECT f.id, filename, create_time, u.name, url, p.name project_name FROM files f "+
-			"LEFT JOIN users u ON u.id = f.creator_id "+
-			"LEFT JOIN projects p ON p.id = project_id "+
-			"WHERE project_id in (?) AND f.filename like ? ", projectIDs, key, projectIDs, key)
+	query := m.DB.Self.Table("files").Select("files.id, realname filename, create_time, u.name, url content, p.name project_name").
+		Joins("LEFT JOIN users u ON u.id = files.creator_id").
+		Joins("LEFT JOIN projects p ON p.id = project_id").
+		Where("project_id IN (?) AND realname LIKE ?", projectIDs, key)
 
 	if pagination {
 		if limit == 0 {
 			limit = constvar.DefaultLimit
 		}
 		query = query.Offset(offset).Limit(limit)
+
+		if lastID != 0 {
+			query = query.Where("files.id < ?", lastID)
+		}
+	}
+
+	for _, r := range record {
+		r.Type = constvar.FileCode
 	}
 
 	err := query.Scan(&record).Count(&count).Error

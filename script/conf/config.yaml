@@ -1,6 +1,10 @@
 local_name: PROJECT_SCRIPT
 db:
-  name: workbench
-  addr: localhost
-  username: root
-  password: 12345678
+#  name: workbench
+#  addr: localhost
+#  username: root
+#  password: 12345678
+  name: workbench_test
+  addr: rm-bp1pkcz9y269h30fm5o.mysql.rds.aliyuncs.com
+  username: workbench_test
+  password: Muxistudio304

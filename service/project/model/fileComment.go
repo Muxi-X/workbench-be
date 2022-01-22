@@ -42,7 +42,7 @@ func (f *FileCommentModel) List(fileID, offset, limit, lastID uint32) ([]*Commen
 
 	commentsList := make([]*CommentListItem, 0)
 
-	query := m.DB.Self.Table("comments_files").Select("comments_files.*, users.name, users.avatar").Where("target_id = ? AND kind = 0 AND re = 0", fileID).Joins("left join users on users.id = comments_files.creator").Offset(offset).Limit(limit).Order("comments_files.id asc")
+	query := m.DB.Self.Table("comments_files").Select("comments_files.*, users.name, users.avatar").Where("target_id = ? AND kind = 0 AND re = 0", fileID).Joins("LEFT JOIN users ON users.id = comments_files.creator").Offset(offset).Limit(limit).Order("comments_files.id ASC")
 
 	if lastID != 0 {
 		query = query.Where("comments_files.id < ?", lastID)
@@ -56,7 +56,7 @@ func (f *FileCommentModel) List(fileID, offset, limit, lastID uint32) ([]*Commen
 	for i := 0; uint64(i) < count; i++ {
 		comment := commentsList[i]
 		commentsLevel2 := make([]*CommentListItem, 0)
-		m.DB.Self.Table("comments_files").Select("comments_files.*, users.name, users.avatar").Where("target_id = ? AND kind = 1 AND re = 0", comment.ID).Joins("left join users on users.id = comments_files.creator").Order("comments_files.id asc").Scan(&commentsLevel2)
+		m.DB.Self.Table("comments_files").Select("comments_files.*, users.name, users.avatar").Where("target_id = ? AND kind = 1 AND re = 0", comment.ID).Joins("LEFT JOIN users ON users.id = comments_files.creator").Order("comments_files.id ASC").Scan(&commentsLevel2)
 		commentsList = append(commentsList, commentsLevel2...)
 	}
 

@@ -209,8 +209,7 @@ type GetFileDetailResponse struct {
 
 // DeleteFileRequest ... 删除文件请求
 type DeleteFileRequest struct {
-	FileName    string `json:"file_name"`
-	ProjectName string `json:"project_name"`
+	FileName string `json:"file_name"`
 } // @name DeleteFileRequest
 
 // CreateDocRequest ... 创建文档请求
@@ -259,14 +258,11 @@ type GetProjectIdsForUserResponse struct {
 	Ids []uint32 `json:"ids"`
 } // @name GetProjectIdsForUserResponse
 
-type SearchRequest struct {
-	Type       uint32 `json:"type"`
-	Keyword    string `json:"keyword"`
-	UserId     uint32 `json:"user_id"`
-	Offset     uint32 `json:"offset"`
-	Limit      uint32 `json:"limit"`
-	Pagination bool   `json:"pagination"`
-} // @name SearchRequest
+type SearchProjectRequest struct {
+	Type      uint32 `json:"type"`
+	Keyword   string `json:"keyword"`
+	ProjectID uint32 `json:"project_id"`
+} // @name SearchProjectRequest
 
 type SearchResult struct {
 	Id          uint32 `json:"id"`

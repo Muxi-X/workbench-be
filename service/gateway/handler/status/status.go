@@ -88,3 +88,22 @@ type DeleteCommentRequest struct {
 	Title string `json:"title"`
 	Kind  uint32 `json:"kind"`
 } // @name DeleteCommentRequest
+
+type SearchStatusRequest struct {
+	Keyword  string `json:"keyword"`
+	UserName string `json:"user_name"`
+	GroupID  uint32 `json:"group_id"`
+} // @name SearchStatusRequest
+
+type SearchResult struct {
+	Id       uint32 `json:"id"`
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	UserName string `json:"user_name"`
+	Time     string `json:"time"`
+} // @name SearchResult
+
+type SearchResponse struct {
+	List  []*SearchResult `json:"list"`
+	Count uint32          `json:"count"`
+} // @name SearchResponse

@@ -9,21 +9,26 @@ import (
 )
 
 // Search ... 搜索文档和文件
-// search_type: 为0时搜索doc_title and file_title，为1时搜索doc_content
+// search_type: 为0时搜索doc title and content，为1时搜索file title
 func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.SearchResponse) error {
-	projects, err := model.GetUserToProjectByUser(req.UserId)
-	if err != nil {
-		return e.ServerErr(errno.ErrDatabase, err.Error())
+	var projectIDs []uint32
+	if req.ProjectId == 0 {
+		projects, err := model.GetUserToProjectByUser(req.UserId)
+		if err != nil {
+			return e.ServerErr(errno.ErrDatabase, err.Error())
+		}
+
+		for _, project := range projects {
+			projectIDs = append(projectIDs, project.ProjectID)
+		}
+	} else {
+		projectIDs = append(projectIDs, req.ProjectId)
 	}
 
-	projectIDs := make([]uint32, len(projects))
-	for i, project := range projects {
-		projectIDs[i] = project.ProjectID
-	}
 	var list []*model.SearchResult
 
-	if req.Type == 0 { // 在文档文件title中查询关键字
-		titleList, count, err := model.SearchTitle(projectIDs, req.Keyword, req.Offset, req.Limit, req.Pagination)
+	if req.Type == 0 { // 在文档title and content中查询关键字
+		titleList, count, err := model.SearchDoc(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
 		if err != nil {
 			return e.ServerErr(errno.ErrDatabase, err.Error())
 		}
@@ -31,19 +36,22 @@ func (s *Service) Search(ctx context.Context, req *pb.SearchRequest, res *pb.Sea
 		list = append(list, titleList...)
 		res.Count = count
 
-	} else if req.Type == 1 { // 在文档content和title中查询关键字
-		contentList, count, err := model.SearchContent(projectIDs, req.Keyword, req.Offset, req.Limit, req.Pagination)
+	} else if req.Type == 1 { // 在文件title中查询关键字
+		contentList, count, err := model.SearchFile(projectIDs, req.Keyword, req.Offset, req.Limit, req.LastId, req.Pagination)
 		if err != nil {
 			return e.ServerErr(errno.ErrDatabase, err.Error())
 		}
 
 		list = append(list, contentList...)
 		res.Count = count
+	} else {
+		return e.BadRequestErr(errno.ErrBind, "wrong type_id")
 	}
 
 	for _, item := range list {
 		res.List = append(res.List, &pb.SearchResult{
 			Id:          item.Id,
+			Type:        uint32(item.Type),
 			Title:       item.Title,
 			UserName:    item.UserName,
 			Content:     item.Content,

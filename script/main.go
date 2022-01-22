@@ -17,5 +17,6 @@ func main() {
 
 	defer log.SyncLogger()
 
-	handler.Start()
+	handler.CommentMigrate()
+	// handler.Start()
 }

@@ -85,6 +85,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		statusRouter.PUT("/comment/:id", status.UpdateComment)
 		statusRouter.DELETE("/comment/:id", status.DeleteComment)
 		statusRouter.GET("/comment/:id", status.CommentList)
+		statusRouter.POST("/search", status.Search)
 	}
 
 	// project

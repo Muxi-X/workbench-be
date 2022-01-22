@@ -73,8 +73,8 @@ func DeleteFile(c *gin.Context) {
 		UserId: userID,
 		Source: &pbf.Source{
 			Kind:      4,
-			Id:        uint32(fileID), // 暂时从前端获取
-			Name:      req.FileName,
+			Id:        uint32(fileID),
+			Name:      req.FileName, // 暂时从前端获取
 			ProjectId: projectID,
 		},
 	}

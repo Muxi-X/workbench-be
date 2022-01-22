@@ -148,13 +148,6 @@ definitions:
     properties:
       file_name:
         type: string
-      project_name:
-        type: string
-    type: object
-  DeleteFolderRequest:
-    properties:
-      id:
-        type: integer
     type: object
   DeleteRequest:
     properties:
@@ -534,41 +527,22 @@ definitions:
       message:
         type: string
     type: object
-  SearchRequest:
+  SearchProjectRequest:
     properties:
       keyword:
         type: string
-      limit:
+      project_id:
         type: integer
-      offset:
-        type: integer
-      pagination:
-        type: boolean
       type:
         type: integer
       user_id:
         type: integer
     type: object
-  SearchResponse:
+  SearchStatusRequest:
     properties:
-      count:
+      group_id:
         type: integer
-      list:
-        items:
-          $ref: '#/definitions/SearchResult'
-        type: array
-    type: object
-  SearchResult:
-    properties:
-      content:
-        type: string
-      id:
-        type: integer
-      project_name:
-        type: string
-      time:
-        type: string
-      title:
+      keyword:
         type: string
       user_name:
         type: string
@@ -796,6 +770,30 @@ definitions:
       type_id:
         type: integer
     type: object
+  muxi-workbench-gateway_handler_project.SearchResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/muxi-workbench-gateway_handler_project.SearchResult'
+        type: array
+    type: object
+  muxi-workbench-gateway_handler_project.SearchResult:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      project_name:
+        type: string
+      time:
+        type: string
+      title:
+        type: string
+      user_name:
+        type: string
+    type: object
   muxi-workbench-gateway_handler_project.UpdateCommentRequest:
     properties:
       content:
@@ -845,6 +843,28 @@ definitions:
       kind:
         type: integer
       title:
+        type: string
+    type: object
+  muxi-workbench-gateway_handler_status.SearchResponse:
+    properties:
+      count:
+        type: integer
+      list:
+        items:
+          $ref: '#/definitions/muxi-workbench-gateway_handler_status.SearchResult'
+        type: array
+    type: object
+  muxi-workbench-gateway_handler_status.SearchResult:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      time:
+        type: string
+      title:
+        type: string
+      user_name:
         type: string
     type: object
   muxi-workbench-gateway_handler_status.UpdateCommentRequest:
@@ -2315,12 +2335,6 @@ paths:
         name: Authorization
         required: true
         type: string
-      - description: delete_folder_request
-        in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/DeleteFolderRequest'
       - description: project_id
         in: query
         name: project_id
@@ -2609,26 +2623,38 @@ paths:
     post:
       consumes:
       - application/json
-      description: 'search_type: 为0时搜索doc_title and file_title，为1时继续搜索doc_content'
+      description: 'search_type: 为0时搜索doc，为1时搜索file（project_id为0时，搜索该用户所有项目）'
       parameters:
       - description: token 用户令牌
         in: header
         name: Authorization
         required: true
         type: string
-      - description: search_request
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: search_project_request
         in: body
         name: object
         required: true
         schema:
-          $ref: '#/definitions/SearchRequest'
+          $ref: '#/definitions/SearchProjectRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/SearchResponse'
+            $ref: '#/definitions/muxi-workbench-gateway_handler_project.SearchResponse'
         "401":
           description: Unauthorized
           schema:
@@ -2637,7 +2663,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Response'
-      summary: searches from title of doc and file or content of doc api
+      summary: searches from title and content of doc or title of file api
       tags:
       - project
   /status:
@@ -3040,6 +3066,53 @@ paths:
           schema:
             $ref: '#/definitions/Response'
       summary: like status api
+      tags:
+      - status
+  /status/search:
+    post:
+      consumes:
+      - application/json
+      description: group_id为0时，搜索所有进度
+      parameters:
+      - description: token 用户令牌
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: last_id
+        in: query
+        name: last_id
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: search_status_request
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/SearchStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/muxi-workbench-gateway_handler_status.SearchResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Response'
+      summary: searches from title and content of status api
       tags:
       - status
   /team:

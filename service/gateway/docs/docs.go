@@ -2352,15 +2352,6 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "delete_folder_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/DeleteFolderRequest"
-                        }
-                    },
-                    {
                         "type": "integer",
                         "description": "project_id",
                         "name": "project_id",
@@ -2625,7 +2616,7 @@ var doc = `{
         },
         "/project/search": {
             "post": {
-                "description": "search_type: 为0时搜索doc_title and file_title，为1时继续搜索doc_content",
+                "description": "search_type: 为0时搜索doc，为1时搜索file（project_id为0时，搜索该用户所有项目）",
                 "consumes": [
                     "application/json"
                 ],
@@ -2635,7 +2626,7 @@ var doc = `{
                 "tags": [
                     "project"
                 ],
-                "summary": "searches from title of doc and file or content of doc api",
+                "summary": "searches from title and content of doc or title of file api",
                 "parameters": [
                     {
                         "type": "string",
@@ -2645,12 +2636,30 @@ var doc = `{
                         "required": true
                     },
                     {
-                        "description": "search_request",
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "description": "search_project_request",
                         "name": "object",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/SearchRequest"
+                            "$ref": "#/definitions/SearchProjectRequest"
                         }
                     }
                 ],
@@ -2658,7 +2667,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/SearchResponse"
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_project.SearchResponse"
                         }
                     },
                     "401": {
@@ -3260,6 +3269,77 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/status/search": {
+            "post": {
+                "description": "group_id为0时，搜索所有进度",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "status"
+                ],
+                "summary": "searches from title and content of status api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "last_id",
+                        "name": "last_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "description": "search_status_request",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SearchStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/muxi-workbench-gateway_handler_status.SearchResponse"
                         }
                     },
                     "401": {
@@ -4758,17 +4838,6 @@ var doc = `{
             "properties": {
                 "file_name": {
                     "type": "string"
-                },
-                "project_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "DeleteFolderRequest": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },
@@ -5356,20 +5425,14 @@ var doc = `{
                 }
             }
         },
-        "SearchRequest": {
+        "SearchProjectRequest": {
             "type": "object",
             "properties": {
                 "keyword": {
                     "type": "string"
                 },
-                "limit": {
+                "project_id": {
                     "type": "integer"
-                },
-                "offset": {
-                    "type": "integer"
-                },
-                "pagination": {
-                    "type": "boolean"
                 },
                 "type": {
                     "type": "integer"
@@ -5379,36 +5442,13 @@ var doc = `{
                 }
             }
         },
-        "SearchResponse": {
+        "SearchStatusRequest": {
             "type": "object",
             "properties": {
-                "count": {
+                "group_id": {
                     "type": "integer"
                 },
-                "list": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/SearchResult"
-                    }
-                }
-            }
-        },
-        "SearchResult": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "project_name": {
-                    "type": "string"
-                },
-                "time": {
-                    "type": "string"
-                },
-                "title": {
+                "keyword": {
                     "type": "string"
                 },
                 "user_name": {
@@ -5759,6 +5799,43 @@ var doc = `{
                 }
             }
         },
+        "muxi-workbench-gateway_handler_project.SearchResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/muxi-workbench-gateway_handler_project.SearchResult"
+                    }
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_project.SearchResult": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "project_name": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
         "muxi-workbench-gateway_handler_project.UpdateCommentRequest": {
             "type": "object",
             "properties": {
@@ -5833,6 +5910,40 @@ var doc = `{
                     "type": "integer"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.SearchResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/muxi-workbench-gateway_handler_status.SearchResult"
+                    }
+                }
+            }
+        },
+        "muxi-workbench-gateway_handler_status.SearchResult": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_name": {
                     "type": "string"
                 }
             }
