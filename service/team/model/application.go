@@ -11,7 +11,7 @@ import (
 type ApplyModel struct {
 	ID     uint32 `json:"id" gorm:"column:id;not null"`
 	UserID uint32 `json:"user_id" gorm:"column:user_id;"`
-	TeamID uint32 `json:"team_id" gorm:"team_id"`
+	TeamID uint32 `json:"team_id" gorm:"column:team_id"`
 }
 
 type ApplyUserItem struct {

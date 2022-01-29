@@ -37,9 +37,9 @@ func Init() {
 	UserInit()
 }
 
-// UpdateUsersGroupIDOrTeamID update user's group_id by user_id
-func UpdateUsersGroupIDOrTeamID(usersID []uint32, value uint32, kind uint32) error {
-	_, err := UserClient.UpdateTeamAndGroupForUsers(context.Background(), &upb.UpdateTeamGroupRequest{Ids: usersID, Value: value, Kind: kind})
+// UpdateUsersGroupIdOrTeamId update user's group_id by user_id
+func UpdateUsersGroupIdOrTeamId(usersId []uint32, value uint32, kind uint32) error {
+	_, err := UserClient.UpdateTeamAndGroupForUsers(context.Background(), &upb.UpdateTeamGroupRequest{Ids: usersId, Value: value, Kind: kind})
 
 	if err != nil {
 		return err

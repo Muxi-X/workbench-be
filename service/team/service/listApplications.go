@@ -11,12 +11,7 @@ import (
 
 // GetApplications …… 列举申请
 func (ts *TeamService) GetApplications(ctx context.Context, req *pb.ApplicationListRequest, res *pb.ApplicationListResponse) error {
-	teamID, err := GetTeamIdByUserId(req.UserId)
-	if err != nil {
-		return e.ServerErr(errno.ErrClient, err.Error())
-	}
-
-	applys, count, err := model.ListApplys(req.Offset, req.Limit, req.Pagination, teamID)
+	applys, count, err := model.ListApplys(req.Offset, req.Limit, req.Pagination, req.TeamId)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

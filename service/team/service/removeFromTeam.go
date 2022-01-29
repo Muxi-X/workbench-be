@@ -19,8 +19,8 @@ func (ts *TeamService) Remove(ctx context.Context, req *pb.RemoveRequest, res *p
 }
 
 // RemoveFromTeam remove from team
-func RemoveFromTeam(teamID uint32, usersID []uint32) error {
-	for _, id := range usersID {
+func RemoveFromTeam(teamID uint32, userIDs []uint32) error {
+	for _, id := range userIDs {
 		info, err := UserClient.GetProfile(context.Background(), &upb.GetRequest{Id: id})
 		if err != nil {
 			return err
@@ -30,10 +30,10 @@ func RemoveFromTeam(teamID uint32, usersID []uint32) error {
 		}
 	}
 
-	if err := UpdateUsersGroupIDOrTeamID(usersID, 0, model.TEAM); err != nil {
+	if err := UpdateUsersGroupIdOrTeamId(userIDs, 0, model.TEAM); err != nil {
 		return err
 	}
-	if err := model.TeamCountOperation(teamID, uint32(len(usersID)), model.SUB); err != nil {
+	if err := model.TeamCountOperation(teamID, uint32(len(userIDs)), model.SUB); err != nil {
 		return err
 	}
 	return nil
