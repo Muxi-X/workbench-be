@@ -75,7 +75,7 @@ CREATE TABLE `projects` (
   `count` int(11) DEFAULT NULL,
   `team_id` int(11) DEFAULT NULL,
   `filetree` text COMMENT '旧版的子文件树，现已弃用，详情见 update.sql',
-  `doctree` text COMMENT '旧版的子文档树，现已启用，详情见 update.sql',
+  `doctree` text COMMENT '旧版的子文档树，现已弃用，详情见 update.sql',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `team_id` (`team_id`)
@@ -196,7 +196,7 @@ CREATE TABLE `files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- 用户-文件关注表
--- !! user2files to user2attentions;
+-- !! user2files to attentions;
 DROP TABLE IF EXISTS `user2files`;
 CREATE TABLE `user2files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -68,13 +68,19 @@ ALTER TABLE `projects` ADD `deleted_at` datetime DEFAULT NULL;
 -- add creator_id for projects
 ALTER TABLE `projects` ADD COLUMN `creator_id` int(11);
 
--- user2file2 -> user2attentions
-rename table `user2files` to `user2attentions`;
-alter table `user2attentions` add column `time_day` varchar(20) DEFAULT NULL;
-alter table `user2attentions` add column `time_hm` varchar(20) DEFAULT NULL;
+-- user2file2 -> attentions
+RENAME TABLE `user2files` TO `attentions`;
+ALTER TABLE `attentions` ADD COLUMN `time_day` varchar(20) DEFAULT NULL;
+ALTER TABLE `attentions` ADD COLUMN `time_hm` varchar(20) DEFAULT NULL;
 
 -- add team_id for applys
-alter table `applys` ADD COLUMN `team_id` int(11) DEFAULT NULL;
+ALTER TABLE `applys` ADD COLUMN `team_id` int(11) DEFAULT NULL;
+
+-- add key for user2projects
+ALTER TABLE `user2projects` ADD KEY  `user_id` (`user_id`);
+
+-- add key for attention
+ALTER TABLE `attentions` ADD UNIQUE KEY `idx_file_kind_user` (`user_id`, `file_id`, `file_kind`) ;
 
 -- -----------------------------
 -- Table structure for comments

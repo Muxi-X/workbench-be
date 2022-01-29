@@ -61,3 +61,9 @@ func (s *Service) DeleteFile(ctx context.Context, req *pb.DeleteRequest, res *pb
 
 	return nil
 }
+type T interface {
+
+}
+func delete[file ](f file) *file {
+	return nil
+}

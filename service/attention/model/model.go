@@ -34,7 +34,7 @@ type File struct {
 }
 
 func (*AttentionModel) TableName() string {
-	return "user2attentions"
+	return "attentions"
 }
 
 // Create a new attention
@@ -69,16 +69,16 @@ func List(lastId, limit uint32, filter *FilterParams) ([]*AttentionDetail, error
 		limit = constvar.DefaultLimit
 	}
 
-	query := m.DB.Self.Table("user2attentions").Select("user2attentions.*, users.name user_name").Joins("left join users on users.id = user_id").Order("user2attentions.id desc").Limit(limit)
+	query := m.DB.Self.Table("attentions").Select("attentions.*, users.name user_name").Joins("left join users on users.id = user_id").Order("attentions.id desc").Limit(limit)
 
 	// 查找用户的attention
 	if filter.UserId != 0 {
-		query = query.Where("user2attentions.user_id = ?", filter.UserId)
+		query = query.Where("attentions.user_id = ?", filter.UserId)
 	}
 
 	// 分页
 	if lastId != 0 {
-		query = query.Where("user2attentions.id < ?", lastId)
+		query = query.Where("attentions.id < ?", lastId)
 	}
 
 	if err := query.Scan(&attentions).Error; err != nil {
