@@ -259,8 +259,8 @@ type GetProjectIdsForUserResponse struct {
 } // @name GetProjectIdsForUserResponse
 
 type SearchProjectRequest struct {
-	Type      uint32 `json:"type"`
-	Keyword   string `json:"keyword"`
+	Type      uint32 `json:"type" binding:"required"`
+	Keyword   string `json:"keyword" binding:"required"`
 	ProjectID uint32 `json:"project_id"`
 } // @name SearchProjectRequest
 

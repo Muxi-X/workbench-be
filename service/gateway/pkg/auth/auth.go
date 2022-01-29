@@ -42,7 +42,7 @@ func Parse(tokenString string) (*Context, error) {
 }
 
 // ParseRequest gets the token from the header and
-// pass it to the Parse function to parses the token.
+// pass it to the Parse function to parse the token.
 func ParseRequest(c *gin.Context) (*Context, error) {
 	header := c.Request.Header.Get("Authorization")
 	if len(header) == 0 {

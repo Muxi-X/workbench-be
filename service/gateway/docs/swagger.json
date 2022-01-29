@@ -4957,6 +4957,10 @@
         },
         "FileRequest": {
             "type": "object",
+            "required": [
+                "id",
+                "kind"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -5413,6 +5417,10 @@
         },
         "SearchProjectRequest": {
             "type": "object",
+            "required": [
+                "keyword",
+                "type"
+            ],
             "properties": {
                 "keyword": {
                     "type": "string"
@@ -5422,14 +5430,14 @@
                 },
                 "type": {
                     "type": "integer"
-                },
-                "user_id": {
-                    "type": "integer"
                 }
             }
         },
         "SearchStatusRequest": {
             "type": "object",
+            "required": [
+                "keyword"
+            ],
             "properties": {
                 "group_id": {
                     "type": "integer"
@@ -5654,6 +5662,9 @@
         },
         "UrlModel": {
             "type": "object",
+            "required": [
+                "url"
+            ],
             "properties": {
                 "url": {
                     "type": "string"

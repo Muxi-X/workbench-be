@@ -4971,6 +4971,10 @@ var doc = `{
         },
         "FileRequest": {
             "type": "object",
+            "required": [
+                "id",
+                "kind"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
@@ -5427,6 +5431,10 @@ var doc = `{
         },
         "SearchProjectRequest": {
             "type": "object",
+            "required": [
+                "keyword",
+                "type"
+            ],
             "properties": {
                 "keyword": {
                     "type": "string"
@@ -5436,14 +5444,14 @@ var doc = `{
                 },
                 "type": {
                     "type": "integer"
-                },
-                "user_id": {
-                    "type": "integer"
                 }
             }
         },
         "SearchStatusRequest": {
             "type": "object",
+            "required": [
+                "keyword"
+            ],
             "properties": {
                 "group_id": {
                     "type": "integer"
@@ -5668,6 +5676,9 @@ var doc = `{
         },
         "UrlModel": {
             "type": "object",
+            "required": [
+                "url"
+            ],
             "properties": {
                 "url": {
                     "type": "string"

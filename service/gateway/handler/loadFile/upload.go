@@ -12,7 +12,7 @@ import (
 )
 
 type UrlModel struct {
-	Url string `json:"url"`
+	Url string `json:"url" binding:"required"`
 } // @name UrlModel
 
 // Upload

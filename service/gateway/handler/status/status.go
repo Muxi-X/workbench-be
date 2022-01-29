@@ -90,7 +90,7 @@ type DeleteCommentRequest struct {
 } // @name DeleteCommentRequest
 
 type SearchStatusRequest struct {
-	Keyword  string `json:"keyword"`
+	Keyword  string `json:"keyword" binding:"required"`
 	UserName string `json:"user_name"`
 	GroupID  uint32 `json:"group_id"`
 } // @name SearchStatusRequest

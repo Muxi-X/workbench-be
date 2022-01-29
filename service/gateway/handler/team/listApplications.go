@@ -49,14 +49,14 @@ func GetApplications(c *gin.Context) {
 		pagination = false
 	}
 
-	userID := c.MustGet("userID").(uint32)
+	teamID := c.MustGet("teamID").(uint32)
 
 	// 构造 ApplicationList 请求
 	ApplicationListReq := &tpb.ApplicationListRequest{
 		Offset:     uint32(limit * page),
 		Limit:      uint32(limit),
 		Pagination: pagination,
-		UserId:     userID,
+		TeamId:     teamID,
 	}
 
 	// 向 GetApplications 服务发送请求

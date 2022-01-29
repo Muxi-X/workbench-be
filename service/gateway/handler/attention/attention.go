@@ -15,8 +15,8 @@ type AttentionItem struct {
 
 // FileRequest ... 添加删除关注请求
 type FileRequest struct {
-	Id   uint32 `json:"id"`
-	Kind uint32 `json:"kind"`
+	Id   uint32 `json:"id" binding:"required"`
+	Kind uint32 `json:"kind" binding:"required"`
 } // @name FileRequest
 
 type AttentionListResponse struct {

@@ -238,6 +238,9 @@ definitions:
         type: integer
       kind:
         type: integer
+    required:
+    - id
+    - kind
     type: object
   GetDocDetailResponse:
     properties:
@@ -535,8 +538,9 @@ definitions:
         type: integer
       type:
         type: integer
-      user_id:
-        type: integer
+    required:
+    - keyword
+    - type
     type: object
   SearchStatusRequest:
     properties:
@@ -546,6 +550,8 @@ definitions:
         type: string
       user_name:
         type: string
+    required:
+    - keyword
     type: object
   Source:
     properties:
@@ -687,6 +693,8 @@ definitions:
     properties:
       url:
         type: string
+    required:
+    - url
     type: object
   User:
     properties:
