@@ -139,33 +139,22 @@ func checkTypeIsValid(reqFileType, reqFatherType uint32) (uint8, uint8, error) {
 	if err != nil {
 		return uint8(0), uint8(0), err
 	}
-	fatherType, err := checkFatherTypeIsValid(reqFatherType)
-	if err != nil {
-		return uint8(0), uint8(0), err
+	if reqFatherType != 0 && reqFatherType != 1 {
+		return uint8(0), uint8(0), errors.New("(father type be 0 -> project file, 1 -> other)")
 	}
 
-	checkType := fatherType - fileType
-	if checkType != uint8(2) && checkType > uint8(0) {
-		return uint8(0), uint8(0), errors.New("father type is conflict to file type")
+	var fatherType uint8
+	if reqFatherType == 1 { // 非根目录
+		fatherType = fileType + 2
 	}
-
 	return fileType, fatherType, nil
 }
 
 func checkFileTypeIsValid(reqType uint32) (uint8, error) {
 	fileType := uint8(reqType)
-	if fileType < constvar.DocCode || fileType > constvar.FileCode {
+	if fileType != constvar.DocCode || fileType != constvar.FileCode {
 		return uint8(0), errors.New("file type must be 1 or 2")
 	}
-	return fileType, nil
-}
-
-func checkFatherTypeIsValid(reqType uint32) (uint8, error) {
-	fileType := uint8(reqType)
-	if fileType > constvar.ProjectCode || fileType < constvar.DocFolderCode {
-		return uint8(0), errors.New("father type must be 0, 3 or 4")
-	}
-
 	return fileType, nil
 }
 

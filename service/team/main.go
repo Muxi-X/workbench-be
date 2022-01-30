@@ -38,7 +38,7 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
-	// init other serivce
+	// init other service
 	s.Init()
 
 	srv := micro.NewService(

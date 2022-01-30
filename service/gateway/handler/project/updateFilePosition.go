@@ -16,7 +16,7 @@ import (
 
 // UpdateFilePosition ... 移动文件
 // @Summary update file position api
-// @Description 移动文件位置
+// @Description 移动文件位置 father type be 0 -> project file, 1 -> other
 // @Tags project
 // @Accept  application/json
 // @Produce  application/json
