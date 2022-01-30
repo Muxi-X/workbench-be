@@ -1816,7 +1816,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: 移动文件位置
+      description: 移动文件位置 father type be 0 -> project file, 1 -> other
       parameters:
       - description: token 用户令牌
         in: header

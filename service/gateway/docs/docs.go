@@ -1400,7 +1400,7 @@ var doc = `{
         },
         "/folder/children/{old_father_id}": {
             "put": {
-                "description": "移动文件位置",
+                "description": "移动文件位置 father type be 0 -\u003e project file, 1 -\u003e other",
                 "consumes": [
                     "application/json"
                 ],
