@@ -30,7 +30,7 @@ service ProjectService {
 
   // 文档相关
   rpc CreateDoc(CreateDocRequest) returns (IdResponse) {}
-  rpc UpdateDoc(UpdateDocRequest ) returns (Response) {}
+  rpc UpdateDoc(UpdateDocRequest) returns (Response) {}
   rpc DeleteDoc(DeleteRequest) returns (Response) {}
   rpc GetDocInfoList(GetInfoByIdsRequest) returns (GetDocInfoListResponse) {}
 
@@ -285,7 +285,7 @@ message MembersListItem {
   string name = 2;
   string avatar = 3;
   string group_name = 4;
-  uint32 role  = 5;
+  uint32 role = 5;
 }
 
 message UpdateMemberRequest {

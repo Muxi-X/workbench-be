@@ -4,7 +4,7 @@ db:
 #  addr: localhost
 #  username: root
 #  password: 12345678
-  name: workbench_test
+  name: workbench
   addr: rm-bp1pkcz9y269h30fm5o.mysql.rds.aliyuncs.com
-  username: workbench_test
+  username: workbench
   password: Muxistudio304

@@ -152,7 +152,7 @@ func checkTypeIsValid(reqFileType, reqFatherType uint32) (uint8, uint8, error) {
 
 func checkFileTypeIsValid(reqType uint32) (uint8, error) {
 	fileType := uint8(reqType)
-	if fileType != constvar.DocCode || fileType != constvar.FileCode {
+	if fileType != constvar.DocCode && fileType != constvar.FileCode {
 		return uint8(0), errors.New("file type must be 1 or 2")
 	}
 	return fileType, nil

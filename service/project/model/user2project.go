@@ -30,8 +30,8 @@ type UserID struct {
 }
 
 // CheckUser2ProjectRecord ... 查找有无记录
-func CheckUser2ProjectRecord(user_id, project_id uint32) (bool, error) {
-	d := m.DB.Self.Table("user2projects").Where("user_id = ? AND project_id = ?", user_id, project_id).First(&UserToProjectModel{}).Error
+func CheckUser2ProjectRecord(userId, projectId uint32) (bool, error) {
+	d := m.DB.Self.Table("user2projects").Where("user_id = ? AND project_id = ?", userId, projectId).First(&UserToProjectModel{}).Error
 	if d != nil {
 		if gorm.IsRecordNotFoundError(d) {
 			return false, nil

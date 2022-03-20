@@ -4428,7 +4428,7 @@
                 }
             }
         },
-        "/user/list": {
+        "/user/list/{group_id}/{team_id}": {
             "get": {
                 "description": "通过 group 和 team 获取 user_list",
                 "consumes": [
@@ -4468,13 +4468,18 @@
                         "required": true
                     },
                     {
-                        "description": "get_user_list_request",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/ListRequest"
-                        }
+                        "type": "integer",
+                        "description": "group_id",
+                        "name": "group_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "team_id",
+                        "name": "team_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -5212,17 +5217,6 @@
             "type": "object",
             "properties": {
                 "type_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "ListRequest": {
-            "type": "object",
-            "properties": {
-                "group": {
-                    "type": "integer"
-                },
-                "team": {
                     "type": "integer"
                 }
             }

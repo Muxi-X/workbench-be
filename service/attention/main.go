@@ -41,10 +41,6 @@ func main() {
 	model.DB.Init()
 	defer model.DB.Close()
 
-	// init redis db
-	model.RedisDB.Init()
-	defer model.RedisDB.Close()
-
 	srv := micro.NewService(
 		micro.Name(viper.GetString("local_name")),
 		micro.WrapHandler(

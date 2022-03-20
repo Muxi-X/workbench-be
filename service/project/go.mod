@@ -28,6 +28,4 @@ require (
 	gorm.io/gorm v1.22.4
 	muxi-workbench v0.0.0-00010101000000-000000000000
 	muxi-workbench-attention v0.0.0-00010101000000-000000000000
-	muxi-workbench-team v0.0.0-00010101000000-000000000000
-	muxi-workbench-user v0.0.0-00010101000000-000000000000
 )
