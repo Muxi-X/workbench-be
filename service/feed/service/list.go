@@ -2,18 +2,11 @@ package service
 
 import (
 	"context"
-
 	"muxi-workbench-feed/errno"
 	"muxi-workbench-feed/model"
 	pb "muxi-workbench-feed/proto"
+	"muxi-workbench/pkg/constvar"
 	e "muxi-workbench/pkg/err"
-)
-
-const (
-	NOBODY     = 0 // 无权限用户
-	NORMAL     = 1 // 普通用户
-	ADMIN      = 3 // 管理员
-	SUPERADMIN = 7 // 超管
 )
 
 // List ... feed列表
@@ -22,7 +15,7 @@ func (s *FeedService) List(ctx context.Context, req *pb.ListRequest, res *pb.Lis
 	var err error
 
 	// 普通用户，只能返回有权限访问的 projects
-	if req.Role == NORMAL {
+	if req.Role == constvar.Normal {
 		projectIds, err = GetFilterFromProjectService(req.UserId)
 		if err != nil {
 			return e.ServerErr(errno.ErrGetDataFromRPC, err.Error())

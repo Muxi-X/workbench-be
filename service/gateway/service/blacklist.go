@@ -37,7 +37,7 @@ func AddToBlacklist(token string, expiresAt int64) error {
 	// 加入 redis 黑名单中
 
 	// 过期时间(s)
-	var expiration time.Duration = time.Duration((expiresAt - time.Now().Unix())) * time.Second
+	var expiration time.Duration = time.Duration(expiresAt-time.Now().Unix()) * time.Second
 
 	if err := m.SetStringInRedis(token, 1, expiration); err != nil {
 		return err
