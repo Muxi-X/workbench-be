@@ -1,6 +1,6 @@
 module muxi-workbench-gateway
 
-// exclude github.com/micro/go-plugins v1.5.1
+ //exclude github.com/micro/go-plugins v1.5.1
 
 go 1.14
 
