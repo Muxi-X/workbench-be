@@ -53,6 +53,7 @@ message UserInfo {
   string real_name = 3;
   string avatar_url = 4;
   string email = 5;
+  string tel = 6;
 }
 
 message UserInfoResponse {

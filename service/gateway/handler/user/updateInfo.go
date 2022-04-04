@@ -46,6 +46,7 @@ func UpdateInfo(c *gin.Context) {
 			RealName:  req.RealName,
 			AvatarUrl: req.AvatarURL,
 			Email:     req.Email,
+			Tel:       req.Tel,
 		},
 	}
 
