@@ -5,6 +5,7 @@ import (
 	errno "muxi-workbench-project/errno"
 	"muxi-workbench-project/model"
 	pb "muxi-workbench-project/proto"
+	m "muxi-workbench/model"
 	e "muxi-workbench/pkg/err"
 	"time"
 )
@@ -28,7 +29,7 @@ func (s *Service) CreateDoc(ctx context.Context, req *pb.CreateDocRequest, res *
 	}
 
 	// 事务
-	id, err := model.CreateDoc(&doc, req.ChildrenPositionIndex)
+	id, err := model.CreateDoc(m.DB.Self, &doc, req.ChildrenPositionIndex)
 	if err != nil {
 		return e.ServerErr(errno.ErrDatabase, err.Error())
 	}

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/jinzhu/gorm"
 	m "muxi-workbench/model"
 )
 
@@ -63,8 +64,8 @@ func GetDocDetail(id uint32) (*FileDetail, error) {
 	return s, d.Error
 }
 
-func CreateDoc(doc *DocModel, childrenPositionIndex uint32) (uint32, error) {
-	tx := m.DB.Self.Begin()
+func CreateDoc(db *gorm.DB, doc *DocModel, childrenPositionIndex uint32) (uint32, error) {
+	tx := db.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
